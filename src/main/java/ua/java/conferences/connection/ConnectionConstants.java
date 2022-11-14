@@ -2,8 +2,7 @@ package ua.java.conferences.connection;
 
 public final class ConnectionConstants {
 
-    private ConnectionConstants() {
-    }
+    private ConnectionConstants() {}
 
     public static final String SETTINGS_FILE = "connection.properties";
 

@@ -3,11 +3,17 @@ package ua.java.conferences.entity;
 import java.util.Objects;
 
 public class User {
+
     private int id;
+
     private String email;
+
     private String password;
+
     private String name;
+
     private String surname;
+
     private boolean emailNotification;
 
     public User() {}
