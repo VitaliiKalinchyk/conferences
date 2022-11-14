@@ -6,6 +6,7 @@ import ua.java.conferences.exception.DBException;
 import java.util.List;
 
 public interface ReportDAO extends EntityDAO<Report> {
+
     boolean setEventForReport(Event var1, Report var2) throws DBException;
 
     List<Report> getReportsFromEvent(Event var1) throws DBException;
