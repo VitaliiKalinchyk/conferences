@@ -3,9 +3,13 @@ package ua.java.conferences.entity;
 import java.util.Objects;
 
 public class Report {
+
     private int id;
+
     private String topic;
+
     private boolean accepted;
+
     private boolean approved;
 
     public Report() {}
