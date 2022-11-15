@@ -41,7 +41,13 @@ public class MysqlUserDAO implements UserDAO {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_USER)) {
             preparedStatement.setString(1, user.getEmail());
-            user = getUser(preparedStatement);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = createUser(resultSet);
+                } else {
+                throw new DBException("No such user");
+                }
+            }
         } catch (SQLException e) {
             throw new DBException(e);
         }
@@ -160,18 +166,6 @@ public class MysqlUserDAO implements UserDAO {
         return user;
     }
 
-    private User getUser(PreparedStatement preparedStatement) throws DBException {
-        User user = null;
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-                user = createUser(resultSet);
-            }
-        } catch (SQLException e) {
-            throw new DBException("No such user");
-        }
-        return user;
-    }
-
     private List<User> getUsers(String query, int id) throws DBException {
         List<User> users = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
@@ -209,11 +203,11 @@ public class MysqlUserDAO implements UserDAO {
         preparedStatement.setInt(5, user.isEmailNotification() ? 1 : 0);
     }
 
-    private static boolean executeStatement(PreparedStatement preparedStatement) {
+    private boolean executeStatement(PreparedStatement preparedStatement) {
         try {
             int affectedRows = preparedStatement.executeUpdate();
             return affectedRows == 0;
-        } catch (SQLException var2) {
+        } catch (SQLException e) {
             return true;
         }
     }

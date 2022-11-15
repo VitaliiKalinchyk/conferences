@@ -40,7 +40,13 @@ public class MysqlEventDAO implements EventDAO {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT)) {
             preparedStatement.setString(1, event.getTitle());
-            event = getEvent(preparedStatement);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    event = createEvent(resultSet);
+                } else {
+                    throw new DBException("No such event");
+                }
+            }
         } catch (SQLException e) {
             throw new DBException(e);
         }
@@ -112,7 +118,13 @@ public class MysqlEventDAO implements EventDAO {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORT_EVENT)) {
             preparedStatement.setInt(1, report.getId());
-            event = getEvent(preparedStatement);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    event = createEvent(resultSet);
+                } else {
+                    throw new DBException("No such event");
+                }
+            }
         } catch (SQLException e) {
             throw new DBException(e);
         }
@@ -124,18 +136,6 @@ public class MysqlEventDAO implements EventDAO {
         preparedStatement.setDate(2, Date.valueOf(event.getDate()));
         preparedStatement.setString(3, event.getLocation());
         preparedStatement.setString(4, event.getDescription());
-    }
-
-    private Event getEvent(PreparedStatement preparedStatement) throws DBException {
-        Event event = null;
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-                event = createEvent(resultSet);
-            }
-        } catch (SQLException e) {
-            throw new DBException("No such event");
-        }
-        return event;
     }
 
     private List<Event> getEvents(String query, int id) throws DBException {

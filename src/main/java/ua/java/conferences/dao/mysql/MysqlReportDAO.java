@@ -39,8 +39,13 @@ public class MysqlReportDAO implements ReportDAO {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORT)) {
             preparedStatement.setString(1, report.getTopic());
-            report = getReport(preparedStatement);
-        } catch (SQLException e) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    report = createReport(resultSet);
+                } else {
+                    throw new DBException("No such report");
+                }
+            }        } catch (SQLException e) {
             throw new DBException(e);
         }
         return report;
@@ -134,18 +139,6 @@ public class MysqlReportDAO implements ReportDAO {
         return reports;
     }
 
-    private Report getReport(PreparedStatement preparedStatement) throws DBException {
-        Report report = null;
-        try (ResultSet resultSet = preparedStatement.executeQuery()) {
-            if (resultSet.next()) {
-                report = createReport(resultSet);
-            }
-        } catch (SQLException e) {
-            throw new DBException("No such report");
-        }
-        return report;
-    }
-
     private Report createReport(ResultSet resultSet) throws SQLException {
         return new ReportBuilder()
                 .setId(resultSet.getInt(ID))
@@ -172,7 +165,7 @@ public class MysqlReportDAO implements ReportDAO {
         }
     }
 
-    private static boolean executeStatement(PreparedStatement preparedStatement) {
+    private boolean executeStatement(PreparedStatement preparedStatement) {
         try {
             int affectedRows = preparedStatement.executeUpdate();
             return affectedRows == 0;

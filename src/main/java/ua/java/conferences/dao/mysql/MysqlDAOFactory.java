@@ -7,8 +7,6 @@ public class MysqlDAOFactory extends DAOFactory {
     private ReportDAO reportDAO;
     private UserDAO userDAO;
 
-    public MysqlDAOFactory() {}
-
     public EventDAO getEventDAO() {
         if (this.eventDAO == null) {
             this.eventDAO = new MysqlEventDAO();
