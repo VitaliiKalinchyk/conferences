@@ -15,11 +15,11 @@ public class DataSource {
     private static final HikariDataSource ds;
 
     static {
-        //loadDriver();
         Properties properties = getProperties();
         config.setJdbcUrl(properties.getProperty(URL_PROPERTY));
         config.setUsername(properties.getProperty(USER_NAME));
         config.setPassword(properties.getProperty(PASSWORD));
+        config.setDriverClassName(properties.getProperty(DRIVER));
         config.addDataSourceProperty(CACHE_PREPARED_STATEMENT, properties.getProperty(CACHE_PREPARED_STATEMENT));
         config.addDataSourceProperty(CACHE_SIZE, properties.getProperty(CACHE_SIZE));
         config.addDataSourceProperty(CACHE_SQL_LIMIT, properties.getProperty(CACHE_SQL_LIMIT));
@@ -32,15 +32,10 @@ public class DataSource {
         return ds.getConnection();
     }
 
-//    private static void loadDriver() {
-//        try {
-//            Class.forName("com.mysql.cj.jdbc.Driver");
-//        } catch (ClassNotFoundException ignored) {}
-//    }
-
     private static Properties getProperties() {
         Properties properties = new Properties();
-        try (InputStream resource = DataSource.class.getClassLoader().getResourceAsStream("connection.properties")){
+        String connectionFile = "connection.properties";
+        try (InputStream resource = DataSource.class.getClassLoader().getResourceAsStream(connectionFile)){
             properties.load(resource);
         } catch (IOException e) {
             // тут щось має бути наприклад логер;
