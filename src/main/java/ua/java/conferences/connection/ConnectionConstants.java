@@ -4,8 +4,6 @@ public final class ConnectionConstants {
 
     private ConnectionConstants() {}
 
-    public static final String SETTINGS_FILE = "connection.properties";
-
     public static final String MYSQL = "MySql";
 
     public static final String URL_PROPERTY = "connection.url";
@@ -19,4 +17,6 @@ public final class ConnectionConstants {
     public static final String CACHE_SIZE = "prepStmtCacheSize";
 
     public static final String CACHE_SQL_LIMIT = "prepStmtCacheSqlLimit";
+
+    public static final String DRIVER = "driver";
 }
