@@ -5,7 +5,7 @@ import ua.java.conferences.dao.UserDAO;
 import ua.java.conferences.entity.*;
 import ua.java.conferences.entity.builder.UserBuilder;
 import ua.java.conferences.entity.role.Role;
-import ua.java.conferences.exception.DBException;
+import ua.java.conferences.exception.DAOException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import static ua.java.conferences.dao.mysql.constants.UserConstants.*;
 public class MysqlUserDAO implements UserDAO {
 
     @Override
-    public boolean add(User user) throws DBException {
+    public boolean add(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER, RETURN_GENERATED_KEYS)) {
             setUsersFields(user, preparedStatement);
@@ -31,36 +31,55 @@ public class MysqlUserDAO implements UserDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public User get(User user) throws DBException {
+    public User getById(int id) throws DAOException {
+        User user;
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER)) {
-            preparedStatement.setString(1, user.getEmail());
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID)) {
+            preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
                 } else {
-                throw new DBException("No such user");
+                    throw new DAOException("No such user");
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return user;
     }
 
     @Override
-    public List<User> getAll() throws DBException {
+    public User getByEmail(User user) throws DAOException {
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL)) {
+            preparedStatement.setString(1, user.getEmail());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    user = createUser(resultSet);
+                } else {
+                throw new DAOException("No such user");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return user;
+    }
+
+    @Override
+    public List<User> getAll() throws DAOException {
         return this.getUsers(GET_USERS, 0);
     }
 
     @Override
-    public boolean update(User user) throws DBException {
+    public boolean update(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
             setUsersFields(user, preparedStatement);
@@ -69,13 +88,13 @@ public class MysqlUserDAO implements UserDAO {
                 return false;
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public boolean delete(User user) throws DBException {
+    public boolean delete(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
             preparedStatement.setInt(1, user.getId());
@@ -83,13 +102,13 @@ public class MysqlUserDAO implements UserDAO {
                 return false;
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public boolean registerForEvent(User user, Event event) throws DBException {
+    public boolean registerForEvent(User user, Event event) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_FOR_EVENT)) {
             preparedStatement.setInt(1, user.getId());
@@ -98,13 +117,13 @@ public class MysqlUserDAO implements UserDAO {
                 return false;
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public Role getUsersRole(User user) throws DBException {
+    public Role getUsersRole(User user) throws DAOException {
         Role role;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ROLE)) {
@@ -113,17 +132,17 @@ public class MysqlUserDAO implements UserDAO {
                 if (resultSet.next()) {
                     role = Role.valueOf(resultSet.getString(ROLE));
                 } else {
-                    throw new DBException("No such user");
+                    throw new DAOException("No such user");
                 }
             }
         }catch (SQLException e) {
-                throw new DBException(e);
+                throw new DAOException(e);
         }
         return role;
     }
 
     @Override
-    public boolean setUsersRole(User user, Role role) throws DBException {
+    public boolean setUsersRole(User user, Role role) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_ROLE)) {
             preparedStatement.setInt(1, role.getValue());
@@ -132,23 +151,23 @@ public class MysqlUserDAO implements UserDAO {
                 return false;
             }
         }catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public List<User> getUsersByRole(Role role) throws DBException {
+    public List<User> getUsersByRole(Role role) throws DAOException {
         return this.getUsers(GET_USERS_BY_ROLE, role.getValue());
     }
 
     @Override
-    public List<User> getUsersByEvent(Event event) throws DBException {
+    public List<User> getUsersByEvent(Event event) throws DAOException {
         return this.getUsers(GET_USERS_BY_EVENT, event.getId());
     }
 
     @Override
-    public User getSpeakerByReport(Report report) throws DBException {
+    public User getSpeakerByReport(Report report) throws DAOException {
         User user;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_SPEAKER)) {
@@ -157,16 +176,16 @@ public class MysqlUserDAO implements UserDAO {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
                 } else {
-                    throw new DBException("No speaker for this report");
+                    throw new DAOException("No speaker for this report");
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return user;
     }
 
-    private List<User> getUsers(String query, int id) throws DBException {
+    private List<User> getUsers(String query, int id) throws DAOException {
         List<User> users = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -179,7 +198,7 @@ public class MysqlUserDAO implements UserDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return users;
     }

@@ -2,21 +2,23 @@ package ua.java.conferences.dao;
 
 import ua.java.conferences.entity.*;
 import ua.java.conferences.entity.role.Role;
-import ua.java.conferences.exception.DBException;
+import ua.java.conferences.exception.DAOException;
 
 import java.util.List;
 
 public interface UserDAO extends EntityDAO<User> {
 
-    boolean registerForEvent(User var1, Event var2) throws DBException;
+    User getByEmail(User user) throws DAOException;
 
-    Role getUsersRole(User var1) throws DBException;
+    User getSpeakerByReport(Report report) throws DAOException;
 
-    boolean setUsersRole(User var1, Role var2) throws DBException;
+    List<User> getUsersByRole(Role role) throws DAOException;
 
-    List<User> getUsersByRole(Role var1) throws DBException;
+    List<User> getUsersByEvent(Event event) throws DAOException;
 
-    List<User> getUsersByEvent(Event var1) throws DBException;
+    boolean registerForEvent(User user, Event event) throws DAOException;
 
-    User getSpeakerByReport(Report var1) throws DBException;
+    Role getUsersRole(User user) throws DAOException;
+
+    boolean setUsersRole(User user, Role role) throws DAOException;
 }

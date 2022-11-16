@@ -4,7 +4,7 @@ import ua.java.conferences.connection.DataSource;
 import ua.java.conferences.dao.EventDAO;
 import ua.java.conferences.entity.*;
 import ua.java.conferences.entity.builder.EventBuilder;
-import ua.java.conferences.exception.DBException;
+import ua.java.conferences.exception.DAOException;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -17,7 +17,7 @@ import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
 public class MysqlEventDAO implements EventDAO {
 
     @Override
-    public boolean add(Event event) throws DBException {
+    public boolean add(Event event) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_EVENT, RETURN_GENERATED_KEYS)) {
             setEventFields(event, preparedStatement);
@@ -30,36 +30,55 @@ public class MysqlEventDAO implements EventDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public Event get(Event event) throws DBException {
+    public Event getById(int id) throws DAOException {
+        Event event;
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT)) {
-            preparedStatement.setString(1, event.getTitle());
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_ID)) {
+            preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
                 } else {
-                    throw new DBException("No such event");
+                    throw new DAOException("No such event");
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return event;
     }
 
     @Override
-    public List<Event> getAll() throws DBException {
+    public Event getByTitle(Event event) throws DAOException {
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_TITLE)) {
+            preparedStatement.setString(1, event.getTitle());
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    event = createEvent(resultSet);
+                } else {
+                    throw new DAOException("No such event");
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return event;
+    }
+
+    @Override
+    public List<Event> getAll() throws DAOException {
         return getEvents(GET_EVENTS, 0);
     }
 
     @Override
-    public boolean update(Event event) throws DBException {
+    public boolean update(Event event) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_EVENT)) {
             setEventFields(event, preparedStatement);
@@ -68,13 +87,13 @@ public class MysqlEventDAO implements EventDAO {
                 return false;
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public boolean delete(Event event) throws DBException {
+    public boolean delete(Event event) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EVENT)) {
             preparedStatement.setInt(1, event.getId());
@@ -82,13 +101,13 @@ public class MysqlEventDAO implements EventDAO {
                 return false;
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public boolean setVisitors(Event event, int visitors) throws DBException {
+    public boolean setVisitors(Event event, int visitors) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_VISITORS)) {
             preparedStatement.setInt(1, visitors);
@@ -97,23 +116,23 @@ public class MysqlEventDAO implements EventDAO {
                 return false;
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public List<Event> getEventsByUser(User user) throws DBException {
+    public List<Event> getEventsByUser(User user) throws DAOException {
         return getEvents(GET_USERS_EVENTS, user.getId());
     }
 
     @Override
-    public List<Event> getEventsBySpeaker(User user) throws DBException {
+    public List<Event> getEventsBySpeaker(User user) throws DAOException {
         return getEvents(GET_SPEAKERS_EVENTS, user.getId());
     }
 
     @Override
-    public Event getEventByReport(Report report) throws DBException {
+    public Event getEventByReport(Report report) throws DAOException {
         Event event;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORT_EVENT)) {
@@ -122,11 +141,11 @@ public class MysqlEventDAO implements EventDAO {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
                 } else {
-                    throw new DBException("No such event");
+                    throw new DAOException("No such event");
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return event;
     }
@@ -138,7 +157,7 @@ public class MysqlEventDAO implements EventDAO {
         preparedStatement.setString(4, event.getDescription());
     }
 
-    private List<Event> getEvents(String query, int id) throws DBException {
+    private List<Event> getEvents(String query, int id) throws DAOException {
         List<Event> events = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -151,7 +170,7 @@ public class MysqlEventDAO implements EventDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return events;
     }

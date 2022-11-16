@@ -9,7 +9,9 @@ public final class EventConstants {
 
     public static final String GET_EVENTS = "SELECT * FROM event";
 
-    public static final String GET_EVENT = "SELECT * FROM event WHERE title=?";
+    public static final String GET_EVENT_BY_ID = "SELECT * FROM event WHERE id=?";
+
+    public static final String GET_EVENT_BY_TITLE = "SELECT * FROM event WHERE title=?";
 
     public static final String EDIT_EVENT = "UPDATE event SET title=?, date=?, location=?, description=? WHERE id=?";
 

@@ -9,7 +9,7 @@ public final class ReportConstants {
 
     public static final String GET_REPORTS = "SELECT * FROM report";
 
-    public static final String GET_REPORT = "SELECT * FROM report WHERE topic=?";
+    public static final String GET_REPORT_BY_ID = "SELECT * FROM report WHERE id=?";
 
     public static final String EDIT_REPORT = "UPDATE report SET topic=?, accepted=?, approved=? WHERE id=?";
 

@@ -4,7 +4,7 @@ import ua.java.conferences.connection.DataSource;
 import ua.java.conferences.dao.ReportDAO;
 import ua.java.conferences.entity.*;
 import ua.java.conferences.entity.builder.ReportBuilder;
-import ua.java.conferences.exception.DBException;
+import ua.java.conferences.exception.DAOException;
 
 import java.sql.*;
 import java.util.*;
@@ -16,7 +16,7 @@ import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
 public class MysqlReportDAO implements ReportDAO {
 
     @Override
-    public boolean add(Report report) throws DBException {
+    public boolean add(Report report) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_REPORT, RETURN_GENERATED_KEYS)) {
             setReportFields(report, preparedStatement);
@@ -29,35 +29,36 @@ public class MysqlReportDAO implements ReportDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public Report get(Report report) throws DBException {
+    public Report getById(int id) throws DAOException {
+        Report report;
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORT)) {
-            preparedStatement.setString(1, report.getTopic());
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORT_BY_ID)) {
+            preparedStatement.setInt(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     report = createReport(resultSet);
                 } else {
-                    throw new DBException("No such report");
+                    throw new DAOException("No such report");
                 }
             }        } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return report;
     }
 
     @Override
-    public List<Report> getAll() throws DBException {
+    public List<Report> getAll() throws DAOException {
         return this.getReports(GET_REPORTS, 0);
     }
 
     @Override
-    public boolean update(Report report) throws DBException {
+    public boolean update(Report report) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_REPORT)) {
             setReportFields(report, preparedStatement);
@@ -66,13 +67,13 @@ public class MysqlReportDAO implements ReportDAO {
                 return false;
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public boolean delete(Report report) throws DBException {
+    public boolean delete(Report report) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_REPORT)) {
             preparedStatement.setInt(1, report.getId());
@@ -80,48 +81,48 @@ public class MysqlReportDAO implements ReportDAO {
                 return false;
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public boolean setEventForReport(Event event, Report report) throws DBException {
+    public boolean setEventForReport(Event event, Report report) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_EVENT)) {
             if (getReportsFromId(report, preparedStatement, event.getId())) {
                 return false;
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public List<Report> getReportsFromEvent(Event event) throws DBException {
+    public List<Report> getReportsFromEvent(Event event) throws DAOException {
         return getReports(GET_EVENTS_REPORT, event.getId());
     }
 
     @Override
-    public boolean setReportForSpeaker(User speaker, Report report) throws DBException {
+    public boolean setReportForSpeaker(User speaker, Report report) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_REPORT)) {
             if (getReportsFromId(report, preparedStatement, speaker.getId())) {
                 return false;
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return true;
     }
 
     @Override
-    public List<Report> getReportsFromSpeaker(User speaker) throws DBException {
+    public List<Report> getReportsFromSpeaker(User speaker) throws DAOException {
         return getReports(GET_SPEAKERS_REPORT, speaker.getId());
     }
 
-    private List<Report> getReports(String query, int id) throws DBException {
+    private List<Report> getReports(String query, int id) throws DAOException {
         List<Report> reports = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
@@ -134,7 +135,7 @@ public class MysqlReportDAO implements ReportDAO {
                 }
             }
         } catch (SQLException e) {
-            throw new DBException(e);
+            throw new DAOException(e);
         }
         return reports;
     }

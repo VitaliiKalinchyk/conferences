@@ -10,7 +10,10 @@ public final class UserConstants {
 
     public static final String GET_USERS = "SELECT * FROM user";
 
-    public static final String GET_USER = "SELECT * FROM user WHERE email=?";
+    public static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id=?";
+
+    public static final String GET_USER_BY_EMAIL = "SELECT * FROM user WHERE email=?";
+
 
     public static final String EDIT_USER =
             "UPDATE user SET email=?, password=?, name=?, surname=?, notification=? WHERE id=?";
