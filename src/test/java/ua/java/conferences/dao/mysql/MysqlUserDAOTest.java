@@ -3,7 +3,7 @@ package ua.java.conferences.dao.mysql;
 import org.junit.jupiter.api.*;
 import ua.java.conferences.entity.*;
 import ua.java.conferences.entity.role.Role;
-import ua.java.conferences.exception.DBException;
+import ua.java.conferences.exception.DAOException;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -20,11 +20,11 @@ class MysqlUserDAOTest {
     }
 
     @Test
-    void testCrud() throws DBException {
+    void testCrud() throws DAOException {
         User testUser = getTestUser();
         assertTrue(userDAO.add(testUser));
 
-        User resultUser = userDAO.get(testUser);
+        User resultUser = userDAO.getById(testUser.getId());
         assertNotEquals(0, resultUser.getId());
         assertEquals(resultUser, testUser);
         assertEquals(resultUser.getId(), testUser.getId());
@@ -41,7 +41,7 @@ class MysqlUserDAOTest {
         resultUser.setName("Result");
         assertTrue(userDAO.update(resultUser));
 
-        User changedUser = userDAO.get(resultUser);
+        User changedUser = userDAO.getByEmail(resultUser);
         assertEquals("Result", changedUser.getName());
         assertEquals(resultUser, changedUser);
 
@@ -51,29 +51,29 @@ class MysqlUserDAOTest {
     }
 
     @Test
-    void testAddTwice() throws DBException {
+    void testAddTwice() throws DAOException {
         assertTrue(userDAO.add(getTestUser()));
         assertFalse(userDAO.add(getTestUser()));
     }
 
     @Test
     void testGetAbsent() {
-        DBException exception = assertThrows(DBException.class, () -> userDAO.get(getTestUser()));
+        DAOException exception = assertThrows(DAOException.class, () -> userDAO.getByEmail(getTestUser()));
         assertEquals("No such user", exception.getMessage());
     }
 
     @Test
-    void testUpdateAbsent() throws DBException {
+    void testUpdateAbsent() throws DAOException {
         assertFalse(userDAO.update(getTestUser()));
     }
 
     @Test
-    void testDeleteAbsent() throws DBException {
+    void testDeleteAbsent() throws DAOException {
         assertFalse(userDAO.delete(getTestUser()));
     }
 
     @Test
-    void testRegisterForEvent() throws DBException {
+    void testRegisterForEvent() throws DAOException {
         User testUser = getTestUser();
         userDAO.add(testUser);
         Event testEvent = getTestEvent();
@@ -86,7 +86,7 @@ class MysqlUserDAOTest {
     }
 
     @Test
-    void testBadRegistrations() throws DBException {
+    void testBadRegistrations() throws DAOException {
         User testUser = getTestUser();
         userDAO.add(testUser);
         Event testEvent = getTestEvent();
@@ -102,7 +102,7 @@ class MysqlUserDAOTest {
     }
 
     @Test
-    void testRoleMethods() throws DBException {
+    void testRoleMethods() throws DAOException {
         User testUser = getTestUser();
         userDAO.add(testUser);
         assertEquals(Role.VISITOR, userDAO.getUsersRole(testUser));
@@ -118,7 +118,7 @@ class MysqlUserDAOTest {
     }
 
     @Test
-    void testSpeakerByReport() throws DBException {
+    void testSpeakerByReport() throws DAOException {
         User testUser = getTestUser();
         userDAO.add(testUser);
         Report testReport = getTestReport();
@@ -130,7 +130,7 @@ class MysqlUserDAOTest {
     @Test
     void testNoReportForSpeaker() {
         Report testReport = getTestReport();
-        DBException exception = assertThrows(DBException.class, () -> userDAO.getSpeakerByReport(testReport));
+        DAOException exception = assertThrows(DAOException.class, () -> userDAO.getSpeakerByReport(testReport));
         assertEquals("No speaker for this report", exception.getMessage());
     }
 }

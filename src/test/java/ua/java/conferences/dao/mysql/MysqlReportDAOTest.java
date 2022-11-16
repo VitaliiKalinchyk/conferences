@@ -3,7 +3,7 @@ package ua.java.conferences.dao.mysql;
 import org.junit.jupiter.api.*;
 import ua.java.conferences.entity.*;
 import ua.java.conferences.entity.role.Role;
-import ua.java.conferences.exception.DBException;
+import ua.java.conferences.exception.DAOException;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
@@ -20,11 +20,11 @@ class MysqlReportDAOTest {
     }
 
     @Test
-    void testCrud() throws DBException {
+    void testCrud() throws DAOException {
         Report testReport = getTestReport();
         assertTrue(reportDAO.add(testReport));
 
-        Report resultReport = reportDAO.get(testReport);
+        Report resultReport = reportDAO.getById(testReport.getId());
         assertNotEquals(0, resultReport.getId());
         assertEquals(resultReport, testReport);
         assertEquals(resultReport.getId(), testReport.getId());
@@ -39,14 +39,14 @@ class MysqlReportDAOTest {
         resultReport.setApproved(true);
         assertTrue(reportDAO.update(resultReport));
 
-        Report changedReport = reportDAO.get(resultReport);
+        Report changedReport = reportDAO.getById(resultReport.getId());
         assertTrue(changedReport.isApproved());
         assertEquals(resultReport, changedReport);
 
         resultReport.setAccepted(true);
         assertTrue(reportDAO.update(resultReport));
 
-        changedReport = reportDAO.get(resultReport);
+        changedReport = reportDAO.getById(resultReport.getId());
         assertTrue(changedReport.isAccepted());
         assertEquals(resultReport, changedReport);
         assertTrue(reportDAO.delete(resultReport));
@@ -57,22 +57,22 @@ class MysqlReportDAOTest {
 
     @Test
     void testGetAbsent() {
-        DBException exception = assertThrows(DBException.class, () -> reportDAO.get(getTestReport()));
+        DAOException exception = assertThrows(DAOException.class, () -> reportDAO.getById(getTestReport().getId()));
         assertEquals("No such report", exception.getMessage());
     }
 
     @Test
-    void testUpdateAbsent() throws DBException {
+    void testUpdateAbsent() throws DAOException {
         assertFalse(reportDAO.update(getTestReport()));
     }
 
     @Test
-    void testDeleteAbsent() throws DBException {
+    void testDeleteAbsent() throws DAOException {
         assertFalse(reportDAO.delete(getTestReport()));
     }
 
     @Test
-    void testReportInEvent() throws DBException {
+    void testReportInEvent() throws DAOException {
         Report testReport = getTestReport();
         reportDAO.add(testReport);
         Event testEvent = getTestEvent();
@@ -85,7 +85,7 @@ class MysqlReportDAOTest {
     }
 
     @Test
-    void testWrongEvent() throws DBException {
+    void testWrongEvent() throws DAOException {
         Report testReport = getTestReport();
         reportDAO.add(testReport);
         Event testEvent = getTestEvent();
@@ -93,7 +93,7 @@ class MysqlReportDAOTest {
     }
 
     @Test
-    void testWrongReport() throws DBException {
+    void testWrongReport() throws DAOException {
         Report testReport = getTestReport();
         Event testEvent = getTestEvent();
         eventDAO.add(testEvent);
@@ -101,20 +101,20 @@ class MysqlReportDAOTest {
     }
 
     @Test
-    void testWrongReportAndEvent() throws DBException {
+    void testWrongReportAndEvent() throws DAOException {
         Report testReport = getTestReport();
         Event testEvent = getTestEvent();
         assertFalse(reportDAO.setEventForReport(testEvent, testReport));
     }
 
     @Test
-    void testSpeakerForReport() throws DBException {
+    void testSpeakerForReport() throws DAOException {
         Report testReport = getTestReport();
         reportDAO.add(testReport);
         User testUser = getTestUser();
         userDAO.add(testUser);
         userDAO.setUsersRole(testUser, Role.SPEAKER);
-        testUser = userDAO.get(testUser);
+        testUser = userDAO.getByEmail(testUser);
         assertTrue(reportDAO.setReportForSpeaker(testUser, testReport));
 
         List<Report> reports = reportDAO.getReportsFromSpeaker(testUser);
@@ -123,7 +123,7 @@ class MysqlReportDAOTest {
     }
 
     @Test
-    void testWrongReportAndSpeaker() throws DBException {
+    void testWrongReportAndSpeaker() throws DAOException {
         Report testReport = getTestReport();
         User testUser = getTestUser();
         assertFalse(reportDAO.setReportForSpeaker(testUser, testReport));
