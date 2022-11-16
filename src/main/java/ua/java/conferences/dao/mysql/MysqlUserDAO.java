@@ -37,11 +37,11 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public User getById(int id) throws DAOException {
+    public User getById(long id) throws DAOException {
         User user;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = createUser(resultSet);

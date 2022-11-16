@@ -35,11 +35,11 @@ public class MysqlReportDAO implements ReportDAO {
     }
 
     @Override
-    public Report getById(int id) throws DAOException {
+    public Report getById(long id) throws DAOException {
         Report report;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORT_BY_ID)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     report = createReport(resultSet);

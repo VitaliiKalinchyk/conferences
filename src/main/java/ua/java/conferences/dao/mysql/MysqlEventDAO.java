@@ -36,11 +36,11 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     @Override
-    public Event getById(int id) throws DAOException {
+    public Event getById(long id) throws DAOException {
         Event event;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_ID)) {
-            preparedStatement.setInt(1, id);
+            preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
