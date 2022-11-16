@@ -13,6 +13,7 @@ import java.util.List;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static ua.java.conferences.dao.mysql.constants.EventConstants.*;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
+import static ua.java.conferences.exception.DAOExceptionMessages.NO_SUCH_EVENT;
 
 public class MysqlEventDAO implements EventDAO {
 
@@ -45,7 +46,7 @@ public class MysqlEventDAO implements EventDAO {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
                 } else {
-                    throw new DAOException("No such event");
+                    throw new DAOException(NO_SUCH_EVENT);
                 }
             }
         } catch (SQLException e) {
@@ -63,7 +64,7 @@ public class MysqlEventDAO implements EventDAO {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
                 } else {
-                    throw new DAOException("No such event");
+                    throw new DAOException(NO_SUCH_EVENT);
                 }
             }
         } catch (SQLException e) {
@@ -141,7 +142,7 @@ public class MysqlEventDAO implements EventDAO {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
                 } else {
-                    throw new DAOException("No such event");
+                    throw new DAOException(NO_SUCH_EVENT);
                 }
             }
         } catch (SQLException e) {

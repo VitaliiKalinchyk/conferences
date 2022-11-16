@@ -12,6 +12,7 @@ import java.util.*;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static ua.java.conferences.dao.mysql.constants.ReportConstants.*;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
+import static ua.java.conferences.exception.DAOExceptionMessages.NO_SUCH_REPORT;
 
 public class MysqlReportDAO implements ReportDAO {
 
@@ -44,7 +45,7 @@ public class MysqlReportDAO implements ReportDAO {
                 if (resultSet.next()) {
                     report = createReport(resultSet);
                 } else {
-                    throw new DAOException("No such report");
+                    throw new DAOException(NO_SUCH_REPORT);
                 }
             }        } catch (SQLException e) {
             throw new DAOException(e);

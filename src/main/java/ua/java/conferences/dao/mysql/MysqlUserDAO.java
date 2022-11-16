@@ -14,6 +14,7 @@ import java.util.List;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
 import static ua.java.conferences.dao.mysql.constants.UserConstants.*;
+import static ua.java.conferences.exception.DAOExceptionMessages.*;
 
 public class MysqlUserDAO implements UserDAO {
 
@@ -46,7 +47,7 @@ public class MysqlUserDAO implements UserDAO {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
                 } else {
-                    throw new DAOException("No such user");
+                    throw new DAOException(NO_SUCH_USER);
                 }
             }
         } catch (SQLException e) {
@@ -64,7 +65,7 @@ public class MysqlUserDAO implements UserDAO {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
                 } else {
-                throw new DAOException("No such user");
+                throw new DAOException(NO_SUCH_USER);
                 }
             }
         } catch (SQLException e) {
@@ -132,7 +133,7 @@ public class MysqlUserDAO implements UserDAO {
                 if (resultSet.next()) {
                     role = Role.valueOf(resultSet.getString(ROLE));
                 } else {
-                    throw new DAOException("No such user");
+                    throw new DAOException(NO_SUCH_USER);
                 }
             }
         }catch (SQLException e) {
@@ -176,7 +177,7 @@ public class MysqlUserDAO implements UserDAO {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
                 } else {
-                    throw new DAOException("No speaker for this report");
+                    throw new DAOException(NO_SPEAKER);
                 }
             }
         } catch (SQLException e) {
