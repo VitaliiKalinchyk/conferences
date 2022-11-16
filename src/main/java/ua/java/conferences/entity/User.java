@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public class User {
 
-    private int id;
+    private long id;
 
     private String email;
 
@@ -16,13 +16,11 @@ public class User {
 
     private boolean emailNotification;
 
-    public User() {}
-
-    public int getId() {
+    public long getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

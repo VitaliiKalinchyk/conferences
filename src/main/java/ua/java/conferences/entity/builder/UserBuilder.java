@@ -11,7 +11,7 @@ public final class UserBuilder {
         this.user = new User();
     }
 
-    public UserBuilder setId(int id) {
+    public UserBuilder setId(long id) {
         this.user.setId(id);
         return this;
     }

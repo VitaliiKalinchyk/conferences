@@ -10,7 +10,7 @@ public class ReportBuilder {
         this.report = new Report();
     }
 
-    public ReportBuilder setId(int id) {
+    public ReportBuilder setId(long id) {
         this.report.setId(id);
         return this;
     }

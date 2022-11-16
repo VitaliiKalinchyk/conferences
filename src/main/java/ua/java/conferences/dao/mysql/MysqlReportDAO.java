@@ -62,7 +62,7 @@ public class MysqlReportDAO implements ReportDAO {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_REPORT)) {
             setReportFields(report, preparedStatement);
-            preparedStatement.setInt(4, report.getId());
+            preparedStatement.setLong(4, report.getId());
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -76,7 +76,7 @@ public class MysqlReportDAO implements ReportDAO {
     public boolean delete(Report report) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_REPORT)) {
-            preparedStatement.setInt(1, report.getId());
+            preparedStatement.setLong(1, report.getId());
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -122,12 +122,12 @@ public class MysqlReportDAO implements ReportDAO {
         return getReports(GET_SPEAKERS_REPORT, speaker.getId());
     }
 
-    private List<Report> getReports(String query, int id) throws DAOException {
+    private List<Report> getReports(String query, long id) throws DAOException {
         List<Report> reports = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             if (id > 0) {
-                preparedStatement.setInt(1, id);
+                preparedStatement.setLong(1, id);
             }
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -155,9 +155,9 @@ public class MysqlReportDAO implements ReportDAO {
         preparedStatement.setInt(3, report.isApproved() ? 1 : 0);
     }
 
-    private boolean getReportsFromId(Report report, PreparedStatement preparedStatement, int id) throws SQLException {
-        preparedStatement.setInt(1, id);
-        preparedStatement.setInt(2, report.getId());
+    private boolean getReportsFromId(Report report, PreparedStatement preparedStatement, long id) throws SQLException {
+        preparedStatement.setLong(1, id);
+        preparedStatement.setLong(2, report.getId());
         try {
             int affectedRows = preparedStatement.executeUpdate();
             return affectedRows == 0;

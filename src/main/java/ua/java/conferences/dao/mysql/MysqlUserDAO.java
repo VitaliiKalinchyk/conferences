@@ -83,7 +83,7 @@ public class MysqlUserDAO implements UserDAO {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
             setUsersFields(user, preparedStatement);
-            preparedStatement.setInt(6, user.getId());
+            preparedStatement.setLong(6, user.getId());
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -97,7 +97,7 @@ public class MysqlUserDAO implements UserDAO {
     public boolean delete(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
-            preparedStatement.setInt(1, user.getId());
+            preparedStatement.setLong(1, user.getId());
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -111,8 +111,8 @@ public class MysqlUserDAO implements UserDAO {
     public boolean registerForEvent(User user, Event event) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_FOR_EVENT)) {
-            preparedStatement.setInt(1, user.getId());
-            preparedStatement.setInt(2, event.getId());
+            preparedStatement.setLong(1, user.getId());
+            preparedStatement.setLong(2, event.getId());
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -127,7 +127,7 @@ public class MysqlUserDAO implements UserDAO {
         Role role;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ROLE)) {
-            preparedStatement.setInt(1, user.getId());
+            preparedStatement.setLong(1, user.getId());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     role = Role.valueOf(resultSet.getString(ROLE));
@@ -146,7 +146,7 @@ public class MysqlUserDAO implements UserDAO {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_ROLE)) {
             preparedStatement.setInt(1, role.getValue());
-            preparedStatement.setInt(2, user.getId());
+            preparedStatement.setLong(2, user.getId());
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -171,7 +171,7 @@ public class MysqlUserDAO implements UserDAO {
         User user;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_SPEAKER)) {
-            preparedStatement.setInt(1, report.getId());
+            preparedStatement.setLong(1, report.getId());
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
@@ -185,12 +185,12 @@ public class MysqlUserDAO implements UserDAO {
         return user;
     }
 
-    private List<User> getUsers(String query, int id) throws DAOException {
+    private List<User> getUsers(String query, long id) throws DAOException {
         List<User> users = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             if (id > 0) {
-                preparedStatement.setInt(1, id);
+                preparedStatement.setLong(1, id);
             }
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {

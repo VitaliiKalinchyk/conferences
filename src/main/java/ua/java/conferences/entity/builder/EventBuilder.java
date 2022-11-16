@@ -12,11 +12,7 @@ public class EventBuilder {
         this.event = new Event();
     }
 
-    public EventBuilder(Event event) {
-        this.event = event;
-    }
-
-    public EventBuilder setId(int id) {
+    public EventBuilder setId(long id) {
         this.event.setId(id);
         return this;
     }
