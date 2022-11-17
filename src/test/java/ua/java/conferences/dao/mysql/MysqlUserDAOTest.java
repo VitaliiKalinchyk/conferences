@@ -41,11 +41,11 @@ class MysqlUserDAOTest {
         resultUser.setName("Result");
         assertTrue(userDAO.update(resultUser));
 
-        User changedUser = userDAO.getByEmail(resultUser);
+        User changedUser = userDAO.getByEmail(resultUser.getEmail());
         assertEquals("Result", changedUser.getName());
         assertEquals(resultUser, changedUser);
 
-        assertTrue(userDAO.delete(resultUser));
+        assertTrue(userDAO.delete(resultUser.getId()));
         users = userDAO.getAll();
         assertEquals(0, users.size());
     }
@@ -58,7 +58,7 @@ class MysqlUserDAOTest {
 
     @Test
     void testGetAbsent() {
-        DAOException exception = assertThrows(DAOException.class, () -> userDAO.getByEmail(getTestUser()));
+        DAOException exception = assertThrows(DAOException.class, () -> userDAO.getByEmail(getTestUser().getEmail()));
         assertEquals("No such user", exception.getMessage());
     }
 
@@ -69,7 +69,7 @@ class MysqlUserDAOTest {
 
     @Test
     void testDeleteAbsent() throws DAOException {
-        assertFalse(userDAO.delete(getTestUser()));
+        assertFalse(userDAO.delete(getTestUser().getId()));
     }
 
     @Test

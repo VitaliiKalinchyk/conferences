@@ -14,5 +14,5 @@ public interface EntityDAO<T> {
 
     boolean update(T t) throws DAOException;
 
-    boolean delete(T t) throws DAOException;
+    boolean delete(long id) throws DAOException;
 }

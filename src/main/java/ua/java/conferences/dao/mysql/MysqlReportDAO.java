@@ -74,10 +74,10 @@ public class MysqlReportDAO implements ReportDAO {
     }
 
     @Override
-    public boolean delete(Report report) throws DAOException {
+    public boolean delete(long id) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_REPORT)) {
-            preparedStatement.setLong(1, report.getId());
+            preparedStatement.setLong(1, id);
             if (executeStatement(preparedStatement)) {
                 return false;
             }

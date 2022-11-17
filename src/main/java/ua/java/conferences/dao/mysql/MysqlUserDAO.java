@@ -57,10 +57,11 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public User getByEmail(User user) throws DAOException {
+    public User getByEmail(String email) throws DAOException {
+        User user;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL)) {
-            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
@@ -95,10 +96,10 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean delete(User user) throws DAOException {
+    public boolean delete(long id) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
-            preparedStatement.setLong(1, user.getId());
+            preparedStatement.setLong(1, id);
             if (executeStatement(preparedStatement)) {
                 return false;
             }

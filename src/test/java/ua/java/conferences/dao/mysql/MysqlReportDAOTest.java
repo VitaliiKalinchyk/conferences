@@ -49,7 +49,7 @@ class MysqlReportDAOTest {
         changedReport = reportDAO.getById(resultReport.getId());
         assertTrue(changedReport.isAccepted());
         assertEquals(resultReport, changedReport);
-        assertTrue(reportDAO.delete(resultReport));
+        assertTrue(reportDAO.delete(resultReport.getId()));
 
         reports = reportDAO.getAll();
         assertEquals(0, reports.size());
@@ -68,7 +68,7 @@ class MysqlReportDAOTest {
 
     @Test
     void testDeleteAbsent() throws DAOException {
-        assertFalse(reportDAO.delete(getTestReport()));
+        assertFalse(reportDAO.delete(getTestReport().getId()));
     }
 
     @Test
@@ -114,7 +114,7 @@ class MysqlReportDAOTest {
         User testUser = getTestUser();
         userDAO.add(testUser);
         userDAO.setUsersRole(testUser, Role.SPEAKER);
-        testUser = userDAO.getByEmail(testUser);
+        testUser = userDAO.getByEmail(testUser.getEmail());
         assertTrue(reportDAO.setReportForSpeaker(testUser, testReport));
 
         List<Report> reports = reportDAO.getReportsFromSpeaker(testUser);

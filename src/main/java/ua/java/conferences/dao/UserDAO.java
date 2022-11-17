@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface UserDAO extends EntityDAO<User> {
 
-    User getByEmail(User user) throws DAOException;
+    User getByEmail(String email) throws DAOException;
 
     User getSpeakerByReport(Report report) throws DAOException;
 

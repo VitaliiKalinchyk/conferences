@@ -23,7 +23,6 @@ class MysqlEventDAOTest {
         Event testEvent = getTestEvent();
         assertTrue(eventDAO.add(testEvent));
 
-        System.out.println(eventDAO.getAll());
         Event resultEvent = eventDAO.getById(testEvent.getId());
         assertNotEquals(0, testEvent.getId());
         assertEquals(resultEvent, testEvent);
@@ -43,7 +42,7 @@ class MysqlEventDAOTest {
         Event changedEvent = eventDAO.getByTitle(resultEvent);
         assertEquals("Result", changedEvent.getTitle());
         assertEquals(resultEvent, changedEvent);
-        assertTrue(eventDAO.delete(resultEvent));
+        assertTrue(eventDAO.delete(resultEvent.getId()));
 
         events = eventDAO.getAll();
         assertEquals(0, events.size());
@@ -68,7 +67,7 @@ class MysqlEventDAOTest {
 
     @Test
     void testDeleteAbsent() throws DAOException {
-        assertFalse(eventDAO.delete(getTestEvent()));
+        assertFalse(eventDAO.delete(getTestEvent().getId()));
     }
 
     @Test
@@ -87,7 +86,7 @@ class MysqlEventDAOTest {
         eventDAO.add(getTestEvent());
         Event testEvent = eventDAO.getByTitle(getTestEvent());
         userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser());
+        User testUser = userDAO.getByEmail(getTestUser().getEmail());
         userDAO.registerForEvent(testUser, testEvent);
         List<Event> events = eventDAO.getEventsByUser(testUser);
         assertTrue(events.contains(testEvent));
@@ -99,7 +98,7 @@ class MysqlEventDAOTest {
         eventDAO.add(getTestEvent());
         Event testEvent = eventDAO.getByTitle(getTestEvent());
         userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser());
+        User testUser = userDAO.getByEmail(getTestUser().getEmail());
         userDAO.registerForEvent(testUser, testEvent);
         List<Event> events = eventDAO.getEventsBySpeaker(testUser);
         assertFalse(events.contains(testEvent));
@@ -111,7 +110,7 @@ class MysqlEventDAOTest {
         eventDAO.add(getTestEvent());
         Event testEvent = eventDAO.getByTitle(getTestEvent());
         userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser());
+        User testUser = userDAO.getByEmail(getTestUser().getEmail());
         Report testReport = getTestReport();
         reportDAO.add(testReport);
         reportDAO.setReportForSpeaker(testUser, testReport);
@@ -126,7 +125,7 @@ class MysqlEventDAOTest {
         eventDAO.add(getTestEvent());
         Event testEvent = eventDAO.getByTitle(getTestEvent());
         userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser());
+        User testUser = userDAO.getByEmail(getTestUser().getEmail());
         Report testReport = getTestReport();
         reportDAO.add(testReport);
         reportDAO.setReportForSpeaker(testUser, testReport);

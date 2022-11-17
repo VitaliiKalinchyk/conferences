@@ -94,10 +94,10 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     @Override
-    public boolean delete(Event event) throws DAOException {
+    public boolean delete(long id) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EVENT)) {
-            preparedStatement.setLong(1, event.getId());
+            preparedStatement.setLong(1, id);
             if (executeStatement(preparedStatement)) {
                 return false;
             }
