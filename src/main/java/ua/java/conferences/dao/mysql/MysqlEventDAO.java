@@ -56,10 +56,11 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     @Override
-    public Event getByTitle(Event event) throws DAOException {
+    public Event getByTitle(String title) throws DAOException {
+        Event event;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_TITLE)) {
-            preparedStatement.setString(1, event.getTitle());
+            preparedStatement.setString(1, title);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
@@ -108,11 +109,11 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     @Override
-    public boolean setVisitors(Event event, int visitors) throws DAOException {
+    public boolean setVisitors(long eventId, int visitors) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_VISITORS)) {
             preparedStatement.setInt(1, visitors);
-            preparedStatement.setLong(2, event.getId());
+            preparedStatement.setLong(2, eventId);
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -123,21 +124,21 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getEventsByUser(User user) throws DAOException {
-        return getEvents(GET_USERS_EVENTS, user.getId());
+    public List<Event> getEventsByUser(long userId) throws DAOException {
+        return getEvents(GET_USERS_EVENTS, userId);
     }
 
     @Override
-    public List<Event> getEventsBySpeaker(User user) throws DAOException {
-        return getEvents(GET_SPEAKERS_EVENTS, user.getId());
+    public List<Event> getEventsBySpeaker(long userId) throws DAOException {
+        return getEvents(GET_SPEAKERS_EVENTS, userId);
     }
 
     @Override
-    public Event getEventByReport(Report report) throws DAOException {
+    public Event getEventByReport(long reportId) throws DAOException {
         Event event;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORT_EVENT)) {
-            preparedStatement.setLong(1, report.getId());
+            preparedStatement.setLong(1, reportId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);

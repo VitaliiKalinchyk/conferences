@@ -39,7 +39,7 @@ class MysqlEventDAOTest {
 
         resultEvent.setTitle("Result");
         assertTrue(eventDAO.update(resultEvent));
-        Event changedEvent = eventDAO.getByTitle(resultEvent);
+        Event changedEvent = eventDAO.getByTitle(resultEvent.getTitle());
         assertEquals("Result", changedEvent.getTitle());
         assertEquals(resultEvent, changedEvent);
         assertTrue(eventDAO.delete(resultEvent.getId()));
@@ -56,7 +56,7 @@ class MysqlEventDAOTest {
 
     @Test
     void testGetAbsent() {
-        DAOException exception = assertThrows(DAOException.class, () -> eventDAO.getByTitle(getTestEvent()));
+        DAOException exception = assertThrows(DAOException.class, () -> eventDAO.getByTitle(getTestEvent().getTitle()));
         assertEquals("No such event", exception.getMessage());
     }
 
@@ -75,20 +75,20 @@ class MysqlEventDAOTest {
         int visitors = 100;
         Event testEvent = getTestEvent();
         eventDAO.add(testEvent);
-        assertTrue(eventDAO.setVisitors(testEvent, visitors));
+        assertTrue(eventDAO.setVisitors(testEvent.getId(), visitors));
 
-        testEvent = eventDAO.getByTitle(testEvent);
+        testEvent = eventDAO.getByTitle(testEvent.getTitle());
         assertEquals(visitors, testEvent.getVisitors());
     }
 
     @Test
     void testUsersEvents() throws DAOException {
         eventDAO.add(getTestEvent());
-        Event testEvent = eventDAO.getByTitle(getTestEvent());
+        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle());
         userDAO.add(getTestUser());
         User testUser = userDAO.getByEmail(getTestUser().getEmail());
-        userDAO.registerForEvent(testUser, testEvent);
-        List<Event> events = eventDAO.getEventsByUser(testUser);
+        userDAO.registerForEvent(testUser.getId(), testEvent.getId());
+        List<Event> events = eventDAO.getEventsByUser(testUser.getId());
         assertTrue(events.contains(testEvent));
         assertEquals(1, events.size());
     }
@@ -96,11 +96,11 @@ class MysqlEventDAOTest {
     @Test
     void testUsersEventsWrongMethod() throws DAOException {
         eventDAO.add(getTestEvent());
-        Event testEvent = eventDAO.getByTitle(getTestEvent());
+        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle());
         userDAO.add(getTestUser());
         User testUser = userDAO.getByEmail(getTestUser().getEmail());
-        userDAO.registerForEvent(testUser, testEvent);
-        List<Event> events = eventDAO.getEventsBySpeaker(testUser);
+        userDAO.registerForEvent(testUser.getId(), testEvent.getId());
+        List<Event> events = eventDAO.getEventsBySpeaker(testUser.getId());
         assertFalse(events.contains(testEvent));
         assertEquals(0, events.size());
     }
@@ -108,14 +108,14 @@ class MysqlEventDAOTest {
     @Test
     void testSpeakersEvents() throws DAOException {
         eventDAO.add(getTestEvent());
-        Event testEvent = eventDAO.getByTitle(getTestEvent());
+        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle());
         userDAO.add(getTestUser());
         User testUser = userDAO.getByEmail(getTestUser().getEmail());
         Report testReport = getTestReport();
         reportDAO.add(testReport);
-        reportDAO.setReportForSpeaker(testUser, testReport);
-        reportDAO.setEventForReport(testEvent, testReport);
-        List<Event> events = eventDAO.getEventsBySpeaker(testUser);
+        reportDAO.setReportForSpeaker(testUser.getId(), testReport.getId());
+        reportDAO.setEventForReport(testEvent.getId(), testReport.getId());
+        List<Event> events = eventDAO.getEventsBySpeaker(testUser.getId());
         assertTrue(events.contains(testEvent));
         assertEquals(1, events.size());
     }
@@ -123,14 +123,14 @@ class MysqlEventDAOTest {
     @Test
     void testSpeakersEventsWrongMethod() throws DAOException {
         eventDAO.add(getTestEvent());
-        Event testEvent = eventDAO.getByTitle(getTestEvent());
+        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle());
         userDAO.add(getTestUser());
         User testUser = userDAO.getByEmail(getTestUser().getEmail());
         Report testReport = getTestReport();
         reportDAO.add(testReport);
-        reportDAO.setReportForSpeaker(testUser, testReport);
-        reportDAO.setEventForReport(testEvent, testReport);
-        List<Event> events = eventDAO.getEventsByUser(testUser);
+        reportDAO.setReportForSpeaker(testUser.getId(), testReport.getId());
+        reportDAO.setEventForReport(testEvent.getId(), testReport.getId());
+        List<Event> events = eventDAO.getEventsByUser(testUser.getId());
         assertFalse(events.contains(testEvent));
         assertEquals(0, events.size());
     }
@@ -138,11 +138,11 @@ class MysqlEventDAOTest {
     @Test
     void testEventByReport() throws DAOException {
         eventDAO.add(getTestEvent());
-        Event testEvent = eventDAO.getByTitle(getTestEvent());
+        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle());
         Report testReport = getTestReport();
         reportDAO.add(testReport);
-        reportDAO.setEventForReport(testEvent, testReport);
-        Event event = eventDAO.getEventByReport(testReport);
+        reportDAO.setEventForReport(testEvent.getId(), testReport.getId());
+        Event event = eventDAO.getEventByReport(testReport.getId());
         assertEquals(event, testEvent);
     }
 
@@ -150,7 +150,7 @@ class MysqlEventDAOTest {
     void testEventByReportBadCase() throws DAOException {
         Report testReport = getTestReport();
         reportDAO.add(testReport);
-        DAOException exception = assertThrows(DAOException.class, () -> eventDAO.getEventByReport(testReport));
+        DAOException exception = assertThrows(DAOException.class, () -> eventDAO.getEventByReport(testReport.getId()));
         assertEquals("No such event", exception.getMessage());
     }
 }

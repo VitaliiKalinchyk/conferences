@@ -77,9 +77,9 @@ class MysqlReportDAOTest {
         reportDAO.add(testReport);
         Event testEvent = getTestEvent();
         eventDAO.add(testEvent);
-        assertTrue(reportDAO.setEventForReport(testEvent, testReport));
+        assertTrue(reportDAO.setEventForReport(testEvent.getId(), testReport.getId()));
 
-        List<Report> reports = reportDAO.getReportsFromEvent(testEvent);
+        List<Report> reports = reportDAO.getReportsFromEvent(testEvent.getId());
         assertTrue(reports.contains(testReport));
         assertEquals(1, reports.size());
     }
@@ -89,7 +89,7 @@ class MysqlReportDAOTest {
         Report testReport = getTestReport();
         reportDAO.add(testReport);
         Event testEvent = getTestEvent();
-        assertFalse(reportDAO.setEventForReport(testEvent, testReport));
+        assertFalse(reportDAO.setEventForReport(testEvent.getId(), testReport.getId()));
     }
 
     @Test
@@ -97,14 +97,14 @@ class MysqlReportDAOTest {
         Report testReport = getTestReport();
         Event testEvent = getTestEvent();
         eventDAO.add(testEvent);
-        assertFalse(reportDAO.setEventForReport(testEvent, testReport));
+        assertFalse(reportDAO.setEventForReport(testEvent.getId(), testReport.getId()));
     }
 
     @Test
     void testWrongReportAndEvent() throws DAOException {
         Report testReport = getTestReport();
         Event testEvent = getTestEvent();
-        assertFalse(reportDAO.setEventForReport(testEvent, testReport));
+        assertFalse(reportDAO.setEventForReport(testEvent.getId(), testReport.getId()));
     }
 
     @Test
@@ -113,11 +113,11 @@ class MysqlReportDAOTest {
         reportDAO.add(testReport);
         User testUser = getTestUser();
         userDAO.add(testUser);
-        userDAO.setUsersRole(testUser, Role.SPEAKER);
+        userDAO.setUsersRole(testUser.getId(), Role.SPEAKER);
         testUser = userDAO.getByEmail(testUser.getEmail());
-        assertTrue(reportDAO.setReportForSpeaker(testUser, testReport));
+        assertTrue(reportDAO.setReportForSpeaker(testUser.getId(), testReport.getId()));
 
-        List<Report> reports = reportDAO.getReportsFromSpeaker(testUser);
+        List<Report> reports = reportDAO.getReportsFromSpeaker(testUser.getId());
         assertTrue(reports.contains(testReport));
         assertEquals(1, reports.size());
     }
@@ -126,6 +126,6 @@ class MysqlReportDAOTest {
     void testWrongReportAndSpeaker() throws DAOException {
         Report testReport = getTestReport();
         User testUser = getTestUser();
-        assertFalse(reportDAO.setReportForSpeaker(testUser, testReport));
+        assertFalse(reportDAO.setReportForSpeaker(testUser.getId(), testReport.getId()));
     }
 }

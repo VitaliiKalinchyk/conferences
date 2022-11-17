@@ -10,15 +10,15 @@ public interface UserDAO extends EntityDAO<User> {
 
     User getByEmail(String email) throws DAOException;
 
-    User getSpeakerByReport(Report report) throws DAOException;
+    User getSpeakerByReport(long reportId) throws DAOException;
 
     List<User> getUsersByRole(Role role) throws DAOException;
 
-    List<User> getUsersByEvent(Event event) throws DAOException;
+    List<User> getUsersByEvent(long eventId) throws DAOException;
 
-    boolean registerForEvent(User user, Event event) throws DAOException;
+    boolean registerForEvent(long userId, long eventId) throws DAOException;
 
-    Role getUsersRole(User user) throws DAOException;
+    Role getUsersRole(long userId) throws DAOException;
 
-    boolean setUsersRole(User user, Role role) throws DAOException;
+    boolean setUsersRole(long userId, Role role) throws DAOException;
 }

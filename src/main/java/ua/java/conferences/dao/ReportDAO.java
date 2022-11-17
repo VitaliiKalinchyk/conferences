@@ -7,11 +7,11 @@ import java.util.List;
 
 public interface ReportDAO extends EntityDAO<Report> {
 
-    boolean setEventForReport(Event event, Report report) throws DAOException;
+    boolean setEventForReport(long eventId, long reportId) throws DAOException;
 
-    List<Report> getReportsFromEvent(Event event) throws DAOException;
+    List<Report> getReportsFromEvent(long eventId) throws DAOException;
 
-    boolean setReportForSpeaker(User user, Report report) throws DAOException;
+    boolean setReportForSpeaker(long userId, long reportId) throws DAOException;
 
-    List<Report> getReportsFromSpeaker(User user) throws DAOException;
+    List<Report> getReportsFromSpeaker(long userId) throws DAOException;
 }

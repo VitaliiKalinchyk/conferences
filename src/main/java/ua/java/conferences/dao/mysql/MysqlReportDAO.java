@@ -88,10 +88,10 @@ public class MysqlReportDAO implements ReportDAO {
     }
 
     @Override
-    public boolean setEventForReport(Event event, Report report) throws DAOException {
+    public boolean setEventForReport(long eventId, long reportId) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_EVENT)) {
-            if (getReportsFromId(report, preparedStatement, event.getId())) {
+            if (getReportsFromId(reportId, preparedStatement, eventId)) {
                 return false;
             }
         } catch (SQLException e) {
@@ -101,15 +101,15 @@ public class MysqlReportDAO implements ReportDAO {
     }
 
     @Override
-    public List<Report> getReportsFromEvent(Event event) throws DAOException {
-        return getReports(GET_EVENTS_REPORT, event.getId());
+    public List<Report> getReportsFromEvent(long eventId) throws DAOException {
+        return getReports(GET_EVENTS_REPORT, eventId);
     }
 
     @Override
-    public boolean setReportForSpeaker(User speaker, Report report) throws DAOException {
+    public boolean setReportForSpeaker(long userId, long reportId) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_REPORT)) {
-            if (getReportsFromId(report, preparedStatement, speaker.getId())) {
+            if (getReportsFromId(reportId, preparedStatement, userId)) {
                 return false;
             }
         } catch (SQLException e) {
@@ -119,8 +119,8 @@ public class MysqlReportDAO implements ReportDAO {
     }
 
     @Override
-    public List<Report> getReportsFromSpeaker(User speaker) throws DAOException {
-        return getReports(GET_SPEAKERS_REPORT, speaker.getId());
+    public List<Report> getReportsFromSpeaker(long userId) throws DAOException {
+        return getReports(GET_SPEAKERS_REPORT, userId);
     }
 
     private List<Report> getReports(String query, long id) throws DAOException {
@@ -156,9 +156,9 @@ public class MysqlReportDAO implements ReportDAO {
         preparedStatement.setInt(3, report.isApproved() ? 1 : 0);
     }
 
-    private boolean getReportsFromId(Report report, PreparedStatement preparedStatement, long id) throws SQLException {
+    private boolean getReportsFromId(long reportId, PreparedStatement preparedStatement, long id) throws SQLException {
         preparedStatement.setLong(1, id);
-        preparedStatement.setLong(2, report.getId());
+        preparedStatement.setLong(2, reportId);
         try {
             int affectedRows = preparedStatement.executeUpdate();
             return affectedRows == 0;

@@ -38,11 +38,11 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public User getById(long id) throws DAOException {
+    public User getById(long userId) throws DAOException {
         User user;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID)) {
-            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
@@ -96,10 +96,10 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean delete(long id) throws DAOException {
+    public boolean delete(long userId) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
-            preparedStatement.setLong(1, id);
+            preparedStatement.setLong(1, userId);
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -110,11 +110,11 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean registerForEvent(User user, Event event) throws DAOException {
+    public boolean registerForEvent(long userId, long eventId) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_FOR_EVENT)) {
-            preparedStatement.setLong(1, user.getId());
-            preparedStatement.setLong(2, event.getId());
+            preparedStatement.setLong(1, userId);
+            preparedStatement.setLong(2, eventId);
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -125,11 +125,11 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public Role getUsersRole(User user) throws DAOException {
+    public Role getUsersRole(long userId) throws DAOException {
         Role role;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ROLE)) {
-            preparedStatement.setLong(1, user.getId());
+            preparedStatement.setLong(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     role = Role.valueOf(resultSet.getString(ROLE));
@@ -144,11 +144,11 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public boolean setUsersRole(User user, Role role) throws DAOException {
+    public boolean setUsersRole(long userId, Role role) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_ROLE)) {
             preparedStatement.setInt(1, role.getValue());
-            preparedStatement.setLong(2, user.getId());
+            preparedStatement.setLong(2, userId);
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -164,16 +164,16 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public List<User> getUsersByEvent(Event event) throws DAOException {
-        return this.getUsers(GET_USERS_BY_EVENT, event.getId());
+    public List<User> getUsersByEvent(long eventId) throws DAOException {
+        return this.getUsers(GET_USERS_BY_EVENT, eventId);
     }
 
     @Override
-    public User getSpeakerByReport(Report report) throws DAOException {
+    public User getSpeakerByReport(long reportId) throws DAOException {
         User user;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_SPEAKER)) {
-            preparedStatement.setLong(1, report.getId());
+            preparedStatement.setLong(1, reportId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = createUser(resultSet);

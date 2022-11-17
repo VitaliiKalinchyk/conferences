@@ -7,13 +7,13 @@ import java.util.List;
 
 public interface EventDAO extends EntityDAO<Event> {
 
-    Event getByTitle(Event event) throws DAOException;
+    Event getByTitle(String title) throws DAOException;
 
-    boolean setVisitors(Event event, int visitors) throws DAOException;
+    boolean setVisitors(long eventId, int visitors) throws DAOException;
 
-    List<Event> getEventsByUser(User user) throws DAOException;
+    List<Event> getEventsByUser(long userId) throws DAOException;
 
-    List<Event> getEventsBySpeaker(User user) throws DAOException;
+    List<Event> getEventsBySpeaker(long userId) throws DAOException;
 
-    Event getEventByReport(Report report) throws DAOException;
+    Event getEventByReport(long reportId) throws DAOException;
 }

@@ -78,9 +78,9 @@ class MysqlUserDAOTest {
         userDAO.add(testUser);
         Event testEvent = getTestEvent();
         eventDAO.add(testEvent);
-        assertTrue(userDAO.registerForEvent(testUser, testEvent));
+        assertTrue(userDAO.registerForEvent(testUser.getId(), testEvent.getId()));
 
-        List<User> users = userDAO.getUsersByEvent(testEvent);
+        List<User> users = userDAO.getUsersByEvent(testEvent.getId());
         assertTrue(users.contains(testUser));
         assertEquals(1, users.size());
     }
@@ -90,13 +90,13 @@ class MysqlUserDAOTest {
         User testUser = getTestUser();
         userDAO.add(testUser);
         Event testEvent = getTestEvent();
-        assertFalse(userDAO.registerForEvent(testUser, testEvent));
+        assertFalse(userDAO.registerForEvent(testUser.getId(), testEvent.getId()));
 
         eventDAO.add(testEvent);
-        assertTrue(userDAO.registerForEvent(testUser, testEvent));
-        assertFalse(userDAO.registerForEvent(testUser, testEvent));
+        assertTrue(userDAO.registerForEvent(testUser.getId(), testEvent.getId()));
+        assertFalse(userDAO.registerForEvent(testUser.getId(), testEvent.getId()));
 
-        List<User> users = userDAO.getUsersByEvent(testEvent);
+        List<User> users = userDAO.getUsersByEvent(testEvent.getId());
         assertTrue(users.contains(testUser));
         assertEquals(1, users.size());
     }
@@ -105,9 +105,9 @@ class MysqlUserDAOTest {
     void testRoleMethods() throws DAOException {
         User testUser = getTestUser();
         userDAO.add(testUser);
-        assertEquals(Role.VISITOR, userDAO.getUsersRole(testUser));
-        assertTrue(userDAO.setUsersRole(testUser, Role.ADMIN));
-        assertEquals(Role.ADMIN, userDAO.getUsersRole(testUser));
+        assertEquals(Role.VISITOR, userDAO.getUsersRole(testUser.getId()));
+        assertTrue(userDAO.setUsersRole(testUser.getId(), Role.ADMIN));
+        assertEquals(Role.ADMIN, userDAO.getUsersRole(testUser.getId()));
 
         List<User> usersByRole = userDAO.getUsersByRole(Role.MODERATOR);
         assertEquals(0, usersByRole.size());
@@ -123,14 +123,14 @@ class MysqlUserDAOTest {
         userDAO.add(testUser);
         Report testReport = getTestReport();
         reportDAO.add(testReport);
-        reportDAO.setReportForSpeaker(testUser, testReport);
-        assertEquals(testUser, userDAO.getSpeakerByReport(testReport));
+        reportDAO.setReportForSpeaker(testUser.getId(), testReport.getId());
+        assertEquals(testUser, userDAO.getSpeakerByReport(testReport.getId()));
     }
 
     @Test
     void testNoReportForSpeaker() {
         Report testReport = getTestReport();
-        DAOException exception = assertThrows(DAOException.class, () -> userDAO.getSpeakerByReport(testReport));
+        DAOException exception = assertThrows(DAOException.class, () -> userDAO.getSpeakerByReport(testReport.getId()));
         assertEquals("No speaker for this report", exception.getMessage());
     }
 }
