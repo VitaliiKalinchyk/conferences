@@ -56,9 +56,8 @@ class MysqlReportDAOTest {
     }
 
     @Test
-    void testGetAbsent() {
-        DAOException exception = assertThrows(DAOException.class, () -> reportDAO.getById(getTestReport().getId()));
-        assertEquals("No such report", exception.getMessage());
+    void testGetAbsent() throws DAOException {
+        assertNull(reportDAO.getById(getTestReport().getId()));
     }
 
     @Test

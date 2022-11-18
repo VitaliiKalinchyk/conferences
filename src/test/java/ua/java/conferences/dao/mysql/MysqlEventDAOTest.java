@@ -55,9 +55,8 @@ class MysqlEventDAOTest {
     }
 
     @Test
-    void testGetAbsent() {
-        DAOException exception = assertThrows(DAOException.class, () -> eventDAO.getByTitle(getTestEvent().getTitle()));
-        assertEquals("No such event", exception.getMessage());
+    void testGetAbsent() throws DAOException {
+        assertNull(eventDAO.getByTitle(getTestEvent().getTitle()));
     }
 
     @Test
@@ -150,7 +149,6 @@ class MysqlEventDAOTest {
     void testEventByReportBadCase() throws DAOException {
         Report testReport = getTestReport();
         reportDAO.add(testReport);
-        DAOException exception = assertThrows(DAOException.class, () -> eventDAO.getEventByReport(testReport.getId()));
-        assertEquals("No such event", exception.getMessage());
+        assertNull(eventDAO.getEventByReport(testReport.getId()));
     }
 }

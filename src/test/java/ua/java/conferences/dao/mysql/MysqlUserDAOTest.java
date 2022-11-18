@@ -57,9 +57,8 @@ class MysqlUserDAOTest {
     }
 
     @Test
-    void testGetAbsent() {
-        DAOException exception = assertThrows(DAOException.class, () -> userDAO.getByEmail(getTestUser().getEmail()));
-        assertEquals("No such user", exception.getMessage());
+    void testGetAbsent() throws DAOException {
+        assertNull(userDAO.getByEmail(getTestUser().getEmail()));
     }
 
     @Test
@@ -128,9 +127,8 @@ class MysqlUserDAOTest {
     }
 
     @Test
-    void testNoReportForSpeaker() {
+    void testNoReportForSpeaker() throws DAOException {
         Report testReport = getTestReport();
-        DAOException exception = assertThrows(DAOException.class, () -> userDAO.getSpeakerByReport(testReport.getId()));
-        assertEquals("No speaker for this report", exception.getMessage());
+        assertNull(userDAO.getSpeakerByReport(testReport.getId()));
     }
 }

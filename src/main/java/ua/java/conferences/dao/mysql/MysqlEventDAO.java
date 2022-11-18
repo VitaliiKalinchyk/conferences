@@ -13,7 +13,6 @@ import java.util.List;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static ua.java.conferences.dao.mysql.constants.EventConstants.*;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
-import static ua.java.conferences.exception.DAOExceptionMessages.NO_SUCH_EVENT;
 
 public class MysqlEventDAO implements EventDAO {
 
@@ -38,15 +37,17 @@ public class MysqlEventDAO implements EventDAO {
 
     @Override
     public Event getById(long id) throws DAOException {
-        Event event;
+        return getEvent(id, GET_EVENT_BY_ID);
+    }
+
+    private Event getEvent(long id, String getEventById) throws DAOException {
+        Event event = null;
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(getEventById)) {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
-                } else {
-                    throw new DAOException(NO_SUCH_EVENT);
                 }
             }
         } catch (SQLException e) {
@@ -57,15 +58,13 @@ public class MysqlEventDAO implements EventDAO {
 
     @Override
     public Event getByTitle(String title) throws DAOException {
-        Event event;
+        Event event = null;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_TITLE)) {
             preparedStatement.setString(1, title);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
-                } else {
-                    throw new DAOException(NO_SUCH_EVENT);
                 }
             }
         } catch (SQLException e) {
@@ -135,21 +134,7 @@ public class MysqlEventDAO implements EventDAO {
 
     @Override
     public Event getEventByReport(long reportId) throws DAOException {
-        Event event;
-        try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORT_EVENT)) {
-            preparedStatement.setLong(1, reportId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    event = createEvent(resultSet);
-                } else {
-                    throw new DAOException(NO_SUCH_EVENT);
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-        return event;
+        return getEvent(reportId, GET_REPORT_EVENT);
     }
 
     private void setEventFields(Event event, PreparedStatement preparedStatement) throws SQLException {

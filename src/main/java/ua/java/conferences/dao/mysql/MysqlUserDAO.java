@@ -14,7 +14,6 @@ import java.util.List;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
 import static ua.java.conferences.dao.mysql.constants.UserConstants.*;
-import static ua.java.conferences.exception.DAOExceptionMessages.*;
 
 public class MysqlUserDAO implements UserDAO {
 
@@ -22,7 +21,7 @@ public class MysqlUserDAO implements UserDAO {
     public boolean add(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER, RETURN_GENERATED_KEYS)) {
-            setUsersFields(user, preparedStatement);
+            setFields(user, preparedStatement);
             if (executeStatement(preparedStatement)) {
                 return false;
             }
@@ -39,15 +38,17 @@ public class MysqlUserDAO implements UserDAO {
 
     @Override
     public User getById(long userId) throws DAOException {
-        User user;
+        return getUser(userId, GET_USER_BY_ID);
+    }
+
+    private User getUser(long userId, String getUserById) throws DAOException {
+        User user = null;
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(getUserById)) {
             preparedStatement.setLong(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
-                } else {
-                    throw new DAOException(NO_SUCH_USER);
                 }
             }
         } catch (SQLException e) {
@@ -58,15 +59,13 @@ public class MysqlUserDAO implements UserDAO {
 
     @Override
     public User getByEmail(String email) throws DAOException {
-        User user;
+        User user = null;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL)) {
             preparedStatement.setString(1, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
-                } else {
-                throw new DAOException(NO_SUCH_USER);
                 }
             }
         } catch (SQLException e) {
@@ -84,7 +83,7 @@ public class MysqlUserDAO implements UserDAO {
     public boolean update(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
-            setUsersFields(user, preparedStatement);
+            setFields(user, preparedStatement);
             preparedStatement.setLong(6, user.getId());
             if (executeStatement(preparedStatement)) {
                 return false;
@@ -126,15 +125,13 @@ public class MysqlUserDAO implements UserDAO {
 
     @Override
     public Role getUsersRole(long userId) throws DAOException {
-        Role role;
+        Role role = null;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_ROLE)) {
             preparedStatement.setLong(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     role = Role.valueOf(resultSet.getString(ROLE));
-                } else {
-                    throw new DAOException(NO_SUCH_USER);
                 }
             }
         }catch (SQLException e) {
@@ -170,21 +167,7 @@ public class MysqlUserDAO implements UserDAO {
 
     @Override
     public User getSpeakerByReport(long reportId) throws DAOException {
-        User user;
-        try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_SPEAKER)) {
-            preparedStatement.setLong(1, reportId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    user = createUser(resultSet);
-                } else {
-                    throw new DAOException(NO_SPEAKER);
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-        return user;
+        return getUser(reportId, GET_SPEAKER);
     }
 
     private List<User> getUsers(String query, long id) throws DAOException {
@@ -216,7 +199,7 @@ public class MysqlUserDAO implements UserDAO {
                 .get();
     }
 
-    private void setUsersFields(User user, PreparedStatement preparedStatement) throws SQLException {
+    private void setFields(User user, PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, user.getEmail());
         preparedStatement.setString(2, user.getPassword());
         preparedStatement.setString(3, user.getName());

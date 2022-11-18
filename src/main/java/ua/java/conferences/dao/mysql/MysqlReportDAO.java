@@ -12,7 +12,6 @@ import java.util.*;
 import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static ua.java.conferences.dao.mysql.constants.ReportConstants.*;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
-import static ua.java.conferences.exception.DAOExceptionMessages.NO_SUCH_REPORT;
 
 public class MysqlReportDAO implements ReportDAO {
 
@@ -37,17 +36,16 @@ public class MysqlReportDAO implements ReportDAO {
 
     @Override
     public Report getById(long id) throws DAOException {
-        Report report;
+        Report report = null;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORT_BY_ID)) {
             preparedStatement.setLong(1, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     report = createReport(resultSet);
-                } else {
-                    throw new DAOException(NO_SUCH_REPORT);
                 }
-            }        } catch (SQLException e) {
+            }
+        } catch (SQLException e) {
             throw new DAOException(e);
         }
         return report;
