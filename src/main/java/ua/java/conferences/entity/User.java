@@ -1,14 +1,17 @@
 package ua.java.conferences.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class User {
+public class User implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private long id;
 
     private String email;
 
-    private String password;
+    private transient String password;
 
     private String name;
 

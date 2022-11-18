@@ -1,8 +1,11 @@
 package ua.java.conferences.entity;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Report {
+public class Report implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private long id;
 
