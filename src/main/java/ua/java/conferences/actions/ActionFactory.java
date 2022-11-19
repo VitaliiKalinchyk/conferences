@@ -1,6 +1,5 @@
 package ua.java.conferences.actions;
 
-import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.implementation.*;
 
 import java.util.*;
@@ -25,9 +24,7 @@ public final class ActionFactory {
         return ACTION_FACTORY;
     }
 
-    public Action createAction(HttpServletRequest request) {
-        String url = request.getRequestURI().substring(request.getContextPath().length());
-        System.out.println(url);
+    public Action createAction(String url) {
         Action action = ACTION_MAP.get(url);
         if (Objects.isNull(action)) {
             return new ErrorAction();
