@@ -1,4 +1,4 @@
-package ua.java.conferences.entity;
+package ua.java.conferences.entities;
 
 import java.io.Serializable;
 import java.util.Objects;

@@ -2,9 +2,9 @@ package ua.java.conferences.dao.mysql;
 
 import ua.java.conferences.connection.DataSource;
 import ua.java.conferences.dao.EventDAO;
-import ua.java.conferences.entity.*;
-import ua.java.conferences.entity.builder.EventBuilder;
-import ua.java.conferences.exception.DAOException;
+import ua.java.conferences.entities.*;
+import ua.java.conferences.entities.builders.EventBuilder;
+import ua.java.conferences.exceptions.DAOException;
 
 import java.sql.*;
 import java.util.ArrayList;

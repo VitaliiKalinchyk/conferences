@@ -1,8 +1,8 @@
 package ua.java.conferences.dao.mysql;
 
 import org.junit.jupiter.api.*;
-import ua.java.conferences.entity.*;
-import ua.java.conferences.exception.DAOException;
+import ua.java.conferences.entities.*;
+import ua.java.conferences.exceptions.DAOException;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;

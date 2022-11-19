@@ -2,8 +2,8 @@ package ua.java.conferences.dao.mysql;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
 import ua.java.conferences.dao.*;
-import ua.java.conferences.entity.*;
-import ua.java.conferences.entity.builder.*;
+import ua.java.conferences.entities.*;
+import ua.java.conferences.entities.builders.*;
 
 import java.io.*;
 import java.sql.*;

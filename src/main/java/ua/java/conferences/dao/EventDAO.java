@@ -1,7 +1,7 @@
 package ua.java.conferences.dao;
 
-import ua.java.conferences.entity.*;
-import ua.java.conferences.exception.DAOException;
+import ua.java.conferences.entities.*;
+import ua.java.conferences.exceptions.DAOException;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package ua.java.conferences.entity.role;
+package ua.java.conferences.entities.role;
 
 public enum Role {
     ADMIN(1),

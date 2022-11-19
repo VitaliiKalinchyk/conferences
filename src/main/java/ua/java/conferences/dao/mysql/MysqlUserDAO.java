@@ -2,10 +2,10 @@ package ua.java.conferences.dao.mysql;
 
 import ua.java.conferences.connection.DataSource;
 import ua.java.conferences.dao.UserDAO;
-import ua.java.conferences.entity.*;
-import ua.java.conferences.entity.builder.UserBuilder;
-import ua.java.conferences.entity.role.Role;
-import ua.java.conferences.exception.DAOException;
+import ua.java.conferences.entities.*;
+import ua.java.conferences.entities.builders.UserBuilder;
+import ua.java.conferences.entities.role.Role;
+import ua.java.conferences.exceptions.DAOException;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
-package ua.java.conferences.entity.builder;
+package ua.java.conferences.entities.builders;
 
-import ua.java.conferences.entity.Report;
+import ua.java.conferences.entities.Report;
 
 public class ReportBuilder {
 

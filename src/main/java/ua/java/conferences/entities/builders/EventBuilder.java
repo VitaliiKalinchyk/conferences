@@ -1,6 +1,6 @@
-package ua.java.conferences.entity.builder;
+package ua.java.conferences.entities.builders;
 
-import ua.java.conferences.entity.Event;
+import ua.java.conferences.entities.Event;
 
 import java.time.LocalDate;
 

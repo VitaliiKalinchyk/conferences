@@ -1,6 +1,6 @@
 package ua.java.conferences.dao;
 
-import ua.java.conferences.exception.DAOException;
+import ua.java.conferences.exceptions.DAOException;
 
 import java.util.List;
 

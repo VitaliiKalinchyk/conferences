@@ -1,4 +1,4 @@
-package ua.java.conferences.exception;
+package ua.java.conferences.exceptions;
 
 public class DAOException extends Exception {
 

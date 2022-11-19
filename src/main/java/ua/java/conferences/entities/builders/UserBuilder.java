@@ -1,7 +1,7 @@
-package ua.java.conferences.entity.builder;
+package ua.java.conferences.entities.builders;
 
 
-import ua.java.conferences.entity.User;
+import ua.java.conferences.entities.User;
 
 public final class UserBuilder {
 
