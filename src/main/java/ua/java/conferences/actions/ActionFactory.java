@@ -12,9 +12,9 @@ public final class ActionFactory {
     private static final Map<String, Action> ACTION_MAP = new HashMap<>();
 
     static {
-        ACTION_MAP.put("/sign-in", new SignIn());
-        ACTION_MAP.put("/sign-out", new SignOut());
-        ACTION_MAP.put("/sign-up", new SignUp());
+        ACTION_MAP.put("/sign-in", new SignInAction());
+        ACTION_MAP.put("/sign-out", new SignOutAction());
+        ACTION_MAP.put("/sign-up", new SignUpAction());
         ACTION_MAP.put("/error", new ErrorAction());
     }
 
