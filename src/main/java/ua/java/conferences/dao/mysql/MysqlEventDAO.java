@@ -108,10 +108,10 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     @Override
-    public boolean setVisitors(long eventId, int visitors) throws DAOException {
+    public boolean setVisitorsCount(long eventId, int visitorsCount) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_VISITORS)) {
-            preparedStatement.setInt(1, visitors);
+            preparedStatement.setInt(1, visitorsCount);
             preparedStatement.setLong(2, eventId);
             if (executeStatement(preparedStatement)) {
                 return false;

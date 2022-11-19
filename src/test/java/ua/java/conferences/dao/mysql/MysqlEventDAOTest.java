@@ -71,13 +71,13 @@ class MysqlEventDAOTest {
 
     @Test
     void testVisitors() throws DAOException {
-        int visitors = 100;
+        int visitorsCount = 100;
         Event testEvent = getTestEvent();
         eventDAO.add(testEvent);
-        assertTrue(eventDAO.setVisitors(testEvent.getId(), visitors));
+        assertTrue(eventDAO.setVisitorsCount(testEvent.getId(), visitorsCount));
 
         testEvent = eventDAO.getByTitle(testEvent.getTitle());
-        assertEquals(visitors, testEvent.getVisitors());
+        assertEquals(visitorsCount, testEvent.getVisitors());
     }
 
     @Test

@@ -9,7 +9,7 @@ public interface EventDAO extends EntityDAO<Event> {
 
     Event getByTitle(String title) throws DAOException;
 
-    boolean setVisitors(long eventId, int visitors) throws DAOException;
+    boolean setVisitorsCount(long eventId, int visitorsCount) throws DAOException;
 
     List<Event> getEventsByUser(long userId) throws DAOException;
 
