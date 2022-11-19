@@ -3,13 +3,10 @@ package ua.java.conferences.controller;
 import ua.java.conferences.actions.*;
 
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
-@WebServlet("/controller")
 public class Controller extends HttpServlet {
 
     private static final ActionFactory ACTION_FACTORY = ActionFactory.getActionFactory();
