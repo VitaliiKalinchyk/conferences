@@ -21,7 +21,6 @@ public class SignInAction implements Action {
     @Override
     public String execute(HttpServletRequest request) {
         String path = "";
-
         String email = request.getParameter("email");
         String password = request.getParameter("password");
         User user = null;
@@ -32,11 +31,10 @@ public class SignInAction implements Action {
         } catch (ServiceException e) {
             path = "/404.jsp";
         }
-
-        if (role == null || user == null) {
+        if (user == null || role == null) {
             path = "/401.jsp";
         } else if (!password.equals(user.getPassword()) ) {
-            path = "sign-in.html";
+            path = "sign-in.jsp";
         } else {
             setSessionAttributes(request, user, role);
             switch (role) {
