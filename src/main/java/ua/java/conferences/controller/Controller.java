@@ -7,10 +7,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
+import java.util.Enumeration;
 
 @WebServlet("/controller")
 public class Controller extends HttpServlet {
-
 
     private static final ActionFactory ACTION_FACTORY = ActionFactory.getActionFactory();
 
@@ -25,6 +25,7 @@ public class Controller extends HttpServlet {
     }
 
     private void processGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
         Action action = ACTION_FACTORY.createAction(request);
 
         //TRY

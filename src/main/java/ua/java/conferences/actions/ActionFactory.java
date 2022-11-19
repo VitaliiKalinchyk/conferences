@@ -12,6 +12,7 @@ public final class ActionFactory {
     private static final Map<String, Action> ACTION_MAP = new HashMap<>();
 
     static {
+        ACTION_MAP.put("/", new IndexAction());
         ACTION_MAP.put("/sign-in", new SignInAction());
         ACTION_MAP.put("/sign-out", new SignOutAction());
         ACTION_MAP.put("/sign-up", new SignUpAction());
@@ -26,6 +27,7 @@ public final class ActionFactory {
 
     public Action createAction(HttpServletRequest request) {
         String url = request.getRequestURI().substring(request.getContextPath().length());
+        System.out.println(url);
         Action action = ACTION_MAP.get(url);
         if (Objects.isNull(action)) {
             return new ErrorAction();
