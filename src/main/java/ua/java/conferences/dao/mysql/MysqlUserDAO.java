@@ -3,7 +3,6 @@ package ua.java.conferences.dao.mysql;
 import ua.java.conferences.connection.DataSource;
 import ua.java.conferences.dao.UserDAO;
 import ua.java.conferences.entities.*;
-import ua.java.conferences.entities.builders.UserBuilder;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.DAOException;
 
@@ -189,7 +188,7 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     private User createUser(ResultSet resultSet) throws SQLException {
-        return new UserBuilder()
+        return new User.UserBuilder()
                 .setId(resultSet.getInt(ID))
                 .setEmail(resultSet.getString(EMAIL))
                 .setName(resultSet.getString(NAME))

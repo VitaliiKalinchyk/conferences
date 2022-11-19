@@ -3,7 +3,6 @@ package ua.java.conferences.dao.mysql;
 import ua.java.conferences.connection.DataSource;
 import ua.java.conferences.dao.EventDAO;
 import ua.java.conferences.entities.*;
-import ua.java.conferences.entities.builders.EventBuilder;
 import ua.java.conferences.exceptions.DAOException;
 
 import java.sql.*;
@@ -163,7 +162,7 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     private Event createEvent(ResultSet resultSet) throws SQLException {
-        return new EventBuilder()
+        return new Event.EventBuilder()
                 .setId(resultSet.getInt(ID))
                 .setTitle(resultSet.getString(TITLE))
                 .setDate(resultSet.getDate(DATE).toLocalDate())

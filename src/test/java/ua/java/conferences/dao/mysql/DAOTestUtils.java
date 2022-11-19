@@ -3,7 +3,6 @@ package ua.java.conferences.dao.mysql;
 import org.apache.ibatis.jdbc.ScriptRunner;
 import ua.java.conferences.dao.*;
 import ua.java.conferences.entities.*;
-import ua.java.conferences.entities.builders.*;
 
 import java.io.*;
 import java.sql.*;
@@ -40,7 +39,7 @@ public final class DAOTestUtils {
     }
 
     public static User getTestUser() {
-        return new UserBuilder()
+        return new User.UserBuilder()
                 .setEmail("test@test.test")
                 .setName("Test")
                 .setSurname("Tester")
@@ -49,7 +48,7 @@ public final class DAOTestUtils {
     }
 
     public static Event getTestEvent() {
-        return new EventBuilder()
+        return new Event.EventBuilder()
                 .setTitle("Event")
                 .setDate(LocalDate.of(2022, 12, 12))
                 .setLocation("Kyiv")
@@ -58,7 +57,7 @@ public final class DAOTestUtils {
     }
 
     public static Report getTestReport() {
-        return (new ReportBuilder())
+        return (new Report.ReportBuilder())
                 .setTopic("Report")
                 .get();
     }
