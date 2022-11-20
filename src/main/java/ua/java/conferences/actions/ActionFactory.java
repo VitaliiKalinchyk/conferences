@@ -24,10 +24,6 @@ public final class ActionFactory {
     }
 
     public Action createAction(String url) {
-        Action action = ACTION_MAP.getOrDefault(url, new  DefaultAction());
-        if (Objects.isNull(action)) {
-            return new ErrorAction();
-        }
-        return action;
+        return ACTION_MAP.getOrDefault(url, new  DefaultAction());
     }
 }
