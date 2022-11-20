@@ -1,5 +1,6 @@
 package ua.java.conferences.controller;
 
+import jakarta.servlet.annotation.WebServlet;
 import ua.java.conferences.actions.*;
 
 import jakarta.servlet.ServletException;
@@ -7,12 +8,14 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
+@WebServlet("/action")
 public class Controller extends HttpServlet {
 
     private static final ActionFactory ACTION_FACTORY = ActionFactory.getActionFactory();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        System.out.println("get");
         processGet(request, response);
     }
 
@@ -22,18 +25,19 @@ public class Controller extends HttpServlet {
     }
 
     private void processGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = request.getRequestURI().substring(request.getContextPath().length());
+        String url = getUrl(request);
         Action action = ACTION_FACTORY.createAction(url);
 
         //TRY
         String address = action.execute(request);
         //CATCH
+//        response.sendRedirect(address);
 
         request.getRequestDispatcher(address).forward(request, response);
     }
 
     private void processPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = request.getRequestURI().substring(request.getContextPath().length());
+        String url = getUrl(request);
         Action action = ACTION_FACTORY.createAction(url);
         String address = null;
         try {
@@ -43,5 +47,9 @@ public class Controller extends HttpServlet {
             request.setAttribute("error", e.getMessage());
         }
         response.sendRedirect(address);
+    }
+
+    private String getUrl(HttpServletRequest request) {
+        return request.getParameter("action");
     }
 }
