@@ -25,8 +25,8 @@ public class Controller extends HttpServlet {
     }
 
     private void processGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = getUrl(request);
-        Action action = ACTION_FACTORY.createAction(url);
+        String actionName = getActionName(request);
+        Action action = ACTION_FACTORY.createAction(actionName);
 
         //TRY
         String address = action.execute(request);
@@ -37,7 +37,7 @@ public class Controller extends HttpServlet {
     }
 
     private void processPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String url = getUrl(request);
+        String url = getActionName(request);
         Action action = ACTION_FACTORY.createAction(url);
         String address = null;
         try {
@@ -49,7 +49,7 @@ public class Controller extends HttpServlet {
         response.sendRedirect(address);
     }
 
-    private String getUrl(HttpServletRequest request) {
+    private String getActionName(HttpServletRequest request) {
         return request.getParameter("action");
     }
 }
