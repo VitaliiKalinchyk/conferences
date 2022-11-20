@@ -23,7 +23,7 @@ public final class ActionFactory {
         return ACTION_FACTORY;
     }
 
-    public Action createAction(String url) {
-        return ACTION_MAP.getOrDefault(url, new  DefaultAction());
+    public Action createAction(String actionName) {
+        return ACTION_MAP.getOrDefault(actionName, new  DefaultAction());
     }
 }
