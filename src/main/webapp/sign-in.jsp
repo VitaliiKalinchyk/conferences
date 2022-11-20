@@ -10,7 +10,8 @@
 <header>
     Conference Smart App Sign In
 </header>
-<form method="POST" action="sign-in">
+<form method="POST" action="action">
+    <input type="hidden" name="action" value="sign-in">
     <label for="email" >Email: </label>
     <input type="email" name="email" id="email">
     <label for="password" >Password: </label>
