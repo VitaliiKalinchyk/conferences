@@ -23,26 +23,26 @@ public class SignInAction implements Action {
         String path = "";
         String email = request.getParameter("email");
         String password = request.getParameter("password");
-        User user = null;
-        Role role = null;
+        User user;
+        Role role;
         try {
             user = userService.getByEmail(email);
             role = userService.getUsersRole(user.getId());
-        } catch (ServiceException e) {
-            path = "/404.jsp";
-        }
-        if (user == null || role == null) {
-            path = "/401.jsp";
-        } else if (!password.equals(user.getPassword()) ) {
-            path = "sign-in.jsp";
-        } else {
-            setSessionAttributes(request, user, role);
-            switch (role) {
-                case VISITOR: path = "visitor/cabinet"; break;
-                case SPEAKER: path = "speaker/cabinet"; break;
-                case MODERATOR: path = "moderator/cabinet"; break;
-                case ADMIN: path = "admin/cabinet"; break;
+            if (!password.equals(user.getPassword()) ) {
+                request.getServletContext().setAttribute("error", "Wrong Password");
+                path = "sign-in.jsp";
+            } else {
+                setSessionAttributes(request, user, role);
+                switch (role) {
+                    case VISITOR: path = "visitor/profile"; break;
+                    case SPEAKER: path = "speaker/profile"; break;
+                    case MODERATOR: path = "moderator/profile"; break;
+                    case ADMIN: path = "admin/profile"; break;
+                }
             }
+        } catch (ServiceException | NullPointerException e) {
+            request.getServletContext().setAttribute("error", "Wrong Email");
+            path = "sign-in.jsp";
         }
         return path;
     }

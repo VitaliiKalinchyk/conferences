@@ -10,6 +10,8 @@
 <header>
     Conference Smart App Sign In
 </header>
+<hr>
+${requestScope.error}
 <form method="POST" action="action">
     <input type="hidden" name="action" value="sign-in">
     <label for="email" >Email: </label>
