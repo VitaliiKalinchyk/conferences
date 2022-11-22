@@ -11,9 +11,9 @@ public class Report implements Serializable {
 
     private String topic;
 
-    private boolean accepted;
+    private long eventId;
 
-    private boolean approved;
+    private User speaker;
 
     public long getId() {
         return this.id;
@@ -31,20 +31,20 @@ public class Report implements Serializable {
         this.topic = topic;
     }
 
-    public boolean isAccepted() {
-        return this.accepted;
+    public long getEventId() {
+        return eventId;
     }
 
-    public void setAccepted(boolean b) {
-        this.accepted = b;
+    public void setEventId(long eventId) {
+        this.eventId = eventId;
     }
 
-    public boolean isApproved() {
-        return this.approved;
+    public User getSpeaker() {
+        return speaker;
     }
 
-    public void setApproved(boolean b) {
-        this.approved = b;
+    public void setSpeaker(User speaker) {
+        this.speaker = speaker;
     }
 
     @Override
@@ -65,8 +65,8 @@ public class Report implements Serializable {
         return "Report{" +
                 "id=" + id +
                 ", topic='" + topic + '\'' +
-                ", accepted=" + accepted +
-                ", approved=" + approved +
+                ", eventId=" + eventId +
+                ", speaker=" + speaker +
                 '}';
     }
 
@@ -79,27 +79,27 @@ public class Report implements Serializable {
         }
 
         public ReportBuilder setId(long id) {
-            this.report.setId(id);
+            report.setId(id);
             return this;
         }
 
         public ReportBuilder setTopic(String topic) {
-            this.report.setTopic(topic);
+            report.setTopic(topic);
             return this;
         }
 
-        public ReportBuilder setAccepted(boolean b) {
-            this.report.setAccepted(b);
+        public ReportBuilder setEventId(long eventId) {
+            report.setEventId(eventId);
             return this;
         }
 
-        public ReportBuilder setApproved(boolean b) {
-            this.report.setApproved(b);
+        public ReportBuilder setSpeaker(User speaker) {
+            report.setSpeaker(speaker);
             return this;
         }
 
         public Report get() {
-            return this.report;
+            return report;
         }
     }
 }

@@ -2,17 +2,17 @@ package ua.java.conferences.dao;
 
 import ua.java.conferences.exceptions.DAOException;
 
-import java.util.List;
+import java.util.*;
 
 public interface EntityDAO<T> {
 
-    boolean add(T t) throws DAOException;
+    void add(T t) throws DAOException;
 
-    T getById(long id) throws DAOException;
+    Optional<T> getById(long id) throws DAOException;
 
     List<T> getAll() throws DAOException;
 
-    boolean update(T t) throws DAOException;
+    void update(T t) throws DAOException;
 
-    boolean delete(long id) throws DAOException;
+    void delete(long id) throws DAOException;
 }

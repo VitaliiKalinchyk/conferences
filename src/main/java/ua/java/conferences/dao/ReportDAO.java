@@ -3,15 +3,13 @@ package ua.java.conferences.dao;
 import ua.java.conferences.entities.*;
 import ua.java.conferences.exceptions.DAOException;
 
-import java.util.List;
+import java.util.*;
 
 public interface ReportDAO extends EntityDAO<Report> {
 
-    boolean setEventForReport(long eventId, long reportId) throws DAOException;
+    Map<Report, Event> getSpeakersReports(long speakerId) throws DAOException;
 
-    List<Report> getReportsFromEvent(long eventId) throws DAOException;
+    List<Report> getEventsReports(long eventId) throws DAOException;
 
-    boolean setReportForSpeaker(long userId, long reportId) throws DAOException;
-
-    List<Report> getReportsFromSpeaker(long userId) throws DAOException;
+    void setSpeaker(long reportId, long speakerId) throws DAOException;
 }

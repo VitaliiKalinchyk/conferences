@@ -4,21 +4,15 @@ import ua.java.conferences.entities.*;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.DAOException;
 
-import java.util.List;
+import java.util.*;
 
 public interface UserDAO extends EntityDAO<User> {
 
-    User getByEmail(String email) throws DAOException;
+    Optional<User> getByEmail(String email) throws DAOException;
 
-    User getSpeakerByReport(long reportId) throws DAOException;
+    List<User> getSpeakers() throws DAOException;
 
-    List<User> getUsersByRole(Role role) throws DAOException;
+    void registerForEvent(long userId, long eventId) throws DAOException;
 
-    List<User> getUsersByEvent(long eventId) throws DAOException;
-
-    boolean registerForEvent(long userId, long eventId) throws DAOException;
-
-    Role getUsersRole(long userId) throws DAOException;
-
-    boolean setUsersRole(long userId, Role role) throws DAOException;
+    void setUsersRole(long userId, Role role) throws DAOException;
 }

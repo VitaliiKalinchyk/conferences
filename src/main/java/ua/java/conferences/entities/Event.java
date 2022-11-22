@@ -18,6 +18,8 @@ public class Event implements Serializable {
 
     private String description;
 
+    private int registrations;
+
     private int visitors;
 
     public long getId() {
@@ -36,6 +38,14 @@ public class Event implements Serializable {
         this.title = title;
     }
 
+    public LocalDate getDate() {
+        return this.date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     public String getLocation() {
         return this.location;
     }
@@ -52,12 +62,12 @@ public class Event implements Serializable {
         this.description = description;
     }
 
-    public LocalDate getDate() {
-        return this.date;
+    public int getRegistrations() {
+        return registrations;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setRegistrations(int registrations) {
+        this.registrations = registrations;
     }
 
     public int getVisitors() {
@@ -89,6 +99,7 @@ public class Event implements Serializable {
                 ", date=" + date +
                 ", location='" + location + '\'' +
                 ", description='" + description + '\'' +
+                ", registrations=" + registrations +
                 ", visitors=" + visitors +
                 '}';
     }
@@ -102,37 +113,42 @@ public class Event implements Serializable {
         }
 
         public EventBuilder setId(long id) {
-            this.event.setId(id);
+            event.setId(id);
             return this;
         }
 
         public EventBuilder setTitle(String title) {
-            this.event.setTitle(title);
+            event.setTitle(title);
             return this;
         }
 
         public EventBuilder setDate(LocalDate date) {
-            this.event.setDate(date);
+            event.setDate(date);
             return this;
         }
 
         public EventBuilder setLocation(String location) {
-            this.event.setLocation(location);
+            event.setLocation(location);
             return this;
         }
 
         public EventBuilder setDescription(String description) {
-            this.event.setDescription(description);
+            event.setDescription(description);
+            return this;
+        }
+
+        public EventBuilder setRegistrations(int registrations) {
+            event.setRegistrations(registrations);
             return this;
         }
 
         public EventBuilder setVisitors(int visitors) {
-            this.event.setVisitors(visitors);
+            event.setVisitors(visitors);
             return this;
         }
 
         public Event get() {
-            return this.event;
+            return event;
         }
     }
 }

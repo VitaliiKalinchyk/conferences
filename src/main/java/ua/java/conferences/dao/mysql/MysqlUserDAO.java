@@ -7,43 +7,29 @@ import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.DAOException;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static java.sql.Statement.RETURN_GENERATED_KEYS;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
 import static ua.java.conferences.dao.mysql.constants.UserConstants.*;
 
 public class MysqlUserDAO implements UserDAO {
 
     @Override
-    public boolean add(User user) throws DAOException {
+    public void add(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER, RETURN_GENERATED_KEYS)) {
-            setFields(user, preparedStatement);
-            if (executeStatement(preparedStatement)) {
-                return false;
-            }
-            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    user.setId(generatedKeys.getInt(1));
-                }
-            }
+             PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER)) {
+            setStatementFields(user, preparedStatement);
+            preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
         }
-        return true;
     }
 
     @Override
-    public User getById(long userId) throws DAOException {
-        return getUser(userId, GET_USER_BY_ID);
-    }
-
-    private User getUser(long userId, String getUserById) throws DAOException {
+    public Optional<User> getById(long userId) throws DAOException {
         User user = null;
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(getUserById)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID)) {
             preparedStatement.setLong(1, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
@@ -53,11 +39,11 @@ public class MysqlUserDAO implements UserDAO {
         } catch (SQLException e) {
             throw new DAOException(e);
         }
-        return user;
+        return  Optional.ofNullable(user);
     }
 
     @Override
-    public User getByEmail(String email) throws DAOException {
+    public Optional<User>  getByEmail(String email) throws DAOException {
         User user = null;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL)) {
@@ -70,121 +56,64 @@ public class MysqlUserDAO implements UserDAO {
         } catch (SQLException e) {
             throw new DAOException(e);
         }
-        return user;
+        return  Optional.ofNullable(user);
     }
 
     @Override
     public List<User> getAll() throws DAOException {
-        return this.getUsers(GET_USERS, 0);
+        return getUsers(GET_USERS);
     }
 
     @Override
-    public boolean update(User user) throws DAOException {
+    public List<User> getSpeakers() throws DAOException {
+        return getUsers(GET_SPEAKERS);
+    }
+
+    @Override
+    public void update(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
-            setFields(user, preparedStatement);
+            setStatementFields(user, preparedStatement);
             preparedStatement.setLong(6, user.getId());
-            if (executeStatement(preparedStatement)) {
-                return false;
-            }
+            preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
         }
-        return true;
     }
 
     @Override
-    public boolean delete(long userId) throws DAOException {
+    public void delete(long userId) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
             preparedStatement.setLong(1, userId);
-            if (executeStatement(preparedStatement)) {
-                return false;
-            }
+            preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
         }
-        return true;
     }
 
     @Override
-    public boolean registerForEvent(long userId, long eventId) throws DAOException {
+    public void registerForEvent(long userId, long eventId) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_FOR_EVENT)) {
             preparedStatement.setLong(1, userId);
             preparedStatement.setLong(2, eventId);
-            if (executeStatement(preparedStatement)) {
-                return false;
-            }
+            preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
         }
-        return true;
     }
 
     @Override
-    public Role getUsersRole(long userId) throws DAOException {
-        Role role = null;
-        try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_ROLE)) {
-            preparedStatement.setLong(1, userId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                if (resultSet.next()) {
-                    role = Role.valueOf(resultSet.getString(ROLE));
-                }
-            }
-        }catch (SQLException e) {
-                throw new DAOException(e);
-        }
-        return role;
-    }
-
-    @Override
-    public boolean setUsersRole(long userId, Role role) throws DAOException {
+    public void setUsersRole(long userId, Role role) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_ROLE)) {
             preparedStatement.setInt(1, role.getValue());
             preparedStatement.setLong(2, userId);
-            if (executeStatement(preparedStatement)) {
-                return false;
-            }
+            preparedStatement.execute();
         }catch (SQLException e) {
             throw new DAOException(e);
         }
-        return true;
-    }
-
-    @Override
-    public List<User> getUsersByRole(Role role) throws DAOException {
-        return this.getUsers(GET_USERS_BY_ROLE, role.getValue());
-    }
-
-    @Override
-    public List<User> getUsersByEvent(long eventId) throws DAOException {
-        return this.getUsers(GET_USERS_BY_EVENT, eventId);
-    }
-
-    @Override
-    public User getSpeakerByReport(long reportId) throws DAOException {
-        return getUser(reportId, GET_SPEAKER);
-    }
-
-    private List<User> getUsers(String query, long id) throws DAOException {
-        List<User> users = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            if (id > 0) {
-                preparedStatement.setLong(1, id);
-            }
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    users.add(createUser(resultSet));
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-        return users;
     }
 
     private User createUser(ResultSet resultSet) throws SQLException {
@@ -195,10 +124,11 @@ public class MysqlUserDAO implements UserDAO {
                 .setSurname(resultSet.getString(SURNAME))
                 .setPassword(resultSet.getString(PASSWORD))
                 .setEmailNotification(resultSet.getInt(NOTIFICATION) == 1)
+                .setRoleId(resultSet.getInt(ROLE_ID))
                 .get();
     }
 
-    private void setFields(User user, PreparedStatement preparedStatement) throws SQLException {
+    private void setStatementFields(User user, PreparedStatement preparedStatement) throws SQLException {
         preparedStatement.setString(1, user.getEmail());
         preparedStatement.setString(2, user.getPassword());
         preparedStatement.setString(3, user.getName());
@@ -206,12 +136,18 @@ public class MysqlUserDAO implements UserDAO {
         preparedStatement.setInt(5, user.isEmailNotification() ? 1 : 0);
     }
 
-    private boolean executeStatement(PreparedStatement preparedStatement) {
-        try {
-            int affectedRows = preparedStatement.executeUpdate();
-            return affectedRows == 0;
+    private List<User> getUsers(String query) throws DAOException {
+        List<User> users = new ArrayList<>();
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    users.add(createUser(resultSet));
+                }
+            }
         } catch (SQLException e) {
-            return true;
+            throw new DAOException(e);
         }
+        return users;
     }
 }

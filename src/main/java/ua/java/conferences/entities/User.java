@@ -19,6 +19,8 @@ public class User implements Serializable {
 
     private boolean emailNotification;
 
+    private int roleId;
+
     public long getId() {
         return this.id;
     }
@@ -67,6 +69,14 @@ public class User implements Serializable {
         this.emailNotification = emailNotification;
     }
 
+    public int getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -89,6 +99,7 @@ public class User implements Serializable {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", emailNotification=" + emailNotification +
+                ", roleId=" + roleId +
                 '}';
     }
 
@@ -101,37 +112,42 @@ public class User implements Serializable {
         }
 
         public UserBuilder setId(long id) {
-            this.user.setId(id);
+            user.setId(id);
             return this;
         }
 
         public UserBuilder setEmail(String email) {
-            this.user.setEmail(email);
+            user.setEmail(email);
             return this;
         }
 
         public UserBuilder setPassword(String password) {
-            this.user.setPassword(password);
+            user.setPassword(password);
             return this;
         }
 
         public UserBuilder setName(String name) {
-            this.user.setName(name);
+            user.setName(name);
             return this;
         }
 
         public UserBuilder setSurname(String surname) {
-            this.user.setSurname(surname);
+            user.setSurname(surname);
             return this;
         }
 
         public UserBuilder setEmailNotification(boolean b) {
-            this.user.setEmailNotification(b);
+            user.setEmailNotification(b);
+            return this;
+        }
+
+        public UserBuilder setRoleId(int roleId) {
+            user.setRoleId(roleId);
             return this;
         }
 
         public User get() {
-            return this.user;
+            return user;
         }
     }
 }
