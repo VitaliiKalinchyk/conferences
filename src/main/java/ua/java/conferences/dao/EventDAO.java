@@ -3,17 +3,17 @@ package ua.java.conferences.dao;
 import ua.java.conferences.entities.*;
 import ua.java.conferences.exceptions.DAOException;
 
-import java.util.List;
+import java.util.*;
 
 public interface EventDAO extends EntityDAO<Event> {
 
-    Event getByTitle(String title) throws DAOException;
+    Optional<Event> getByTitle(String title) throws DAOException;
 
-    boolean setVisitorsCount(long eventId, int visitorsCount) throws DAOException;
+    void setVisitorsCount(long eventId, int visitorsCount) throws DAOException;
 
-    List<Event> getEventsByUser(long userId) throws DAOException;
+    List<Event> getSortedEvents(String filter, String sortField, String order) throws DAOException;
 
-    List<Event> getEventsBySpeaker(long userId) throws DAOException;
+    List<Event> getEventsByVisitor(long userId) throws DAOException;
 
-    Event getEventByReport(long reportId) throws DAOException;
+    List<Event> getEventsBySpeaker(long speakerId) throws DAOException;
 }
