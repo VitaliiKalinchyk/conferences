@@ -6,7 +6,7 @@ public final class SQLFields {
 
     public static final String ID = "id";
 
-    public static final String ROLE = "role_name";
+    public static final String USER_ID = "user_id";
 
     public static final String EMAIL = "email";
 
@@ -18,7 +18,11 @@ public final class SQLFields {
 
     public static final String NOTIFICATION = "notification";
 
+    public static final String ROLE_ID = "role_id";
+
     public static final String TITLE = "title";
+
+    public static final String EVENT_ID = "event_id";
 
     public static final String DATE = "date";
 
@@ -26,11 +30,9 @@ public final class SQLFields {
 
     public static final String DESCRIPTION = "description";
 
+    public static final String REGISTRATIONS = "registrations";
+
     public static final String VISITORS = "visitors";
 
     public static final String TOPIC = "topic";
-
-    public static final String ACCEPTED = "accepted";
-
-    public static final String APPROVED = "approved";
 }
