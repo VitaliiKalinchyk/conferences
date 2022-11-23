@@ -22,6 +22,8 @@ public class Event implements Serializable {
 
     private int visitors;
 
+    private int reports;
+
     public long getId() {
         return this.id;
     }
@@ -78,6 +80,14 @@ public class Event implements Serializable {
         this.visitors = visitors;
     }
 
+    public int getReports() {
+        return reports;
+    }
+
+    public void setReports(int reports) {
+        this.reports = reports;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -101,6 +111,7 @@ public class Event implements Serializable {
                 ", description='" + description + '\'' +
                 ", registrations=" + registrations +
                 ", visitors=" + visitors +
+                ", reports=" + reports +
                 '}';
     }
 
@@ -144,6 +155,11 @@ public class Event implements Serializable {
 
         public EventBuilder setVisitors(int visitors) {
             event.setVisitors(visitors);
+            return this;
+        }
+
+        public EventBuilder setReports(int reports) {
+            event.setReports(reports);
             return this;
         }
 

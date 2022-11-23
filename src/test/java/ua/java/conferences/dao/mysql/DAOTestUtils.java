@@ -24,6 +24,7 @@ public final class DAOTestUtils {
 
     public static final EventDAO eventDAO;
 
+
     static {
         userDAO = daoFactory.getUserDAO();
         reportDAO = daoFactory.getReportDAO();
@@ -49,8 +50,9 @@ public final class DAOTestUtils {
 
     public static Event getTestEvent() {
         return new Event.EventBuilder()
+                .setId(1)
                 .setTitle("Event")
-                .setDate(LocalDate.of(2022, 12, 12))
+                .setDate(LocalDate.of(2022, 12, 28))
                 .setLocation("Kyiv")
                 .setDescription("test event")
                 .get();
@@ -59,6 +61,7 @@ public final class DAOTestUtils {
     public static Report getTestReport() {
         return (new Report.ReportBuilder())
                 .setTopic("Report")
+                .setEvent(getTestEvent())
                 .get();
     }
 }

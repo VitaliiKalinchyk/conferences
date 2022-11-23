@@ -11,9 +11,10 @@ public class Report implements Serializable {
 
     private String topic;
 
-    private long eventId;
+    private Event event;
 
     private User speaker;
+
 
     public long getId() {
         return this.id;
@@ -31,12 +32,12 @@ public class Report implements Serializable {
         this.topic = topic;
     }
 
-    public long getEventId() {
-        return eventId;
+    public Event getEvent() {
+        return event;
     }
 
-    public void setEventId(long eventId) {
-        this.eventId = eventId;
+    public void setEvent(Event event) {
+        this.event = event;
     }
 
     public User getSpeaker() {
@@ -65,7 +66,7 @@ public class Report implements Serializable {
         return "Report{" +
                 "id=" + id +
                 ", topic='" + topic + '\'' +
-                ", eventId=" + eventId +
+                ", event=" + event +
                 ", speaker=" + speaker +
                 '}';
     }
@@ -88,8 +89,8 @@ public class Report implements Serializable {
             return this;
         }
 
-        public ReportBuilder setEventId(long eventId) {
-            report.setEventId(eventId);
+        public ReportBuilder setEvent(Event event) {
+            report.setEvent(event);
             return this;
         }
 

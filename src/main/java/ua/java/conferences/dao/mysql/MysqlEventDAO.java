@@ -166,6 +166,7 @@ public class MysqlEventDAO implements EventDAO {
                 .setDescription(resultSet.getString(DESCRIPTION))
                 .setRegistrations(resultSet.getInt(REGISTRATIONS))
                 .setVisitors(resultSet.getInt(VISITORS))
+                .setReports(resultSet.getInt(REPORTS))
                 .get();
     }
 

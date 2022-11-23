@@ -7,7 +7,7 @@ import java.util.*;
 
 public interface ReportDAO extends EntityDAO<Report> {
 
-    Map<Report, Event> getSpeakersReports(long speakerId) throws DAOException;
+    List<Report> getSpeakersReports(long speakerId) throws DAOException;
 
     List<Report> getEventsReports(long eventId) throws DAOException;
 

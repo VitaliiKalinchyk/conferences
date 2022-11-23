@@ -116,6 +116,23 @@ public class MysqlUserDAO implements UserDAO {
         }
     }
 
+    @Override
+    public boolean isRegistered(long userId, long eventId) throws DAOException {
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(IS_REGISTERED)) {
+            preparedStatement.setLong(1, userId);
+            preparedStatement.setLong(2, eventId);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return true;
+                }
+            }
+        }catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return false;
+    }
+
     private User createUser(ResultSet resultSet) throws SQLException {
         return new User.UserBuilder()
                 .setId(resultSet.getInt(ID))

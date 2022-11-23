@@ -34,5 +34,7 @@ public final class SQLFields {
 
     public static final String VISITORS = "visitors";
 
+    public static final String REPORTS = "reports";
+
     public static final String TOPIC = "topic";
 }

@@ -15,4 +15,6 @@ public interface UserDAO extends EntityDAO<User> {
     void registerForEvent(long userId, long eventId) throws DAOException;
 
     void setUsersRole(long userId, Role role) throws DAOException;
+
+    boolean isRegistered(long userId, long eventId) throws DAOException;
 }

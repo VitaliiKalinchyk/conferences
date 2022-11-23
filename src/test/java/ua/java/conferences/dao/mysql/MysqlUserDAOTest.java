@@ -22,54 +22,47 @@ class MysqlUserDAOTest {
     @Test
     void testCrud() throws DAOException {
         User testUser = getTestUser();
-        assertTrue(userDAO.add(testUser));
+        assertDoesNotThrow(() -> userDAO.add(testUser));
 
-        User resultUser = userDAO.getById(testUser.getId());
+        User resultUser = userDAO.getByEmail(testUser.getEmail()).orElse(null);
+        assertNotNull(resultUser);
         assertNotEquals(0, resultUser.getId());
-        assertEquals(resultUser, testUser);
-        assertEquals(resultUser.getId(), testUser.getId());
+        assertNotEquals(resultUser, testUser);
         assertEquals(resultUser.getEmail(), testUser.getEmail());
         assertEquals(resultUser.getPassword(), testUser.getPassword());
         assertEquals(resultUser.getName(), testUser.getName());
         assertEquals(resultUser.getSurname(), testUser.getSurname());
         assertEquals(resultUser.isEmailNotification(), testUser.isEmailNotification());
+        assertEquals(Role.VISITOR.getValue(), resultUser.getRoleId());
 
         List<User> users = userDAO.getAll();
         assertTrue(users.contains(resultUser));
         assertEquals(1, users.size());
 
         resultUser.setName("Result");
-        assertTrue(userDAO.update(resultUser));
+        assertDoesNotThrow(() -> userDAO.update(resultUser));
 
-        User changedUser = userDAO.getByEmail(resultUser.getEmail());
-        assertEquals("Result", changedUser.getName());
-        assertEquals(resultUser, changedUser);
+        User updatedUser = userDAO.getById(resultUser.getId()).orElse(null);
+        assertNotNull(updatedUser);
+        assertEquals("Result", updatedUser.getName());
 
-        assertTrue(userDAO.delete(resultUser.getId()));
+        assertDoesNotThrow(() -> userDAO.delete(updatedUser.getId()));
         users = userDAO.getAll();
         assertEquals(0, users.size());
     }
 
     @Test
-    void testAddTwice() throws DAOException {
-        assertTrue(userDAO.add(getTestUser()));
-        assertFalse(userDAO.add(getTestUser()));
+    void testAddTwice() {
+        assertDoesNotThrow(() -> userDAO.add(getTestUser()));
+        DAOException exception = assertThrows((DAOException.class), () -> userDAO.add(getTestUser()));
+        assertTrue(exception.getMessage().contains("Duplicate entry"));
     }
 
     @Test
     void testGetAbsent() throws DAOException {
-        assertNull(userDAO.getByEmail(getTestUser().getEmail()));
+        assertNull(userDAO.getByEmail(getTestUser().getEmail()).orElse(null));
     }
 
-    @Test
-    void testUpdateAbsent() throws DAOException {
-        assertFalse(userDAO.update(getTestUser()));
-    }
-
-    @Test
-    void testDeleteAbsent() throws DAOException {
-        assertFalse(userDAO.delete(getTestUser().getId()));
-    }
 
     @Test
     void testRegisterForEvent() throws DAOException {
@@ -77,58 +70,52 @@ class MysqlUserDAOTest {
         userDAO.add(testUser);
         Event testEvent = getTestEvent();
         eventDAO.add(testEvent);
-        assertTrue(userDAO.registerForEvent(testUser.getId(), testEvent.getId()));
+        assertDoesNotThrow(() -> userDAO.registerForEvent(1, 1));
 
-        List<User> users = userDAO.getUsersByEvent(testEvent.getId());
-        assertTrue(users.contains(testUser));
-        assertEquals(1, users.size());
+        assertTrue(userDAO.isRegistered(1, 1));
+
+        List<Event> events = eventDAO.getEventsByVisitor(1);
+        assertEquals(1, events.size());
     }
 
     @Test
     void testBadRegistrations() throws DAOException {
         User testUser = getTestUser();
         userDAO.add(testUser);
+        assertThrows((DAOException.class), () -> userDAO.registerForEvent(1, 1));
         Event testEvent = getTestEvent();
-        assertFalse(userDAO.registerForEvent(testUser.getId(), testEvent.getId()));
-
         eventDAO.add(testEvent);
-        assertTrue(userDAO.registerForEvent(testUser.getId(), testEvent.getId()));
-        assertFalse(userDAO.registerForEvent(testUser.getId(), testEvent.getId()));
 
-        List<User> users = userDAO.getUsersByEvent(testEvent.getId());
-        assertTrue(users.contains(testUser));
-        assertEquals(1, users.size());
+        assertFalse(userDAO.isRegistered(1, 1));
+
+        List<Event> events = eventDAO.getEventsByVisitor(1);
+        assertEquals(0, events.size());
     }
 
     @Test
     void testRoleMethods() throws DAOException {
         User testUser = getTestUser();
         userDAO.add(testUser);
-        assertEquals(Role.VISITOR, userDAO.getUsersRole(testUser.getId()));
-        assertTrue(userDAO.setUsersRole(testUser.getId(), Role.ADMIN));
-        assertEquals(Role.ADMIN, userDAO.getUsersRole(testUser.getId()));
+        testUser = userDAO.getById(1).orElse(null);
+        assertNotNull(testUser);
+        assertEquals(Role.VISITOR.getValue(), testUser.getRoleId());
 
-        List<User> usersByRole = userDAO.getUsersByRole(Role.MODERATOR);
-        assertEquals(0, usersByRole.size());
-
-        usersByRole = userDAO.getUsersByRole(Role.ADMIN);
-        assertEquals(1, usersByRole.size());
-        assertTrue(usersByRole.contains(testUser));
+        userDAO.setUsersRole(1, Role.ADMIN);
+        testUser = userDAO.getById(1).orElse(null);
+        assertNotNull(testUser);
+        assertEquals(Role.ADMIN.getValue(), testUser.getRoleId());
     }
 
     @Test
-    void testSpeakerByReport() throws DAOException {
+    void testSpeakersMethod() throws DAOException {
         User testUser = getTestUser();
         userDAO.add(testUser);
-        Report testReport = getTestReport();
-        reportDAO.add(testReport);
-        reportDAO.setReportForSpeaker(testUser.getId(), testReport.getId());
-        assertEquals(testUser, userDAO.getSpeakerByReport(testReport.getId()));
-    }
+        userDAO.setUsersRole(1, Role.MODERATOR);
+        List<User> users = userDAO.getSpeakers();
+        assertEquals(0, users.size());
 
-    @Test
-    void testNoReportForSpeaker() throws DAOException {
-        Report testReport = getTestReport();
-        assertNull(userDAO.getSpeakerByReport(testReport.getId()));
+        userDAO.setUsersRole(1, Role.SPEAKER);
+        users = userDAO.getSpeakers();
+        assertEquals(1, users.size());
     }
 }

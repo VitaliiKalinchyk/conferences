@@ -23,4 +23,6 @@ public final class UserConstants {
     public static final String REGISTER_FOR_EVENT = "INSERT INTO user_has_event VALUES (?,?)";
 
     public static final String SET_ROLE = "UPDATE user SET role_id=? WHERE id=?";
+
+    public static final String IS_REGISTERED = "SELECT * from user_has_event event where user_id=? AND event_id=?";
 }
