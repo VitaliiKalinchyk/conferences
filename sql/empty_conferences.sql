@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `role` (
 CREATE TABLE IF NOT EXISTS `user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(120) NOT NULL,
-  `password` VARCHAR(32) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `surname` VARCHAR(45) NOT NULL,
   `role_id` INT NOT NULL DEFAULT 4,
@@ -37,13 +37,12 @@ CREATE TABLE IF NOT EXISTS `event` (
   `description` VARCHAR(400) NOT NULL,
   `visitors` INT NULL,
   PRIMARY KEY (`id`),
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
   UNIQUE INDEX `title_UNIQUE` (`title` ASC) VISIBLE);
 
 CREATE TABLE IF NOT EXISTS `report` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `topic` VARCHAR(200) NOT NULL,
-  `accepted` TINYINT NULL,
-  `approved` TINYINT NULL,
   `event_id` INT NULL,
   `user_id` INT NULL,
   PRIMARY KEY (`id`),

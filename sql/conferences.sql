@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `conferences`.`role` (
 CREATE TABLE IF NOT EXISTS `conferences`.`user` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `email` VARCHAR(120) NOT NULL,
-  `password` VARCHAR(32) NOT NULL,
+  `password` VARCHAR(255) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
   `surname` VARCHAR(45) NOT NULL,
   `role_id` INT NOT NULL DEFAULT 4,
@@ -37,13 +37,12 @@ CREATE TABLE IF NOT EXISTS `conferences`.`event` (
   `description` VARCHAR(400) NOT NULL,
   `visitors` INT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE);
+  UNIQUE INDEX `id_UNIQUE` (`id` ASC) VISIBLE,
+  UNIQUE INDEX `title_UNIQUE` (`title` ASC) VISIBLE);
 
 CREATE TABLE IF NOT EXISTS `conferences`.`report` (
   `id` INT NOT NULL AUTO_INCREMENT,
   `topic` VARCHAR(200) NOT NULL,
-  `accepted` TINYINT NULL,
-  `approved` TINYINT NULL,
   `event_id` INT NULL,
   `user_id` INT NULL,
   PRIMARY KEY (`id`),
@@ -152,7 +151,10 @@ UPDATE report SET user_id=13 WHERE id=5;
 UPDATE report SET user_id=11 WHERE id=2;
 UPDATE report SET user_id=11 WHERE id=3;
 UPDATE report SET user_id=12 WHERE id=1;
-UPDATE report SET approved=1, accepted=1 WHERE id=5;
-UPDATE report SET approved=1 WHERE id=2;
-UPDATE report SET approved=1 WHERE id=3;
-UPDATE report SET accepted=1 WHERE id=1;
+
+
+INSERT INTO report (topic, event_id, user_id) VALUES ('TOPIC', 1, null);
+
+SELECT report.id, report.topic, report.event_id,report.user_id, user.name, user.surname, event.id, event.title, event.date, event.location FROM report
+LEFT JOIN user ON report.user_id=user.id LEFT JOIN event ON report.event_id=event.id  WHERE event_id=7;
+select * from event;
