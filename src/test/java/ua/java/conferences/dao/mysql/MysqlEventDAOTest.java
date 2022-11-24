@@ -7,17 +7,14 @@ import ua.java.conferences.exceptions.DAOException;
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.dao.mysql.DAOTestUtils.*;
 import static ua.java.conferences.dao.mysql.constants.EventConstants.*;
-import static ua.java.conferences.dao.mysql.constants.SQLFields.DATE;
-import static ua.java.conferences.dao.mysql.constants.SQLFields.TITLE;
+import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
 
 class MysqlEventDAOTest {
 
@@ -71,6 +68,20 @@ class MysqlEventDAOTest {
         assertNull(eventDAO.getByTitle(getTestEvent().getTitle()).orElse(null));
     }
 
+    @Test
+    void testDelete() throws DAOException {
+        eventDAO.add(getTestEvent());
+        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle()).orElse(getTestEvent());
+        reportDAO.add(getTestReport());
+        userDAO.add(getTestUser());
+        User testUser = userDAO.getByEmail(getTestUser().getEmail()).orElse(getTestUser());
+        userDAO.registerForEvent(testUser.getId(), testEvent.getId());
+
+        assertDoesNotThrow(() -> eventDAO.delete(testEvent.getId()));
+        assertEquals(0, eventDAO.getAll().size());
+        assertEquals(0, eventDAO.getEventsByVisitor(testUser.getId()).size());
+        assertEquals(0, reportDAO.getAll().size());
+    }
 
     @Test
     void testVisitors() throws DAOException {
