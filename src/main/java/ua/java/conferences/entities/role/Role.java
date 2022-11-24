@@ -15,4 +15,13 @@ public enum Role {
     public int getValue() {
         return this.value;
     }
+
+    public String getName(int value) {
+        for (Role role: Role.values()) {
+            if (role.value == value) {
+                return role.name();
+            }
+        }
+        return VISITOR.name();
+    }
 }
