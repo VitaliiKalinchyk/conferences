@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO viewProfile(long userId) throws ServiceException {
+    public UserResponseDTO view(long userId) throws ServiceException {
         UserResponseDTO userDTO;
         try {
             User user = userDAO.getById(userId).orElse(null);
@@ -128,7 +128,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteUser(long userId) throws ServiceException {
+    public void delete(long userId) throws ServiceException {
         try {
             userDAO.delete(userId);
         } catch (DAOException e) {

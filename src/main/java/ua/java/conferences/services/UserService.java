@@ -2,17 +2,14 @@ package ua.java.conferences.services;
 
 import ua.java.conferences.dto.request.UserRequestDTO;
 import ua.java.conferences.dto.response.UserResponseDTO;
-import ua.java.conferences.entities.*;
 import ua.java.conferences.exceptions.*;
 
 import java.util.List;
 
-public interface UserService extends Service<User> {
+public interface UserService extends Service<UserResponseDTO> {
     void register(UserRequestDTO userDTO) throws ServiceException;
 
     UserResponseDTO signIn(String login, String password) throws ServiceException;
-
-    UserResponseDTO viewProfile(long userId) throws ServiceException;
 
     UserResponseDTO searchUser(String email) throws ServiceException;
 
@@ -23,8 +20,6 @@ public interface UserService extends Service<User> {
     UserResponseDTO editProfile(UserRequestDTO userDTO) throws ServiceException;
 
     void setRole(long userId, int roleId) throws ServiceException;
-
-    void deleteUser(long userId) throws ServiceException;
 
     void registerForEvent(long userId, long eventId) throws ServiceException;
 

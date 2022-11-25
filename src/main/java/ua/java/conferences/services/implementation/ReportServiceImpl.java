@@ -1,14 +1,18 @@
 package ua.java.conferences.services.implementation;
 
 import ua.java.conferences.dao.ReportDAO;
+import ua.java.conferences.dto.request.ReportRequestDTO;
+import ua.java.conferences.dto.response.*;
 import ua.java.conferences.entities.Report;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.ReportService;
 
-import java.util.List;
+import java.util.*;
+
+import static ua.java.conferences.utils.ConvertorUtil.*;
+import static ua.java.conferences.utils.ValidatorUtil.*;
 
 public class ReportServiceImpl implements ReportService {
-
 
     private final ReportDAO reportDAO;
 
@@ -17,127 +21,96 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public boolean add(Report report) throws ServiceException {
-        boolean result;
+    public void createReport(ReportRequestDTO reportDTO) throws ServiceException {
+        validateReport(reportDTO);
+        Report report = convertDTOToReport(reportDTO);
         try {
-            result = reportDAO.add(report);
+            reportDAO.add(report);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return result;
     }
 
     @Override
-    public Report getById(long id) throws ServiceException {
-        Report report;
+    public ReportResponseDTO view(long reportId) throws ServiceException {
+        ReportResponseDTO reportDTO;
         try {
-            report = reportDAO.getById(id);
+            Report report = reportDAO.getById(reportId).orElse(null);
+            if (report == null) {
+                throw new NoSuchReportException();
+            }
+            reportDTO = convertReportToDTO(report);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return report;
+        return reportDTO;
     }
 
     @Override
-    public List<Report> getAll() throws ServiceException {
-        List<Report> reports;
+    public List<ReportResponseDTO> viewEventsReports(long eventId) throws ServiceException {
+        List<ReportResponseDTO> reportDTOS = new ArrayList<>();
         try {
-            reports = reportDAO.getAll();
+            List<Report> reports = reportDAO.getEventsReports(eventId);
+            reports.forEach(report -> reportDTOS.add(convertReportToDTO(report)));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return reports;
+        return reportDTOS;
     }
 
     @Override
-    public boolean update(Report report) throws ServiceException {
-        boolean result;
+    public List<SpeakersReportResponseDTO> viewSpeakersReports(long speakerId) throws ServiceException {
+        List<SpeakersReportResponseDTO> reportDTOS = new ArrayList<>();
         try {
-            result = reportDAO.update(report);
+            List<Report> reports = reportDAO.getSpeakersReports(speakerId);
+            reports.forEach(report -> reportDTOS.add(convertSpeakersReportToDTO(report)));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return result;
+        return reportDTOS;
     }
 
     @Override
-    public boolean delete(long id) throws ServiceException {
-        boolean result;
+    public void updateReport(ReportRequestDTO reportDTO) throws ServiceException {
+        validateReport(reportDTO);
+        Report report = convertDTOToReport(reportDTO);
         try {
-            result = reportDAO.delete(id);
+            reportDAO.update(report);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return result;
     }
 
     @Override
-    public boolean setEventForReport(long eventId, long reportId) throws ServiceException {
-        boolean result;
+    public void setSpeaker(long reportId, long speakerId) throws ServiceException {
         try {
-            result = reportDAO.setEventForReport(eventId, reportId);
+            reportDAO.setSpeaker(reportId, speakerId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return result;
     }
 
     @Override
-    public List<Report> getReportsFromEvent(long eventId) throws ServiceException {
-        List<Report> reports;
+    public void deleteSpeaker(long reportId) throws ServiceException {
         try {
-            reports = reportDAO.getReportsFromEvent(eventId);
+            reportDAO.deleteSpeaker(reportId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return reports;
     }
 
     @Override
-    public boolean setReportForSpeaker(long userId, long reportId) throws ServiceException {
-        boolean result;
+    public void delete(long reportId) throws ServiceException {
         try {
-            result = reportDAO.setEventForReport(userId, reportId);
+            reportDAO.delete(reportId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return result;
     }
 
-    @Override
-    public List<Report> getReportsFromSpeaker(long userId) throws ServiceException {
-        List<Report> reports;
-        try {
-            reports = reportDAO.getReportsFromSpeaker(userId);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
+    private void validateReport(ReportRequestDTO reportDTO) throws IncorrectFormatException {
+        if (!validateComplexName(reportDTO.topic)) {
+            throw new IncorrectFormatException("topic");
         }
-        return reports;
-    }
-
-    @Override
-    public boolean approveReport(long reportId) throws ServiceException {
-        boolean result;
-        try {
-            Report report = reportDAO.getById(reportId);
-            report.setApproved(true);
-            result = reportDAO.update(report);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return result;
-    }
-
-    @Override
-    public boolean acceptReport(long reportId) throws ServiceException {
-        boolean result;
-        try {
-            Report report = reportDAO.getById(reportId);
-            report.setAccepted(true);
-            result = reportDAO.update(report);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return result;
     }
 }

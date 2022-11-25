@@ -1,21 +1,22 @@
 package ua.java.conferences.services;
 
-import ua.java.conferences.entities.Report;
+import ua.java.conferences.dto.request.ReportRequestDTO;
+import ua.java.conferences.dto.response.*;
 import ua.java.conferences.exceptions.*;
 
 import java.util.List;
 
-public interface ReportService extends Service<Report> {
+public interface ReportService extends Service<ReportResponseDTO> {
 
-    boolean setEventForReport(long eventId, long reportId) throws ServiceException;
+    void createReport(ReportRequestDTO reportDTO) throws ServiceException;
 
-    List<Report> getReportsFromEvent(long eventId) throws ServiceException;
+    List<ReportResponseDTO> viewEventsReports(long eventId) throws ServiceException;
 
-    boolean setReportForSpeaker(long userId, long reportId) throws ServiceException;
+    List<SpeakersReportResponseDTO> viewSpeakersReports(long speakerId) throws ServiceException;
 
-    List<Report> getReportsFromSpeaker(long userId) throws ServiceException;
+    void updateReport(ReportRequestDTO reportDTO) throws ServiceException;
 
-    boolean approveReport(long reportId) throws ServiceException;
+    void setSpeaker(long reportId, long speakerId) throws ServiceException;
 
-    boolean acceptReport(long reportId) throws ServiceException;
+    void deleteSpeaker(long reportId) throws ServiceException;
 }

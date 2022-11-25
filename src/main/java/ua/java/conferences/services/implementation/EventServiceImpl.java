@@ -1,11 +1,18 @@
 package ua.java.conferences.services.implementation;
 
 import ua.java.conferences.dao.EventDAO;
+import ua.java.conferences.dto.request.EventRequestDTO;
+import ua.java.conferences.dto.response.*;
 import ua.java.conferences.entities.Event;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.EventService;
 
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
+
+import static ua.java.conferences.dao.mysql.constants.EventConstants.UPCOMING;
+import static ua.java.conferences.utils.ConvertorUtil.*;
+import static ua.java.conferences.utils.ValidatorUtil.*;
 
 public class EventServiceImpl implements EventService {
 
@@ -16,112 +23,137 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public boolean add(Event event) throws ServiceException {
-        boolean result;
+    public EventResponseDTO createEvent(EventRequestDTO eventDTO) throws ServiceException {
+        validateEvent(eventDTO);
+        Event event = convertDTOToEvent(eventDTO);
         try {
-            result = eventDAO.add(event);
+            eventDAO.add(event);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return result;
+        return convertEventToDTO(event);
     }
 
     @Override
-    public Event getById(long id) throws ServiceException {
-        Event event;
+    public EventResponseDTO view(long eventId) throws ServiceException {
+        EventResponseDTO eventDTO;
         try {
-            event = eventDAO.getById(id);
+            Event event = eventDAO.getById(eventId).orElse(null);
+            if (event == null) {
+                throw new NoSuchEventException();
+            }
+            eventDTO = convertEventToDTO(event);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return event;
+        return eventDTO;
     }
 
     @Override
-    public List<Event> getAll() throws ServiceException {
-        List<Event> events;
+    public EventResponseDTO searchEvent(String title) throws ServiceException {
+        EventResponseDTO eventDTO;
         try {
-            events = eventDAO.getAll();
+            Event event = eventDAO.getByTitle(title).orElse(null);
+            if (event == null) {
+                throw new NoSuchEventException();
+            }
+            eventDTO = convertEventToDTO(event);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return events;
+        return eventDTO;
     }
 
     @Override
-    public boolean update(Event event) throws ServiceException {
-        boolean result;
+    public List<EventResponseDTO> viewUsersEvents(long userId) throws ServiceException {
+        List<EventResponseDTO> eventDTOS = new ArrayList<>();
         try {
-            result = eventDAO.update(event);
+            List<Event> events = eventDAO.getEventsByVisitor(userId);
+            events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return result;
+        return eventDTOS;
     }
 
     @Override
-    public boolean delete(long id) throws ServiceException {
-        boolean result;
+    public List<EventResponseDTO> viewSpeakersEvents(long speakerId) throws ServiceException {
+        List<EventResponseDTO> eventDTOS = new ArrayList<>();
         try {
-            result = eventDAO.delete(id);
+            List<Event> events = eventDAO.getEventsBySpeaker(speakerId);
+            events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return result;
+        return eventDTOS;
     }
 
     @Override
-    public Event getByTitle(String title) throws ServiceException {
-        Event event;
+    public List<EventResponseDTO> viewSortedEventsByUser(String sortField, String order) throws ServiceException {
+        List<EventResponseDTO> eventDTOS = new ArrayList<>();
         try {
-            event = eventDAO.getByTitle(title);
+            List<Event> events = eventDAO.getSortedEvents(UPCOMING, sortField, order);
+            events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return event;
+        return eventDTOS;
     }
 
     @Override
-    public boolean setVisitorsCount(long eventId, int visitorsCount) throws ServiceException {
-        boolean result;
+    public List<FullEventResponseDTO> viewSortedEventsByModerator(String filter, String sortField, String order) throws ServiceException {
+        List<FullEventResponseDTO> eventDTOS = new ArrayList<>();
         try {
-            result = eventDAO.setVisitorsCount(eventId, visitorsCount);
+            List<Event> events = eventDAO.getSortedEvents(filter, sortField, order);
+            events.forEach(event -> eventDTOS.add(convertEventToFullDTO(event)));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return result;
+        return eventDTOS;
     }
 
     @Override
-    public List<Event> getEventsByUser(long userId) throws ServiceException {
-        List<Event> events;
+    public EventResponseDTO editEvent(EventRequestDTO eventDTO) throws ServiceException {
+        validateEvent(eventDTO);
+        Event event = convertDTOToEvent(eventDTO);
         try {
-            events = eventDAO.getEventsByUser(userId);
+            eventDAO.update(event);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return events;
+        return convertEventToDTO(event);
     }
 
     @Override
-    public List<Event> getEventsBySpeaker(long userId) throws ServiceException {
-        List<Event> events;
+    public void setVisitorsCount(long eventId, int visitorsCount) throws ServiceException {
         try {
-            events = eventDAO.getEventsBySpeaker(userId);
+            eventDAO.setVisitorsCount(eventId, visitorsCount);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return events;
     }
 
     @Override
-    public Event getEventByReport(long reportId) throws ServiceException {
-        Event event;
+    public void delete(long eventId) throws ServiceException {
         try {
-            event = eventDAO.getEventByReport(reportId);
+            eventDAO.delete(eventId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
-        return event;
+    }
+
+    private void validateEvent(EventRequestDTO eventDTO) throws IncorrectFormatException {
+        if (!validateComplexName(eventDTO.title)) {
+            throw new IncorrectFormatException("title");
+        }
+        if (!validateDate(LocalDate.parse(eventDTO.date))) {
+            throw new IncorrectFormatException("date");
+        }
+        if (!validateComplexName(eventDTO.location)) {
+            throw new IncorrectFormatException("location");
+        }
+        if (!validateDescription(eventDTO.description)) {
+            throw new IncorrectFormatException("description");
+        }
     }
 }
