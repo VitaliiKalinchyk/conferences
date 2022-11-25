@@ -12,4 +12,6 @@ public interface ReportDAO extends EntityDAO<Report> {
     List<Report> getEventsReports(long eventId) throws DAOException;
 
     void setSpeaker(long reportId, long speakerId) throws DAOException;
+
+    void deleteSpeaker(long reportId) throws DAOException;
 }
