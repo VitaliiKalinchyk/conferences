@@ -1,14 +1,18 @@
 package ua.java.conferences.services.implementation;
 
-import ua.java.conferences.dao.UserDAO;
-import ua.java.conferences.services.UserService;
+import ua.java.conferences.dao.*;
+import ua.java.conferences.dto.request.UserRequestDTO;
+import ua.java.conferences.dto.response.UserResponseDTO;
 import ua.java.conferences.entities.User;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
+import ua.java.conferences.services.UserService;
 
-import java.util.List;
+import java.util.*;
 
-import static ua.java.conferences.entities.role.Role.*;
+import static ua.java.conferences.utils.ConvertorUtil.*;
+import static ua.java.conferences.utils.PasswordHashUtil.*;
+import static ua.java.conferences.utils.ValidatorUtil.*;
 
 public class UserServiceImpl implements UserService {
 
@@ -19,178 +23,151 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean add(User user) throws ServiceException {
+    public void register(UserRequestDTO userDTO) throws ServiceException {
+        validateUser(userDTO);
+        User user = convertDTOToUser(userDTO);
+        try {
+            userDAO.add(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public UserResponseDTO signIn(String login, String password) throws ServiceException {
+        UserResponseDTO userDTO;
+        try {
+            User user = userDAO.getByEmail(login).orElse(null);
+            if (Objects.isNull(user)) {
+                throw new IncorrectEmailException();
+            }
+            if (!verify(user.getPassword(), password)) {
+                throw new IncorrectPasswordException();
+            }
+            userDTO = convertUserToDTO(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return userDTO;
+    }
+
+    @Override
+    public UserResponseDTO viewProfile(long userId) throws ServiceException {
+        UserResponseDTO userDTO;
+        try {
+            User user = userDAO.getById(userId).orElse(null);
+            if (user == null) {
+                throw new NoSuchUserException();
+            }
+            userDTO = convertUserToDTO(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return userDTO;
+    }
+
+    @Override
+    public UserResponseDTO searchUser(String email) throws ServiceException {
+        UserResponseDTO userDTO;
+        try {
+            User user = userDAO.getByEmail(email).orElse(null);
+            if (user == null) {
+                throw new NoSuchUserException();
+            }
+            userDTO = convertUserToDTO(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return userDTO;
+    }
+
+    @Override
+    public List<UserResponseDTO> viewUsers() throws ServiceException {
+        List<UserResponseDTO> userDTOS = new ArrayList<>();
+        try {
+            List<User> users = userDAO.getAll();
+            users.forEach(user -> userDTOS.add(convertUserToDTO(user)));
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return userDTOS;
+    }
+
+    @Override
+    public List<UserResponseDTO> viewSpeakers() throws ServiceException {
+        List<UserResponseDTO> userDTOS = new ArrayList<>();
+        try {
+            List<User> users = userDAO.getSpeakers();
+            users.forEach(user -> userDTOS.add(convertUserToDTO(user)));
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return userDTOS;
+    }
+
+    @Override
+    public UserResponseDTO editProfile(UserRequestDTO userDTO) throws ServiceException {
+        validateUser(userDTO);
+        User user = convertDTOToUser(userDTO);
+        try {
+            userDAO.update(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return convertUserToDTO(user);
+    }
+
+    @Override
+    public void setRole(long userId, int roleId) throws ServiceException {
+        try {
+            Role role = Role.getRole(roleId);
+            userDAO.setUsersRole(userId, role);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void deleteUser(long userId) throws ServiceException {
+        try {
+            userDAO.delete(userId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void registerForEvent(long userId, long eventId) throws ServiceException {
+        try {
+            userDAO.registerForEvent(userId, eventId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public boolean isRegistered(long userId, long eventId) throws ServiceException {
         boolean result;
         try {
-            result = userDAO.add(user);
+            result = userDAO.isRegistered(userId, eventId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
         return result;
     }
 
-    @Override
-    public User getById(long id) throws ServiceException {
-        User user;
-        try {
-            user = userDAO.getById(id);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
+    private void validateUser(UserRequestDTO userDTO) throws IncorrectFormatException {
+        if (!validateEmail(userDTO.email)) {
+            throw new IncorrectFormatException("email");
         }
-        return user;
-    }
-
-    @Override
-    public List<User> getAll() throws ServiceException {
-        List<User> users;
-        try {
-            users = userDAO.getAll();
-        } catch (DAOException e) {
-            throw new ServiceException(e);
+        if (!validatePassword(userDTO.password)) {
+            throw new IncorrectFormatException("password");
         }
-        return users;
-    }
-
-    @Override
-    public boolean update(User user) throws ServiceException {
-        boolean result;
-        try {
-            result = userDAO.update(user);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
+        if (!validateName(userDTO.name)) {
+            throw new IncorrectFormatException("name");
         }
-        return result;
-    }
-
-    @Override
-    public boolean delete(long id) throws ServiceException {
-        boolean result;
-        try {
-            result = userDAO.delete(id);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
+        if (!validateName(userDTO.surname)) {
+            throw new IncorrectFormatException("surname");
         }
-        return result;
-    }
-
-    @Override
-    public User getByEmail(String email) throws ServiceException {
-        User user;
-        try {
-            user = userDAO.getByEmail(email);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return user;
-    }
-
-    @Override
-    public User getSpeakerByReport(long reportId) throws ServiceException {
-        User user;
-        try {
-            user = userDAO.getSpeakerByReport(reportId);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return user;
-    }
-
-    @Override
-    public List<User> getVisitors() throws ServiceException {
-        List<User> users;
-        try {
-            users = userDAO.getUsersByRole(VISITOR);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return users;
-    }
-
-    @Override
-    public List<User> getSpeakers() throws ServiceException {
-        List<User> users;
-        try {
-            users = userDAO.getUsersByRole(Role.SPEAKER);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return users;
-    }
-
-    @Override
-    public List<User> getModerators() throws ServiceException {
-        List<User> users;
-        try {
-            users = userDAO.getUsersByRole(Role.MODERATOR);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return users;
-    }
-
-    @Override
-    public List<User> getUsersByEvent(long eventId) throws ServiceException {
-        List<User> users;
-        try {
-            users = userDAO.getUsersByEvent(eventId);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return users;
-    }
-
-    @Override
-    public boolean registerForEvent(long userId, long eventId) throws ServiceException {
-        boolean result;
-        try {
-            result = userDAO.registerForEvent(userId, eventId);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return result;
-    }
-
-    @Override
-    public Role getUsersRole(long userId) throws ServiceException {
-        Role role;
-        try {
-            role = userDAO.getUsersRole(userId);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return role;
-    }
-
-    @Override
-    public boolean setUserAsVisitor(long userId) throws ServiceException {
-        boolean result;
-        try {
-            result = userDAO.setUsersRole(userId, VISITOR);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return result;
-    }
-
-    @Override
-    public boolean setUserAsSpeaker(long userId) throws ServiceException {
-        boolean result;
-        try {
-            result = userDAO.setUsersRole(userId, SPEAKER);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return result;
-    }
-
-    @Override
-    public boolean setUserAsModerator(long userId) throws ServiceException {
-        boolean result;
-        try {
-            result = userDAO.setUsersRole(userId, MODERATOR);
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return result;
     }
 }
