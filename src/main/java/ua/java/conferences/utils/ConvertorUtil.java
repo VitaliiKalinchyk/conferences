@@ -1,4 +1,4 @@
-package ua.java.conferences.dto;
+package ua.java.conferences.utils;
 
 import ua.java.conferences.dto.request.*;
 import ua.java.conferences.dto.response.*;
@@ -7,15 +7,17 @@ import ua.java.conferences.entities.role.Role;
 
 import java.time.LocalDate;
 
-public final class Convertor {
+import static ua.java.conferences.utils.PasswordHashUtil.*;
 
-    private Convertor() {}
+public final class ConvertorUtil {
+
+    private ConvertorUtil() {}
 
     public static User convertDTOToUser(UserRequestDTO userDTO) {
         return new User.UserBuilder()
                 .setId(userDTO.id)
                 .setEmail(userDTO.email)
-                .setPassword(userDTO.password)
+                .setPassword(encode(userDTO.password))
                 .setName(userDTO.name)
                 .setSurname(userDTO.surname)
                 .setEmailNotification(userDTO.notification)
@@ -24,7 +26,7 @@ public final class Convertor {
 
     public static UserResponseDTO convertUserToDTO(User user) {
         return new UserResponseDTO(user.getId(), user.getEmail(), user.getName(), user.getSurname(),
-                user.isEmailNotification(), Role.ADMIN.getName(user.getRoleId()));
+                user.isEmailNotification(), Role.getRole(user.getRoleId()).name());
     }
 
     public static Report convertDTOToReport(ReportRequestDTO reportDTO) {
