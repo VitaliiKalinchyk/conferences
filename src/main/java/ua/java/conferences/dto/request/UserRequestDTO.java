@@ -1,5 +1,7 @@
 package ua.java.conferences.dto.request;
 
+import java.util.Objects;
+
 public class UserRequestDTO {
 
     public final long id;
@@ -21,5 +23,19 @@ public class UserRequestDTO {
         this.name = name;
         this.surname = surname;
         this.notification = notification;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserRequestDTO that = (UserRequestDTO) o;
+        return id == that.id && notification == that.notification && email.equals(that.email)
+                && password.equals(that.password) && name.equals(that.name) && surname.equals(that.surname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, email, password, name, surname, notification);
     }
 }

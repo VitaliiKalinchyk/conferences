@@ -1,5 +1,7 @@
 package ua.java.conferences.dto.response;
 
+import java.util.Objects;
+
 public class FullEventResponseDTO {
 
     public final long id;
@@ -25,5 +27,18 @@ public class FullEventResponseDTO {
         this.reports = reports;
         this.registrations = registrations;
         this.visitors = visitors;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FullEventResponseDTO that = (FullEventResponseDTO) o;
+        return id == that.id && reports == that.reports && registrations == that.registrations && visitors == that.visitors && title.equals(that.title) && date.equals(that.date) && location.equals(that.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, date, location, reports, registrations, visitors);
     }
 }
