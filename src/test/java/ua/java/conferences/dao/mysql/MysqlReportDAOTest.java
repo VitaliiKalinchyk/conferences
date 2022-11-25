@@ -136,4 +136,27 @@ class MysqlReportDAOTest {
         User speaker = testReport.getSpeaker();
         assertEquals(testUser.getName(), speaker.getName());
     }
+
+    @Test
+    void testDeleteSpeaker() throws DAOException {
+        Event testEvent = getTestEvent();
+        eventDAO.add(testEvent);
+        Report testReport = getTestReport();
+        reportDAO.add(testReport);
+        User testUser = getTestUser();
+        userDAO.add(testUser);
+        reportDAO.setSpeaker(1, 1);
+
+        List<Report> reports = reportDAO.getSpeakersReports(1);
+        assertEquals(1, reports.size());
+
+        assertDoesNotThrow(() -> reportDAO.deleteSpeaker(1));
+
+        reports = reportDAO.getSpeakersReports(1);
+        assertEquals(0, reports.size());
+
+        testReport = reportDAO.getById(1).orElse(null);
+        assertNotNull(testReport);
+        assertNull(testReport.getSpeaker());
+    }
 }

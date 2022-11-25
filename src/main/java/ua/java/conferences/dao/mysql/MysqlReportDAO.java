@@ -119,6 +119,18 @@ public class MysqlReportDAO implements ReportDAO {
     }
 
     @Override
+    public void deleteSpeaker(long reportId) throws DAOException {
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(SET_SPEAKER)) {
+            preparedStatement.setNull(1, NULL);
+            preparedStatement.setLong(2, reportId);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
     public List<Report> getSpeakersReports(long speakerId) throws DAOException {
         List<Report> reports = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
