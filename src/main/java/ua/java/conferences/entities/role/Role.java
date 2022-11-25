@@ -16,12 +16,12 @@ public enum Role {
         return this.value;
     }
 
-    public String getName(int value) {
+    public static Role getRole(int value) {
         for (Role role: Role.values()) {
             if (role.value == value) {
-                return role.name();
+                return role;
             }
         }
-        return VISITOR.name();
+        return VISITOR;
     }
 }
