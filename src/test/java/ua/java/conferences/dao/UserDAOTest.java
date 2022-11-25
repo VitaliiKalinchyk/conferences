@@ -1,4 +1,4 @@
-package ua.java.conferences.dao.mysql;
+package ua.java.conferences.dao;
 
 import org.junit.jupiter.api.*;
 import ua.java.conferences.entities.*;
@@ -10,9 +10,9 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ua.java.conferences.dao.mysql.DAOTestUtils.*;
+import static ua.java.conferences.dao.DAOTestUtils.*;
 
-class MysqlUserDAOTest {
+class UserDAOTest {
 
     @BeforeEach
     void clearDB() throws FileNotFoundException, SQLException {
