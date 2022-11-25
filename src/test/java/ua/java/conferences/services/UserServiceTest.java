@@ -1,4 +1,4 @@
-package ua.java.conferences.services.implementation;
+package ua.java.conferences.services;
 
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
@@ -9,7 +9,7 @@ import ua.java.conferences.dto.response.UserResponseDTO;
 import ua.java.conferences.entities.User;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
-import ua.java.conferences.services.UserService;
+import ua.java.conferences.services.implementation.UserServiceImpl;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.utils.PasswordHashUtil.encode;
 
-class UserServiceImplTest {
+class UserServiceTest {
 
     private final UserDAO userDAO = mock(UserDAO.class);
 
@@ -104,13 +104,13 @@ class UserServiceImplTest {
     @Test
     void testViewProfile() throws DAOException, ServiceException {
         when(userDAO.getById(ID)).thenReturn(Optional.of(getTestUser()));
-        assertEquals(getTestUserResponseDTO(), userService.viewProfile(ID));
+        assertEquals(getTestUserResponseDTO(), userService.view(ID));
     }
 
     @Test
     void testViewProfileNoUser() throws DAOException {
         when(userDAO.getById(ID)).thenReturn(Optional.empty());
-        assertThrows(NoSuchUserException.class,() -> userService.viewProfile(ID));
+        assertThrows(NoSuchUserException.class,() -> userService.view(ID));
     }
 
     @Test
@@ -160,7 +160,7 @@ class UserServiceImplTest {
     @Test
     void testDeleteUser() throws DAOException {
         doNothing().when(userDAO).delete(isA(long.class));
-        assertDoesNotThrow(() -> userService.deleteUser(ID));
+        assertDoesNotThrow(() -> userService.delete(ID));
     }
 
     @Test
@@ -184,6 +184,7 @@ class UserServiceImplTest {
     private UserRequestDTO getTestUserRequestDTO() {
         return new UserRequestDTO(ID, EMAIL, PASSWORD, NAME, SURNAME, NOTIFICATION);
     }
+
     private UserResponseDTO getTestUserResponseDTO() {
         return new UserResponseDTO(ID, EMAIL, NAME, SURNAME, NOTIFICATION, ROLE_NAME);
     }
