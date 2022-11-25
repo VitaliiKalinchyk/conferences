@@ -1,4 +1,4 @@
-package ua.java.conferences.dao.mysql;
+package ua.java.conferences.dao;
 
 import org.junit.jupiter.api.*;
 import ua.java.conferences.entities.*;
@@ -12,11 +12,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ua.java.conferences.dao.mysql.DAOTestUtils.*;
+import static ua.java.conferences.dao.DAOTestUtils.*;
 import static ua.java.conferences.dao.mysql.constants.EventConstants.*;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
 
-class MysqlEventDAOTest {
+class EventDAOTest {
 
     @BeforeEach
     void clearDB() throws FileNotFoundException, SQLException {
@@ -149,7 +149,7 @@ class MysqlEventDAOTest {
     @Test
     void testSortedEvents() throws DAOException {
         List<Event> events = getRandomEvents();
-        events.forEach(MysqlEventDAOTest::addEventToDb);
+        events.forEach(EventDAOTest::addEventToDb);
         List<Event> dbEvents = eventDAO.getSortedEvents(UPCOMING, TITLE, ASC);
         List<Event> sortedEvents = events.stream()
                 .filter(event -> event.getDate().isAfter(LocalDate.now()))
