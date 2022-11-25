@@ -24,7 +24,7 @@ public class ReportResponseDTO {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ReportResponseDTO that = (ReportResponseDTO) o;
-        return id == that.id && speakerId == that.speakerId && topic.equals(that.topic) && speakerName.equals(that.speakerName);
+        return id == that.id && speakerId == that.speakerId && topic.equals(that.topic);
     }
 
     @Override
