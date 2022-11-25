@@ -32,15 +32,27 @@ public final class Constants {
 
     public static final String TOPIC = "Report topic";
 
+    public static final String WRONG_TOPIC = "";
+
     public static final String TITLE = "Event title";
 
-    public static final String DATE_NAME = "2022-11-25";
+    public static final String WRONG_TITLE = "";
 
-    public static final LocalDate DATE = LocalDate.of(2022, 11, 25);
+    public static final LocalDate DATE = LocalDate.now().plusDays(1);
+
+    public static final LocalDate WRONG_DATE = LocalDate.now().minusDays(1);
+
+    public static final String DATE_NAME = DATE.toString();
+
+    public static final String WRONG_DATE_NAME = WRONG_DATE.toString();
 
     public static final String LOCATION = "Kyiv";
 
+    public static final String WRONG_LOCATION = "";
+
     public static final String DESCRIPTION = "What an awesome event!";
+
+    public static final String WRONG_DESCRIPTION = "";
 
     public static final int REGISTRATIONS = 111;
 
