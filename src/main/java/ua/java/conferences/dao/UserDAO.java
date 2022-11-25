@@ -12,9 +12,9 @@ public interface UserDAO extends EntityDAO<User> {
 
     List<User> getSpeakers() throws DAOException;
 
-    void registerForEvent(long userId, long eventId) throws DAOException;
-
     void setUsersRole(long userId, Role role) throws DAOException;
+
+    void registerForEvent(long userId, long eventId) throws DAOException;
 
     boolean isRegistered(long userId, long eventId) throws DAOException;
 }
