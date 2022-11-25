@@ -11,7 +11,7 @@ public final class ValidatorUtil {
     //For names and surnames
     private static final String NAME_REGEX = "^[A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'\\- ]{1,30}";
 
-    //for topics and titles
+    //for topics and titles and locations
     private static final String COMPLEX_NAME_REGEX = "^[\\wА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\\-~`!@#$^&*()={} ]{2,70}";
 
     private static final String DESCRIPTION_REGEX = "^[\\wА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\\-~`!@#$^&*()={} ]{1,200}";
