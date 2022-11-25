@@ -63,6 +63,17 @@ class MysqlUserDAOTest {
         assertNull(userDAO.getByEmail(getTestUser().getEmail()).orElse(null));
     }
 
+    @Test
+    void testUpdateSameEmail() throws DAOException {
+        userDAO.add(getTestUser());
+        User secondUser = getTestUser();
+        secondUser.setEmail("someEmail");
+        userDAO.add(secondUser);
+        secondUser.setEmail(getTestUser().getEmail());
+        secondUser.setId(2);
+        DAOException exception = assertThrows((DAOException.class), () -> userDAO.update(secondUser));
+        assertTrue(exception.getMessage().contains("Duplicate entry"));
+    }
 
     @Test
     void testRegisterForEvent() throws DAOException {
