@@ -19,7 +19,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.utils.PasswordHashUtil.encode;
-import static ua.java.conferences.exceptions.IncorrectFormatException.*;
+import static ua.java.conferences.exceptions.IncorrectFormatException.Message.*;
 
 class UserServiceTest {
 
@@ -39,7 +39,7 @@ class UserServiceTest {
         doNothing().when(userDAO).add(isA(User.class));
         UserRequestDTO userDTO = new UserRequestDTO(ID, WRONG_EMAIL, PASSWORD, NAME, SURNAME, NOTIFICATION);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> userService.register(userDTO));
-        assertEquals(Message.EMAIL, e.getMessage());
+        assertEquals(ENTER_CORRECT_EMAIL, e.getMessage());
     }
 
     @Test
@@ -47,7 +47,7 @@ class UserServiceTest {
         doNothing().when(userDAO).add(isA(User.class));
         UserRequestDTO userDTO = new UserRequestDTO(ID, EMAIL, WRONG_PASSWORD, NAME, SURNAME, NOTIFICATION);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> userService.register(userDTO));
-        assertEquals(Message.PASSWORD, e.getMessage());
+        assertEquals(ENTER_CORRECT_PASSWORD, e.getMessage());
     }
 
     @Test
@@ -55,7 +55,7 @@ class UserServiceTest {
         doNothing().when(userDAO).add(isA(User.class));
         UserRequestDTO userDTO = new UserRequestDTO(ID, EMAIL, PASSWORD, WRONG_NAME, SURNAME, NOTIFICATION);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> userService.register(userDTO));
-        assertEquals(Message.NAME, e.getMessage());
+        assertEquals(ENTER_CORRECT_NAME, e.getMessage());
     }
 
     @Test
@@ -63,7 +63,7 @@ class UserServiceTest {
         doNothing().when(userDAO).add(isA(User.class));
         UserRequestDTO userDTO = new UserRequestDTO(ID, EMAIL, PASSWORD, NAME, WRONG_SURNAME, NOTIFICATION);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> userService.register(userDTO));
-        assertEquals(Message.SURNAME, e.getMessage());
+        assertEquals(ENTER_CORRECT_SURNAME, e.getMessage());
     }
 
     @Test
@@ -163,7 +163,7 @@ class UserServiceTest {
         doNothing().when(userDAO).updateEmail(isA(User.class));
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class,
                 () -> userService.changeEmail(ID, WRONG_EMAIL));
-        assertEquals(Message.EMAIL, e.getMessage());
+        assertEquals(ENTER_CORRECT_EMAIL, e.getMessage());
     }
 
     @Test
@@ -177,7 +177,7 @@ class UserServiceTest {
         doNothing().when(userDAO).updatePassword(isA(User.class));
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class,
                 () -> userService.changePassword(ID, WRONG_PASSWORD));
-        assertEquals(Message.PASSWORD, e.getMessage());
+        assertEquals(ENTER_CORRECT_PASSWORD, e.getMessage());
     }
 
     @Test

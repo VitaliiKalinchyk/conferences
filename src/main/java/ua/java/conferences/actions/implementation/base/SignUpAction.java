@@ -8,7 +8,7 @@ import ua.java.conferences.exceptions.IncorrectFormatException;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
 
-import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
 
 public class SignUpAction implements Action {
@@ -27,15 +27,15 @@ public class SignUpAction implements Action {
         String surname = request.getParameter(SURNAME);
         boolean notification = Boolean.parseBoolean(request.getParameter(NOTIFICATION));
         UserRequestDTO user = new UserRequestDTO(0, email, password, name, surname, notification);
-        request.setAttribute("user", user);
+        request.setAttribute(USER, user);
         try {
             userService.register(user);
         } catch (IncorrectFormatException e) {
-            request.setAttribute("error", e);
+            request.setAttribute(ERROR, e);
             path = "sign-up.jsp";
         } catch (ServiceException e) {
             if (e.getMessage().contains("Duplicate")) {
-                request.setAttribute("error", e);
+                request.setAttribute(ERROR, e);
                 path = "sign-up.jsp";
             } else {
                 path = "error.jsp";

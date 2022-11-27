@@ -145,16 +145,16 @@ public class EventServiceImpl implements EventService {
 
     private void validateEvent(EventRequestDTO eventDTO) throws IncorrectFormatException {
         if (!validateComplexName(eventDTO.title)) {
-            throw new IncorrectFormatException(TITLE);
+            throw new IncorrectFormatException(ENTER_CORRECT_TITLE);
         }
         if (!validateDate(LocalDate.parse(eventDTO.date))) {
-            throw new IncorrectFormatException(DATE);
+            throw new IncorrectFormatException(ENTER_VALID_DATE);
         }
         if (!validateComplexName(eventDTO.location)) {
-            throw new IncorrectFormatException(LOCATION);
+            throw new IncorrectFormatException(ENTER_CORRECT_LOCATION);
         }
         if (!validateDescription(eventDTO.description)) {
-            throw new IncorrectFormatException(DESCRIPTION);
+            throw new IncorrectFormatException(ENTER_CORRECT_DESCRIPTION);
         }
     }
 }

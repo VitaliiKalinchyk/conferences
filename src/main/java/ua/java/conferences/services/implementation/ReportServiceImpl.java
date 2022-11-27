@@ -9,7 +9,7 @@ import ua.java.conferences.services.ReportService;
 
 import java.util.*;
 
-import static ua.java.conferences.exceptions.IncorrectFormatException.Message.TOPIC;
+import static ua.java.conferences.exceptions.IncorrectFormatException.Message.ENTER_CORRECT_TOPIC;
 import static ua.java.conferences.utils.ConvertorUtil.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;
 
@@ -111,7 +111,7 @@ public class ReportServiceImpl implements ReportService {
 
     private void validateReport(ReportRequestDTO reportDTO) throws IncorrectFormatException {
         if (!validateComplexName(reportDTO.topic)) {
-            throw new IncorrectFormatException(TOPIC);
+            throw new IncorrectFormatException(ENTER_CORRECT_TOPIC);
         }
     }
 }

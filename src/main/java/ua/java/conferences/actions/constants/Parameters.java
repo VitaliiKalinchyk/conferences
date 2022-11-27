@@ -1,10 +1,10 @@
 package ua.java.conferences.actions.constants;
 
-public final class ActionConstants {
+public final class Parameters {
 
-    private ActionConstants() {}
+    private Parameters() {}
 
-    public static final String USER = "email";
+    public static final String USER = "user";
 
     public static final String ROLE = "role";
 
@@ -16,7 +16,7 @@ public final class ActionConstants {
 
     public static final String SURNAME = "surname";
 
-    public static final String NOTIFICATION = "emailNotification";
+    public static final String NOTIFICATION = "notification";
 
     public static final String TITLE = "title";
 
@@ -33,4 +33,8 @@ public final class ActionConstants {
     public static final String ACCEPTED = "accepted";
 
     public static final String APPROVED = "approved";
+
+    public static final String ERROR = "error";
+
+    public static final String ID = "id";
 }

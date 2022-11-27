@@ -121,7 +121,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changeEmail(long userId, String email) throws ServiceException {
         if (!validateEmail(email)) {
-            throw new IncorrectFormatException(EMAIL);
+            throw new IncorrectFormatException(ENTER_CORRECT_EMAIL);
         }
         try {
             userDAO.updateEmail(new User.UserBuilder().setId(userId).setEmail(email).get());
@@ -133,7 +133,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePassword(long userId, String password) throws ServiceException {
         if (!validatePassword(password)) {
-            throw new IncorrectFormatException(PASSWORD);
+            throw new IncorrectFormatException(ENTER_CORRECT_PASSWORD);
         }
         try {
             userDAO.updateEmail(new User.UserBuilder().setId(userId).setPassword(password).get());
@@ -183,16 +183,16 @@ public class UserServiceImpl implements UserService {
 
     private void validateUser(UserRequestDTO userDTO) throws IncorrectFormatException {
         if (!validateEmail(userDTO.email)) {
-            throw new IncorrectFormatException(EMAIL);
+            throw new IncorrectFormatException(ENTER_CORRECT_EMAIL);
         }
         if (!validatePassword(userDTO.password)) {
-            throw new IncorrectFormatException(PASSWORD);
+            throw new IncorrectFormatException(ENTER_CORRECT_PASSWORD);
         }
         if (!validateName(userDTO.name)) {
-            throw new IncorrectFormatException(NAME);
+            throw new IncorrectFormatException(ENTER_CORRECT_NAME);
         }
         if (!validateName(userDTO.surname)) {
-            throw new IncorrectFormatException(SURNAME);
+            throw new IncorrectFormatException(ENTER_CORRECT_SURNAME);
         }
     }
 }

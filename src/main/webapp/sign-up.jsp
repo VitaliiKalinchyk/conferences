@@ -23,23 +23,23 @@
 </p>
 <form method="POST" action="action">
     <input type="hidden" name="action" value="sign-up">
-    <%=message.equals(Message.EMAIL) ? Message.EMAIL : ""%>
+    <%=message.equals(Message.ENTER_CORRECT_EMAIL) ? Message.ENTER_CORRECT_EMAIL : ""%>
     <%=message.contains("Duplicate") ? "This email is already in use" : ""%>
     <br>
     <label for="email" >Email*: </label>
     <input type="email" name="email" id="email" required value=<%=user != null ? user.email : ""%>>
     <br>
-    <%=message.equals(Message.PASSWORD) ? Message.PASSWORD : ""%>
+    <%=message.equals(Message.ENTER_CORRECT_PASSWORD) ? Message.ENTER_CORRECT_PASSWORD : ""%>
     <br>
     <label for="password" >Password*: </label>
     <input type="password" name="password" id="password" required>
     <br>
-    <%=message.equals(Message.NAME) ? Message.NAME : ""%>
+    <%=message.equals(Message.ENTER_CORRECT_NAME) ? Message.ENTER_CORRECT_NAME : ""%>
     <br>
     <label for="name" >Name*: </label>
     <input type="text" name="name" id="name" required value=<%=user != null ? user.name : ""%>>
     <br>
-    <%=message.equals(Message.SURNAME) ? Message.SURNAME : ""%>
+    <%=message.equals(Message.ENTER_CORRECT_SURNAME) ? Message.ENTER_CORRECT_SURNAME : ""%>
     <br>
     <label for="surname" >Surname*: </label>
     <input type="text" name="surname" id="surname" required value=<%=user != null ? user.surname : ""%>>
@@ -55,4 +55,5 @@
     </p>
 </footer>
 </body>
+
 </html>

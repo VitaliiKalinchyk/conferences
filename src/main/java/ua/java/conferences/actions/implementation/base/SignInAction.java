@@ -9,6 +9,7 @@ import ua.java.conferences.services.*;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.ServiceException;
 
+import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
 
 public class SignInAction implements Action {
@@ -21,8 +22,8 @@ public class SignInAction implements Action {
     @Override
     public String execute(HttpServletRequest request) {
         String path;
-        String email = request.getParameter("email");
-        String password = request.getParameter("password");
+        String email = request.getParameter(EMAIL);
+        String password = request.getParameter(PASSWORD);
         UserResponseDTO user;
         try {
             user = userService.signIn(email, password);
@@ -44,7 +45,7 @@ public class SignInAction implements Action {
     }
 
     private static void setSessionAttributes(HttpServletRequest request, UserResponseDTO user) {
-        request.getSession().setAttribute("user", user);
-        request.getSession().setAttribute("role", user.role);
+        request.getSession().setAttribute(USER, user);
+        request.getSession().setAttribute(ROLE, user.role);
     }
 }
