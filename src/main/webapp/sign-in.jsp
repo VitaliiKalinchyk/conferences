@@ -29,8 +29,12 @@
     <p><input type="submit" value="Sign In"></p>
 </form>
 <p>
+    Forgot Your Password?
+    <a href="reset-password.jsp">Reset Password</a>
+</p>
+<p>
     Don't have a Conference Smart App Account?
-    <a href="sign-up.jsp"> Create Account</a>
+    <a href="sign-up.jsp">Create Account</a>
 </p>
 <footer>
     <p>

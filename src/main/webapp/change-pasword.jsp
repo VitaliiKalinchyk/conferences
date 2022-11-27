@@ -7,7 +7,7 @@
 <html lang="en">
 
 <head>
-    <title>Title</title>
+    <title>Conference Smart App</title>
 </head>
 
 <body>
@@ -16,8 +16,9 @@
 </header>
 <hr>
 <form method="POST" action="action">
-    <input type="hidden" name="action" value="password-reset">
+    <input type="hidden" name="action" value="change-password">
     <%=error instanceof IncorrectPasswordException ? "Wrong password" : ""%>
+    <br>
     <label for="password" >Password: </label>
     <input type="password" name="password" id="password" required>
     <p><input type="submit" value="Change Password"></p>

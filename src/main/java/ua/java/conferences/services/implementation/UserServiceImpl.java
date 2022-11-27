@@ -69,6 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO searchUser(String email) throws ServiceException {
+        validate(validateEmail(email), ENTER_CORRECT_EMAIL);
         UserResponseDTO userDTO;
         try {
             User user = userDAO.getByEmail(email).orElse(null);
@@ -81,6 +82,7 @@ public class UserServiceImpl implements UserService {
         }
         return userDTO;
     }
+
 
     @Override
     public List<UserResponseDTO> viewUsers() throws ServiceException {
@@ -120,9 +122,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changeEmail(long userId, String email) throws ServiceException {
-        if (!validateEmail(email)) {
-            throw new IncorrectFormatException(ENTER_CORRECT_EMAIL);
-        }
+        validate(validateEmail(email), ENTER_CORRECT_EMAIL);
         try {
             userDAO.updateEmail(new User.UserBuilder().setId(userId).setEmail(email).get());
         } catch (DAOException e) {
@@ -132,9 +132,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void changePassword(long userId, String password) throws ServiceException {
-        if (!validatePassword(password)) {
-            throw new IncorrectFormatException(ENTER_CORRECT_PASSWORD);
-        }
+        validate(validatePassword(password), ENTER_CORRECT_PASSWORD);
         try {
             userDAO.updateEmail(new User.UserBuilder().setId(userId).setPassword(password).get());
         } catch (DAOException e) {
@@ -181,18 +179,16 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
+    private static void validate(boolean email, String enterCorrectEmail) throws IncorrectFormatException {
+        if (!email) {
+            throw new IncorrectFormatException(enterCorrectEmail);
+        }
+    }
+
     private void validateUser(UserRequestDTO userDTO) throws IncorrectFormatException {
-        if (!validateEmail(userDTO.email)) {
-            throw new IncorrectFormatException(ENTER_CORRECT_EMAIL);
-        }
-        if (!validatePassword(userDTO.password)) {
-            throw new IncorrectFormatException(ENTER_CORRECT_PASSWORD);
-        }
-        if (!validateName(userDTO.name)) {
-            throw new IncorrectFormatException(ENTER_CORRECT_NAME);
-        }
-        if (!validateName(userDTO.surname)) {
-            throw new IncorrectFormatException(ENTER_CORRECT_SURNAME);
-        }
+        validate(validateEmail(userDTO.email), ENTER_CORRECT_EMAIL);
+        validate(validatePassword(userDTO.password), ENTER_CORRECT_PASSWORD);
+        validate(validateName(userDTO.name), ENTER_CORRECT_NAME);
+        validate(validateName(userDTO.surname), ENTER_CORRECT_SURNAME);
     }
 }

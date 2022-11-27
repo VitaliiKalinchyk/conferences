@@ -14,6 +14,7 @@ public final class ActionFactory {
         ACTION_MAP.put("sign-in", new SignInAction());
         ACTION_MAP.put("sign-up", new SignUpAction());
         ACTION_MAP.put("sign-out", new SignOutAction());
+        ACTION_MAP.put("password-reset", new PasswordResetAction());
         ACTION_MAP.put("change-password", new PasswordChangeAction());
         ACTION_MAP.put("error", new ErrorAction());
     }
