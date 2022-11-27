@@ -1,0 +1,50 @@
+package ua.java.conferences.actions.implementation.base;
+
+import jakarta.servlet.http.HttpServletRequest;
+
+import ua.java.conferences.actions.Action;
+import ua.java.conferences.dto.response.UserResponseDTO;
+import ua.java.conferences.exceptions.*;
+import ua.java.conferences.services.*;
+import ua.java.conferences.entities.role.Role;
+import ua.java.conferences.exceptions.ServiceException;
+
+import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
+
+public class SignInAction implements Action {
+
+    private final UserService userService;
+
+    public SignInAction() {
+        userService = ServiceFactory.getInstance(MYSQL).getUserService();
+    }
+    @Override
+    public String execute(HttpServletRequest request) {
+        String path;
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        UserResponseDTO user;
+        try {
+            user = userService.signIn(email, password);
+            setSessionAttributes(request, user);
+            switch (Role.valueOf(user.role)) {
+                case SPEAKER: path = "speaker/profile.jsp"; break;
+                case MODERATOR: path = "moderator/profile.jsp"; break;
+                case ADMIN: path = "admin/profile.jsp"; break;
+                default: path = "visitor/profile.jsp";
+
+            }
+        } catch (IncorrectEmailException | IncorrectPasswordException e) {
+            request.setAttribute("error", e);
+            path = "sign-in.jsp";
+        } catch (ServiceException e) {
+            path = "error.jsp";
+        }
+        return path;
+    }
+
+    private static void setSessionAttributes(HttpServletRequest request, UserResponseDTO user) {
+        request.getSession().setAttribute("user", user);
+        request.getSession().setAttribute("role", user.role);
+    }
+}
