@@ -8,14 +8,13 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet("/action")
+@WebServlet({"/action", "/admin/action", "/admin/visitor", "/admin/moderator", "/admin/speaker"})
 public class Controller extends HttpServlet {
 
     private static final ActionFactory ACTION_FACTORY = ActionFactory.getActionFactory();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("get");
         processGet(request, response);
     }
 
@@ -27,12 +26,7 @@ public class Controller extends HttpServlet {
     private void processGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String actionName = getActionName(request);
         Action action = ACTION_FACTORY.createAction(actionName);
-
-        //TRY
         String address = action.execute(request);
-        //CATCH
-//        response.sendRedirect(address);
-
         request.getRequestDispatcher(address).forward(request, response);
     }
 
@@ -43,10 +37,9 @@ public class Controller extends HttpServlet {
         try {
             address = action.execute(request);
         } catch (Exception e) {
-            //Log the error
-            request.setAttribute("error", e.getMessage());
+            request.setAttribute("global_error", e.getMessage());
         }
-        response.sendRedirect(address);
+        request.getRequestDispatcher(address).forward(request, response);
     }
 
     private String getActionName(HttpServletRequest request) {
