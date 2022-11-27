@@ -73,8 +73,34 @@ public class MysqlUserDAO implements UserDAO {
     public void update(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
-            setStatementFields(user, preparedStatement);
-            preparedStatement.setLong(6, user.getId());
+            preparedStatement.setString(1, user.getName());
+            preparedStatement.setString(2, user.getSurname());
+            preparedStatement.setInt(3, user.isEmailNotification() ? 1 : 0);
+            preparedStatement.setLong(4, user.getId());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public void updateEmail(User user) throws DAOException {
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(EDIT_EMAIL)) {
+            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setLong(2, user.getId());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public void updatePassword(User user) throws DAOException {
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(EDIT_PASSWORD)) {
+            preparedStatement.setString(1, user.getPassword());
+            preparedStatement.setLong(2, user.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);

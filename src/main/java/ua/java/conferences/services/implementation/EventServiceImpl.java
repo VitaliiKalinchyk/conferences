@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.util.*;
 
 import static ua.java.conferences.dao.mysql.constants.EventConstants.UPCOMING;
+import static ua.java.conferences.exceptions.IncorrectFormatException.Message.*;
 import static ua.java.conferences.utils.ConvertorUtil.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;
 
@@ -144,16 +145,16 @@ public class EventServiceImpl implements EventService {
 
     private void validateEvent(EventRequestDTO eventDTO) throws IncorrectFormatException {
         if (!validateComplexName(eventDTO.title)) {
-            throw new IncorrectFormatException("title");
+            throw new IncorrectFormatException(TITLE);
         }
         if (!validateDate(LocalDate.parse(eventDTO.date))) {
-            throw new IncorrectFormatException("date");
+            throw new IncorrectFormatException(DATE);
         }
         if (!validateComplexName(eventDTO.location)) {
-            throw new IncorrectFormatException("location");
+            throw new IncorrectFormatException(LOCATION);
         }
         if (!validateDescription(eventDTO.description)) {
-            throw new IncorrectFormatException("description");
+            throw new IncorrectFormatException(DESCRIPTION);
         }
     }
 }

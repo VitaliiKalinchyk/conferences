@@ -64,6 +64,20 @@ class UserDAOTest {
     }
 
     @Test
+    void testUpdateEmail() throws DAOException {
+        userDAO.add(getTestUser());
+        User testUser = userDAO.getById(1).orElse(null);
+        assertNotNull(testUser);
+
+        testUser.setEmail("newEmail@email.com");
+        userDAO.updateEmail(testUser);
+        testUser = userDAO.getById(1).orElse(null);
+        assertNotNull(testUser);
+
+        assertEquals("newEmail@email.com", testUser.getEmail());
+    }
+
+    @Test
     void testUpdateSameEmail() throws DAOException {
         userDAO.add(getTestUser());
         User secondUser = getTestUser();
@@ -71,8 +85,22 @@ class UserDAOTest {
         userDAO.add(secondUser);
         secondUser.setEmail(getTestUser().getEmail());
         secondUser.setId(2);
-        DAOException exception = assertThrows((DAOException.class), () -> userDAO.update(secondUser));
+        DAOException exception = assertThrows((DAOException.class), () -> userDAO.updateEmail(secondUser));
         assertTrue(exception.getMessage().contains("Duplicate entry"));
+    }
+
+    @Test
+    void testUpdatePassword() throws DAOException {
+        userDAO.add(getTestUser());
+        User testUser = userDAO.getById(1).orElse(null);
+        assertNotNull(testUser);
+
+        testUser.setPassword("newPassword1234");
+        userDAO.updatePassword(testUser);
+        testUser = userDAO.getById(1).orElse(null);
+        assertNotNull(testUser);
+
+        assertEquals("newPassword1234", testUser.getPassword());
     }
 
     @Test

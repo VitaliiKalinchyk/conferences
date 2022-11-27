@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
+import static ua.java.conferences.exceptions.IncorrectFormatException.*;
 import static ua.java.conferences.dao.mysql.constants.EventConstants.*;
 
 class EventServiceTest {
@@ -36,7 +37,7 @@ class EventServiceTest {
         doNothing().when(eventDAO).add(isA(Event.class));
         EventRequestDTO eventDTO = new EventRequestDTO(ID, WRONG_TITLE,DATE_NAME, LOCATION, DESCRIPTION);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.createEvent(eventDTO));
-        assertEquals("title", e.getMessage());
+        assertEquals(Message.TITLE, e.getMessage());
     }
 
     @Test
@@ -44,7 +45,7 @@ class EventServiceTest {
         doNothing().when(eventDAO).add(isA(Event.class));
         EventRequestDTO eventDTO = new EventRequestDTO(ID, TITLE,WRONG_DATE_NAME, LOCATION, DESCRIPTION);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.createEvent(eventDTO));
-        assertEquals("date", e.getMessage());
+        assertEquals(Message.DATE, e.getMessage());
     }
 
     @Test
@@ -52,7 +53,7 @@ class EventServiceTest {
         doNothing().when(eventDAO).add(isA(Event.class));
         EventRequestDTO eventDTO = new EventRequestDTO(ID, TITLE,DATE_NAME, WRONG_LOCATION, DESCRIPTION);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.createEvent(eventDTO));
-        assertEquals("location", e.getMessage());
+        assertEquals(Message.LOCATION, e.getMessage());
     }
 
     @Test
@@ -60,7 +61,7 @@ class EventServiceTest {
         doNothing().when(eventDAO).add(isA(Event.class));
         EventRequestDTO eventDTO = new EventRequestDTO(ID, TITLE,DATE_NAME, LOCATION, WRONG_DESCRIPTION);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.createEvent(eventDTO));
-        assertEquals("description", e.getMessage());
+        assertEquals(Message.DESCRIPTION, e.getMessage());
     }
 
     @Test

@@ -10,6 +10,7 @@ import ua.java.conferences.services.UserService;
 
 import java.util.*;
 
+import static ua.java.conferences.exceptions.IncorrectFormatException.Message.*;
 import static ua.java.conferences.utils.ConvertorUtil.*;
 import static ua.java.conferences.utils.PasswordHashUtil.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;
@@ -118,6 +119,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void changeEmail(long userId, String email) throws ServiceException {
+        if (!validateEmail(email)) {
+            throw new IncorrectFormatException(EMAIL);
+        }
+        try {
+            userDAO.updateEmail(new User.UserBuilder().setId(userId).setEmail(email).get());
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
+    public void changePassword(long userId, String password) throws ServiceException {
+        if (!validatePassword(password)) {
+            throw new IncorrectFormatException(PASSWORD);
+        }
+        try {
+            userDAO.updateEmail(new User.UserBuilder().setId(userId).setPassword(password).get());
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public void setRole(long userId, int roleId) throws ServiceException {
         try {
             Role role = Role.getRole(roleId);
@@ -158,16 +183,16 @@ public class UserServiceImpl implements UserService {
 
     private void validateUser(UserRequestDTO userDTO) throws IncorrectFormatException {
         if (!validateEmail(userDTO.email)) {
-            throw new IncorrectFormatException("email");
+            throw new IncorrectFormatException(EMAIL);
         }
         if (!validatePassword(userDTO.password)) {
-            throw new IncorrectFormatException("password");
+            throw new IncorrectFormatException(PASSWORD);
         }
         if (!validateName(userDTO.name)) {
-            throw new IncorrectFormatException("name");
+            throw new IncorrectFormatException(NAME);
         }
         if (!validateName(userDTO.surname)) {
-            throw new IncorrectFormatException("surname");
+            throw new IncorrectFormatException(SURNAME);
         }
     }
 }

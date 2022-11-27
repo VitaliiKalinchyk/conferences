@@ -14,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
+import static ua.java.conferences.exceptions.IncorrectFormatException.*;
 
 class ReportServiceTest {
 
@@ -33,7 +34,7 @@ class ReportServiceTest {
         doNothing().when(reportDAO).add(isA(Report.class));
         ReportRequestDTO reportDTO = new ReportRequestDTO(ID, WRONG_TOPIC, ID, ID);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> reportService.createReport(reportDTO));
-        assertEquals("topic", e.getMessage());
+        assertEquals(Message.TOPIC, e.getMessage());
     }
 
     @Test
