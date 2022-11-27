@@ -8,11 +8,11 @@ import ua.java.conferences.services.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
 
-public class PasswordResetAction implements Action {
+public class PasswordChangeAction implements Action {
 
     private final UserService userService;
 
-    public PasswordResetAction() {
+    public PasswordChangeAction() {
         userService = ServiceFactory.getInstance(MYSQL).getUserService();
     }
 
@@ -25,7 +25,7 @@ public class PasswordResetAction implements Action {
             userService.changePassword(id, password);
         } catch (IncorrectFormatException e) {
             request.setAttribute(ERROR, e);
-            path = "reset-password.jsp";
+            path = "change-password.jsp";
         } catch (ServiceException e) {
             path = "error.jsp";
         }

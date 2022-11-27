@@ -20,7 +20,7 @@
     <%=error instanceof IncorrectPasswordException ? "Wrong password" : ""%>
     <label for="password" >Password: </label>
     <input type="password" name="password" id="password" required>
-    <p><input type="submit" value="Reset Password"></p>
+    <p><input type="submit" value="Change Password"></p>
 </form>
 <footer>
     <p>
