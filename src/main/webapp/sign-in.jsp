@@ -1,3 +1,10 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page import="ua.java.conferences.exceptions.ServiceException" %>
+<%@ page import="ua.java.conferences.exceptions.IncorrectPasswordException" %>
+<%@ page import="ua.java.conferences.exceptions.IncorrectEmailException" %>
+<%String name = (String) request.getAttribute("name");%>
+<%ServiceException error = (ServiceException) request.getAttribute("error");%>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,18 +18,19 @@
     Conference Smart App Sign In
 </header>
 <hr>
-${requestScope.error}
 <form method="POST" action="action">
     <input type="hidden" name="action" value="sign-in">
+    <%=error instanceof IncorrectEmailException ? "Wrong email" : ""%>
     <label for="email" >Email: </label>
-    <input type="email" name="email" id="email">
+    <input type="email" name="email" id="email" required value=<%=name != null ? name : ""%>>
+    <%=error instanceof IncorrectPasswordException ? "Wrong password" : ""%>
     <label for="password" >Password: </label>
-    <input type="password" name="password" id="password">
+    <input type="password" name="password" id="password" required>
     <p><input type="submit" value="Sign In"></p>
 </form>
 <p>
     Don't have a Conference Smart App Account?
-    <a href="sign-up.html"> Create Account</a>
+    <a href="sign-up.jsp"> Create Account</a>
 </p>
 <footer>
     <p>
