@@ -123,13 +123,13 @@ public class MysqlUserDAO implements UserDAO {
     public void registerForEvent(long userId, long eventId) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(REGISTER_FOR_EVENT)) {
-            preparedStatement.setLong(1, userId);
-            preparedStatement.setLong(2, eventId);
+            setIds(userId, eventId, preparedStatement);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
         }
     }
+
 
     @Override
     public void setUsersRole(long userId, Role role) throws DAOException {
@@ -147,8 +147,7 @@ public class MysqlUserDAO implements UserDAO {
     public boolean isRegistered(long userId, long eventId) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(IS_REGISTERED)) {
-            preparedStatement.setLong(1, userId);
-            preparedStatement.setLong(2, eventId);
+            setIds(userId, eventId, preparedStatement);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     return true;
@@ -193,5 +192,10 @@ public class MysqlUserDAO implements UserDAO {
             throw new DAOException(e);
         }
         return users;
+    }
+
+    private static void setIds(long userId, long eventId, PreparedStatement preparedStatement) throws SQLException {
+        preparedStatement.setLong(1, userId);
+        preparedStatement.setLong(2, eventId);
     }
 }
