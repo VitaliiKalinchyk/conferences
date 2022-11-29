@@ -1,6 +1,8 @@
 package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.java.conferences.actions.Action;
 import ua.java.conferences.dto.request.UserRequestDTO;
 import ua.java.conferences.dto.response.UserResponseDTO;
@@ -12,6 +14,8 @@ import static ua.java.conferences.actions.constants.Parameters.ERROR;
 import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
 
 public class EditProfileAction implements Action {
+
+    private static final Logger logger = LoggerFactory.getLogger(EditProfileAction.class);
 
     private final UserService userService;
 
@@ -30,6 +34,7 @@ public class EditProfileAction implements Action {
             setAttributes(request, user, e);
             path = "edit-profile.jsp";
         } catch (ServiceException e) {
+            logger.error(e.getMessage());
             if (e.getMessage().contains("Duplicate")) {
                 request.setAttribute(ERROR, e);
                 path = "edit-profile.jsp";
@@ -41,7 +46,7 @@ public class EditProfileAction implements Action {
         return path;
     }
 
-    private static UserRequestDTO getUserRequestDTO(HttpServletRequest request, UserResponseDTO currentUser) {
+    private UserRequestDTO getUserRequestDTO(HttpServletRequest request, UserResponseDTO currentUser) {
         long id = currentUser.getId();
         String email = request.getParameter(EMAIL);
         String name = request.getParameter(NAME);
@@ -51,7 +56,7 @@ public class EditProfileAction implements Action {
         return new UserRequestDTO(id, email, name, surname, isNotified);
     }
 
-    private static void setAttributes(HttpServletRequest request, UserRequestDTO user, IncorrectFormatException e) {
+    private void setAttributes(HttpServletRequest request, UserRequestDTO user, IncorrectFormatException e) {
         request.setAttribute(EMAIL, user.getEmail());
         request.setAttribute(NAME, user.getName());
         request.setAttribute(SURNAME, user.getSurname());
@@ -59,7 +64,7 @@ public class EditProfileAction implements Action {
         request.setAttribute(ERROR, e);
     }
 
-    private static void updateCurrentUserFields(UserResponseDTO currentUser, UserRequestDTO user) {
+    private void updateCurrentUserFields(UserResponseDTO currentUser, UserRequestDTO user) {
         currentUser.setEmail(user.getEmail());
         currentUser.setName(user.getName());
         currentUser.setSurname(user.getSurname());

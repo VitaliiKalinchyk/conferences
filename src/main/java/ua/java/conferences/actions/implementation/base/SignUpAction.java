@@ -2,6 +2,8 @@ package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.java.conferences.actions.Action;
 import ua.java.conferences.dto.request.UserRequestDTO;
 import ua.java.conferences.exceptions.IncorrectFormatException;
@@ -12,6 +14,9 @@ import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
 
 public class SignUpAction implements Action {
+
+    private static final Logger logger = LoggerFactory.getLogger(SignUpAction.class);
+
     private final UserService userService;
 
     public SignUpAction() {
@@ -29,6 +34,7 @@ public class SignUpAction implements Action {
             request.setAttribute(ERROR, e);
             path = "sign-up.jsp";
         } catch (ServiceException e) {
+            logger.error(e.getMessage());
             if (e.getMessage().contains("Duplicate")) {
                 request.setAttribute(ERROR, e);
                 path = "sign-up.jsp";
