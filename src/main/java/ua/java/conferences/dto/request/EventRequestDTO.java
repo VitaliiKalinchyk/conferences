@@ -4,21 +4,61 @@ import java.util.Objects;
 
 public class EventRequestDTO {
 
-    public final long id;
+    private long id;
 
-    public final String title;
+    private String title;
 
-    public final String date;
+    private String date;
 
-    public final String location;
+    private String location;
 
-    public final String description;
+    private String description;
 
     public EventRequestDTO(long id, String title, String date, String location, String description) {
         this.id = id;
         this.title = title;
         this.date = date;
         this.location = location;
+        this.description = description;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -34,5 +74,16 @@ public class EventRequestDTO {
     @Override
     public int hashCode() {
         return Objects.hash(id, title, date, location, description);
+    }
+
+    @Override
+    public String toString() {
+        return "EventRequestDTO{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", date='" + date + '\'' +
+                ", location='" + location + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

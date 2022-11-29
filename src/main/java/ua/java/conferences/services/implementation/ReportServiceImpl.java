@@ -60,8 +60,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<SpeakersReportResponseDTO> viewSpeakersReports(long speakerId) throws ServiceException {
-        List<SpeakersReportResponseDTO> reportDTOS = new ArrayList<>();
+    public List<ReportResponseDTO> viewSpeakersReports(long speakerId) throws ServiceException {
+        List<ReportResponseDTO> reportDTOS = new ArrayList<>();
         try {
             List<Report> reports = reportDAO.getSpeakersReports(speakerId);
             reports.forEach(report -> reportDTOS.add(convertSpeakersReportToDTO(report)));
@@ -110,7 +110,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     private void validateReport(ReportRequestDTO reportDTO) throws IncorrectFormatException {
-        if (!validateComplexName(reportDTO.topic)) {
+        if (!validateComplexName(reportDTO.getTopic())) {
             throw new IncorrectFormatException(ENTER_CORRECT_TOPIC);
         }
     }

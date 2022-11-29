@@ -62,7 +62,7 @@ class ReportServiceTest {
     @Test
     void testViewSpeakersReports() throws DAOException, ServiceException {
         List<Report> reports = new ArrayList<>();
-        List<SpeakersReportResponseDTO> reportDTOs = new ArrayList<>();
+        List<ReportResponseDTO> reportDTOs = new ArrayList<>();
         reports.add(getTestReport());
         reportDTOs.add(getTestSpeakerReportResponseDTO());
         when(reportDAO.getSpeakersReports(ID)).thenReturn(reports);
@@ -101,8 +101,8 @@ class ReportServiceTest {
         return new ReportResponseDTO(ID, TOPIC, ID, SPEAKER_NAME);
     }
 
-    private SpeakersReportResponseDTO getTestSpeakerReportResponseDTO() {
-        return new SpeakersReportResponseDTO(ID, TOPIC, ID, TITLE, DATE_NAME, LOCATION);
+    private ReportResponseDTO getTestSpeakerReportResponseDTO() {
+        return new ReportResponseDTO(ID, TOPIC, ID, TITLE, DATE_NAME, LOCATION);
     }
 
     private Report getTestReport() {

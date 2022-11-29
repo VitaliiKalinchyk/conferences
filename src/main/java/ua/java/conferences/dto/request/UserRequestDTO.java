@@ -4,17 +4,33 @@ import java.util.Objects;
 
 public class UserRequestDTO {
 
-    public final long id;
+    private long id;
 
-    public final String email;
+    private String email;
 
-    public final String password;
+    private String password;
 
-    public final String name;
+    private String name;
 
-    public final String surname;
+    private String surname;
 
-    public final boolean notification;
+    private boolean notification;
+
+    public UserRequestDTO(long id, String email, String name, String surname, boolean notification) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+        this.notification = notification;
+    }
+
+    public UserRequestDTO(String email, String password, String name, String surname, boolean notification) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.surname = surname;
+        this.notification = notification;
+    }
 
     public UserRequestDTO(long id, String email, String password, String name, String surname, boolean notification) {
         this.id = id;
@@ -22,6 +38,55 @@ public class UserRequestDTO {
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.notification = notification;
+    }
+
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public boolean isNotification() {
+        return notification;
+    }
+
+    public void setNotification(boolean notification) {
         this.notification = notification;
     }
 
@@ -37,5 +102,17 @@ public class UserRequestDTO {
     @Override
     public int hashCode() {
         return Objects.hash(id, email, password, name, surname, notification);
+    }
+
+    @Override
+    public String toString() {
+        return "UserRequestDTO{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", notification=" + notification +
+                '}';
     }
 }

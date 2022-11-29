@@ -12,7 +12,7 @@ public interface ReportService extends Service<ReportResponseDTO> {
 
     List<ReportResponseDTO> viewEventsReports(long eventId) throws ServiceException;
 
-    List<SpeakersReportResponseDTO> viewSpeakersReports(long speakerId) throws ServiceException;
+    List<ReportResponseDTO> viewSpeakersReports(long speakerId) throws ServiceException;
 
     void updateReport(ReportRequestDTO reportDTO) throws ServiceException;
 

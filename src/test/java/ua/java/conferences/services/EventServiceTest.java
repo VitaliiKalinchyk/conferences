@@ -137,7 +137,7 @@ class EventServiceTest {
     @Test
     void viewSortedEventsByModerator() throws DAOException, ServiceException {
         List<Event> events = new ArrayList<>();
-        List<FullEventResponseDTO> eventDTOs = new ArrayList<>();
+        List<EventResponseDTO> eventDTOs = new ArrayList<>();
         events.add(getTestEvent());
         eventDTOs.add(getTestFullEventResponseDTO());
         when(eventDAO.getSortedEvents(PASSED, "date", DESC)).thenReturn(events);
@@ -170,8 +170,8 @@ class EventServiceTest {
         return new EventResponseDTO(ID, TITLE, DATE_NAME, LOCATION, DESCRIPTION);
     }
 
-    private FullEventResponseDTO getTestFullEventResponseDTO() {
-        return new FullEventResponseDTO(ID, TITLE, DATE_NAME, LOCATION, REPORTS, REGISTRATIONS, VISITORS);
+    private EventResponseDTO getTestFullEventResponseDTO() {
+        return new EventResponseDTO(ID, TITLE, DATE_NAME, LOCATION, REPORTS, REGISTRATIONS, VISITORS);
     }
 
     private Event getTestEvent() {

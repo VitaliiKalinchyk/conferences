@@ -121,20 +121,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changeEmail(long userId, String email) throws ServiceException {
-        validate(validateEmail(email), ENTER_CORRECT_EMAIL);
+    public void changePassword(long userId, String oldPassword, String newPassword) throws ServiceException {
         try {
-            userDAO.updateEmail(new User.UserBuilder().setId(userId).setEmail(email).get());
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-    }
-
-    @Override
-    public void changePassword(long userId, String password) throws ServiceException {
-        validate(validatePassword(password), ENTER_CORRECT_PASSWORD);
-        try {
-            userDAO.updateEmail(new User.UserBuilder().setId(userId).setPassword(password).get());
+            User user = userDAO.getById(userId).orElseThrow(NoSuchUserException::new);
+            if (!verify(user.getPassword(),oldPassword)) {
+                throw new IncorrectPasswordException();
+            }
+            validate(validatePassword(newPassword), ENTER_CORRECT_PASSWORD);
+            User userToUpdate = new User.UserBuilder().setId(userId).setPassword(encode(newPassword)).get();
+            userDAO.updatePassword(userToUpdate);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -179,16 +174,18 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    private static void validate(boolean email, String enterCorrectEmail) throws IncorrectFormatException {
-        if (!email) {
+    private static void validate(boolean validation, String enterCorrectEmail) throws IncorrectFormatException {
+        if (!validation) {
             throw new IncorrectFormatException(enterCorrectEmail);
         }
     }
 
     private void validateUser(UserRequestDTO userDTO) throws IncorrectFormatException {
-        validate(validateEmail(userDTO.email), ENTER_CORRECT_EMAIL);
-        validate(validatePassword(userDTO.password), ENTER_CORRECT_PASSWORD);
-        validate(validateName(userDTO.name), ENTER_CORRECT_NAME);
-        validate(validateName(userDTO.surname), ENTER_CORRECT_SURNAME);
+        validate(validateEmail(userDTO.getEmail()), ENTER_CORRECT_EMAIL);
+        if (userDTO.getPassword() != null) {
+            validate(validatePassword(userDTO.getPassword()), ENTER_CORRECT_PASSWORD);
+        }
+        validate(validateName(userDTO.getName()), ENTER_CORRECT_NAME);
+        validate(validateName(userDTO.getSurname()), ENTER_CORRECT_SURNAME);
     }
 }

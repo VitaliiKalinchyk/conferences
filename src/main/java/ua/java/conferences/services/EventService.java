@@ -18,7 +18,7 @@ public interface EventService extends Service<EventResponseDTO> {
 
     List<EventResponseDTO> viewSortedEventsByUser(String sortField, String order) throws ServiceException;
 
-    List<FullEventResponseDTO> viewSortedEventsByModerator(String filter, String sortField, String order) throws ServiceException;
+    List<EventResponseDTO> viewSortedEventsByModerator(String filter, String sortField, String order) throws ServiceException;
 
     EventResponseDTO editEvent(EventRequestDTO eventDTO) throws ServiceException;
 

@@ -102,8 +102,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<FullEventResponseDTO> viewSortedEventsByModerator(String filter, String sortField, String order) throws ServiceException {
-        List<FullEventResponseDTO> eventDTOS = new ArrayList<>();
+    public List<EventResponseDTO> viewSortedEventsByModerator(String filter, String sortField, String order) throws ServiceException {
+        List<EventResponseDTO> eventDTOS = new ArrayList<>();
         try {
             List<Event> events = eventDAO.getSortedEvents(filter, sortField, order);
             events.forEach(event -> eventDTOS.add(convertEventToFullDTO(event)));
@@ -144,16 +144,16 @@ public class EventServiceImpl implements EventService {
     }
 
     private void validateEvent(EventRequestDTO eventDTO) throws IncorrectFormatException {
-        if (!validateComplexName(eventDTO.title)) {
+        if (!validateComplexName(eventDTO.getTitle())) {
             throw new IncorrectFormatException(ENTER_CORRECT_TITLE);
         }
-        if (!validateDate(LocalDate.parse(eventDTO.date))) {
+        if (!validateDate(LocalDate.parse(eventDTO.getDate()))) {
             throw new IncorrectFormatException(ENTER_VALID_DATE);
         }
-        if (!validateComplexName(eventDTO.location)) {
+        if (!validateComplexName(eventDTO.getLocation())) {
             throw new IncorrectFormatException(ENTER_CORRECT_LOCATION);
         }
-        if (!validateDescription(eventDTO.description)) {
+        if (!validateDescription(eventDTO.getDescription())) {
             throw new IncorrectFormatException(ENTER_CORRECT_DESCRIPTION);
         }
     }

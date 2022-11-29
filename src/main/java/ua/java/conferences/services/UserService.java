@@ -19,9 +19,7 @@ public interface UserService extends Service<UserResponseDTO> {
 
     UserResponseDTO editProfile(UserRequestDTO userDTO) throws ServiceException;
 
-    void changeEmail(long userId, String email) throws ServiceException;
-
-    void changePassword(long userId, String password) throws ServiceException;
+    void changePassword(long userId, String oldPassword, String newPassword) throws ServiceException;
 
     void setRole(long userId, int roleId) throws ServiceException;
 

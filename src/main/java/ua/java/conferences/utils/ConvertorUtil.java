@@ -15,12 +15,12 @@ public final class ConvertorUtil {
 
     public static User convertDTOToUser(UserRequestDTO userDTO) {
         return new User.UserBuilder()
-                .setId(userDTO.id)
-                .setEmail(userDTO.email)
-                .setPassword(encode(userDTO.password))
-                .setName(userDTO.name)
-                .setSurname(userDTO.surname)
-                .setEmailNotification(userDTO.notification)
+                .setId(userDTO.getId())
+                .setEmail(userDTO.getEmail())
+                .setPassword(encode(userDTO.getPassword()))
+                .setName(userDTO.getName())
+                .setSurname(userDTO.getSurname())
+                .setEmailNotification(userDTO.isNotification())
                 .get();
     }
 
@@ -30,16 +30,18 @@ public final class ConvertorUtil {
     }
 
     public static Report convertDTOToReport(ReportRequestDTO reportDTO) {
-        long speakerId = reportDTO.speakerId;
+        long speakerId = reportDTO.getSpeakerId();
         User speaker = null;
         if (speakerId != 0) {
             speaker = new User.UserBuilder().setId(speakerId).get();
         }
+        long eventId = reportDTO.getEventId();
+        Event event = new Event.EventBuilder().setId(eventId).get();
         return new Report.ReportBuilder()
-                .setId(reportDTO.id)
-                .setTopic(reportDTO.topic)
+                .setId(reportDTO.getId())
+                .setTopic(reportDTO.getTopic())
                 .setSpeaker(speaker)
-                .setEvent(new Event.EventBuilder().setId(reportDTO.eventId).get())
+                .setEvent(event)
                 .get();
     }
 
@@ -54,19 +56,19 @@ public final class ConvertorUtil {
         return new ReportResponseDTO(report.getId(), report.getTopic(), speakerId, speakersName);
     }
 
-    public static SpeakersReportResponseDTO convertSpeakersReportToDTO(Report report) {
+    public static ReportResponseDTO convertSpeakersReportToDTO(Report report) {
         Event event = report.getEvent();
-        return new SpeakersReportResponseDTO(report.getId(), report.getTopic(),
+        return new ReportResponseDTO(report.getId(), report.getTopic(),
                 event.getId(), event.getTitle(), event.getDate().toString(), event.getLocation());
     }
 
     public static Event convertDTOToEvent(EventRequestDTO eventDTO) {
         return new Event.EventBuilder()
-                .setId(eventDTO.id)
-                .setTitle(eventDTO.title)
-                .setDate(LocalDate.parse(eventDTO.date))
-                .setLocation(eventDTO.location)
-                .setDescription(eventDTO.description)
+                .setId(eventDTO.getId())
+                .setTitle(eventDTO.getTitle())
+                .setDate(LocalDate.parse(eventDTO.getDate()))
+                .setLocation(eventDTO.getLocation())
+                .setDescription(eventDTO.getDescription())
                 .get();
     }
 
@@ -75,8 +77,8 @@ public final class ConvertorUtil {
                 event.getDate().toString(), event.getLocation(), event.getDescription());
     }
 
-    public static  FullEventResponseDTO  convertEventToFullDTO (Event event) {
-        return new FullEventResponseDTO(event.getId(), event.getTitle(),
+    public static EventResponseDTO convertEventToFullDTO (Event event) {
+        return new EventResponseDTO(event.getId(), event.getTitle(),
                 event.getDate().toString(), event.getLocation(), event.getReports(),
                 event.getRegistrations(), event.getVisitors());
     }

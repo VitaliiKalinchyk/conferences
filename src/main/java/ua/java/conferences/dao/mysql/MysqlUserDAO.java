@@ -73,10 +73,11 @@ public class MysqlUserDAO implements UserDAO {
     public void update(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
-            preparedStatement.setString(1, user.getName());
-            preparedStatement.setString(2, user.getSurname());
-            preparedStatement.setInt(3, user.isEmailNotification() ? 1 : 0);
-            preparedStatement.setLong(4, user.getId());
+            preparedStatement.setString(1, user.getEmail());
+            preparedStatement.setString(2, user.getName());
+            preparedStatement.setString(3, user.getSurname());
+            preparedStatement.setInt(4, user.isEmailNotification() ? 1 : 0);
+            preparedStatement.setLong(5, user.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);

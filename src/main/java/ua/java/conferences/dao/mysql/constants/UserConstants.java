@@ -15,7 +15,7 @@ public final class UserConstants {
 
     public static final String GET_SPEAKERS = "SELECT * FROM user WHERE role_id = 3";
 
-    public static final String EDIT_USER = "UPDATE user SET name=?, surname=?, notification=? WHERE id=?";
+    public static final String EDIT_USER = "UPDATE user SET email=?, name=?, surname=?, notification=? WHERE id=?";
 
     public static final String EDIT_EMAIL = "UPDATE user SET email=? WHERE id=?";
 

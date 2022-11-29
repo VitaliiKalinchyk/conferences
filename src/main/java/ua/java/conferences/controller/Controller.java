@@ -8,7 +8,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet({"/action", "/admin/action", "/admin/visitor", "/admin/moderator", "/admin/speaker"})
+@WebServlet({"/controller"})
 public class Controller extends HttpServlet {
 
     private static final ActionFactory ACTION_FACTORY = ActionFactory.getActionFactory();
@@ -24,13 +24,6 @@ public class Controller extends HttpServlet {
     }
 
     private void processGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String actionName = getActionName(request);
-        Action action = ACTION_FACTORY.createAction(actionName);
-        String address = action.execute(request);
-        request.getRequestDispatcher(address).forward(request, response);
-    }
-
-    private void processPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String url = getActionName(request);
         Action action = ACTION_FACTORY.createAction(url);
         String address = null;
@@ -40,6 +33,10 @@ public class Controller extends HttpServlet {
             request.setAttribute("global_error", e.getMessage());
         }
         request.getRequestDispatcher(address).forward(request, response);
+    }
+
+    private void processPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        doGet(request, response);
     }
 
     private String getActionName(HttpServletRequest request) {

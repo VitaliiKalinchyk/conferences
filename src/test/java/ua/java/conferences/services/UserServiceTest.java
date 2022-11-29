@@ -153,32 +153,12 @@ class UserServiceTest {
     }
 
     @Test
-    void testEditEmail() throws DAOException {
-        doNothing().when(userDAO).updateEmail(isA(User.class));
-        assertDoesNotThrow(() -> userService.changeEmail(ID, EMAIL));
-    }
-
-    @Test
-    void testEditWrongEmail() throws DAOException {
-        doNothing().when(userDAO).updateEmail(isA(User.class));
-        IncorrectFormatException e = assertThrows(IncorrectFormatException.class,
-                () -> userService.changeEmail(ID, WRONG_EMAIL));
-        assertEquals(ENTER_CORRECT_EMAIL, e.getMessage());
-    }
-
-    @Test
-    void testEditPassword() throws DAOException {
+    void testEditWrongOldPassword() throws DAOException {
         doNothing().when(userDAO).updatePassword(isA(User.class));
-        assertDoesNotThrow(() -> userService.changePassword(ID, PASSWORD));
+        when(userDAO.getById(ID)).thenReturn(Optional.of(getTestUser()));
+        assertThrows(IncorrectPasswordException.class, () -> userService.changePassword(ID, WRONG_PASSWORD, PASSWORD));
     }
 
-    @Test
-    void testEditWrongPassword() throws DAOException {
-        doNothing().when(userDAO).updatePassword(isA(User.class));
-        IncorrectFormatException e = assertThrows(IncorrectFormatException.class,
-                () -> userService.changePassword(ID, WRONG_PASSWORD));
-        assertEquals(ENTER_CORRECT_PASSWORD, e.getMessage());
-    }
 
     @Test
     void testSetRole() throws DAOException {

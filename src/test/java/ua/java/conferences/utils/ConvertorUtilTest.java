@@ -49,8 +49,8 @@ class ConvertorUtilTest {
 
     @Test
     void testConvertSpeakersReportToDTO() {
-        SpeakersReportResponseDTO testDTO = getTestSpeakerReportResponseDTO();
-        SpeakersReportResponseDTO reportToDTO = convertSpeakersReportToDTO(getTestReport());
+        ReportResponseDTO testDTO = getTestSpeakerReportResponseDTO();
+        ReportResponseDTO reportToDTO = convertSpeakersReportToDTO(getTestReport());
         assertEquals(testDTO, reportToDTO);
     }
 
@@ -74,8 +74,8 @@ class ConvertorUtilTest {
 
     @Test
     void testConvertEventToFullDTO() {
-        FullEventResponseDTO testDTO = getTestFullEventResponseDTO();
-        FullEventResponseDTO eventToDTO = convertEventToFullDTO(getTestEvent());
+        EventResponseDTO testDTO = getTestFullEventResponseDTO();
+        EventResponseDTO eventToDTO = convertEventToFullDTO(getTestEvent());
         assertEquals(testDTO, eventToDTO);
     }
 
@@ -99,16 +99,16 @@ class ConvertorUtilTest {
         return new ReportResponseDTO(ID, TOPIC, ID, SPEAKER_NAME);
     }
 
-    private SpeakersReportResponseDTO getTestSpeakerReportResponseDTO() {
-        return new SpeakersReportResponseDTO(ID, TOPIC, ID, TITLE, DATE_NAME, LOCATION);
+    private ReportResponseDTO getTestSpeakerReportResponseDTO() {
+        return new ReportResponseDTO(ID, TOPIC, ID, TITLE, DATE_NAME, LOCATION);
     }
 
     private EventResponseDTO getTestEventResponseDTO() {
         return new EventResponseDTO(ID, TITLE, DATE_NAME, LOCATION, DESCRIPTION);
     }
 
-    private FullEventResponseDTO getTestFullEventResponseDTO() {
-        return new FullEventResponseDTO(ID, TITLE, DATE_NAME, LOCATION, REPORTS, REGISTRATIONS, VISITORS);
+    private EventResponseDTO getTestFullEventResponseDTO() {
+        return new EventResponseDTO(ID, TITLE, DATE_NAME, LOCATION, REPORTS, REGISTRATIONS, VISITORS);
     }
 
     private User getTestUser() {

@@ -4,18 +4,50 @@ import java.util.Objects;
 
 public class ReportRequestDTO {
 
-    public final long id;
+    private long id;
 
-    public final String topic;
+    private String topic;
 
-    public final long speakerId;
+    private long speakerId;
 
-    public final long eventId;
+    private long eventId;
 
     public ReportRequestDTO(long id, String topic, long speakerId, long eventId) {
         this.id = id;
         this.topic = topic;
         this.speakerId = speakerId;
+        this.eventId = eventId;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public long getSpeakerId() {
+        return speakerId;
+    }
+
+    public void setSpeakerId(long speakerId) {
+        this.speakerId = speakerId;
+    }
+
+    public long getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(long eventId) {
         this.eventId = eventId;
     }
 
@@ -30,5 +62,15 @@ public class ReportRequestDTO {
     @Override
     public int hashCode() {
         return Objects.hash(id, topic, speakerId, eventId);
+    }
+
+    @Override
+    public String toString() {
+        return "ReportRequestDTO{" +
+                "id=" + id +
+                ", topic='" + topic + '\'' +
+                ", speakerId=" + speakerId +
+                ", eventId=" + eventId +
+                '}';
     }
 }
