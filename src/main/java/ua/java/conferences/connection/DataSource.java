@@ -3,12 +3,15 @@ package ua.java.conferences.connection;
 import static ua.java.conferences.connection.ConnectionConstants.*;
 
 import com.zaxxer.hikari.*;
+import org.slf4j.*;
 
 import java.io.*;
 import java.sql.*;
 import java.util.Properties;
 
 public class DataSource {
+
+    private static final Logger logger = LoggerFactory.getLogger(DataSource.class);
 
     private static final HikariConfig config = new HikariConfig();
 
@@ -38,7 +41,7 @@ public class DataSource {
         try (InputStream resource = DataSource.class.getClassLoader().getResourceAsStream(connectionFile)){
             properties.load(resource);
         } catch (IOException e) {
-            // тут щось має бути наприклад логер;
+            logger.error(e.getMessage());
         }
         return properties;
     }

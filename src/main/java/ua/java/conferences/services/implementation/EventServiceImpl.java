@@ -17,6 +17,7 @@ import static ua.java.conferences.utils.ValidatorUtil.*;
 
 public class EventServiceImpl implements EventService {
 
+
     private final EventDAO eventDAO;
 
     public EventServiceImpl(EventDAO eventDAO) {
