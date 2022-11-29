@@ -1,3 +1,4 @@
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ page import="ua.java.conferences.exceptions.*" %>
 <%ServiceException error = (ServiceException) request.getAttribute("error");%>
 
@@ -14,7 +15,7 @@
     Conference Smart App Password Reset
 </header>
 <hr>
-<form method="POST" action="action">
+<form method="POST" action="controller">
     <input type="hidden" name="action" value="password-reset">
     <%=error instanceof IncorrectEmailException ? "Wrong email " : ""%>
     <%=error instanceof NoSuchUserException ? "Not registered email " : ""%>

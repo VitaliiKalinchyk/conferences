@@ -18,23 +18,27 @@
     Conference Smart App Sign In
 </header>
 <hr>
-<form method="POST" action="action">
+<form method="POST" action="controller">
     <input type="hidden" name="action" value="sign-in">
     <%=error instanceof IncorrectEmailException ? "Wrong email" : ""%>
+    <br>
     <label for="email" >Email: </label>
     <input type="email" name="email" id="email" required value=<%=name != null ? name : ""%>>
+    <br>
     <%=error instanceof IncorrectPasswordException ? "Wrong password" : ""%>
+    <br>
     <label for="password" >Password: </label>
     <input type="password" name="password" id="password" required>
+    <br>
     <p><input type="submit" value="Sign In"></p>
 </form>
 <p>
     Forgot Your Password?
-    <a href="reset-password.jsp">Reset Password</a>
+    <a href="controller?action=reset-password-page">Reset Password</a>
 </p>
 <p>
     Don't have a Conference Smart App Account?
-    <a href="sign-up.jsp">Create Account</a>
+    <a href="controller?action=sign-up-page">Create Account</a>
 </p>
 <footer>
     <p>
