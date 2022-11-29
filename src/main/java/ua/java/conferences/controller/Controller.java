@@ -1,6 +1,8 @@
 package ua.java.conferences.controller;
 
 import jakarta.servlet.annotation.WebServlet;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ua.java.conferences.actions.*;
 
 import jakarta.servlet.ServletException;
@@ -10,6 +12,8 @@ import java.io.IOException;
 
 @WebServlet({"/controller"})
 public class Controller extends HttpServlet {
+
+    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
 
     private static final ActionFactory ACTION_FACTORY = ActionFactory.getActionFactory();
 
@@ -30,7 +34,7 @@ public class Controller extends HttpServlet {
         try {
             address = action.execute(request);
         } catch (Exception e) {
-            request.setAttribute("global_error", e.getMessage());
+            logger.error(e.getMessage());
         }
         request.getRequestDispatcher(address).forward(request, response);
     }
