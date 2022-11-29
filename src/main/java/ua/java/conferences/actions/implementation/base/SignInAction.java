@@ -6,7 +6,6 @@ import ua.java.conferences.actions.Action;
 import ua.java.conferences.dto.response.UserResponseDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
-import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.ServiceException;
 
 import static ua.java.conferences.actions.constants.Parameters.*;
@@ -28,13 +27,7 @@ public class SignInAction implements Action {
         try {
             user = userService.signIn(email, password);
             setSessionAttributes(request, user);
-            switch (Role.valueOf(user.role)) {
-                case SPEAKER: path = "speaker/profile.jsp"; break;
-                case MODERATOR: path = "moderator/profile.jsp"; break;
-                case ADMIN: path = "admin/profile.jsp"; break;
-                default: path = "visitor/profile.jsp";
-
-            }
+            path = "profile.jsp";
         } catch (IncorrectEmailException | IncorrectPasswordException e) {
             request.setAttribute("error", e);
             path = "sign-in.jsp";
@@ -46,6 +39,6 @@ public class SignInAction implements Action {
 
     private static void setSessionAttributes(HttpServletRequest request, UserResponseDTO user) {
         request.getSession().setAttribute(USER, user);
-        request.getSession().setAttribute(ROLE, user.role);
+        request.getSession().setAttribute(ROLE, user.getRole());
     }
 }

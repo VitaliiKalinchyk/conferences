@@ -3,9 +3,9 @@ package ua.java.conferences.actions.implementation.base;
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.Action;
 
-public class DefaultAction implements Action {
+public class SignUpPageAction implements Action {
     @Override
     public String execute(HttpServletRequest request) {
-        return "index.jsp";
+        return "sign-up.jsp";
     }
 }

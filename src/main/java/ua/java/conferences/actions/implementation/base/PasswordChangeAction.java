@@ -2,6 +2,7 @@ package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.Action;
+import ua.java.conferences.dto.response.UserResponseDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
@@ -18,12 +19,13 @@ public class PasswordChangeAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) {
-        String path = "sign-in.jsp";
-        long id = Long.parseLong(request.getParameter(ID));
-        String password = request.getParameter(ID);
+        String path = "profile.jsp";
+        long id = ((UserResponseDTO) request.getSession().getAttribute("user")).getId();
+        String oldPassword = request.getParameter(OLD_PASSWORD);
+        String password = request.getParameter(PASSWORD);
         try {
-            userService.changePassword(id, password);
-        } catch (IncorrectFormatException e) {
+            userService.changePassword(id, oldPassword, password);
+        } catch (IncorrectFormatException | IncorrectPasswordException | NoSuchUserException e) {
             request.setAttribute(ERROR, e);
             path = "change-password.jsp";
         } catch (ServiceException e) {

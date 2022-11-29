@@ -21,12 +21,7 @@ public class SignUpAction implements Action {
     @Override
     public String execute(HttpServletRequest request) {
         String path = "sign-in.jsp";
-        String email = request.getParameter(EMAIL);
-        String password = request.getParameter(PASSWORD);
-        String name = request.getParameter(NAME);
-        String surname = request.getParameter(SURNAME);
-        boolean notification = Boolean.parseBoolean(request.getParameter(NOTIFICATION));
-        UserRequestDTO user = new UserRequestDTO(0, email, password, name, surname, notification);
+        UserRequestDTO user = getUserRequestDTO(request);
         request.setAttribute(USER, user);
         try {
             userService.register(user);
@@ -42,5 +37,15 @@ public class SignUpAction implements Action {
             }
         }
         return path;
+    }
+
+    private static UserRequestDTO getUserRequestDTO(HttpServletRequest request) {
+        String email = request.getParameter(EMAIL);
+        String password = request.getParameter(PASSWORD);
+        String name = request.getParameter(NAME);
+        String surname = request.getParameter(SURNAME);
+        String notification = request.getParameter(NOTIFICATION);
+        boolean isNotified = notification != null && notification.equals("on");
+        return new UserRequestDTO(email, password, name, surname, isNotified);
     }
 }

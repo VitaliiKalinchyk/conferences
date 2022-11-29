@@ -12,6 +12,8 @@ public final class Parameters {
 
     public static final String PASSWORD = "password";
 
+    public static final String OLD_PASSWORD = "old-password";
+
     public static final String NAME = "name";
 
     public static final String SURNAME = "surname";

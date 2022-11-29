@@ -10,6 +10,6 @@ public class SignOutAction implements Action {
     public String execute(HttpServletRequest request) {
         HttpSession session = request.getSession();
         session.invalidate();
-        return "/conferences/index.html";
+        return "index.jsp";
     }
 }

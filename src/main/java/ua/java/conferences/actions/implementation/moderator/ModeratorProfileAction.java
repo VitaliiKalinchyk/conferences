@@ -1,11 +1,11 @@
-package ua.java.conferences.actions.implementation.base;
+package ua.java.conferences.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.Action;
 
-public class DefaultAction implements Action {
+public class ModeratorProfileAction implements Action {
     @Override
     public String execute(HttpServletRequest request) {
-        return "index.jsp";
+        return "/moderator/profile.jsp";
     }
 }
