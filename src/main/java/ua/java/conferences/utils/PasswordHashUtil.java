@@ -9,7 +9,7 @@ public final class PasswordHashUtil {
     private PasswordHashUtil(){}
 
     public static String encode(String password) {
-        return argon2.hash(2,15*1024,1, password.toCharArray());
+        return password != null ? argon2.hash(2,15*1024,1, password.toCharArray()) : "";
     }
 
     public static boolean verify(String hash, String password) {
