@@ -22,7 +22,7 @@ public class SearchUserAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) {
-        String path = "founded-user.jsp";
+        String path = "user-by-email.jsp";
         String email = request.getParameter("email");
         try {
             UserResponseDTO user = userService.searchUser(email);

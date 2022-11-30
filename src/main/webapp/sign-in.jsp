@@ -34,12 +34,14 @@
 </form>
 <p>
     Forgot Your Password?
-    <a href="controller?action=reset-password-page">Reset Password</a>
+    <a href="reset-password.jsp">Reset Password</a>
 </p>
 <p>
     Don't have a Conference Smart App Account?
-    <a href="controller?action=sign-up-page">Create Account</a>
+    <a href="sign-up.jsp">Create Account</a>
 </p>
+<br>
+<a href="index.jsp">To the Main Page</a>
 <footer>
     <p>
         2022 © Conference Smart App

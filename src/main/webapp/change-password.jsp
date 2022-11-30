@@ -1,38 +1,42 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ page import="ua.java.conferences.exceptions.ServiceException" %>
-<%@ page import="ua.java.conferences.exceptions.IncorrectFormatException.Message" %>
-<%@ page import="ua.java.conferences.exceptions.IncorrectPasswordException" %>
-<%@ page import="ua.java.conferences.exceptions.NoSuchUserException" %>
-<%ServiceException error = (ServiceException) request.getAttribute("error");%>
-<%String message = error != null ? error.getMessage() != null ? error.getMessage() : "" : "";%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:setBundle basename="resources"/>
+
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Conference Smart App</title>
+    <title>Conference Smart App. <fmt:message key="change.password"/></title>
 </head>
 
 <body>
 <header>
-    Conference Smart App Change Password
+    Conference Smart App <fmt:message key="change.password"/>
 </header>
 <hr>
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="change-password">
-    <%=error instanceof IncorrectPasswordException ? "Pls, check your old password spelling" : ""%>
-    <%=error instanceof NoSuchUserException ? "Seems you doesn't have an account anymore" : ""%>
+    <c:if test="${not empty requestScope.message}">
+        <fmt:message key="${requestScope.message}"/>
+    </c:if>
     <br>
-    <label for="old-password" >Old Password: </label>
+    <br>
+    <label for="old-password" ><fmt:message key="old.password"/> </label>
     <input type="password" name="old-password" id="old-password" required>
     <br>
     <br>
-    <%=message.equals(Message.ENTER_CORRECT_PASSWORD) ? Message.ENTER_CORRECT_PASSWORD : ""%>
+    <label for="password" ><fmt:message key="new.password"/> </label>
+    <input type="password" name="password" id="password" title=<fmt:message key="password.requirements"/> required>
     <br>
-    <label for="password" >Password: </label>
-    <input type="password" name="password" id="password" title="Password should contain at least one uppercase letter, one lowercase letter, one digit and has length from 8 to 20 characters" required>
-    <p><input type="submit" value="Change Password"></p>
+    <br>
+    <label for="confirm-password" ><fmt:message key="confirm.password"/> </label>
+    <input type="password" name="confirm-password" id="confirm-password" title=<fmt:message key="password.requirements"/> required>
+    <p><input type="submit" value=<fmt:message key="change.password"/>></p>
 </form>
+<br>
+<a href="index.jsp"><fmt:message key="to.main"/></a>
 <footer>
     <p>
         2022 © Conference Smart App

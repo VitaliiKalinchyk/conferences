@@ -39,8 +39,7 @@ public class SignInAction implements Action {
         } catch (ServiceException e) {
             logger.error(e.getMessage());
             path = "error.jsp";
-        }
-        return path;
+        }return path;
     }
 
     private static void setSessionAttributes(HttpServletRequest request, UserResponseDTO user) {

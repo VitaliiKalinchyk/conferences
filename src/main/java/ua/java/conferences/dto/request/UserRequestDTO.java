@@ -1,8 +1,11 @@
 package ua.java.conferences.dto.request;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class UserRequestDTO {
+public class UserRequestDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private long id;
 

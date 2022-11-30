@@ -24,6 +24,8 @@
     <input type="email" name="email" id="email" required>
     <p><input type="submit" value="Reset Password"></p>
 </form>
+<br>
+<a href="index.jsp">To the Main Page</a>
 <footer>
     <p>
         2022 © Conference Smart App

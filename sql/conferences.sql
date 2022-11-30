@@ -81,22 +81,22 @@ CREATE TABLE IF NOT EXISTS `conferences`.`user_has_event` (
 
 INSERT INTO role VALUES (1, 'ADMIN'), (2, 'MODERATOR'), (3, 'SPEAKER'), (4, 'VISITOR');
 INSERT INTO user (email, password, name, surname) VALUES 
-('first@gmail.com', 'Password1', 'First', 'Visitor'), 
-('second@gmail.com', 'Password2', 'Second', 'Reviewer'),
-('third@gmail.com', 'Password3', 'Third', 'Fan'),
-('fourth@gmail.com', 'Password4', 'Fourth', 'Critic'),
-('fifth@gmail.com', 'Password5', 'Fifth', 'Switcher'),
-('sixth@gmail.com', 'Password6', 'Sixth', 'Student'),
-('seventh@gmail.com', 'Password7', 'Seventh', 'Trainee'),
-('eighth@gmail.com', 'Password8', 'Eighth', 'Junior'),
-('ninth@gmail.com', 'Password9', 'Ninth', 'JustForFun'),
-('tenth@gmail.com', 'Password10', 'James', 'Gosling'),
-('Maxim_Veres@epam.com', 'passwordV1', 'Maxim', 'Veres'),
-('Yuriy_Mischeryakov@epam.com', 'passwordM1', 'Yuriy', 'Mischeryakov'),
-('Dmytro_Kolesnikov@epam.com', 'passwordK1', 'Dmytro', 'Kolesnikov'),
-('moderator1@epam.com', 'passwordMod1', 'Main', 'Moderator'),
-('moderator2@epam.com', 'passwordMod2', 'Support', 'Moderator'),
-('admin@epam.com', 'passwordA1', 'Admin', 'Admin');
+('first@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'First', 'Visitor'), 
+('second@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Second', 'Reviewer'),
+('third@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Third', 'Fan'),
+('fourth@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Fourth', 'Critic'),
+('fifth@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Fifth', 'Switcher'),
+('sixth@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Sixth', 'Student'),
+('seventh@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Seventh', 'Trainee'),
+('eighth@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Eighth', 'Junior'),
+('ninth@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Ninth', 'JustForFun'),
+('tenth@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'James', 'Gosling'),
+('Maxim_Veres@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Maxim', 'Veres'),
+('Yuriy_Mischeryakov@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Yuriy', 'Mischeryakov'),
+('Dmytro_Kolesnikov@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Dmytro', 'Kolesnikov'),
+('moderator1@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Main', 'Moderator'),
+('moderator2@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Support', 'Moderator'),
+('admin@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Admin', 'Admin');
 UPDATE user SET role_id=3 WHERE email LIKE '%@epam.com';
 UPDATE user SET role_id=2 WHERE email='moderator1@epam.com';
 UPDATE user SET role_id=2 WHERE email='moderator2@epam.com';
@@ -152,9 +152,4 @@ UPDATE report SET user_id=11 WHERE id=2;
 UPDATE report SET user_id=11 WHERE id=3;
 UPDATE report SET user_id=12 WHERE id=1;
 
-
-INSERT INTO report (topic, event_id, user_id) VALUES ('TOPIC', 1, null);
-
-SELECT report.id, report.topic, report.event_id,report.user_id, user.name, user.surname, event.id, event.title, event.date, event.location FROM report
-LEFT JOIN user ON report.user_id=user.id LEFT JOIN event ON report.event_id=event.id  WHERE event_id=7;
-select * from event;
+select * from user;

@@ -25,23 +25,22 @@ public class EditProfileAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) {
-        String path = "profile.jsp";
+        String path = "edit-profile.jsp";
         UserResponseDTO currentUser = (UserResponseDTO) request.getSession().getAttribute("user");
         UserRequestDTO user = getUserRequestDTO(request, currentUser);
         try {
             userService.editProfile(user);
         } catch (IncorrectFormatException e) {
             setAttributes(request, user, e);
-            path = "edit-profile.jsp";
         } catch (ServiceException e) {
             logger.error(e.getMessage());
             if (e.getMessage().contains("Duplicate")) {
                 request.setAttribute(ERROR, e);
-                path = "edit-profile.jsp";
             } else {
                 path = "error.jsp";
             }
         }
+        request.setAttribute("message", "successfully updated");
         updateCurrentUserFields(currentUser, user);
         return path;
     }

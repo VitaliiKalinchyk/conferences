@@ -16,9 +16,9 @@
     <strong>
         Conference Smart App
     </strong>
-    <a href="controller?action=default">Main</a>
-    <a href="controller?action=about">About us</a>
-    <a href="controller?action=contacts">Contacts</a>
+    <a href="index.jsp">Main</a>
+    <a href="about.jsp">About us</a>
+    <a href="contacts.jsp">Contacts</a>
     <a href="controller?action=profile">Profile</a>
     <a href="controller?action=sign-out">Sign Out</a>
     change language here
@@ -28,11 +28,12 @@
 </menu>
 <br>
 <h3>Users</h3>
+${message}
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="search-user">
     <%=error instanceof NoSuchUserException ? "Wrong email" : ""%>
     <br>
-    <label for="email">Enter user's email</label>
+    <label for="email">Search user by email</label>
     <input type="email" name="email" id="email" required>
     <p><input type="submit" value="Search"></p>
 </form>

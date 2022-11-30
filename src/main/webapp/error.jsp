@@ -10,6 +10,11 @@
 
 <body>
 <p>Oops! Something went wrong</p>
+<br>
+<br>
+<br>
+<br>
+<a href="index.jsp">To the Main Page</a>
 </body>
 
 </html>

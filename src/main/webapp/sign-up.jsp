@@ -19,7 +19,7 @@
 </header>
 <p>
     Already have a Conference Smart App Account?
-    <a href="controller?action=sign-in-page"> Sign In</a>
+    <a href="sign-in.jsp"> Sign In</a>
 </p>
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="sign-up">
@@ -51,6 +51,8 @@
     <br>
     <input type="submit" value="Signup">
 </form>
+<br>
+<a href="index.jsp">To the Main Page</a>
 <footer>
     <p>
         2022 © Conference Smart App

@@ -29,6 +29,7 @@ public class DeleteUserAction implements Action {
             logger.error(e.getMessage());
             path = "error.jsp";
         }
+        request.setAttribute("message", "successfully deleted");
         return path;
     }
 }

@@ -23,15 +23,19 @@ public class PasswordChangeAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) {
-        String path = "profile.jsp";
+        String path = "change-password.jsp";
         long id = ((UserResponseDTO) request.getSession().getAttribute("user")).getId();
         String oldPassword = request.getParameter(OLD_PASSWORD);
         String password = request.getParameter(PASSWORD);
+        String confirmPassword = request.getParameter(CONFIRM_PASSWORD);
         try {
             userService.changePassword(id, oldPassword, password);
-        } catch (IncorrectFormatException | IncorrectPasswordException | NoSuchUserException e) {
-            request.setAttribute(ERROR, e);
-            path = "change-password.jsp";
+            if (!password.equals(confirmPassword)) {
+                throw new PasswordMatchingException();
+            }
+            request.setAttribute(MESSAGE, SUCCEED);
+        } catch (IncorrectFormatException | IncorrectPasswordException | NoSuchUserException | PasswordMatchingException e) {
+            request.setAttribute(MESSAGE, e.getMessage());
         } catch (ServiceException e) {
             logger.error(e.getMessage());
             path = "error.jsp";

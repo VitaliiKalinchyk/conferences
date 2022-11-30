@@ -1,8 +1,11 @@
 package ua.java.conferences.dto.response;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class EventResponseDTO {
+public class EventResponseDTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private long id;
 

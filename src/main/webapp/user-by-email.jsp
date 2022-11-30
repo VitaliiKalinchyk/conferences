@@ -1,6 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ page import="ua.java.conferences.dto.response.UserResponseDTO" %>
-<%UserResponseDTO user = (UserResponseDTO) request.getAttribute("user"); %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,9 +13,9 @@
     <strong>
         Conference Smart App
     </strong>
-    <a href="controller?action=default">Main</a>
-    <a href="controller?action=about">About us</a>
-    <a href="controller?action=contacts">Contacts</a>
+    <a href="index.jsp">Main</a>
+    <a href="about.jsp">About us</a>
+    <a href="contacts.jsp">Contacts</a>
     <a href="controller?action=profile">Profile</a>
     <a href="controller?action=sign-out">Sign Out</a>
     change language here
@@ -27,16 +25,21 @@
 </menu>
 <br>
 <h3>User</h3>
-Email: <%=user.getEmail()%>
-Name: <%=user.getName()%>
-Surname: <%=user.getSurname()%>
-Role: <%=user.getRole()%>
-<a href="controller?action=delete-user&user-id=<%=user.getId()%>">Delete</a>
-<form action="controller">
+Email: ${requestScope.user.email}
+Name: ${requestScope.user.name}
+Surname: ${requestScope.user.surname}
+Role: ${requestScope.user.role}
+<form method="POST" action="controller">
+    <input type="hidden" name="action" value="delete-user">
+    <input type="hidden" name="user-id" value=${requestScope.user.id}>
+    <input type="submit" value="Delete">
+</form>
+<form method="POST" action="controller">
     <input type="hidden" name="action" value="set-role">
-    <input type="hidden" name="user-id" value=<%=user.getId()%>>
+    <input type="hidden" name="user-id" value=${requestScope.user.id}>
     <label for="role">Set a role:</label>
     <select id="role" name="role">
+        <option value="" selected disabled hidden>Choose role</option>
         <option value="VISITOR">VISITOR</option>
         <option value="SPEAKER">SPEAKER</option>
         <option value="MODERATOR">MODERATOR</option>

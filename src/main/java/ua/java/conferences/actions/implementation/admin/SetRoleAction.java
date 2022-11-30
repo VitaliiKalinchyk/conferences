@@ -22,11 +22,12 @@ public class SetRoleAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) {
-        String path = "view-users.jsp";
+        String path = "user-by-email.jsp";
         long userId = Long.parseLong(request.getParameter("user-id"));
         int roleId = Role.valueOf(request.getParameter("role")).getValue();
         try {
             userService.setRole(userId, roleId);
+            request.setAttribute("user", userService.view(userId));
         } catch (ServiceException e) {
             logger.error(e.getMessage());
             path = "error.jsp";
