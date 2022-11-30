@@ -1,6 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ page import="ua.java.conferences.dto.response.UserResponseDTO" %>
-<%UserResponseDTO user = (UserResponseDTO) session.getAttribute("user");%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -15,28 +14,38 @@
     <strong>
         Conference Smart App
     </strong>
-    <a href="controller?action=default">Main</a>
-    <a href="controller?action=about">About us</a>
-    <a href="controller?action=contacts">Contacts</a>
+    <a href="index.jsp">Main</a>
+    <a href="about.jsp">About us</a>
+    <a href="contacts.jsp">Contacts</a>
     <a href="controller?action=profile">Profile</a>
     <a href="controller?action=sign-out">Sign Out</a>
     change language here
 </menu>
 <menu>
-    <% if (session != null && session.getAttribute("role") == "ADMIN") out.print("<a href=\"controller?action=view-users\">View Users</a>"); %>
+    <c:choose>
+        <c:when test="${sessionScope.role eq 'ADMIN'}">
+            <a href="controller?action=view-users">View Users</a>
+        </c:when>
+        <c:when test="${sessionScope.role eq 'MODERATOR'}">
+        </c:when>
+        <c:when test="${sessionScope.role eq 'SPEAKER'}">
+        </c:when>
+        <c:when test="${sessionScope.role eq 'VISITOR'}">
+        </c:when>
+    </c:choose>
 </menu>
 <br>
 <h3>Profile Info</h3>
 <a href="controller?action=edit-profile-page">Edit profile</a>
 <br>
 <h4>Email:</h4>
-<%=user.getEmail()%>
+${sessionScope.user.email}
 <h4>Name:</h4>
-<%=user.getName()%>
+${sessionScope.user.name}
 <h4>Surname:</h4>
-<%=user.getSurname()%>
+${sessionScope.user.surname}
 <h4>Email Notification:</h4>
-<%=user.isNotification() ? "Yes" : "No"%>
+<c:out value="${sessionScope.user.notification ? 'Yes': 'No'}"/>
 <br>
 <br>
 <footer>
