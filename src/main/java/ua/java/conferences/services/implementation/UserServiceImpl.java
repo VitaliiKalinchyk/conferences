@@ -30,7 +30,11 @@ public class UserServiceImpl implements UserService {
         try {
             userDAO.add(user);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            if (e.getMessage().contains("Duplicate")) {
+                throw new DuplicateEmailException();
+            } else {
+                throw new ServiceException(e);
+            }
         }
     }
 
@@ -115,7 +119,11 @@ public class UserServiceImpl implements UserService {
         try {
             userDAO.update(user);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            if (e.getMessage().contains("Duplicate")) {
+                throw new DuplicateEmailException();
+            } else {
+                throw new ServiceException(e);
+            }
         }
         return convertUserToDTO(user);
     }
@@ -174,9 +182,9 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    private static void validate(boolean validation, String enterCorrectEmail) throws IncorrectFormatException {
+    private static void validate(boolean validation, String exceptionMessage) throws IncorrectFormatException {
         if (!validation) {
-            throw new IncorrectFormatException(enterCorrectEmail);
+            throw new IncorrectFormatException(exceptionMessage);
         }
     }
 
