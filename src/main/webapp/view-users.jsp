@@ -21,7 +21,6 @@
     <a href="contacts.jsp"><fmt:message key="contacts"/></a>
     <a href="controller?action=profile"><fmt:message key="profile"/></a>
     <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
-    change language here
 </menu>
 <menu>
     <c:choose>

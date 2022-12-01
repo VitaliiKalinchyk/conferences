@@ -14,14 +14,13 @@
 <body>
 <menu>
     <strong>
-        Conference Smart App <fmt:message key="profile"/>
+        Conference Smart App
     </strong>
     <a href="index.jsp"><fmt:message key="main"/></a>
     <a href="about.jsp"><fmt:message key="about"/></a>
     <a href="contacts.jsp"><fmt:message key="contacts"/></a>
     <a href="controller?action=profile"><fmt:message key="profile"/></a>
     <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
-    change language here
 </menu>
 <menu>
     <c:choose>

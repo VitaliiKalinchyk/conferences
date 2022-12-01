@@ -35,7 +35,7 @@ public class PasswordChangeAction implements Action {
             }
             request.setAttribute(MESSAGE, SUCCEED_UPDATE);
         } catch (IncorrectFormatException | IncorrectPasswordException | NoSuchUserException | PasswordMatchingException e) {
-            request.setAttribute(MESSAGE, e.getMessage());
+            request.setAttribute(ERROR, e.getMessage());
         } catch (ServiceException e) {
             logger.error(e.getMessage());
             path = "error.jsp";

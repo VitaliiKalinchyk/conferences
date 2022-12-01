@@ -21,17 +21,16 @@
     <a href="contacts.jsp"><fmt:message key="contacts"/></a>
     <a href="controller?action=profile"><fmt:message key="profile"/></a>
     <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
-    change language here
 </menu>
 <menu>
     <a href="controller?action=view-users"><fmt:message key="view.users"/></a>
 </menu>
 <br>
 <h3><fmt:message key="user"/></h3>
-Email: ${requestScope.user.email}
-Name: ${requestScope.user.name}
-Surname: ${requestScope.user.surname}
-Role: ${requestScope.user.role}
+<fmt:message key="email"/>: ${requestScope.user.email}
+<fmt:message key="name"/>: ${requestScope.user.name}
+<fmt:message key="surname"/>: ${requestScope.user.surname}
+<fmt:message key="role"/>: ${requestScope.user.role}
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="delete-user">
     <input type="hidden" name="user-id" value=${requestScope.user.id}>

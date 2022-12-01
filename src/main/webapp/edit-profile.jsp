@@ -30,7 +30,6 @@
             <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
         </c:otherwise>
     </c:choose>
-    change language here
 </menu>
 <br>
 <h3><fmt:message key="edit.profile"/></h3>
@@ -58,14 +57,14 @@
     </c:if>
     <br>
     <label for="name" ><fmt:message key="name"/>*: </label>
-    <input name="name" id="name" title=<fmt:message key="name.requirements"/> required value="${nameValue}">
+    <input name="name" id="name" title="<fmt:message key="name.requirements"/>" required value="${nameValue}">
     <br>
     <c:if test="${fn:contains(error, 'surname')}">
         <fmt:message key="${requestScope.error}"/>
     </c:if>
     <br>
     <label for="surname" ><fmt:message key="surname"/>*: </label>
-    <input name="surname" id="surname" title=<fmt:message key="surname.requirements"/> required value="${surnameValue}">
+    <input name="surname" id="surname" title="<fmt:message key="surname.requirements"/>" required value="${surnameValue}">
     <br>
     <br>
     <label for="notification" ><fmt:message key="notification"/>: </label>

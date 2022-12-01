@@ -21,6 +21,9 @@
     <c:if test="${not empty requestScope.message}">
         <fmt:message key="${requestScope.message}"/>
     </c:if>
+    <c:if test="${not empty requestScope.error}">
+        <fmt:message key="${requestScope.error}"/>
+    </c:if>
     <br>
     <br>
     <label for="old-password" ><fmt:message key="old.password"/>*: </label>
@@ -28,11 +31,11 @@
     <br>
     <br>
     <label for="password" ><fmt:message key="new.password"/>*: </label>
-    <input type="password" name="password" id="password" title=<fmt:message key="password.requirements"/> required>
+    <input type="password" name="password" id="password" title="<fmt:message key="password.requirements"/>" required>
     <br>
     <br>
     <label for="confirm-password" ><fmt:message key="confirm.password"/>*: </label>
-    <input type="password" name="confirm-password" id="confirm-password" title=<fmt:message key="password.requirements"/> required>
+    <input type="password" name="confirm-password" id="confirm-password" title="<fmt:message key="password.requirements"/>" required>
     <p><input type="submit" value=<fmt:message key="change.password"/>></p>
 </form>
 <br>

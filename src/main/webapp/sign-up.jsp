@@ -39,7 +39,7 @@
     <br>
     <br>
     <label for="confirm-password" ><fmt:message key="confirm.password"/>*: </label>
-    <input type="password" name="confirm-password" id="confirm-password" title=<fmt:message key="password.requirements"/> required>
+    <input type="password" name="confirm-password" id="confirm-password" title="<fmt:message key="password.requirements"/>" required>
     <br>
     <br>
     <c:if test="${fn:contains(error, '.name')}">

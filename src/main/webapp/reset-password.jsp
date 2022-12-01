@@ -20,6 +20,9 @@
     <c:if test="${not empty requestScope.message}">
         <fmt:message key="${requestScope.message}"/>
     </c:if>
+    <c:if test="${not empty requestScope.error}">
+        <fmt:message key="${requestScope.error}"/>
+    </c:if>
     <br>
     <label for="email" ><fmt:message key="email"/>: </label>
     <input type="email" name="email" id="email" required>
