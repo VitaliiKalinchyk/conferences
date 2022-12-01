@@ -1,30 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:setBundle basename="resources"/>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Conference Smart App</title>
+    <title>Conference Smart App. <fmt:message key="profile"/></title>
 </head>
 
 <body>
 <menu>
     <strong>
-        Conference Smart App
+        Conference Smart App <fmt:message key="profile"/>
     </strong>
-    <a href="index.jsp">Main</a>
-    <a href="about.jsp">About us</a>
-    <a href="contacts.jsp">Contacts</a>
-    <a href="controller?action=profile">Profile</a>
-    <a href="controller?action=sign-out">Sign Out</a>
+    <a href="index.jsp"><fmt:message key="main"/></a>
+    <a href="about.jsp"><fmt:message key="about"/></a>
+    <a href="contacts.jsp"><fmt:message key="contacts"/></a>
+    <a href="controller?action=profile"><fmt:message key="profile"/></a>
+    <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
     change language here
 </menu>
 <menu>
     <c:choose>
         <c:when test="${sessionScope.role eq 'ADMIN'}">
-            <a href="controller?action=view-users">View Users</a>
+            <a href="controller?action=view-users"><fmt:message key="view.users"/></a>
         </c:when>
         <c:when test="${sessionScope.role eq 'MODERATOR'}">
         </c:when>
@@ -35,17 +37,24 @@
     </c:choose>
 </menu>
 <br>
-<h3>Profile Info</h3>
-<a href="controller?action=edit-profile-page">Edit profile</a>
+<h3><fmt:message key="profile.info"/></h3>
+<a href="controller?action=edit-profile-page"><fmt:message key="edit.profile"/></a>
 <br>
-<h4>Email:</h4>
+<h4><fmt:message key="email"/>:</h4>
 ${sessionScope.user.email}
-<h4>Name:</h4>
+<h4><fmt:message key="name"/>:</h4>
 ${sessionScope.user.name}
-<h4>Surname:</h4>
+<h4><fmt:message key="surname"/>:</h4>
 ${sessionScope.user.surname}
-<h4>Email Notification:</h4>
-<c:out value="${sessionScope.user.notification ? 'Yes': 'No'}"/>
+<h4><fmt:message key="notification"/>:</h4>
+<c:choose>
+    <c:when test="${sessionScope.user.notification}">
+        <fmt:message key="yes"/>
+    </c:when>
+    <c:otherwise>
+        <fmt:message key="no"/>
+    </c:otherwise>
+</c:choose>
 <br>
 <br>
 <footer>
