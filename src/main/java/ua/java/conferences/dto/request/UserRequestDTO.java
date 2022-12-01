@@ -20,28 +20,28 @@ public class UserRequestDTO implements Serializable {
     private boolean notification;
 
     public UserRequestDTO(long id, String email, String name, String surname, boolean notification) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.surname = surname;
-        this.notification = notification;
+        setId(id);
+        setEmail(email);
+        setName(name);
+        setSurname(surname);
+        setNotification(notification);
     }
 
     public UserRequestDTO(String email, String password, String name, String surname, boolean notification) {
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-        this.notification = notification;
+        setEmail(email);
+        setPassword(password);
+        setName(name);
+        setSurname(surname);
+        setNotification(notification);
     }
 
     public UserRequestDTO(long id, String email, String password, String name, String surname, boolean notification) {
-        this.id = id;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.surname = surname;
-        this.notification = notification;
+        setId(id);
+        setEmail(email);
+        setPassword(password);
+        setName(name);
+        setSurname(surname);
+        setNotification(notification);
     }
 
 

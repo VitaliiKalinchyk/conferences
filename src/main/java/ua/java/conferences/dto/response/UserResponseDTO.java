@@ -20,12 +20,12 @@ public class UserResponseDTO implements Serializable {
     private String role;
 
     public UserResponseDTO(long id, String email, String name, String surname, boolean notification, String role) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.surname = surname;
-        this.notification = notification;
-        this.role = role;
+        setId(id);
+        setEmail(email);
+        setName(name);
+        setSurname(surname);
+        setNotification(notification);
+        setRole(role);
     }
 
     public long getId() {
@@ -93,12 +93,12 @@ public class UserResponseDTO implements Serializable {
     @Override
     public String toString() {
         return "UserResponseDTO{" +
-                "id=" + id +
-                ", email='" + email + '\'' +
-                ", name='" + name + '\'' +
-                ", surname='" + surname + '\'' +
-                ", notification=" + notification +
-                ", role='" + role + '\'' +
+                "id=" + getId() +
+                ", email='" + getEmail() + '\'' +
+                ", name='" + getName() + '\'' +
+                ", surname='" + getSurname() + '\'' +
+                ", notification=" + isNotification() +
+                ", role='" + getRole() + '\'' +
                 '}';
     }
 }

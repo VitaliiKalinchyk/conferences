@@ -24,22 +24,22 @@ public class EventResponseDTO implements Serializable {
     private int visitors;
 
     public EventResponseDTO(long id, String title, String date, String location, String description) {
-        this.id = id;
-        this.title = title;
-        this.date = date;
-        this.location = location;
-        this.description = description;
+        setId(id);
+        setTitle(title);
+        setDate(date);
+        setLocation(location);
+        setDescription(description);
     }
 
     public EventResponseDTO(long id, String title, String date, String location,
                             int reports, int registrations, int visitors) {
-        this.id = id;
-        this.title = title;
-        this.date = date;
-        this.location = location;
-        this.reports = reports;
-        this.registrations = registrations;
-        this.visitors = visitors;
+        setId(id);
+        setTitle(title);
+        setDate(date);
+        setLocation(location);
+        setReports(reports);
+        setRegistrations(registrations);
+        setVisitors(visitors);
     }
 
     public long getId() {
@@ -124,14 +124,14 @@ public class EventResponseDTO implements Serializable {
     @Override
     public String toString() {
         return "EventResponseDTO{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", date='" + date + '\'' +
-                ", location='" + location + '\'' +
-                ", description='" + description + '\'' +
-                ", reports=" + reports +
-                ", registrations=" + registrations +
-                ", visitors=" + visitors +
+                "id=" + getId() +
+                ", title='" + getTitle() + '\'' +
+                ", date='" + getDate() + '\'' +
+                ", location='" + getLocation() + '\'' +
+                ", description='" + getDescription() + '\'' +
+                ", reports=" + getReports() +
+                ", registrations=" + getRegistrations() +
+                ", visitors=" + getVisitors() +
                 '}';
     }
 }

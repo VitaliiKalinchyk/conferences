@@ -18,11 +18,11 @@ public class EventRequestDTO implements Serializable {
     private String description;
 
     public EventRequestDTO(long id, String title, String date, String location, String description) {
-        this.id = id;
-        this.title = title;
-        this.date = date;
-        this.location = location;
-        this.description = description;
+        setId(id);
+        setTitle(title);
+        setDate(date);
+        setLocation(location);
+        setDescription(description);
     }
 
     public long getId() {

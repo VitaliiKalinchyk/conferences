@@ -16,10 +16,10 @@ public class ReportRequestDTO implements Serializable {
     private long eventId;
 
     public ReportRequestDTO(long id, String topic, long speakerId, long eventId) {
-        this.id = id;
-        this.topic = topic;
-        this.speakerId = speakerId;
-        this.eventId = eventId;
+        setId(id);
+        setTopic(topic);
+        setSpeakerId(speakerId);
+        setEventId(eventId);
     }
 
     public long getId() {

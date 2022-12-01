@@ -24,19 +24,19 @@ public class ReportResponseDTO implements Serializable {
     private String location;
 
     public ReportResponseDTO(long id, String topic, long speakerId, String speakerName) {
-        this.id = id;
-        this.topic = topic;
-        this.speakerId = speakerId;
-        this.speakerName = speakerName;
+        setId(id);
+        setTopic(topic);
+        setSpeakerId(speakerId);
+        setSpeakerName(speakerName);
     }
 
     public ReportResponseDTO(long id, String topic, long eventId, String title, String date, String location) {
-        this.id = id;
-        this.topic = topic;
-        this.eventId = eventId;
-        this.title = title;
-        this.date = date;
-        this.location = location;
+        setId(id);
+        setTopic(topic);
+        setEventId(eventId);
+        setTitle(title);
+        setDate(date);
+        setLocation(location);
     }
 
     public long getId() {
@@ -121,14 +121,14 @@ public class ReportResponseDTO implements Serializable {
     @Override
     public String toString() {
         return "ReportResponseDTO{" +
-                "id=" + id +
-                ", topic='" + topic + '\'' +
-                ", speakerId=" + speakerId +
-                ", speakerName='" + speakerName + '\'' +
-                ", eventId=" + eventId +
-                ", title='" + title + '\'' +
-                ", date='" + date + '\'' +
-                ", location='" + location + '\'' +
+                "id=" + getId() +
+                ", topic='" + getTopic() + '\'' +
+                ", speakerId=" + getSpeakerId() +
+                ", speakerName='" + getSpeakerName() + '\'' +
+                ", eventId=" + getEventId() +
+                ", title='" + getTitle() + '\'' +
+                ", date='" + getDate() + '\'' +
+                ", location='" + getLocation() + '\'' +
                 '}';
     }
 }
