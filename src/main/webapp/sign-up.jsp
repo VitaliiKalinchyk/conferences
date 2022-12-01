@@ -1,58 +1,64 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ page import="ua.java.conferences.dto.request.UserRequestDTO" %>
-<%@ page import="ua.java.conferences.exceptions.ServiceException" %>
-<%@ page import="ua.java.conferences.exceptions.IncorrectFormatException.Message" %>
-<%UserRequestDTO user = (UserRequestDTO) request.getAttribute("user");%>
-<%ServiceException error = (ServiceException) request.getAttribute("error");%>
-<%String message = error != null ? error.getMessage() : "";%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<fmt:setBundle basename="resources"/>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Conference Smart App</title>
+    <title>Conference Smart App. <fmt:message key="sign.up"/></title>
 </head>
 
 <body>
 <header>
-    Create Your Conference Smart App Account
+    Conference Smart App <fmt:message key="sign.up"/>
 </header>
 <p>
-    Already have a Conference Smart App Account?
-    <a href="sign-in.jsp"> Sign In</a>
+    <fmt:message key="have.account"/>
+    <a href="sign-in.jsp"><fmt:message key="sign.in"/></a>
 </p>
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="sign-up">
-    <%=message.equals(Message.ENTER_CORRECT_EMAIL) ? Message.ENTER_CORRECT_EMAIL : ""%>
-    <%=message.contains("Duplicate") ? "This email is already in use" : ""%>
+    <c:set var="error" value="${requestScope.error}"/>
+    <c:if test="${fn:contains(error, 'email')}">
+        <fmt:message key="${requestScope.error}"/>
+    </c:if>
     <br>
-    <label for="email" >Email*: </label>
-    <input type="email" name="email" id="email" required value=<%=user != null ? user.getEmail() : ""%>>
+    <label for="email" ><fmt:message key="email"/>*: </label>
+    <input type="email" name="email" id="email" required value="${requestScope.user.email}">
     <br>
-    <%=message.equals(Message.ENTER_CORRECT_PASSWORD) ? Message.ENTER_CORRECT_PASSWORD : ""%>
+    <c:if test="${fn:contains(error, 'pass')}">
+        <fmt:message key="${requestScope.error}"/>
+    </c:if>
     <br>
-    <label for="password" >Password*: </label>
-    <input type="password" name="password" id="password" title="Password should contain at least one uppercase letter, one lowercase letter, one digit and has length from 8 to 20 characters" required>
+    <label for="password" ><fmt:message key="password"/>*: </label>
+    <input type="password" name="password" id="password" title="<fmt:message key="password.requirements"/>" required>
     <br>
-    <%=message.equals(Message.ENTER_CORRECT_NAME) ? Message.ENTER_CORRECT_NAME : ""%>
+    <c:if test="${fn:contains(error, '.name')}">
+        <fmt:message key="${requestScope.error}"/>
+    </c:if>    <br>
+    <label for="name" ><fmt:message key="name"/>*: </label>
+    <input type="text" name="name" id="name" title="<fmt:message key="name.requirements"/>" required value="${requestScope.user.name}">
     <br>
-    <label for="name" >Name*: </label>
-    <input type="text" name="name" id="name" title="Name can consists only letters and an apostrophe" required value=<%=user != null ? user.getName() : ""%>>
+    <c:if test="${fn:contains(error, 'surname')}">
+        <fmt:message key="${requestScope.error}"/>
+    </c:if>
     <br>
-    <%=message.equals(Message.ENTER_CORRECT_SURNAME) ? Message.ENTER_CORRECT_SURNAME : ""%>
-    <br>
-    <label for="surname" >Surname*: </label>
-    <input type="text" name="surname" id="surname" title="Surname can consists only letters and an apostrophe" required value=<%=user != null ? user.getSurname() : ""%>>
+    <label for="surname" ><fmt:message key="surname"/>*: </label>
+    <input type="text" name="surname" id="surname" title="<fmt:message key="surname.requirements"/>" required value="${requestScope.user.surname}">
     <br>
     <br>
-    <label for="notification" >Email notification: </label>
+    <label for="notification" ><fmt:message key="notification"/>: </label>
     <input type="checkbox" name="notification" id="notification" checked>
     <br>
     <br>
-    <input type="submit" value="Signup">
+    <input type="submit" value="<fmt:message key="sign.up"/>">
 </form>
 <br>
-<a href="index.jsp">To the Main Page</a>
+<a href="index.jsp"><fmt:message key="to.main"/></a>
 <footer>
     <p>
         2022 © Conference Smart App

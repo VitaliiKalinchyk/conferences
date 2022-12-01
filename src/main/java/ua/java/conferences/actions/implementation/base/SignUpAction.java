@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.java.conferences.actions.Action;
 import ua.java.conferences.dto.request.UserRequestDTO;
+import ua.java.conferences.exceptions.DuplicateEmailException;
 import ua.java.conferences.exceptions.IncorrectFormatException;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
@@ -30,17 +31,12 @@ public class SignUpAction implements Action {
         request.setAttribute(USER, user);
         try {
             userService.register(user);
-        } catch (IncorrectFormatException e) {
-            request.setAttribute(ERROR, e);
+        } catch (IncorrectFormatException | DuplicateEmailException e) {
+            request.setAttribute(ERROR, e.getMessage());
             path = "sign-up.jsp";
         } catch (ServiceException e) {
             logger.error(e.getMessage());
-            if (e.getMessage().contains("Duplicate")) {
-                request.setAttribute(ERROR, e);
-                path = "sign-up.jsp";
-            } else {
-                path = "error.jsp";
-            }
+            path = "error.jsp";
         }
         return path;
     }
