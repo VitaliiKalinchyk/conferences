@@ -23,20 +23,20 @@
     </c:if>
     <br>
     <br>
-    <label for="old-password" ><fmt:message key="old.password"/> </label>
+    <label for="old-password" ><fmt:message key="old.password"/>*: </label>
     <input type="password" name="old-password" id="old-password" required>
     <br>
     <br>
-    <label for="password" ><fmt:message key="new.password"/> </label>
+    <label for="password" ><fmt:message key="new.password"/>*: </label>
     <input type="password" name="password" id="password" title=<fmt:message key="password.requirements"/> required>
     <br>
     <br>
-    <label for="confirm-password" ><fmt:message key="confirm.password"/> </label>
+    <label for="confirm-password" ><fmt:message key="confirm.password"/>*: </label>
     <input type="password" name="confirm-password" id="confirm-password" title=<fmt:message key="password.requirements"/> required>
     <p><input type="submit" value=<fmt:message key="change.password"/>></p>
 </form>
 <br>
-<a href="index.jsp"><fmt:message key="to.main"/></a>
+<a href="profile.jsp"><fmt:message key="to.profile"/></a>
 <footer>
     <p>
         2022 © Conference Smart App

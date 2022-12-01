@@ -28,7 +28,7 @@
 </menu>
 <br>
 <h3>Users</h3>
-${message}
+${requestScope.message}
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="search-user">
     <%=error instanceof NoSuchUserException ? "Wrong email" : ""%>

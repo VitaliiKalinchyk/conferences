@@ -25,19 +25,19 @@ public class PasswordResetAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) {
-        String path = "sign-in.jsp";
+        String path = "reset-password.jsp";
         String email = request.getParameter(EMAIL);
         try {
             userService.searchUser(email);
+            request.setAttribute(MESSAGE, CHECK_EMAIL);
+            //send link via email
         } catch (IncorrectFormatException | NoSuchUserException e) {
             logger.error(e.getMessage());
-            request.setAttribute(ERROR, e);
-            path = "reset-password.jsp";
+            request.setAttribute(MESSAGE, e.getMessage());
         } catch (ServiceException e) {
             logger.error(e.getMessage());
             path = "error.jsp";
         }
-        //send link via email
         return path;
     }
 }

@@ -1,31 +1,32 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ page import="ua.java.conferences.exceptions.*" %>
-<%ServiceException error = (ServiceException) request.getAttribute("error");%>
-
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:setBundle basename="resources"/>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <title>Conference Smart App</title>
+    <title>Conference Smart App. <fmt:message key="reset.password"/></title>
 </head>
 
 <body>
 <header>
-    Conference Smart App Password Reset
+    Conference Smart App <fmt:message key="reset.password"/>
 </header>
 <hr>
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="password-reset">
-    <%=error instanceof IncorrectEmailException ? "Wrong email " : ""%>
-    <%=error instanceof NoSuchUserException ? "Not registered email " : ""%>
+    <c:if test="${not empty requestScope.message}">
+        <fmt:message key="${requestScope.message}"/>
+    </c:if>
     <br>
-    <label for="email" >Enter your email: </label>
+    <label for="email" ><fmt:message key="email"/>: </label>
     <input type="email" name="email" id="email" required>
-    <p><input type="submit" value="Reset Password"></p>
+    <p><input type="submit" value="<fmt:message key="reset.password"/>"></p>
 </form>
 <br>
-<a href="index.jsp">To the Main Page</a>
+<a href="index.jsp"><fmt:message key="to.main"/></a>
 <footer>
     <p>
         2022 © Conference Smart App

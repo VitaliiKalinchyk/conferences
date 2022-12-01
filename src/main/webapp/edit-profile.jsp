@@ -1,21 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
-<%@ page import="ua.java.conferences.dto.response.UserResponseDTO" %>
-<%@ page import="ua.java.conferences.exceptions.ServiceException" %>
-<%@ page import="ua.java.conferences.exceptions.IncorrectFormatException.Message" %>
-<%UserResponseDTO user = (UserResponseDTO) session.getAttribute("user"); %>
-<%String attributeEmail = (String) request.getAttribute("email"); %>
-<%String attributeName = (String) request.getAttribute("name"); %>
-<%String attributeSurname = (String) request.getAttribute("surname"); %>
-<%Boolean attributeNotification = (Boolean) request.getAttribute("notification"); %>
-<%String email = attributeEmail != null ? attributeEmail :user.getEmail(); %>
-<%String name = attributeName != null ? attributeName :user.getName(); %>
-<%String surname = attributeSurname != null ? attributeSurname :user.getSurname(); %>
-<%Boolean notification = attributeNotification != null ? attributeNotification :user.isNotification(); %>
-<%ServiceException error = (ServiceException) request.getAttribute("error"); %>
-<%String message = error != null ? error.getMessage() : ""; %>
 
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/html">
@@ -54,35 +41,45 @@
 <br>
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="edit-profile">
-    <%=message.equals(Message.ENTER_CORRECT_EMAIL) ? Message.ENTER_CORRECT_EMAIL : ""%>
-    <%=message.contains("Duplicate") ? "This email is already in use" : ""%>
+    <c:set var="error" value="${requestScope.error}"/>
+    <c:set var="emailValue" value="${requestScope.email eq null ? sessionScope.user.email : requestScope.email}"/>
+    <c:set var="nameValue" value="${requestScope.name eq null ? sessionScope.user.name : requestScope.name}"/>
+    <c:set var="surnameValue" value="${requestScope.surname eq null ? sessionScope.user.surname : requestScope.surname}"/>
+    <c:set var="notification" value="${requestScope.notification eq null ? sessionScope.user.notification : requestScope.notification}"/>
+    <c:if test="${fn:contains(error, 'email')}">
+        <fmt:message key="${requestScope.error}"/>
+    </c:if>
     <br>
-    <label for="email" >Email*: </label>
-    <input type="email" name="email" id="email" required value=<%=email%>>
+    <label for="email" ><fmt:message key="email"/>*: </label>
+    <input type="email" name="email" id="email" required value="${emailValue}">
     <br>
-    <%=message.equals(Message.ENTER_CORRECT_NAME) ? Message.ENTER_CORRECT_NAME : ""%>
+    <c:if test="${fn:contains(error, '.name')}">
+        <fmt:message key="${requestScope.error}"/>
+    </c:if>
     <br>
-    <label for="name" >Name*: </label>
-    <input type="text" name="name" id="name" title="Name can consists only letters and an apostrophe" required value=<%=name%>>
+    <label for="name" ><fmt:message key="name"/>*: </label>
+    <input name="name" id="name" title=<fmt:message key="name.requirements"/> required value="${nameValue}">
     <br>
-    <%=message.equals(Message.ENTER_CORRECT_SURNAME) ? Message.ENTER_CORRECT_SURNAME : ""%>
+    <c:if test="${fn:contains(error, 'surname')}">
+        <fmt:message key="${requestScope.error}"/>
+    </c:if>
     <br>
-    <label for="surname" >Surname*: </label>
-    <input type="text" name="surname" id="surname" title="Surname can consists only letters and an apostrophe"  required value=<%=surname%>>
-    <br>
-    <br>
-    <label for="notification" >Email notification: </label>
-    <input type="checkbox" name="notification" id="notification" <%=notification ? "checked" : "" %>>
+    <label for="surname" ><fmt:message key="surname"/>*: </label>
+    <input name="surname" id="surname" title=<fmt:message key="surname.requirements"/> required value="${surnameValue}">
     <br>
     <br>
-    <input type="submit" value="Submit">
+    <label for="notification" ><fmt:message key="notification"/>: </label>
+    <input type="checkbox" name="notification" id="notification" ${notification ? "checked" : ""}>
+    <br>
+    <br>
+    <input type="submit" value="<fmt:message key="submit"/>">
 </form>
 <br>
 <br>
-<a href="controller?action=change-password-page">Change Password</a>
+<a href="controller?action=change-password-page"><fmt:message key="change.password"/></a>
 <br>
 <br>
-<a href="controller?action=profile">Back to profile</a>
+<a href="controller?action=profile"><fmt:message key="to.profile"/></a>
 <br>
 <br>
 <footer>

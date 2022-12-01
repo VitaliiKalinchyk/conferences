@@ -40,5 +40,7 @@ public final class Parameters {
 
     public static final String MESSAGE = "message";
 
+    public static final String CHECK_EMAIL = "check.email";
+
     public static final String SUCCEED = "succeed";
 }

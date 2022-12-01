@@ -34,12 +34,14 @@ public class SignInAction implements Action {
             path = "profile.jsp";
         } catch (IncorrectEmailException | IncorrectPasswordException e) {
             logger.error(e.getMessage());
-            request.setAttribute("error", e);
+            request.setAttribute(ERROR, e.getMessage());
+            request.setAttribute(EMAIL, email);
             path = "sign-in.jsp";
         } catch (ServiceException e) {
             logger.error(e.getMessage());
             path = "error.jsp";
-        }return path;
+        }
+        return path;
     }
 
     private static void setSessionAttributes(HttpServletRequest request, UserResponseDTO user) {

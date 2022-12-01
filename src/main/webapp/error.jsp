@@ -1,20 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:setBundle basename="resources"/>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Oops</title>
+    <title><fmt:message key="oops"/></title>
 </head>
 
 <body>
-<p>Oops! Something went wrong</p>
+<p><fmt:message key="global.error"/></p>
 <br>
 <br>
 <br>
 <br>
-<a href="index.jsp">To the Main Page</a>
+<a href="index.jsp"><fmt:message key="to.main"/></a>
 </body>
 
 </html>

@@ -1,8 +1,7 @@
 package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import ua.java.conferences.actions.Action;
 import ua.java.conferences.dto.request.UserRequestDTO;
 import ua.java.conferences.dto.response.UserResponseDTO;
@@ -10,7 +9,6 @@ import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
 import static ua.java.conferences.actions.constants.Parameters.*;
-import static ua.java.conferences.actions.constants.Parameters.ERROR;
 import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
 
 public class EditProfileAction implements Action {
@@ -30,18 +28,14 @@ public class EditProfileAction implements Action {
         UserRequestDTO user = getUserRequestDTO(request, currentUser);
         try {
             userService.editProfile(user);
-        } catch (IncorrectFormatException e) {
-            setAttributes(request, user, e);
+            request.setAttribute(MESSAGE, SUCCEED);
+        } catch (IncorrectFormatException | DuplicateEmailException e) {
+            setAttributes(request, user, e.getMessage());
         } catch (ServiceException e) {
             logger.error(e.getMessage());
-            if (e.getMessage().contains("Duplicate")) {
-                request.setAttribute(ERROR, e);
-            } else {
-                path = "error.jsp";
-            }
+            path = "error.jsp";
         }
-        request.setAttribute("message", "successfully updated");
-        updateCurrentUserFields(currentUser, user);
+        updateSessionUser(currentUser, user);
         return path;
     }
 
@@ -55,15 +49,15 @@ public class EditProfileAction implements Action {
         return new UserRequestDTO(id, email, name, surname, isNotified);
     }
 
-    private void setAttributes(HttpServletRequest request, UserRequestDTO user, IncorrectFormatException e) {
+    private void setAttributes(HttpServletRequest request, UserRequestDTO user, String error) {
         request.setAttribute(EMAIL, user.getEmail());
         request.setAttribute(NAME, user.getName());
         request.setAttribute(SURNAME, user.getSurname());
         request.setAttribute(NOTIFICATION, user.isNotification());
-        request.setAttribute(ERROR, e);
+        request.setAttribute(ERROR, error);
     }
 
-    private void updateCurrentUserFields(UserResponseDTO currentUser, UserRequestDTO user) {
+    private void updateSessionUser(UserResponseDTO currentUser, UserRequestDTO user) {
         currentUser.setEmail(user.getEmail());
         currentUser.setName(user.getName());
         currentUser.setSurname(user.getSurname());
