@@ -37,6 +37,11 @@
     <label for="password" ><fmt:message key="password"/>*: </label>
     <input type="password" name="password" id="password" title="<fmt:message key="password.requirements"/>" required>
     <br>
+    <br>
+    <label for="confirm-password" ><fmt:message key="confirm.password"/>*: </label>
+    <input type="password" name="confirm-password" id="confirm-password" title=<fmt:message key="password.requirements"/> required>
+    <br>
+    <br>
     <c:if test="${fn:contains(error, '.name')}">
         <fmt:message key="${requestScope.error}"/>
     </c:if>    <br>

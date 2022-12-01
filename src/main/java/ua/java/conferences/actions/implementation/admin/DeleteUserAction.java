@@ -7,6 +7,7 @@ import ua.java.conferences.actions.Action;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
 
+import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
 
 public class DeleteUserAction implements Action {
@@ -29,7 +30,7 @@ public class DeleteUserAction implements Action {
             logger.error(e.getMessage());
             path = "error.jsp";
         }
-        request.setAttribute("message", "successfully deleted");
+        request.setAttribute(MESSAGE, SUCCEED_DELETE);
         return path;
     }
 }

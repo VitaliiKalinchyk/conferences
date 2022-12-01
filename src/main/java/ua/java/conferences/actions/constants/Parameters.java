@@ -42,5 +42,7 @@ public final class Parameters {
 
     public static final String CHECK_EMAIL = "check.email";
 
-    public static final String SUCCEED = "succeed";
+    public static final String SUCCEED_UPDATE = "succeed.update";
+
+    public static final String SUCCEED_DELETE = "succeed.delete";
 }

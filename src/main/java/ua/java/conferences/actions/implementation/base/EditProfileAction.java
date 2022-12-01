@@ -28,7 +28,7 @@ public class EditProfileAction implements Action {
         UserRequestDTO user = getUserRequestDTO(request, currentUser);
         try {
             userService.editProfile(user);
-            request.setAttribute(MESSAGE, SUCCEED);
+            request.setAttribute(MESSAGE, SUCCEED_UPDATE);
         } catch (IncorrectFormatException | DuplicateEmailException e) {
             setAttributes(request, user, e.getMessage());
         } catch (ServiceException e) {

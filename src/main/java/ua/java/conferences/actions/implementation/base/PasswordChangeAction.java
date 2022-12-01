@@ -33,7 +33,7 @@ public class PasswordChangeAction implements Action {
             if (!password.equals(confirmPassword)) {
                 throw new PasswordMatchingException();
             }
-            request.setAttribute(MESSAGE, SUCCEED);
+            request.setAttribute(MESSAGE, SUCCEED_UPDATE);
         } catch (IncorrectFormatException | IncorrectPasswordException | NoSuchUserException | PasswordMatchingException e) {
             request.setAttribute(MESSAGE, e.getMessage());
         } catch (ServiceException e) {

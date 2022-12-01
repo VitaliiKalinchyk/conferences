@@ -1,41 +1,55 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
-<%@ page import="ua.java.conferences.exceptions.ServiceException" %>
-<%@ page import="ua.java.conferences.exceptions.NoSuchUserException" %>
-<%ServiceException error = (ServiceException) request.getAttribute("error");%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<fmt:setBundle basename="resources"/>
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
-    <title>Conference Smart App</title>
+    <title>Conference Smart App. <fmt:message key="view.users"/></title>
 </head>
 
 <body>
 <menu>
     <strong>
-        Conference Smart App
+        Conference Smart App <fmt:message key="view.users"/>
     </strong>
-    <a href="index.jsp">Main</a>
-    <a href="about.jsp">About us</a>
-    <a href="contacts.jsp">Contacts</a>
-    <a href="controller?action=profile">Profile</a>
-    <a href="controller?action=sign-out">Sign Out</a>
+    <a href="index.jsp"><fmt:message key="main"/></a>
+    <a href="about.jsp"><fmt:message key="about"/></a>
+    <a href="contacts.jsp"><fmt:message key="contacts"/></a>
+    <a href="controller?action=profile"><fmt:message key="profile"/></a>
+    <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
     change language here
 </menu>
 <menu>
-    <% if (session != null && session.getAttribute("role") == "ADMIN") out.print("<a href=\"controller?action=view-users\">View Users</a>"); %>
+    <c:choose>
+        <c:when test="${sessionScope.role eq 'ADMIN'}">
+            <a href="controller?action=view-users"><fmt:message key="view.users"/></a>
+        </c:when>
+        <c:when test="${sessionScope.role eq 'MODERATOR'}">
+        </c:when>
+        <c:when test="${sessionScope.role eq 'SPEAKER'}">
+        </c:when>
+        <c:when test="${sessionScope.role eq 'VISITOR'}">
+        </c:when>
+    </c:choose>
 </menu>
 <br>
-<h3>Users</h3>
-${requestScope.message}
+<h3><fmt:message key="users"/></h3>
+<c:if test="${not empty requestScope.message}">
+    <fmt:message key="${requestScope.message}"/>
+</c:if>
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="search-user">
-    <%=error instanceof NoSuchUserException ? "Wrong email" : ""%>
+    <c:if test="${not empty requestScope.error}">
+        <fmt:message key="${requestScope.error}"/>
+    </c:if>
     <br>
-    <label for="email">Search user by email</label>
+    <label for="email"><fmt:message key="search.user"/></label>
     <input type="email" name="email" id="email" required>
-    <p><input type="submit" value="Search"></p>
+    <p><input type="submit" value="<fmt:message key="search"/>"></p>
 </form>
 <br>
 <br>

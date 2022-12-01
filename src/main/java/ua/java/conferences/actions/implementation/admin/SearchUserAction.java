@@ -8,6 +8,7 @@ import ua.java.conferences.dto.response.UserResponseDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
+import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
 
 public class SearchUserAction implements Action {
@@ -26,9 +27,9 @@ public class SearchUserAction implements Action {
         String email = request.getParameter("email");
         try {
             UserResponseDTO user = userService.searchUser(email);
-            request.setAttribute("user", user);
+            request.setAttribute(USER, user);
         } catch (NoSuchUserException e) {
-            request.setAttribute("error", e);
+            request.setAttribute(ERROR, e.getMessage());
             path = "view-users.jsp";
         } catch (ServiceException e) {
             logger.error(e.getMessage());

@@ -8,6 +8,7 @@ import ua.java.conferences.actions.Action;
 import ua.java.conferences.dto.request.UserRequestDTO;
 import ua.java.conferences.exceptions.DuplicateEmailException;
 import ua.java.conferences.exceptions.IncorrectFormatException;
+import ua.java.conferences.exceptions.PasswordMatchingException;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
 
@@ -30,8 +31,9 @@ public class SignUpAction implements Action {
         UserRequestDTO user = getUserRequestDTO(request);
         request.setAttribute(USER, user);
         try {
+            checkPasswordMatch(request);
             userService.register(user);
-        } catch (IncorrectFormatException | DuplicateEmailException e) {
+        } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException e) {
             request.setAttribute(ERROR, e.getMessage());
             path = "sign-up.jsp";
         } catch (ServiceException e) {
@@ -39,6 +41,14 @@ public class SignUpAction implements Action {
             path = "error.jsp";
         }
         return path;
+    }
+
+    void checkPasswordMatch(HttpServletRequest request) throws PasswordMatchingException {
+        String password = request.getParameter(PASSWORD);
+        String confirmPassword = request.getParameter(CONFIRM_PASSWORD);
+        if (!password.equals(confirmPassword)) {
+            throw new PasswordMatchingException();
+        }
     }
 
     private static UserRequestDTO getUserRequestDTO(HttpServletRequest request) {
