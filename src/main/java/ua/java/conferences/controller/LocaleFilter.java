@@ -10,8 +10,9 @@ import java.io.IOException;
 @WebFilter("/*")
 public class LocaleFilter implements Filter {
 
-
     private static final String LOCALE = "locale";
+
+    private static final String REFRESH = "Refresh";
 
     private String defaultLocale;
 
@@ -24,7 +25,7 @@ public class LocaleFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String locale = httpRequest.getParameter(LOCALE);
         if (isNotBlank(locale)) {
-            ((HttpServletResponse)response).setIntHeader("Refresh", 0);
+            ((HttpServletResponse)response).setIntHeader(REFRESH, 0);
             httpRequest.getSession().setAttribute(LOCALE, locale);
         } else {
             String sessionLocale = (String) httpRequest.getSession().getAttribute(LOCALE);
