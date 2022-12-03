@@ -16,6 +16,7 @@ class ConvertorUtilTest {
         User testUser = getTestUser();
         User dtoToUser = convertDTOToUser(getTestUserRequestDTO());
         assertEquals(testUser, dtoToUser);
+        assertEquals(testUser.getId(), dtoToUser.getId());
         assertEquals(testUser.getEmail(), dtoToUser.getEmail());
         assertNotEquals(testUser.getPassword(), dtoToUser.getPassword());
         assertEquals(testUser.getName(), dtoToUser.getName());
