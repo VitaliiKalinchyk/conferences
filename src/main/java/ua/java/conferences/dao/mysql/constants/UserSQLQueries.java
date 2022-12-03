@@ -1,8 +1,8 @@
 package ua.java.conferences.dao.mysql.constants;
 
-public final class UserConstants {
+public final class UserSQLQueries {
 
-    private UserConstants() {}
+    private UserSQLQueries() {}
 
     public static final String ADD_USER =
             "INSERT INTO user (email, password, name, surname, notification) VALUES (?,?,?,?,?)";

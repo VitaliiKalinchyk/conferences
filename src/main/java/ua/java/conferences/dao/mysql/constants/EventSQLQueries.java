@@ -1,9 +1,9 @@
 package ua.java.conferences.dao.mysql.constants;
 
 
-public final class EventConstants {
+public final class EventSQLQueries {
 
-    private EventConstants() {}
+    private EventSQLQueries() {}
 
     public static final String ADD_EVENT = "INSERT INTO event (title, date, location, description) VALUES (?,?,?,?)";
 
@@ -12,13 +12,13 @@ public final class EventConstants {
             "visitors FROM event LEFT JOIN user_has_event ON event.id=user_has_event.event_id " +
             "LEFT JOIN report ON event.id=report.event_id ";
 
-    public static final String UPCOMING = "date > now()";
+    public static final String UPCOMING = " date > now() ";
 
-    public static final String PASSED = "date < now()";
+    public static final String PASSED = " date < now() ";
 
-    public static final String ASC = "ASC";
+    public static final String ASC = " ASC ";
 
-    public static final String DESC = "DESC";
+    public static final String DESC = " DESC ";
 
     public static final String GET_EVENT_BY_ID =  UTIL_GET_EVENT +"WHERE event.id=? GROUP BY event.id";
 

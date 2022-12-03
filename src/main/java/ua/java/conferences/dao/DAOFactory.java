@@ -2,7 +2,7 @@ package ua.java.conferences.dao;
 
 import ua.java.conferences.dao.mysql.MysqlDAOFactory;
 
-import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
+import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
 public abstract class DAOFactory {
 

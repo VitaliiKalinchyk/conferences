@@ -7,7 +7,7 @@ import java.io.*;
 import java.sql.*;
 import java.time.LocalDate;
 
-import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
+import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
 public final class DAOTestUtils {
 

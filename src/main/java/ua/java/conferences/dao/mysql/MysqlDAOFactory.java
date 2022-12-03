@@ -8,26 +8,24 @@ public class MysqlDAOFactory extends DAOFactory {
     private UserDAO userDAO;
 
     public EventDAO getEventDAO() {
-        if (this.eventDAO == null) {
-            this.eventDAO = new MysqlEventDAO();
+        if (eventDAO == null) {
+            eventDAO = new MysqlEventDAO();
         }
-
-        return this.eventDAO;
+        return eventDAO;
     }
 
     public ReportDAO getReportDAO() {
-        if (this.reportDAO == null) {
-            this.reportDAO = new MysqlReportDAO();
+        if (reportDAO == null) {
+            reportDAO = new MysqlReportDAO();
         }
-
-        return this.reportDAO;
+        return reportDAO;
     }
 
     public UserDAO getUserDAO() {
-        if (this.userDAO == null) {
-            this.userDAO = new MysqlUserDAO();
+        if (userDAO == null) {
+            userDAO = new MysqlUserDAO();
         }
 
-        return this.userDAO;
+        return userDAO;
     }
 }

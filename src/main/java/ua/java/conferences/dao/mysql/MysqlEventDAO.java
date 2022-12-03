@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static ua.java.conferences.dao.mysql.constants.EventConstants.*;
+import static ua.java.conferences.dao.mysql.constants.EventSQLQueries.*;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
 
 public class MysqlEventDAO implements EventDAO {
@@ -19,7 +19,8 @@ public class MysqlEventDAO implements EventDAO {
     public void add(Event event) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_EVENT)) {
-            setStatementFields(event, preparedStatement);
+            int k = 0;
+            setStatementFields(event, preparedStatement, k);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -31,7 +32,8 @@ public class MysqlEventDAO implements EventDAO {
         Event event = null;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_ID)) {
-            preparedStatement.setLong(1, id);
+            int k = 0;
+            preparedStatement.setLong(++k, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
@@ -48,7 +50,8 @@ public class MysqlEventDAO implements EventDAO {
         Event event = null;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_TITLE)) {
-            preparedStatement.setString(1, title);
+            int k = 0;
+            preparedStatement.setString(++k, title);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
@@ -88,8 +91,9 @@ public class MysqlEventDAO implements EventDAO {
     public void update(Event event) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_EVENT)) {
-            setStatementFields(event, preparedStatement);
-            preparedStatement.setLong(5, event.getId());
+            int k = 0;
+            k = setStatementFields(event, preparedStatement, k);
+            preparedStatement.setLong(++k, event.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -100,7 +104,8 @@ public class MysqlEventDAO implements EventDAO {
     public void delete(long id) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EVENT)) {
-            preparedStatement.setLong(1, id);
+            int k = 0;
+            preparedStatement.setLong(++k, id);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -111,26 +116,29 @@ public class MysqlEventDAO implements EventDAO {
     public void setVisitorsCount(long eventId, int visitorsCount) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_VISITORS)) {
-            preparedStatement.setInt(1, visitorsCount);
-            preparedStatement.setLong(2, eventId);
+            int k = 0;
+            preparedStatement.setInt(++k, visitorsCount);
+            preparedStatement.setLong(++k, eventId);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
         }
     }
 
-    private void setStatementFields(Event event, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(1, event.getTitle());
-        preparedStatement.setDate(2, Date.valueOf(event.getDate()));
-        preparedStatement.setString(3, event.getLocation());
-        preparedStatement.setString(4, event.getDescription());
+    private int setStatementFields(Event event, PreparedStatement preparedStatement, int k) throws SQLException {
+        preparedStatement.setString(++k, event.getTitle());
+        preparedStatement.setDate(++k, Date.valueOf(event.getDate()));
+        preparedStatement.setString(++k, event.getLocation());
+        preparedStatement.setString(++k, event.getDescription());
+        return k;
     }
 
     private List<Event> getUsersEvents(long userId, String query) throws DAOException {
         List<Event> events = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            preparedStatement.setLong(1, userId);
+            int k = 0;
+            preparedStatement.setLong(++k, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     events.add(createUserEvent(resultSet));

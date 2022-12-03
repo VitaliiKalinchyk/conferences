@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.dao.DAOTestUtils.*;
-import static ua.java.conferences.dao.mysql.constants.EventConstants.*;
+import static ua.java.conferences.dao.mysql.constants.EventSQLQueries.*;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
 
 class EventDAOTest {

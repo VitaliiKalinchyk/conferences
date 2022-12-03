@@ -10,7 +10,7 @@ import java.sql.*;
 import java.util.*;
 
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
-import static ua.java.conferences.dao.mysql.constants.UserConstants.*;
+import static ua.java.conferences.dao.mysql.constants.UserSQLQueries.*;
 
 public class MysqlUserDAO implements UserDAO {
 
@@ -30,7 +30,8 @@ public class MysqlUserDAO implements UserDAO {
         User user = null;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_ID)) {
-            preparedStatement.setLong(1, userId);
+            int k = 0;
+            preparedStatement.setLong(++k, userId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
@@ -47,7 +48,8 @@ public class MysqlUserDAO implements UserDAO {
         User user = null;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL)) {
-            preparedStatement.setString(1, email);
+            int k = 0;
+            preparedStatement.setString(++k, email);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     user = createUser(resultSet);
@@ -73,11 +75,12 @@ public class MysqlUserDAO implements UserDAO {
     public void update(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
-            preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setString(2, user.getName());
-            preparedStatement.setString(3, user.getSurname());
-            preparedStatement.setInt(4, user.isEmailNotification() ? 1 : 0);
-            preparedStatement.setLong(5, user.getId());
+            int k = 0;
+            preparedStatement.setString(++k, user.getEmail());
+            preparedStatement.setString(++k, user.getName());
+            preparedStatement.setString(++k, user.getSurname());
+            preparedStatement.setInt(++k, user.isEmailNotification() ? 1 : 0);
+            preparedStatement.setLong(++k, user.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -88,8 +91,9 @@ public class MysqlUserDAO implements UserDAO {
     public void updateEmail(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_EMAIL)) {
-            preparedStatement.setString(1, user.getEmail());
-            preparedStatement.setLong(2, user.getId());
+            int k = 0;
+            preparedStatement.setString(++k, user.getEmail());
+            preparedStatement.setLong(++k, user.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -100,8 +104,9 @@ public class MysqlUserDAO implements UserDAO {
     public void updatePassword(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_PASSWORD)) {
-            preparedStatement.setString(1, user.getPassword());
-            preparedStatement.setLong(2, user.getId());
+            int k = 0;
+            preparedStatement.setString(++k, user.getPassword());
+            preparedStatement.setLong(++k, user.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -112,7 +117,8 @@ public class MysqlUserDAO implements UserDAO {
     public void delete(long userId) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_USER)) {
-            preparedStatement.setLong(1, userId);
+            int k = 0;
+            preparedStatement.setLong(++k, userId);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -135,8 +141,9 @@ public class MysqlUserDAO implements UserDAO {
     public void setUsersRole(long userId, Role role) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_ROLE)) {
-            preparedStatement.setInt(1, role.getValue());
-            preparedStatement.setLong(2, userId);
+            int k = 0;
+            preparedStatement.setInt(++k, role.getValue());
+            preparedStatement.setLong(++k, userId);
             preparedStatement.execute();
         }catch (SQLException e) {
             throw new DAOException(e);
@@ -172,11 +179,12 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     private void setStatementFields(User user, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setString(1, user.getEmail());
-        preparedStatement.setString(2, user.getPassword());
-        preparedStatement.setString(3, user.getName());
-        preparedStatement.setString(4, user.getSurname());
-        preparedStatement.setInt(5, user.isEmailNotification() ? 1 : 0);
+        int k = 0;
+        preparedStatement.setString(++k, user.getEmail());
+        preparedStatement.setString(++k, user.getPassword());
+        preparedStatement.setString(++k, user.getName());
+        preparedStatement.setString(++k, user.getSurname());
+        preparedStatement.setInt(++k, user.isEmailNotification() ? 1 : 0);
     }
 
     private List<User> getUsers(String query) throws DAOException {
@@ -195,7 +203,8 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     private static void setIds(long userId, long eventId, PreparedStatement preparedStatement) throws SQLException {
-        preparedStatement.setLong(1, userId);
-        preparedStatement.setLong(2, eventId);
+        int k = 0;
+        preparedStatement.setLong(++k, userId);
+        preparedStatement.setLong(++k, eventId);
     }
 }

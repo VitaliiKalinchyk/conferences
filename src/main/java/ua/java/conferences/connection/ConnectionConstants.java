@@ -4,8 +4,6 @@ public final class ConnectionConstants {
 
     private ConnectionConstants() {}
 
-    public static final String MYSQL = "MySql";
-
     public static final String URL_PROPERTY = "connection.url";
 
     public static final String USER_NAME = "user.name";
