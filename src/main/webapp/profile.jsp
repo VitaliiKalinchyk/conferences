@@ -2,9 +2,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:setBundle basename="resources"/>
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${sessionScope.locale}">
 
 <head>
     <meta charset="UTF-8">
@@ -12,6 +13,7 @@
 </head>
 
 <body>
+
 <menu>
     <strong>
         Conference Smart App
@@ -22,6 +24,7 @@
     <a href="controller?action=profile"><fmt:message key="profile"/></a>
     <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
 </menu>
+
 <menu>
     <c:choose>
         <c:when test="${sessionScope.role eq 'ADMIN'}">
@@ -35,19 +38,21 @@
         </c:when>
     </c:choose>
 </menu>
+
 <br>
 <h3><fmt:message key="profile.info"/></h3>
 <a href="controller?action=edit-profile-page"><fmt:message key="edit.profile"/></a>
 <br>
+
 <h4><fmt:message key="email"/>:</h4>
-${sessionScope.user.email}
+${sessionScope.loggedUser.email}
 <h4><fmt:message key="name"/>:</h4>
-${sessionScope.user.name}
+${sessionScope.loggedUser.name}
 <h4><fmt:message key="surname"/>:</h4>
-${sessionScope.user.surname}
+${sessionScope.loggedUser.surname}
 <h4><fmt:message key="notification"/>:</h4>
 <c:choose>
-    <c:when test="${sessionScope.user.notification}">
+    <c:when test="${sessionScope.loggedUser.notification}">
         <fmt:message key="yes"/>
     </c:when>
     <c:otherwise>
@@ -56,11 +61,13 @@ ${sessionScope.user.surname}
 </c:choose>
 <br>
 <br>
+
 <footer>
     <p>
         2022 © Conference Smart App
     </p>
 </footer>
+
 </body>
 
 </html>

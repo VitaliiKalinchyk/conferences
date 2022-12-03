@@ -13,6 +13,7 @@
 </head>
 
 <body>
+
 <menu>
     <strong>
         Conference Smart App
@@ -21,9 +22,9 @@
     <a href="about.jsp"><fmt:message key="about"/></a>
     <a href="contacts.jsp"><fmt:message key="contacts"/></a>
     <c:choose>
-        <c:when test="${sessionScope.user eq null}">
-            <a href="sign-in.jsp"><fmt:message key="sign.in"/></a>
-            <a href="sign-up.jsp"><fmt:message key="sign.up"/></a>
+        <c:when test="${sessionScope.loggedUser eq null}">
+            <a href="signIn.jsp"><fmt:message key="sign.in"/></a>
+            <a href="signUp.jsp"><fmt:message key="sign.up"/></a>
         </c:when>
         <c:otherwise>
             <a href="controller?action=profile"><fmt:message key="profile"/></a>
@@ -31,15 +32,19 @@
         </c:otherwise>
     </c:choose>
     <form method="post">
-        <select name="locale" onchange='submit();'>
-            <option value="en" ${sessionScope.locale == 'en' ? 'selected' : ''}><fmt:message key="en"/></option>
-            <option value="uk_UA" ${sessionScope.locale == 'uk_UA' ? 'selected' : ''}><fmt:message key="ua"/></option>
-        </select>
+        <label>
+            <select name="locale" onchange='submit();'>
+                <option value="en" ${sessionScope.locale == 'en' ? 'selected' : ''}><fmt:message key="en"/></option>
+                <option value="uk_UA" ${sessionScope.locale == 'uk_UA' ? 'selected' : ''}><fmt:message key="ua"/></option>
+            </select>
+        </label>
     </form>
 </menu>
+
 <header><fmt:message key="about"/> – Conference Smart App</header>
+<hr>
 <br>
-<br>
+
 <p>
     Finding the right Conference venue in the right location at the right price to meet the budget can be very time-consuming
     and stressful for the Meeting booker, so why not use the FREE service provided by an experienced Conference Agency.
@@ -55,11 +60,15 @@
     No request is too large or small for an experienced Conference agency to handle, from an interview room,
     to a national conference, gala dinner, road show or exhibition. The Agent will source suitable venues to meet
     the requirements and budget, negotiate discounted meeting rates and favourable terms to ensure
+
 </p>
 <footer>
     <p>
         2022 © Conference Smart App
     </p>
+
 </footer>
+
 </body>
+
 </html>

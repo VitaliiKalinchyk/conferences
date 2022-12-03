@@ -2,20 +2,23 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:setBundle basename="resources"/>
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${sessionScope.locale}">
 
 <head>
     <title>Conference Smart App. <fmt:message key="change.password"/></title>
 </head>
 
 <body>
+
 <header>
     Conference Smart App <fmt:message key="change.password"/>
 </header>
 <hr>
+
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="change-password">
     <c:if test="${not empty requestScope.message}">
@@ -38,13 +41,16 @@
     <input type="password" name="confirm-password" id="confirm-password" title="<fmt:message key="password.requirements"/>" required>
     <p><input type="submit" value=<fmt:message key="change.password"/>></p>
 </form>
+
 <br>
 <a href="profile.jsp"><fmt:message key="to.profile"/></a>
+
 <footer>
     <p>
         2022 © Conference Smart App
     </p>
 </footer>
+
 </body>
 
 </html>

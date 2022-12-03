@@ -3,9 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${sessionScope.locale}">
 
 <head>
     <meta charset="UTF-8">
@@ -13,13 +14,18 @@
 </head>
 
 <body>
+
 <header>
     Conference Smart App <fmt:message key="sign.in"/>
 </header>
 <hr>
+
 <form method="POST" action="controller">
-    <c:set var="error" value="${requestScope.error}"/>
     <input type="hidden" name="action" value="sign-in">
+    <c:set var="error" value="${requestScope.error}"/>
+    <c:if test="${not empty requestScope.message}">
+        <fmt:message key="${requestScope.message}"/>
+    </c:if>
     <c:if test="${fn:contains(error, 'email')}">
         <fmt:message key="${requestScope.error}"/>
     </c:if>
@@ -36,21 +42,26 @@
     <br>
     <p><input type="submit" value="<fmt:message key="sign.in"/>"></p>
 </form>
+
 <p>
     <fmt:message key="forgot.password"/>
-    <a href="reset-password.jsp"><fmt:message key="reset.password"/></a>
+    <a href="resetPassword.jsp"><fmt:message key="reset.password"/></a>
 </p>
+
 <p>
     <fmt:message key="no.account"/>
-    <a href="sign-up.jsp"><fmt:message key="sign.up"/></a>
+    <a href="signUp.jsp"><fmt:message key="sign.up"/></a>
 </p>
 <br>
+
 <a href="index.jsp"><fmt:message key="to.main"/></a>
+
 <footer>
     <p>
         2022 © Conference Smart App
     </p>
 </footer>
+
 </body>
 
 </html>

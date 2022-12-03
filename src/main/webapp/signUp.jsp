@@ -3,9 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="${sessionScope.locale}">
 
 <head>
     <meta charset="UTF-8">
@@ -13,13 +14,17 @@
 </head>
 
 <body>
+
 <header>
     Conference Smart App <fmt:message key="sign.up"/>
 </header>
+<hr>
+
 <p>
     <fmt:message key="have.account"/>
-    <a href="sign-in.jsp"><fmt:message key="sign.in"/></a>
+    <a href="signIn.jsp"><fmt:message key="sign.in"/></a>
 </p>
+
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="sign-up">
     <c:set var="error" value="${requestScope.error}"/>
@@ -44,7 +49,8 @@
     <br>
     <c:if test="${fn:contains(error, '.name')}">
         <fmt:message key="${requestScope.error}"/>
-    </c:if>    <br>
+    </c:if>
+    <br>
     <label for="name" ><fmt:message key="name"/>*: </label>
     <input type="text" name="name" id="name" title="<fmt:message key="name.requirements"/>" required value="${requestScope.user.name}">
     <br>
@@ -62,13 +68,16 @@
     <br>
     <input type="submit" value="<fmt:message key="sign.up"/>">
 </form>
+
 <br>
 <a href="index.jsp"><fmt:message key="to.main"/></a>
+
 <footer>
     <p>
         2022 © Conference Smart App
     </p>
 </footer>
+
 </body>
 
 </html>

@@ -3,9 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
+<fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="${sessionScope.locale}">
 
 <head>
     <meta charset="UTF-8">
@@ -13,6 +14,7 @@
 </head>
 
 <body>
+
 <menu>
     <strong>
         Conference Smart App <fmt:message key="edit.profile"/>
@@ -21,9 +23,9 @@
     <a href="about.jsp"><fmt:message key="about"/></a>
     <a href="contacts.jsp"><fmt:message key="contacts"/></a>
     <c:choose>
-        <c:when test="${sessionScope.user eq null}">
-            <a href="sign-in.jsp"><fmt:message key="sign.in"/></a>
-            <a href="sign-up.jsp"><fmt:message key="sign.up"/></a>
+        <c:when test="${sessionScope.loggedUser eq null}">
+            <a href="signIn.jsp"><fmt:message key="sign.in"/></a>
+            <a href="signUp.jsp"><fmt:message key="sign.up"/></a>
         </c:when>
         <c:otherwise>
             <a href="controller?action=profile"><fmt:message key="profile"/></a>
@@ -31,6 +33,7 @@
         </c:otherwise>
     </c:choose>
 </menu>
+
 <br>
 <h3><fmt:message key="edit.profile"/></h3>
 <br>
@@ -38,13 +41,14 @@
     <fmt:message key="${requestScope.message}"/>
 </c:if>
 <br>
+
 <form method="POST" action="controller">
     <input type="hidden" name="action" value="edit-profile">
     <c:set var="error" value="${requestScope.error}"/>
-    <c:set var="emailValue" value="${requestScope.email eq null ? sessionScope.user.email : requestScope.email}"/>
-    <c:set var="nameValue" value="${requestScope.name eq null ? sessionScope.user.name : requestScope.name}"/>
-    <c:set var="surnameValue" value="${requestScope.surname eq null ? sessionScope.user.surname : requestScope.surname}"/>
-    <c:set var="notification" value="${requestScope.notification eq null ? sessionScope.user.notification : requestScope.notification}"/>
+    <c:set var="emailValue" value="${requestScope.user.email eq null ? sessionScope.loggedUser.email : requestScope.user.email}"/>
+    <c:set var="nameValue" value="${requestScope.user.name eq null ? sessionScope.loggedUser.name : requestScope.user.name}"/>
+    <c:set var="surnameValue" value="${requestScope.user.surname eq null ? sessionScope.loggedUser.surname : requestScope.user.surname}"/>
+    <c:set var="notification" value="${requestScope.user.notification eq null ? sessionScope.loggedUser.notification : requestScope.user.notification}"/>
     <c:if test="${fn:contains(error, 'email')}">
         <fmt:message key="${requestScope.error}"/>
     </c:if>
@@ -73,19 +77,23 @@
     <br>
     <input type="submit" value="<fmt:message key="submit"/>">
 </form>
+
 <br>
 <br>
 <a href="controller?action=change-password-page"><fmt:message key="change.password"/></a>
+
 <br>
 <br>
 <a href="controller?action=profile"><fmt:message key="to.profile"/></a>
 <br>
 <br>
+
 <footer>
     <p>
         2022 © Conference Smart App
     </p>
 </footer>
+
 </body>
 
 </html>
