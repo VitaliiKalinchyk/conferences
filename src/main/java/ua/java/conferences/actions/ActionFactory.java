@@ -21,9 +21,9 @@ public final class ActionFactory {
         ACTION_MAP.put("edit-profile-page", new EditProfilePageAction());
         ACTION_MAP.put("edit-profile", new EditProfileAction());
         ACTION_MAP.put("sign-out", new SignOutAction());
-        ACTION_MAP.put("password-reset", new PasswordResetAction());
-        ACTION_MAP.put("change-password", new PasswordChangeAction());
-        ACTION_MAP.put("change-password-page", new PasswordChangePageAction());
+        ACTION_MAP.put("password-reset", new ResetPasswordAction());
+        ACTION_MAP.put("change-password", new ChangePasswordAction());
+        ACTION_MAP.put("change-password-page", new ChangePasswordPageAction());
 
         ACTION_MAP.put("view-users", new ViewUsersAction());
         ACTION_MAP.put("search-user", new SearchUserAction());
@@ -40,5 +40,9 @@ public final class ActionFactory {
 
     public Action createAction(String actionName) {
         return ACTION_MAP.getOrDefault(actionName, new DefaultAction());
+    }
+
+    public ActionPost createActionPost(String actionName) {
+        return (ActionPost) ACTION_MAP.getOrDefault(actionName, new DefaultAction());
     }
 }

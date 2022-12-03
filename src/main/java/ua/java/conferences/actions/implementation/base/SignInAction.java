@@ -5,15 +5,17 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.java.conferences.actions.Action;
+import ua.java.conferences.actions.ActionPost;
 import ua.java.conferences.dto.response.UserResponseDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 import ua.java.conferences.exceptions.ServiceException;
 
-import static ua.java.conferences.actions.constants.Parameters.*;
-import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
+import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
-public class SignInAction implements Action {
+public class SignInAction implements Action, ActionPost {
 
     private static final Logger logger = LoggerFactory.getLogger(SignInAction.class);
 
@@ -22,30 +24,48 @@ public class SignInAction implements Action {
     public SignInAction() {
         userService = ServiceFactory.getInstance(MYSQL).getUserService();
     }
+
     @Override
-    public String execute(HttpServletRequest request) {
-        String path;
+    public String executeGet(HttpServletRequest request) {
+        String path = SIGN_UP_PAGE;
+        path = getPath(request, path);
+        transferFromSessionToRequest(request);
+        return path;
+    }
+
+    private void transferFromSessionToRequest(HttpServletRequest request) {
+        transferStringFromSessionToRequest(request, EMAIL);
+        transferStringFromSessionToRequest(request, ERROR);
+    }
+
+    @Override
+    public String executePost(HttpServletRequest request) {
+        String path = PROFILE_PAGE;
         String email = request.getParameter(EMAIL);
         String password = request.getParameter(PASSWORD);
         UserResponseDTO user;
         try {
             user = userService.signIn(email, password);
-            setSessionAttributes(request, user);
-            path = "profile.jsp";
+            setLoggedUser(request, user);
         } catch (IncorrectEmailException | IncorrectPasswordException e) {
             logger.error(e.getMessage());
-            request.setAttribute(ERROR, e.getMessage());
-            request.setAttribute(EMAIL, email);
-            path = "sign-in.jsp";
+            setSessionAttributes(request, email, e);
+            path = SIGN_IN_PAGE;
         } catch (ServiceException e) {
             logger.error(e.getMessage());
-            path = "error.jsp";
+            path = ERROR_PAGE;
         }
-        return path;
+        request.getSession().setAttribute(CURRENT_PATH, path);
+        return "controller?action=sign-in";
     }
 
-    private static void setSessionAttributes(HttpServletRequest request, UserResponseDTO user) {
-        request.getSession().setAttribute(USER, user);
+    private static void setSessionAttributes(HttpServletRequest request, String email, ServiceException e) {
+        request.getSession().setAttribute(ERROR, e.getMessage());
+        request.getSession().setAttribute(EMAIL, email);
+    }
+
+    private static void setLoggedUser(HttpServletRequest request, UserResponseDTO user) {
+        request.getSession().setAttribute(LOGGED_USER, user);
         request.getSession().setAttribute(ROLE, user.getRole());
     }
 }

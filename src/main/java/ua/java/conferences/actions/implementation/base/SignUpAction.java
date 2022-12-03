@@ -2,20 +2,17 @@ package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ua.java.conferences.actions.Action;
+import org.slf4j.*;
+import ua.java.conferences.actions.*;
 import ua.java.conferences.dto.request.UserRequestDTO;
-import ua.java.conferences.exceptions.DuplicateEmailException;
-import ua.java.conferences.exceptions.IncorrectFormatException;
-import ua.java.conferences.exceptions.PasswordMatchingException;
-import ua.java.conferences.exceptions.ServiceException;
+import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
-import static ua.java.conferences.actions.constants.Parameters.*;
-import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
+import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
-public class SignUpAction implements Action {
+public class SignUpAction implements Action, ActionPost {
 
     private static final Logger logger = LoggerFactory.getLogger(SignUpAction.class);
 
@@ -26,38 +23,48 @@ public class SignUpAction implements Action {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
-        String path = "sign-in.jsp";
-        UserRequestDTO user = getUserRequestDTO(request);
-        request.setAttribute(USER, user);
-        try {
-            checkPasswordMatch(request);
-            userService.register(user);
-        } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException e) {
-            request.setAttribute(ERROR, e.getMessage());
-            path = "sign-up.jsp";
-        } catch (ServiceException e) {
-            logger.error(e.getMessage());
-            path = "error.jsp";
-        }
+    public String executeGet(HttpServletRequest request) {
+        String path = getPath(request, SIGN_UP_PAGE);
+        transferFromSessionToRequest(request);
         return path;
     }
 
-    void checkPasswordMatch(HttpServletRequest request) throws PasswordMatchingException {
-        String password = request.getParameter(PASSWORD);
-        String confirmPassword = request.getParameter(CONFIRM_PASSWORD);
-        if (!password.equals(confirmPassword)) {
-            throw new PasswordMatchingException();
-        }
+    private void transferFromSessionToRequest(HttpServletRequest request) {
+        transferStringFromSessionToRequest(request, MESSAGE);
+        transferStringFromSessionToRequest(request, ERROR);
+        transferUserRequestDTOFromSessionToRequest(request);
     }
 
-    private static UserRequestDTO getUserRequestDTO(HttpServletRequest request) {
+    @Override
+    public String executePost(HttpServletRequest request) {
+        String path = SIGN_IN_PAGE;
+        UserRequestDTO user = getUserRequestDTO(request);
+        request.getSession().setAttribute(USER, user);
+        try {
+            userService.register(user, request.getParameter(CONFIRM_PASSWORD));
+            request.getSession().setAttribute(MESSAGE, SUCCEED_REGISTER);
+        } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException e) {
+            request.getSession().setAttribute(ERROR, e.getMessage());
+            path = SIGN_UP_PAGE;
+        } catch (ServiceException e) {
+            logger.error(e.getMessage());
+            path = ERROR_PAGE;
+        }
+        request.getSession().setAttribute(CURRENT_PATH, path);
+        return "controller?action=sign-up";
+    }
+
+    private UserRequestDTO getUserRequestDTO(HttpServletRequest request) {
         String email = request.getParameter(EMAIL);
         String password = request.getParameter(PASSWORD);
         String name = request.getParameter(NAME);
         String surname = request.getParameter(SURNAME);
-        String notification = request.getParameter(NOTIFICATION);
-        boolean isNotified = notification != null && notification.equals("on");
+        boolean isNotified = isNotified(request);
         return new UserRequestDTO(email, password, name, surname, isNotified);
+    }
+
+    private static boolean isNotified(HttpServletRequest request) {
+        String notification = request.getParameter(NOTIFICATION);
+        return notification != null && notification.equals("on");
     }
 }

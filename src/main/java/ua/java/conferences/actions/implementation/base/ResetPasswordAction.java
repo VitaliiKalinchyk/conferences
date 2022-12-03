@@ -10,22 +10,24 @@ import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.ServiceFactory;
 import ua.java.conferences.services.UserService;
 
-import static ua.java.conferences.actions.constants.Parameters.*;
-import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
+import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.Pages.ERROR_PAGE;
+import static ua.java.conferences.actions.constants.Pages.RESET_PASSWORD_PAGE;
+import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
-public class PasswordResetAction implements Action {
+public class ResetPasswordAction implements Action {
 
-    private static final Logger logger = LoggerFactory.getLogger(PasswordResetAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(ResetPasswordAction.class);
 
     private final UserService userService;
 
-    public PasswordResetAction() {
+    public ResetPasswordAction() {
         userService = ServiceFactory.getInstance(MYSQL).getUserService();
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
-        String path = "reset-password.jsp";
+    public String executeGet(HttpServletRequest request) {
+        String path = RESET_PASSWORD_PAGE;
         String email = request.getParameter(EMAIL);
         try {
             userService.searchUser(email);
@@ -36,7 +38,7 @@ public class PasswordResetAction implements Action {
             request.setAttribute(ERROR, e.getMessage());
         } catch (ServiceException e) {
             logger.error(e.getMessage());
-            path = "error.jsp";
+            path = ERROR_PAGE;
         }
         return path;
     }

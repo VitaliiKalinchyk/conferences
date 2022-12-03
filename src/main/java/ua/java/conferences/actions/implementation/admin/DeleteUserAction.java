@@ -1,16 +1,16 @@
 package ua.java.conferences.actions.implementation.admin;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import ua.java.conferences.actions.Action;
+import org.slf4j.*;
+import ua.java.conferences.actions.*;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
 
-import static ua.java.conferences.actions.constants.Parameters.*;
-import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
+import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
-public class DeleteUserAction implements Action {
+public class DeleteUserAction implements Action, ActionPost {
 
     private static final Logger logger = LoggerFactory.getLogger(DeleteUserAction.class);
 
@@ -21,16 +21,25 @@ public class DeleteUserAction implements Action {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
-        String path = "view-users.jsp";
-        long id = Long.parseLong(request.getParameter("user-id"));
+    public String executeGet(HttpServletRequest request) {
+        String path = VIEW_USERS_PAGE;
+        path = getPath(request, path);
+        transferStringFromSessionToRequest(request, MESSAGE);
+        return path;
+    }
+
+    @Override
+    public String executePost(HttpServletRequest request) {
+        String path = VIEW_USERS_PAGE;
+        long id = Long.parseLong(request.getParameter(USER_ID));
         try {
             userService.delete(id);
+            request.getSession().setAttribute(MESSAGE, SUCCEED_DELETE);
         } catch (ServiceException e) {
             logger.error(e.getMessage());
-            path = "error.jsp";
+            path = ERROR_PAGE;
         }
-        request.setAttribute(MESSAGE, SUCCEED_DELETE);
-        return path;
+        request.getSession().setAttribute(CURRENT_PATH, path);
+        return "controller?action=delete-user";
     }
 }

@@ -4,5 +4,5 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public interface Action {
 
-    String execute(HttpServletRequest request);
+    String executeGet(HttpServletRequest request);
 }

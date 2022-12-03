@@ -1,13 +1,11 @@
 package ua.java.conferences.controller;
 
-import jakarta.servlet.annotation.WebServlet;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import ua.java.conferences.actions.*;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
-
+import jakarta.servlet.annotation.WebServlet;
+import org.slf4j.*;
 import java.io.IOException;
 
 @WebServlet({"/controller"})
@@ -23,24 +21,32 @@ public class Controller extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         processPost(request, response);
     }
 
     private void processGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String url = getActionName(request);
         Action action = ACTION_FACTORY.createAction(url);
-        String address = null;
+        String path = null;
         try {
-            address = action.execute(request);
+            path = action.executeGet(request);
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        request.getRequestDispatcher(address).forward(request, response);
+        request.getRequestDispatcher(path).forward(request, response);
     }
 
-    private void processPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        doGet(request, response);
+    private void processPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String url = getActionName(request);
+        ActionPost actionPost = ACTION_FACTORY.createActionPost(url);
+        String path = null;
+        try {
+            path = actionPost.executePost(request);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        response.sendRedirect(path);
     }
 
     private String getActionName(HttpServletRequest request) {

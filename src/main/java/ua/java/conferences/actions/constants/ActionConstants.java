@@ -1,12 +1,16 @@
 package ua.java.conferences.actions.constants;
 
-public final class Parameters {
+public final class ActionConstants {
 
-    private Parameters() {}
+    private ActionConstants() {}
 
     public static final String ID = "id";
 
+    public static final String USER_ID = "user-id";
+
     public static final String USER = "user";
+
+    public static final String LOGGED_USER = "loggedUser";
 
     public static final String ROLE = "role";
 
@@ -40,7 +44,12 @@ public final class Parameters {
 
     public static final String MESSAGE = "message";
 
+    public static final String CURRENT_PATH = "currentPath";
+
+    //fmt keys
     public static final String CHECK_EMAIL = "check.email";
+
+    public static final String SUCCEED_REGISTER = "succeed.registered";
 
     public static final String SUCCEED_UPDATE = "succeed.update";
 

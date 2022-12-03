@@ -8,8 +8,9 @@ import ua.java.conferences.dto.response.UserResponseDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
-import static ua.java.conferences.actions.constants.Parameters.*;
-import static ua.java.conferences.connection.ConnectionConstants.MYSQL;
+import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
 public class SearchUserAction implements Action {
 
@@ -22,18 +23,18 @@ public class SearchUserAction implements Action {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
-        String path = "user-by-email.jsp";
-        String email = request.getParameter("email");
+    public String executeGet(HttpServletRequest request) {
+        String path = USER_BY_EMAIL_PAGE;
+        String email = request.getParameter(EMAIL);
         try {
             UserResponseDTO user = userService.searchUser(email);
             request.setAttribute(USER, user);
         } catch (NoSuchUserException e) {
             request.setAttribute(ERROR, e.getMessage());
-            path = "view-users.jsp";
+            path = VIEW_USERS_PAGE;
         } catch (ServiceException e) {
             logger.error(e.getMessage());
-            path = "error.jsp";
+            path = ERROR_PAGE;
         }
         return path;
     }
