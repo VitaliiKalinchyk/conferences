@@ -17,7 +17,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.exceptions.IncorrectFormatException.Message.*;
-import static ua.java.conferences.dao.mysql.constants.EventConstants.*;
+import static ua.java.conferences.dao.mysql.constants.EventSQLQueries.*;
 
 class EventServiceTest {
 

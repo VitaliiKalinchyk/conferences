@@ -7,7 +7,7 @@ import ua.java.conferences.exceptions.*;
 import java.util.List;
 
 public interface UserService extends Service<UserResponseDTO> {
-    void register(UserRequestDTO userDTO) throws ServiceException;
+    void register(UserRequestDTO userDTO, String confirmPassword) throws ServiceException;
 
     UserResponseDTO signIn(String login, String password) throws ServiceException;
 
@@ -19,7 +19,7 @@ public interface UserService extends Service<UserResponseDTO> {
 
     UserResponseDTO editProfile(UserRequestDTO userDTO) throws ServiceException;
 
-    void changePassword(long userId, String oldPassword, String newPassword) throws ServiceException;
+    void changePassword(long userId, String oldPassword, String newPassword, String confirmPassword) throws ServiceException;
 
     void setRole(long userId, int roleId) throws ServiceException;
 

@@ -10,7 +10,7 @@ import ua.java.conferences.services.EventService;
 import java.time.LocalDate;
 import java.util.*;
 
-import static ua.java.conferences.dao.mysql.constants.EventConstants.UPCOMING;
+import static ua.java.conferences.dao.mysql.constants.EventSQLQueries.UPCOMING;
 import static ua.java.conferences.exceptions.IncorrectFormatException.Message.*;
 import static ua.java.conferences.utils.ConvertorUtil.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;

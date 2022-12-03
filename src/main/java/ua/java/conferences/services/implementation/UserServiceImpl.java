@@ -24,17 +24,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(UserRequestDTO userDTO) throws ServiceException {
+    public void register(UserRequestDTO userDTO, String confirmPassword) throws ServiceException {
         validateUser(userDTO);
+        checkPasswordMatching(userDTO.getPassword(), confirmPassword);
         User user = convertDTOToUser(userDTO);
         try {
             userDAO.add(user);
         } catch (DAOException e) {
-            if (e.getMessage().contains("Duplicate")) {
-                throw new DuplicateEmailException();
-            } else {
-                throw new ServiceException(e);
-            }
+            checkExceptionType(e);
         }
     }
 
@@ -42,13 +39,8 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO signIn(String login, String password) throws ServiceException {
         UserResponseDTO userDTO;
         try {
-            User user = userDAO.getByEmail(login).orElse(null);
-            if (Objects.isNull(user)) {
-                throw new IncorrectEmailException();
-            }
-            if (!verify(user.getPassword(), password)) {
-                throw new IncorrectPasswordException();
-            }
+            User user = userDAO.getByEmail(login).orElseThrow(IncorrectEmailException::new);
+            checkIfPasswordCorrect(password, user);
             userDTO = convertUserToDTO(user);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -60,10 +52,7 @@ public class UserServiceImpl implements UserService {
     public UserResponseDTO view(long userId) throws ServiceException {
         UserResponseDTO userDTO;
         try {
-            User user = userDAO.getById(userId).orElse(null);
-            if (user == null) {
-                throw new NoSuchUserException();
-            }
+            User user = userDAO.getById(userId).orElseThrow(NoSuchUserException::new);
             userDTO = convertUserToDTO(user);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -76,10 +65,7 @@ public class UserServiceImpl implements UserService {
         validate(validateEmail(email), ENTER_CORRECT_EMAIL);
         UserResponseDTO userDTO;
         try {
-            User user = userDAO.getByEmail(email).orElse(null);
-            if (user == null) {
-                throw new NoSuchUserException();
-            }
+            User user = userDAO.getByEmail(email).orElseThrow(NoSuchUserException::new);
             userDTO = convertUserToDTO(user);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -119,22 +105,18 @@ public class UserServiceImpl implements UserService {
         try {
             userDAO.update(user);
         } catch (DAOException e) {
-            if (e.getMessage().contains("Duplicate")) {
-                throw new DuplicateEmailException();
-            } else {
-                throw new ServiceException(e);
-            }
+            checkExceptionType(e);
         }
         return convertUserToDTO(user);
     }
 
     @Override
-    public void changePassword(long userId, String oldPassword, String newPassword) throws ServiceException {
+    public void changePassword(long userId, String oldPassword, String newPassword, String confirmPassword)
+            throws ServiceException {
         try {
             User user = userDAO.getById(userId).orElseThrow(NoSuchUserException::new);
-            if (!verify(user.getPassword(),oldPassword)) {
-                throw new IncorrectPasswordException();
-            }
+            checkIfPasswordCorrect(oldPassword, user);
+            checkPasswordMatching(newPassword, confirmPassword);
             validate(validatePassword(newPassword), ENTER_CORRECT_PASSWORD);
             User userToUpdate = new User.UserBuilder().setId(userId).setPassword(encode(newPassword)).get();
             userDAO.updatePassword(userToUpdate);
@@ -182,7 +164,27 @@ public class UserServiceImpl implements UserService {
         return result;
     }
 
-    private static void validate(boolean validation, String exceptionMessage) throws IncorrectFormatException {
+    private void checkExceptionType(DAOException e) throws ServiceException {
+        if (e.getMessage().contains("Duplicate")) {
+            throw new DuplicateEmailException();
+        } else {
+            throw new ServiceException(e);
+        }
+    }
+
+    private void checkPasswordMatching(String password, String confirmPassword) throws PasswordMatchingException {
+        if (!password.equals(confirmPassword)) {
+            throw new PasswordMatchingException();
+        }
+    }
+
+    private void checkIfPasswordCorrect(String password, User user) throws IncorrectPasswordException {
+        if (!verify(user.getPassword(), password)) {
+            throw new IncorrectPasswordException();
+        }
+    }
+
+    private void validate(boolean validation, String exceptionMessage) throws IncorrectFormatException {
         if (!validation) {
             throw new IncorrectFormatException(exceptionMessage);
         }
