@@ -28,7 +28,7 @@
             <a href="signUp.jsp"><fmt:message key="sign.up"/></a>
         </c:when>
         <c:otherwise>
-            <a href="controller?action=profile"><fmt:message key="profile"/></a>
+            <a href="profile.jsp"><fmt:message key="profile"/></a>
             <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
         </c:otherwise>
     </c:choose>
@@ -80,11 +80,11 @@
 
 <br>
 <br>
-<a href="controller?action=change-password-page"><fmt:message key="change.password"/></a>
+<a href="changePassword.jsp"><fmt:message key="change.password"/></a>
 
 <br>
 <br>
-<a href="controller?action=profile"><fmt:message key="to.profile"/></a>
+<a href="profile.jsp"><fmt:message key="to.profile"/></a>
 <br>
 <br>
 
