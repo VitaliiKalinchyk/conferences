@@ -1,12 +1,8 @@
-package ua.java.conferences.controller;
-
+package ua.java.conferences.filters;
 
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.*;
-
 import java.io.IOException;
 
-@WebFilter(urlPatterns = "/*", initParams = @WebInitParam(name = "encoding", value = "UTF-8"))
 public class EncodingFilter implements Filter {
 
     private String encoding;

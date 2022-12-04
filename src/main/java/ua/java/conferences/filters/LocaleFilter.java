@@ -1,31 +1,31 @@
-package ua.java.conferences.controller;
+package ua.java.conferences.filters;
 
 
 import jakarta.servlet.*;
-import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebFilter("/*")
 public class LocaleFilter implements Filter {
 
     private static final String LOCALE = "locale";
 
     private static final String REFRESH = "Refresh";
 
+    private static final int REFRESH_TIME = 0;
+
     private String defaultLocale;
 
     @Override
-    public void init(FilterConfig filterConfig) {
-        defaultLocale = "en";
+    public void init(FilterConfig config) {
+        defaultLocale = config.getInitParameter("defaultLocale");
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String locale = httpRequest.getParameter(LOCALE);
         if (isNotBlank(locale)) {
-            ((HttpServletResponse)response).setIntHeader(REFRESH, 0);
+            ((HttpServletResponse)response).setIntHeader(REFRESH, REFRESH_TIME);
             httpRequest.getSession().setAttribute(LOCALE, locale);
         } else {
             String sessionLocale = (String) httpRequest.getSession().getAttribute(LOCALE);

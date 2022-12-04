@@ -4,11 +4,9 @@ import ua.java.conferences.actions.*;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
-import jakarta.servlet.annotation.WebServlet;
 import org.slf4j.*;
 import java.io.IOException;
 
-@WebServlet({"/controller"})
 public class Controller extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
