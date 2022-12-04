@@ -4,6 +4,8 @@ public final class Pages {
 
     private Pages() {}
 
+    public static final String CONTROLLER_PAGE = "controller";
+
     public static final String INDEX_PAGE = "index.jsp";
 
     public static final String ABOUT_PAGE = "about.jsp";

@@ -41,8 +41,6 @@
     </form>
 </menu>
 
-<img src="img/gartner-conf-e1551786210967.jpg" alt="<fmt:message key="pic"/>">
-
 <footer>
     <p>
         2022 © Conference Smart App
