@@ -17,15 +17,11 @@ public final class ActionFactory {
         ACTION_MAP.put("sign-up", new SignUpAction());
         ACTION_MAP.put("error", new ErrorAction());
 
-        ACTION_MAP.put("profile", new ProfileAction());
-        ACTION_MAP.put("edit-profile-page", new EditProfilePageAction());
         ACTION_MAP.put("edit-profile", new EditProfileAction());
         ACTION_MAP.put("sign-out", new SignOutAction());
         ACTION_MAP.put("password-reset", new ResetPasswordAction());
         ACTION_MAP.put("change-password", new ChangePasswordAction());
-        ACTION_MAP.put("change-password-page", new ChangePasswordPageAction());
 
-        ACTION_MAP.put("view-users", new ViewUsersAction());
         ACTION_MAP.put("search-user", new SearchUserAction());
         ACTION_MAP.put("delete-user", new DeleteUserAction());
         ACTION_MAP.put("set-role", new SetRoleAction());
