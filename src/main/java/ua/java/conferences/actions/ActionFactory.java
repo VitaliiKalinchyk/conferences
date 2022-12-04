@@ -5,6 +5,8 @@ import ua.java.conferences.actions.implementation.base.*;
 
 import java.util.*;
 
+import static ua.java.conferences.actions.constants.ActionNames.*;
+
 public final class ActionFactory {
 
     private static final ActionFactory ACTION_FACTORY = new ActionFactory();
@@ -12,19 +14,19 @@ public final class ActionFactory {
     private static final Map<String, Action> ACTION_MAP = new HashMap<>();
 
     static {
-        ACTION_MAP.put("default", new DefaultAction());
-        ACTION_MAP.put("sign-in", new SignInAction());
-        ACTION_MAP.put("sign-up", new SignUpAction());
-        ACTION_MAP.put("error", new ErrorAction());
+        ACTION_MAP.put(DEFAULT_ACTION, new DefaultAction());
+        ACTION_MAP.put(SIGN_IN_ACTION, new SignInAction());
+        ACTION_MAP.put(SIGN_UP_ACTION, new SignUpAction());
+        ACTION_MAP.put(PASSWORD_RESET_ACTION, new ResetPasswordAction());
+        ACTION_MAP.put(ERROR_ACTION, new ErrorAction());
 
-        ACTION_MAP.put("edit-profile", new EditProfileAction());
-        ACTION_MAP.put("sign-out", new SignOutAction());
-        ACTION_MAP.put("password-reset", new ResetPasswordAction());
-        ACTION_MAP.put("change-password", new ChangePasswordAction());
+        ACTION_MAP.put(SIGN_OUT_ACTION, new SignOutAction());
+        ACTION_MAP.put(EDIT_PROFILE_ACTION, new EditProfileAction());
+        ACTION_MAP.put(CHANGE_PASSWORD_ACTION, new ChangePasswordAction());
 
-        ACTION_MAP.put("search-user", new SearchUserAction());
-        ACTION_MAP.put("delete-user", new DeleteUserAction());
-        ACTION_MAP.put("set-role", new SetRoleAction());
+        ACTION_MAP.put(SEARCH_USER_ACTION, new SearchUserAction());
+        ACTION_MAP.put(DELETE_USER_ACTION, new DeleteUserAction());
+        ACTION_MAP.put(SET_ROLE_ACTION, new SetRoleAction());
 
     }
 
