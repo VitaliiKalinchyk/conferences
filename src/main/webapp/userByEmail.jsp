@@ -21,12 +21,12 @@
     <a href="index.jsp"><fmt:message key="main"/></a>
     <a href="about.jsp"><fmt:message key="about"/></a>
     <a href="contacts.jsp"><fmt:message key="contacts"/></a>
-    <a href="controller?action=profile"><fmt:message key="profile"/></a>
+    <a href="profile.jsp"><fmt:message key="profile"/></a>
     <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
 </menu>
 
 <menu>
-    <a href="controller?action=view-users"><fmt:message key="view.users"/></a>
+    <a href="viewUsers.jsp"><fmt:message key="view.users"/></a>
 </menu>
 <br>
 
