@@ -9,38 +9,16 @@
 <html lang="${sessionScope.locale}">
 
 <head>
-    <meta charset="UTF-8">
     <title>Conference Smart App. <fmt:message key="contacts"/></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
-<menu>
-    <strong>
-        Conference Smart App
-    </strong>
-    <a href="index.jsp"><fmt:message key="main"/></a>
-    <a href="about.jsp"><fmt:message key="about"/></a>
-    <a href="contacts.jsp"><fmt:message key="contacts"/></a>
-    <c:choose>
-        <c:when test="${sessionScope.loggedUser eq null}">
-            <a href="signIn.jsp"><fmt:message key="sign.in"/></a>
-            <a href="signUp.jsp"><fmt:message key="sign.up"/></a>
-        </c:when>
-        <c:otherwise>
-            <a href="profile.jsp"><fmt:message key="profile"/></a>
-            <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
-        </c:otherwise>
-    </c:choose>
-    <form method="POST">
-        <label>
-            <select name="locale" onchange='submit();'>
-                <option value="en" ${sessionScope.locale eq 'en' ? 'selected' : ''}><fmt:message key="en"/></option>
-                <option value="uk_UA" ${sessionScope.locale eq 'uk_UA' ? 'selected' : ''}><fmt:message key="ua"/></option>
-            </select>
-        </label>
-    </form>
-</menu>
+<jsp:include page="fragments/mainMenu.jsp"/>
 
 <header><fmt:message key="contacts"/> – Conference Smart App</header>
 <hr>
@@ -52,11 +30,7 @@
     +44 (0) 1628 773300 enquiries@conferencecontacts.co.uk
 </p>
 
-<footer>
-    <p>
-        2022 © Conference Smart App
-    </p>
-</footer>
+<jsp:include page="fragments/footer.jsp"/>
 
 </body>
 
