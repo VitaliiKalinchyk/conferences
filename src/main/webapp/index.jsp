@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
@@ -34,12 +35,14 @@
     <form method="post">
         <label>
             <select name="locale" onchange='submit();'>
-                <option value="en" ${sessionScope.locale == 'en' ? 'selected' : ''}><fmt:message key="en"/></option>
-                <option value="uk_UA" ${sessionScope.locale == 'uk_UA' ? 'selected' : ''}><fmt:message key="ua"/></option>
+                <option value="en" ${sessionScope.locale eq 'en' ? 'selected' : ''}><fmt:message key="en"/></option>
+                <option value="uk_UA" ${sessionScope.locale eq 'uk_UA' ? 'selected' : ''}><fmt:message key="ua"/></option>
             </select>
         </label>
     </form>
 </menu>
+
+<img src="img/gartner-conf-e1551786210967.jpg" alt="<fmt:message key="pic"/>">
 
 <footer>
     <p>
