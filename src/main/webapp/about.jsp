@@ -34,8 +34,8 @@
     <form method="post">
         <label>
             <select name="locale" onchange='submit();'>
-                <option value="en" ${sessionScope.locale == 'en' ? 'selected' : ''}><fmt:message key="en"/></option>
-                <option value="uk_UA" ${sessionScope.locale == 'uk_UA' ? 'selected' : ''}><fmt:message key="ua"/></option>
+                <option value="en" ${sessionScope.locale eq 'en' ? 'selected' : ''}><fmt:message key="en"/></option>
+                <option value="uk_UA" ${sessionScope.locale eq 'uk_UA' ? 'selected' : ''}><fmt:message key="ua"/></option>
             </select>
         </label>
     </form>
