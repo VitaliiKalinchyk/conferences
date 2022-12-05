@@ -6,7 +6,7 @@ import ua.java.conferences.filters.domains.*;
 
 import java.io.IOException;
 
-import static ua.java.conferences.actions.constants.ActionConstants.LOGGED_USER;
+import static ua.java.conferences.actions.constants.ActionConstants.*;
 import static ua.java.conferences.actions.constants.Pages.*;
 
 public class AuthenticationFilter implements Filter {
@@ -15,7 +15,8 @@ public class AuthenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         if (isNoLoggedUser(httpRequest) && isAccessDenied(httpRequest)) {
-                request.getRequestDispatcher(SIGN_IN_PAGE).forward(request, response);
+            httpRequest.setAttribute(MESSAGE, ACCESS_DENIED);
+            request.getRequestDispatcher(SIGN_IN_PAGE).forward(request, response);
         } else {
             chain.doFilter(request, response);
         }

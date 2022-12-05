@@ -6,7 +6,7 @@ import ua.java.conferences.filters.domains.*;
 
 import java.io.IOException;
 
-import static ua.java.conferences.actions.constants.ActionConstants.ROLE;
+import static ua.java.conferences.actions.constants.ActionConstants.*;
 import static ua.java.conferences.actions.constants.Pages.*;
 
 public class AuthorizationFilter implements Filter {
@@ -16,7 +16,8 @@ public class AuthorizationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String role = (String) httpRequest.getSession().getAttribute(ROLE);
         if (role != null && isAccessDenied(httpRequest, role)) {
-            request.getRequestDispatcher(PROFILE_PAGE).forward(request, response);
+            httpRequest.setAttribute(MESSAGE, ACCESS_DENIED);
+            request.getRequestDispatcher(SIGN_IN_PAGE).forward(request, response);
         } else {
             chain.doFilter(request, response);
         }

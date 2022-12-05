@@ -54,4 +54,6 @@ public final class ActionConstants {
     public static final String SUCCEED_UPDATE = "succeed.update";
 
     public static final String SUCCEED_DELETE = "succeed.delete";
+
+    public static final String ACCESS_DENIED = "access.denied";
 }
