@@ -21,11 +21,12 @@
 <jsp:include page="fragments/mainMenu.jsp"/>
 <br>
 <br>
-<span class="mb-0 h6"><fmt:message key="about"/> – Conference Smart App</span>
+<br>
+<span class="mb-0 mx-5 my=4 h6"><fmt:message key="about"/></span>
 <hr>
 <br>
 
-<div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
+<div class="bd-example-snippet bd-code-snippet col2"><div class="bd-example">
     <p>Finding the right Conference venue in the right location at the right price to meet the budget can be very time-consuming
         and stressful for the Meeting booker, so why not use the FREE service provided by an experienced Conference Agency.</p>
     <p>An experienced conference agent will understand what it takes to make the meeting successful.

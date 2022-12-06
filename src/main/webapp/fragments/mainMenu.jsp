@@ -39,7 +39,6 @@
                         </li>
                     </c:when>
                     <c:otherwise>
-
                         <li class="nav-item">
                             <a class="nav-link"  href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
                         </li>
@@ -57,3 +56,6 @@
         </div>
     </div>
 </nav>
+
+
+<script src="js/activation.js"></script>
