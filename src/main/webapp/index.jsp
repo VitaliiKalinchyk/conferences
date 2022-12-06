@@ -18,14 +18,13 @@
 
 <body>
 
-<jsp:include page="fragments/mainMenu.jsp"/>
-<br>
-<br>
-<br>
+<jsp:include page="fragments/mainMenu.jsp"/><br>
+
 <figure class="text-center">
     <img src="img/gartner-conf-e1551786210967.jpg" class="figure-img img-fluid rounded" alt="<fmt:message key="pic"/>">
     <figcaption class="figure-caption"><fmt:message key="pic.description"/></figcaption>
 </figure>
+
 <jsp:include page="fragments/footer.jsp"/>
 
 </body>

@@ -22,21 +22,16 @@
 
 <div class="col-lg-8 mx-auto p-4 py-md-5">
 
-    <header class="d-flex mt-3 align-items-center pb-3 mb-5 border-bottom">
+    <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
         <span class="fs-4"><fmt:message key="contacts"/></span>
     </header>
 
-
-
-<header><fmt:message key="contacts"/> – Conference Smart App</header>
-<hr>
-<p>
-    York House, 18 York Road, Maidenhead, Berkshire, SL6 1SF, UK
-    <br>
-    Registered in England & Wales Company number 02118204
-    <br>
-    +44 (0) 1628 773300 enquiries@conferencecontacts.co.uk
-</p>
+    <main>
+        <p class="fs-5 col-md-8">York House, 18 York Road, Maidenhead, Berkshire, SL6 1SF, UK</p>
+        <p class="fs-5 col-md-8">Registered in England & Wales Company number 02118204</p>
+        <p class="fs-5 col-md-8">+44 (0) 1628 773300 enquiries@conferencecontacts.co.uk</p>
+    </main>
+</div>
 
 <jsp:include page="fragments/footer.jsp"/>
 

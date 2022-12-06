@@ -5,8 +5,9 @@
 <fmt:setBundle basename="resources"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
-<div class="container">
-    <footer class="py-3 my-4">
-        <p class="text-center text-muted">2023 © Conference Smart App</p>
-    </footer>
-</div>
+<h class="navbar navbar-dark fixed-top bg-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand " href="index.jsp"><span class="mb-0 h4">Conference Smart App</span></a>
+  </div>
+</h>
+<br><br>

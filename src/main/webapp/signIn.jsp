@@ -1,7 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
@@ -9,58 +9,67 @@
 <html lang="${sessionScope.locale}">
 
 <head>
-    <meta charset="UTF-8">
     <title>Conference Smart App. <fmt:message key="sign.in"/></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
-<header>
-    Conference Smart App <fmt:message key="sign.in"/>
-</header>
-<hr>
+<jsp:include page="fragments/emptyMenu.jsp"/>
 
-<form method="POST" action="controller">
-    <input type="hidden" name="action" value="sign-in">
-    <c:set var="error" value="${requestScope.error}"/>
-    <c:if test="${not empty requestScope.message}">
-        <fmt:message key="${requestScope.message}"/>
-    </c:if>
-    <c:if test="${fn:contains(error, 'email')}">
-        <fmt:message key="${requestScope.error}"/>
-    </c:if>
-    <br>
-    <label for="email" ><fmt:message key="email"/>: </label>
-    <input type="email" name="email" id="email" required value="${requestScope.email}">
-    <br>
-    <c:if test="${fn:contains(error, 'pass')}">
-        <fmt:message key="${requestScope.error}"/>
-    </c:if>
-    <br>
-    <label for="password" ><fmt:message key="password"/>: </label>
-    <input type="password" name="password" id="password" required>
-    <br>
-    <p><input type="submit" value="<fmt:message key="sign.in"/>"></p>
-</form>
+<div class="col-lg-5 mx-auto p-4 py-md-5">
 
-<p>
-    <fmt:message key="forgot.password"/>
-    <a href="resetPassword.jsp"><fmt:message key="reset.password"/></a>
-</p>
+    <header class="d-flex align-items-center pb-0 mb-3 border-bottom">
+        <span class="fs-4"><fmt:message key="sign.in"/></span>
+    </header>
 
-<p>
-    <fmt:message key="no.account"/>
-    <a href="signUp.jsp"><fmt:message key="sign.up"/></a>
-</p>
-<br>
+    <form method="POST" action="controller">
+        <input type="hidden" name="action" value="sign-in">
+        <div class="form-group">
+            <c:set var="error" value="${requestScope.error}"/>
+            <c:if test="${not empty requestScope.message}">
+                <span class="text-success"><fmt:message key="${requestScope.message}"/></span>
+            </c:if>
+            <br>
+            <label class="form-label fs-5" for="email"><fmt:message key="email"/>: </label>
+            <input class="form-control" type="email" name="email" id="email" required value="${requestScope.email}">
+            <c:if test="${fn:contains(error, 'email')}">
+                <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
+            </c:if>
+            <br>
+        </div>
+        <div class="form-group">
+            <label class="form-label  fs-5" for="password"><fmt:message key="password"/>: </label>
+            <input class="form-control" type="password" name="password" id="password" required>
+            <c:if test="${fn:contains(error, 'pass')}">
+                <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
+            </c:if>
+            <br>
+        </div>
+        <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="sign.in"/></button>
+    </form>
 
-<a href="index.jsp"><fmt:message key="to.main"/></a>
-
-<footer>
-    <p>
-        2022 © Conference Smart App
+    <p class="fs-6 col-md-8">
+        <fmt:message key="forgot.password"/>
+        <a href="resetPassword.jsp" class="link-dark"><fmt:message key="reset.password"/></a>
     </p>
-</footer>
+
+    <p class="fs-6 col-md-8">
+        <fmt:message key="no.account"/>
+        <a href="signUp.jsp" class="link-dark"><fmt:message key="sign.up"/></a>
+    </p>
+    <br>
+    <br>
+    <p class="fs-6 col-md-8">
+        <a href="index.jsp" class="link-dark"><fmt:message key="to.main"/></a>
+    </p>
+
+</div>
+
+<jsp:include page="fragments/footer.jsp"/>
 
 </body>
 
