@@ -20,6 +20,14 @@
 
 <jsp:include page="fragments/mainMenu.jsp"/>
 
+<div class="col-lg-8 mx-auto p-4 py-md-5">
+
+    <header class="d-flex mt-3 align-items-center pb-3 mb-5 border-bottom">
+        <span class="fs-4"><fmt:message key="contacts"/></span>
+    </header>
+
+
+
 <header><fmt:message key="contacts"/> – Conference Smart App</header>
 <hr>
 <p>
