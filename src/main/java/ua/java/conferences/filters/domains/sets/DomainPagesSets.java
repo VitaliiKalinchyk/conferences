@@ -1,7 +1,6 @@
 package ua.java.conferences.filters.domains.sets;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static ua.java.conferences.actions.constants.Pages.*;
 
