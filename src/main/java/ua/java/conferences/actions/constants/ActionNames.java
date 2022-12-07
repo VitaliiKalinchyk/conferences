@@ -22,6 +22,8 @@ public final class ActionNames {
 
     public static final String SEARCH_USER_ACTION = "search-user";
 
+    public static final String VIEW_USERS_ACTION = "view-users";
+
     public static final String DELETE_USER_ACTION = "delete-user";
 
     public static final String SET_ROLE_ACTION = "set-role";

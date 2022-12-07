@@ -24,6 +24,7 @@ public final class ActionFactory {
         ACTION_MAP.put(EDIT_PROFILE_ACTION, new EditProfileAction());
         ACTION_MAP.put(CHANGE_PASSWORD_ACTION, new ChangePasswordAction());
 
+        ACTION_MAP.put(VIEW_USERS_ACTION, new ViewUsersAction());
         ACTION_MAP.put(SEARCH_USER_ACTION, new SearchUserAction());
         ACTION_MAP.put(DELETE_USER_ACTION, new DeleteUserAction());
         ACTION_MAP.put(SET_ROLE_ACTION, new SetRoleAction());
