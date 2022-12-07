@@ -18,7 +18,9 @@
 
 <body>
 
-<jsp:include page="fragments/mainMenu.jsp"/><br>
+<jsp:include page="fragments/mainMenu.jsp"/>
+
+<jsp:include page="fragments/menuChoice.jsp"/><br>
 
 <figure class="text-center">
     <img src="img/gartner-conf-e1551786210967.jpg" class="figure-img img-fluid rounded" alt="<fmt:message key="pic"/>">
