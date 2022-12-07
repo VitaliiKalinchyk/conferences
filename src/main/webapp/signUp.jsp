@@ -90,17 +90,12 @@
     <p class="fs-6 col-md-8">
         <fmt:message key="have.account"/>
         <a href="signIn.jsp" class="link-dark"><fmt:message key="sign.in"/></a>
-    </p>
-    <br>
-    <br>
-    <p class="fs-6 col-md-8">
-        <a href="index.jsp" class="link-dark"><fmt:message key="to.main"/></a>
-    </p>
+    </p><br><br>
 
+    <p class="fs-6 col-md-8"><a href="index.jsp" class="link-dark"><fmt:message key="to.main"/></a></p>
 </div>
 
 <jsp:include page="fragments/footer.jsp"/>
 
 </body>
-
 </html>

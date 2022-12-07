@@ -1,7 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
@@ -9,66 +9,51 @@
 <html lang="${sessionScope.locale}">
 
 <head>
-    <meta charset="UTF-8">
     <title>Conference Smart App. <fmt:message key="profile"/></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
-<menu>
-    <strong>
-        Conference Smart App
-    </strong>
-    <a href="index.jsp"><fmt:message key="main"/></a>
-    <a href="about.jsp"><fmt:message key="about"/></a>
-    <a href="contacts.jsp"><fmt:message key="contacts"/></a>
-    <a href="profile.jsp"><fmt:message key="profile"/></a>
-    <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
-</menu>
+<jsp:include page="fragments/mainMenu.jsp"/>
 
-<menu>
-    <c:choose>
-        <c:when test="${sessionScope.role eq 'ADMIN'}">
-            <a href="viewUsers.jsp"><fmt:message key="view.users"/></a>
-        </c:when>
-        <c:when test="${sessionScope.role eq 'MODERATOR'}">
-        </c:when>
-        <c:when test="${sessionScope.role eq 'SPEAKER'}">
-        </c:when>
-        <c:when test="${sessionScope.role eq 'VISITOR'}">
-        </c:when>
-    </c:choose>
-</menu>
+<jsp:include page="fragments/menuChoice.jsp"/>
 
-<br>
-<h3><fmt:message key="profile.info"/></h3>
-<a href="editProfile.jsp"><fmt:message key="edit.profile"/></a>
-<br>
+<div class="col-lg-8 mx-auto p-4 py-md-5">
 
-<h4><fmt:message key="email"/>:</h4>
-${sessionScope.loggedUser.email}
-<h4><fmt:message key="name"/>:</h4>
-${sessionScope.loggedUser.name}
-<h4><fmt:message key="surname"/>:</h4>
-${sessionScope.loggedUser.surname}
-<h4><fmt:message key="notification"/>:</h4>
-<c:choose>
-    <c:when test="${sessionScope.loggedUser.notification}">
-        <fmt:message key="yes"/>
-    </c:when>
-    <c:otherwise>
-        <fmt:message key="no"/>
-    </c:otherwise>
-</c:choose>
-<br>
-<br>
+    <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+        <span class="fs-4"><fmt:message key="profile.info"/></span>
+    </header>
 
-<footer>
-    <p>
-        2022 © Conference Smart App
-    </p>
-</footer>
+    <main>
+        <p class="fs-6"><fmt:message key="email"/>:</p>
+        <p class="fs-5">${sessionScope.loggedUser.email}</p>
+
+        <p class="fs-6"><fmt:message key="name"/>:</p>
+        <p class="fs-5">${sessionScope.loggedUser.name}</p>
+
+        <p class="fs-6"><fmt:message key="surname"/>:</p>
+        <p class="fs-5">${sessionScope.loggedUser.surname}</p>
+
+        <p class="fs-6"><fmt:message key="notification"/>:</p>
+        <c:choose>
+            <c:when test="${sessionScope.loggedUser.notification}">
+                <p class="fs-5"><fmt:message key="yes"/></p>
+            </c:when>
+            <c:otherwise>
+                <p class="fs-5"><fmt:message key="no"/></p>
+            </c:otherwise>
+        </c:choose><br>
+    </main>
+
+    <a href="editProfile.jsp" class="btn btn-dark mt-4 mb-4"><fmt:message key="edit.profile"/></a>
+
+</div>
+
+<jsp:include page="fragments/footer.jsp"/>
 
 </body>
-
 </html>

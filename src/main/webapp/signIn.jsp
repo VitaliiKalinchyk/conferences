@@ -28,28 +28,29 @@
 
     <form method="POST" action="controller">
         <input type="hidden" name="action" value="sign-in">
+        <c:set var="error" value="${requestScope.error}"/>
+
         <div class="form-group">
-            <c:set var="error" value="${requestScope.error}"/>
             <c:if test="${not empty requestScope.message}">
                 <span class="text-success"><fmt:message key="${requestScope.message}"/></span>
-            </c:if>
-            <br>
+            </c:if><br>
             <label class="form-label fs-5" for="email"><fmt:message key="email"/>: </label>
             <input class="form-control" type="email" name="email" id="email" required value="${requestScope.email}">
             <c:if test="${fn:contains(error, 'email')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
-            </c:if>
-            <br>
+            </c:if><br>
         </div>
+
         <div class="form-group">
             <label class="form-label  fs-5" for="password"><fmt:message key="password"/>: </label>
             <input class="form-control" type="password" name="password" id="password" required>
             <c:if test="${fn:contains(error, 'pass')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
-            </c:if>
-            <br>
+            </c:if><br>
         </div>
+
         <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="sign.in"/></button>
+
     </form>
 
     <p class="fs-6 col-md-8">
@@ -60,17 +61,13 @@
     <p class="fs-6 col-md-8">
         <fmt:message key="no.account"/>
         <a href="signUp.jsp" class="link-dark"><fmt:message key="sign.up"/></a>
-    </p>
-    <br>
-    <br>
-    <p class="fs-6 col-md-8">
-        <a href="index.jsp" class="link-dark"><fmt:message key="to.main"/></a>
-    </p>
+    </p><br><br>
+
+    <p class="fs-6 col-md-8"><a href="index.jsp" class="link-dark"><fmt:message key="to.main"/></a></p>
 
 </div>
 
 <jsp:include page="fragments/footer.jsp"/>
 
 </body>
-
 </html>
