@@ -42,6 +42,8 @@ public final class ActionConstants {
 
     public static final String ERROR = "error";
 
+    public static final String SEND_REDIRECT = "sendRedirect";
+
     public static final String MESSAGE = "message";
 
     public static final String CURRENT_PATH = "currentPath";

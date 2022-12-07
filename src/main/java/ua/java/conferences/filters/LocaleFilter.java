@@ -6,6 +6,8 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
+import static ua.java.conferences.actions.constants.Pages.CONTROLLER_PAGE;
+
 public class LocaleFilter implements Filter {
 
     private static final String LOCALE = "locale";
@@ -27,13 +29,16 @@ public class LocaleFilter implements Filter {
         if (isNotBlank(locale)) {
             ((HttpServletResponse)response).setIntHeader(REFRESH, REFRESH_TIME);
             httpRequest.getSession().setAttribute(LOCALE, locale);
+            if ((!httpRequest.getServletPath().contains(CONTROLLER_PAGE))) {
+                chain.doFilter(request, response);
+            }
         } else {
             String sessionLocale = (String) httpRequest.getSession().getAttribute(LOCALE);
             if (isBlank(sessionLocale)) {
                 httpRequest.getSession().setAttribute(LOCALE, defaultLocale);
             }
+            chain.doFilter(request, response);
         }
-        chain.doFilter(request, response);
     }
 
     private boolean isBlank(String locale) {

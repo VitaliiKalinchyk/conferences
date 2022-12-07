@@ -7,6 +7,8 @@ import jakarta.servlet.http.*;
 import org.slf4j.*;
 import java.io.IOException;
 
+import static ua.java.conferences.actions.constants.ActionConstants.SEND_REDIRECT;
+
 public class Controller extends HttpServlet {
 
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
@@ -32,7 +34,11 @@ public class Controller extends HttpServlet {
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
-        request.getRequestDispatcher(path).forward(request, response);
+        if ((request.getAttribute(SEND_REDIRECT)) != null) {
+            response.sendRedirect(path);
+        } else {
+            request.getRequestDispatcher(path).forward(request, response);
+        }
     }
 
     private void processPost(HttpServletRequest request, HttpServletResponse response) throws IOException {

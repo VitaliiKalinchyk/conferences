@@ -53,7 +53,6 @@ public final class DomainPagesSets {
     static {
         ADMIN_PAGES.addAll(LOGGED_USER_PAGES);
         ADMIN_PAGES.add(VIEW_USERS_PAGE);
-        ADMIN_PAGES.add(USER_BY_EMAIL_PAGE);
     }
 
     public static Set<String>  getAnonymousUserPages() {

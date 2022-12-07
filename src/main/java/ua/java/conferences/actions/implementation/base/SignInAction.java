@@ -36,6 +36,7 @@ public class SignInAction implements Action, ActionPost {
     private void transferFromSessionToRequest(HttpServletRequest request) {
         transferStringFromSessionToRequest(request, EMAIL);
         transferStringFromSessionToRequest(request, ERROR);
+        transferStringFromSessionToRequest(request, SEND_REDIRECT);
     }
 
     @Override
@@ -47,6 +48,7 @@ public class SignInAction implements Action, ActionPost {
         try {
             user = userService.signIn(email, password);
             setLoggedUser(request, user);
+            request.getSession().setAttribute(SEND_REDIRECT, SEND_REDIRECT);
         } catch (IncorrectEmailException | IncorrectPasswordException e) {
             logger.error(e.getMessage());
             setSessionAttributes(request, email, e);
