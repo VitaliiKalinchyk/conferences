@@ -27,11 +27,11 @@ public final class DomainActionsSets {
         ANONYMOUS_USER_ACTIONS.add(SIGN_UP_ACTION);
         ANONYMOUS_USER_ACTIONS.add(PASSWORD_RESET_ACTION);
         ANONYMOUS_USER_ACTIONS.add(ERROR_ACTION);
+        ANONYMOUS_USER_ACTIONS.add(SIGN_OUT_ACTION);
     }
 
     static {
         LOGGED_USER_ACTIONS.addAll(ANONYMOUS_USER_ACTIONS);
-        LOGGED_USER_ACTIONS.add(SIGN_OUT_ACTION);
         LOGGED_USER_ACTIONS.add(EDIT_PROFILE_ACTION);
         LOGGED_USER_ACTIONS.add(CHANGE_PASSWORD_ACTION);
     }
@@ -53,6 +53,7 @@ public final class DomainActionsSets {
         ADMIN_ACTIONS.add(SEARCH_USER_ACTION);
         ADMIN_ACTIONS.add(DELETE_USER_ACTION);
         ADMIN_ACTIONS.add(SET_ROLE_ACTION);
+        ADMIN_ACTIONS.add(VIEW_USERS_ACTION);
     }
 
     public static Set<String>  getAnonymousUserActions() {

@@ -1,38 +1,34 @@
 package ua.java.conferences.actions.implementation.admin;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import ua.java.conferences.actions.Action;
 import ua.java.conferences.dto.response.UserResponseDTO;
-import ua.java.conferences.exceptions.*;
+import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
+
+import java.util.List;
 
 import static ua.java.conferences.actions.constants.ActionConstants.*;
 import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
-public class SearchUserAction implements Action {
+public class ViewUsersAction implements Action {
 
-    private static final Logger logger = LoggerFactory.getLogger(SearchUserAction.class);
+    private static final Logger logger = LoggerFactory.getLogger(ViewUsersAction.class);
 
     private final UserService userService;
 
-    public SearchUserAction() {
+    public ViewUsersAction() {
         userService = ServiceFactory.getInstance(MYSQL).getUserService();
     }
 
     @Override
     public String executeGet(HttpServletRequest request) {
-
-        String path = USER_BY_EMAIL_PAGE;
-        String email = request.getParameter(EMAIL);
+        String path = VIEW_USERS_PAGE;
         try {
-            UserResponseDTO user = userService.searchUser(email);
-            request.setAttribute(USER, user);
-        } catch (NoSuchUserException e) {
-            request.setAttribute(ERROR, e.getMessage());
-            path = request.getParameter(CURRENT_PAGE);
+            List<UserResponseDTO> users = userService.viewUsers();
+            request.setAttribute(USERS, users);
         } catch (ServiceException e) {
             logger.error(e.getMessage());
             path = ERROR_PAGE;

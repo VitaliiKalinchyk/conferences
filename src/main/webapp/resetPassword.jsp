@@ -18,7 +18,7 @@
 
 <body>
 
-<jsp:include page="fragments/emptyMenu.jsp"/>
+<jsp:include page="fragments/mainMenu.jsp"/>
 
 <div class="col-lg-5 mx-auto p-4 py-md-5">
 
@@ -43,9 +43,8 @@
         </div>
 
         <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="reset.password"/></button>
-    </form><br><br>
+    </form>
 
-    <p class="fs-6 col-md-8"><a href="index.jsp" class="link-dark"><fmt:message key="to.main"/></a></p>
 </div>
 
 <jsp:include page="fragments/footer.jsp"/>

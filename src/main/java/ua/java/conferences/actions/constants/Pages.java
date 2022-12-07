@@ -28,5 +28,7 @@ public final class Pages {
 
     public static final String VIEW_USERS_PAGE = "viewUsers.jsp";
 
-    public static final String USER_BY_EMAIL_PAGE = "userByEmail.jsp";
+    public static final String SEARCH_USERS_PAGE = "searchUser.jsp";
+
+    public static final String USER_BY_EMAIL_PAGE = "userByAdmin.jsp";
 }

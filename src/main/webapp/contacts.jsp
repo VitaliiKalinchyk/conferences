@@ -22,7 +22,7 @@
 
 <jsp:include page="fragments/menuChoice.jsp"/>
 
-<div class="col-lg-8 mx-auto p-4 py-md-5">
+<div class="col-lg-7 mx-auto p-4 py-md-5">
 
     <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
         <span class="fs-4"><fmt:message key="contacts"/></span>

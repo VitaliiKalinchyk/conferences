@@ -18,7 +18,7 @@
 
 <body>
 
-<jsp:include page="fragments/emptyMenu.jsp"/>
+<jsp:include page="fragments/mainMenu.jsp"/>
 
 <div class="col-lg-5 mx-auto p-4 py-md-5">
 
@@ -61,10 +61,7 @@
     <p class="fs-6 col-md-8">
         <fmt:message key="no.account"/>
         <a href="signUp.jsp" class="link-dark"><fmt:message key="sign.up"/></a>
-    </p><br><br>
-
-    <p class="fs-6 col-md-8"><a href="index.jsp" class="link-dark"><fmt:message key="to.main"/></a></p>
-
+    </p>
 </div>
 
 <jsp:include page="fragments/footer.jsp"/>

@@ -7,7 +7,7 @@ import jakarta.servlet.http.*;
 import org.slf4j.*;
 import java.io.IOException;
 
-import static ua.java.conferences.actions.constants.ActionConstants.SEND_REDIRECT;
+import static ua.java.conferences.actions.constants.ActionConstants.*;
 
 public class Controller extends HttpServlet {
 
@@ -54,6 +54,6 @@ public class Controller extends HttpServlet {
     }
 
     private String getActionName(HttpServletRequest request) {
-        return request.getParameter("action");
+        return request.getParameter(ACTION);
     }
 }

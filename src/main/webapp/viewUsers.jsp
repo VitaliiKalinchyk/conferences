@@ -1,7 +1,7 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
@@ -9,63 +9,56 @@
 <html lang="${sessionScope.locale}">
 
 <head>
-    <meta charset="UTF-8">
     <title>Conference Smart App. <fmt:message key="view.users"/></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/bootstrap.min.js"></script>
 </head>
 
 <body>
 
-<menu>
-    <strong>
-        Conference Smart App <fmt:message key="view.users"/>
-    </strong>
-    <a href="index.jsp"><fmt:message key="main"/></a>
-    <a href="about.jsp"><fmt:message key="about"/></a>
-    <a href="contacts.jsp"><fmt:message key="contacts"/></a>
-    <a href="profile.jsp"><fmt:message key="profile"/></a>
-    <a href="controller?action=sign-out"><fmt:message key="sign.out"/></a>
-</menu>
+<jsp:include page="fragments/mainMenu.jsp"/>
 
-<menu>
-    <c:choose>
-        <c:when test="${sessionScope.role eq 'ADMIN'}">
-            <a href="viewUsers.jsp"><fmt:message key="view.users"/></a>
-        </c:when>
-        <c:when test="${sessionScope.role eq 'MODERATOR'}">
-        </c:when>
-        <c:when test="${sessionScope.role eq 'SPEAKER'}">
-        </c:when>
-        <c:when test="${sessionScope.role eq 'VISITOR'}">
-        </c:when>
-    </c:choose>
-</menu>
-<br>
+<jsp:include page="fragments/menuChoice.jsp"/>
 
-<h3><fmt:message key="users"/></h3>
-<c:if test="${not empty requestScope.message}">
-    <fmt:message key="${requestScope.message}"/>
-</c:if>
+<div class="col-lg-7 mx-auto p-4 py-md-5">
 
-<form method="GET" action="controller">
-    <input type="hidden" name="action" value="search-user">
-    <c:if test="${not empty requestScope.error}">
-        <fmt:message key="${requestScope.error}"/>
-    </c:if>
-    <br>
-    <label for="email"><fmt:message key="search.user"/></label>
-    <input type="email" name="email" id="email" required>
-    <p>
-        <input type="submit" value="<fmt:message key="search"/>">
-    </p>
-</form>
-<br>
-<br>
+    <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+        <span class="fs-4"><fmt:message key="users"/></span>
+    </header>
 
-<footer>
-    <p>
-        2022 © Conference Smart App
-    </p>
-</footer>
+        <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
+            <table class="table table-striped" aria-label="user-table">
+                <thead>
+                <tr>
+                    <th scope="col"><fmt:message key="id"/></th>
+                    <th scope="col"><fmt:message key="email"/></th>
+                    <th scope="col"><fmt:message key="name"/></th>
+                    <th scope="col"><fmt:message key="surname"/></th>
+                    <th scope="col"><fmt:message key="role"/></th>
+                    <th scope="col"><fmt:message key="action1"/></th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach var="user" items="${requestScope.users}">
+                <tr>
+                    <td><c:out value="${user.id}" /></td>
+                    <td><c:out value="${user.email}" /></td>
+                    <td><c:out value="${user.name}" /></td>
+                    <td><c:out value="${user.surname}" /></td>
+                    <td><fmt:message key="${user.role}" /></td>
+                    <td>
+                        <a href=controller?action=search-user&email=${user.email}><fmt:message key="edit"/></a>
+                    </td>
+                </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+</div>
+
+<jsp:include page="fragments/footer.jsp"/>
 
 </body>
 </html>

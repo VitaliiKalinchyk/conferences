@@ -22,7 +22,7 @@ public class DeleteUserAction implements Action, ActionPost {
 
     @Override
     public String executeGet(HttpServletRequest request) {
-        String path = VIEW_USERS_PAGE;
+        String path = SEARCH_USERS_PAGE;
         path = getPath(request, path);
         transferStringFromSessionToRequest(request, MESSAGE);
         return path;
@@ -30,7 +30,7 @@ public class DeleteUserAction implements Action, ActionPost {
 
     @Override
     public String executePost(HttpServletRequest request) {
-        String path = VIEW_USERS_PAGE;
+        String path = SEARCH_USERS_PAGE;
         long id = Long.parseLong(request.getParameter(USER_ID));
         try {
             userService.delete(id);

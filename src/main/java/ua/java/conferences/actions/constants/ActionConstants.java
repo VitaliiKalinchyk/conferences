@@ -4,11 +4,17 @@ public final class ActionConstants {
 
     private ActionConstants() {}
 
+    public static final String ACTION = "action";
+
+    public static final String CURRENT_PAGE = "current-page";
+
     public static final String ID = "id";
 
     public static final String USER_ID = "user-id";
 
     public static final String USER = "user";
+
+    public static final String USERS = "users";
 
     public static final String LOGGED_USER = "loggedUser";
 
