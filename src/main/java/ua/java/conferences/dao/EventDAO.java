@@ -15,5 +15,7 @@ public interface EventDAO extends EntityDAO<Event> {
 
     List<Event> getEventsByVisitor(long userId) throws DAOException;
 
+    List<Event> getPastEventsByVisitor(long userId) throws DAOException;
+
     List<Event> getEventsBySpeaker(long speakerId) throws DAOException;
 }

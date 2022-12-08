@@ -79,6 +79,18 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
+    public List<EventResponseDTO> viewPastUsersEvents(long userId) throws ServiceException {
+        List<EventResponseDTO> eventDTOS = new ArrayList<>();
+        try {
+            List<Event> events = eventDAO.getPastEventsByVisitor(userId);
+            events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return eventDTOS;
+    }
+
+    @Override
     public List<EventResponseDTO> viewSpeakersEvents(long speakerId) throws ServiceException {
         List<EventResponseDTO> eventDTOS = new ArrayList<>();
         try {

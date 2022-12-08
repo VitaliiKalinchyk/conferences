@@ -80,7 +80,10 @@ public class MysqlEventDAO implements EventDAO {
         return getUsersEvents(userId, GET_VISITORS_EVENTS);
     }
 
-
+    @Override
+    public List<Event> getPastEventsByVisitor(long userId) throws DAOException {
+        return getUsersEvents(userId, GET_PAST_VISITORS_EVENTS);
+    }
 
     @Override
     public List<Event> getEventsBySpeaker(long speakerId) throws DAOException {

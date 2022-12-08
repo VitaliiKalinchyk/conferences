@@ -107,6 +107,24 @@ class EventDAOTest {
     }
 
     @Test
+    void testUsersPastEvents() throws DAOException {
+        Event testEvent = getTestEvent();
+        testEvent.setDate(LocalDate.of(2010, 1, 1));
+        eventDAO.add(testEvent);
+        testEvent = eventDAO.getByTitle(getTestEvent().getTitle()).orElse(getTestEvent());
+        userDAO.add(getTestUser());
+        User testUser = userDAO.getByEmail(getTestUser().getEmail()).orElse(getTestUser());
+        userDAO.registerForEvent(testUser.getId(), testEvent.getId());
+        List<Event> events = eventDAO.getPastEventsByVisitor(testUser.getId());
+        assertTrue(events.contains(testEvent));
+        assertEquals(1, events.size());
+
+        events = eventDAO.getEventsByVisitor(testUser.getId());
+        assertFalse(events.contains(testEvent));
+        assertEquals(0, events.size());
+    }
+
+    @Test
     void testUsersEventsWrongMethod() throws DAOException {
         eventDAO.add(getTestEvent());
         Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle()).orElse(getTestEvent());

@@ -10,6 +10,7 @@ import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.implementation.EventServiceImpl;
 
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -112,6 +113,20 @@ class EventServiceTest {
         eventDTOs.add(getTestEventResponseDTO());
         when(eventDAO.getEventsByVisitor(ID)).thenReturn(events);
         assertIterableEquals(eventDTOs, eventService.viewUsersEvents(ID));
+    }
+
+    @Test
+    void viewPastUsersEvents() throws DAOException, ServiceException {
+        List<Event> events = new ArrayList<>();
+        List<EventResponseDTO> eventDTOs = new ArrayList<>();
+        Event testEvent = getTestEvent();
+        testEvent.setDate(LocalDate.of(2010, 12, 12));
+        events.add(testEvent);
+        EventResponseDTO testEventResponseDTO = getTestEventResponseDTO();
+        testEventResponseDTO.setDate("2010-12-12");
+        eventDTOs.add(testEventResponseDTO);
+        when(eventDAO.getPastEventsByVisitor(ID)).thenReturn(events);
+        assertIterableEquals(eventDTOs, eventService.viewPastUsersEvents(ID));
     }
 
     @Test
