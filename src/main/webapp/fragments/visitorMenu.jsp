@@ -21,6 +21,11 @@
                     <a class="nav-link text-decoration-underline" aria-current="page"
                        href="controller?action=view-visitors-events"><fmt:message key="view.visitors.events"/></a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link text-decoration-underline" aria-current="page"
+                       href="controller?action=view-visitors-events&passed=passed">
+                        <fmt:message key="view.visitors.past.events"/></a>
+                </li>
             </ul>
         </div>
     </div>

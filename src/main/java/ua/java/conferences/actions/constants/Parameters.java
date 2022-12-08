@@ -17,6 +17,8 @@ public final class Parameters {
     public static final String NOTIFICATION = "notification";
     public static final String IS_REGISTERED = "isRegistered";
 
+    public static final String IS_COMING = "isComing";
+
     public static final String EVENT_ID = "event-id";
     public static final String EVENT = "event";
     public static final String EVENTS = "events";
@@ -33,6 +35,7 @@ public final class Parameters {
     public static final String ACTION = "action";
     public static final String CURRENT_PAGE = "current-page";
 
+    public static final String PASSED = "passed";
 
     private Parameters() {}
 }

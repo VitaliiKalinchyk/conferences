@@ -2,11 +2,12 @@ package ua.java.conferences.actions.implementation.visitor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.*;
-import ua.java.conferences.actions.Action;
+import ua.java.conferences.actions.*;
 import ua.java.conferences.dto.response.*;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import static ua.java.conferences.actions.constants.Parameters.*;
@@ -41,6 +42,8 @@ public class ViewEventByVisitorAction implements Action {
             request.setAttribute(IS_REGISTERED, isRegistered);
             List<ReportResponseDTO> reports = reportService.viewEventsReports(eventId);
             request.setAttribute(REPORTS, reports);
+            boolean futureEvent = LocalDate.now().isBefore(LocalDate.parse(event.getDate()));
+            request.setAttribute(IS_COMING, futureEvent);
         } catch (ServiceException e) {
             logger.error(e.getMessage());
             path = ERROR_PAGE;
