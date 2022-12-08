@@ -31,4 +31,10 @@ public final class Pages {
     public static final String SEARCH_USERS_PAGE = "searchUser.jsp";
 
     public static final String USER_BY_EMAIL_PAGE = "userByAdmin.jsp";
+
+    public static final String VIEW_UP_EVENTS_BY_VISITOR_PAGE = "viewUpcomingEventsByVisitor.jsp";
+
+    public static final String VIEW_VISITORS_EVENTS_PAGE = "viewVisitorsEvents.jsp";
+
+    public static final String VIEW_EVENT_BY_VISITOR_PAGE = "viewEventByVisitor.jsp";
 }

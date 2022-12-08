@@ -3,12 +3,15 @@ package ua.java.conferences.actions.implementation.base;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.*;
 import ua.java.conferences.actions.*;
+
 import ua.java.conferences.dto.response.UserResponseDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
-import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.ActionNames.CHANGE_PASSWORD_ACTION;
 import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.actions.constants.ParameterValues.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
 public class ChangePasswordAction implements Action, ActionPost {
@@ -44,7 +47,7 @@ public class ChangePasswordAction implements Action, ActionPost {
             path = ERROR_PAGE;
         }
         request.getSession().setAttribute(CURRENT_PATH, path);
-        return "controller?action=change-password";
+        return getControllerDirective();
     }
 
     private void userServiceChangePassword(HttpServletRequest request, long id) throws ServiceException {
@@ -52,5 +55,9 @@ public class ChangePasswordAction implements Action, ActionPost {
         String password = request.getParameter(PASSWORD);
         String confirmPassword = request.getParameter(CONFIRM_PASSWORD);
         userService.changePassword(id, oldPassword, password, confirmPassword);
+    }
+
+    private static String getControllerDirective() {
+        return CONTROLLER_PAGE + "?" + ACTION + "=" + CHANGE_PASSWORD_ACTION;
     }
 }

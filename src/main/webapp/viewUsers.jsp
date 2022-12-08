@@ -28,7 +28,21 @@
         <span class="fs-4"><fmt:message key="users"/></span>
     </header>
 
-        <div class="bd-example-snippet bd-code-snippet"><div class="bd-example">
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
+        <label class="form-check-label" for="flexRadioDefault1">
+            Default radio
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" checked>
+        <label class="form-check-label" for="flexRadioDefault2">
+            Default checked radio
+        </label>
+    </div>
+
+    <div class="bd-example-snippet bd-code-snippet">
+        <div class="bd-example">
             <table class="table table-striped" aria-label="user-table">
                 <thead>
                 <tr>
@@ -37,28 +51,28 @@
                     <th scope="col"><fmt:message key="name"/></th>
                     <th scope="col"><fmt:message key="surname"/></th>
                     <th scope="col"><fmt:message key="role"/></th>
-                    <th scope="col"><fmt:message key="action1"/></th>
+                    <th scope="col"><fmt:message key="action"/></th>
                 </tr>
                 </thead>
                 <tbody>
                 <c:forEach var="user" items="${requestScope.users}">
-                <tr>
-                    <td><c:out value="${user.id}" /></td>
-                    <td><c:out value="${user.email}" /></td>
-                    <td><c:out value="${user.name}" /></td>
-                    <td><c:out value="${user.surname}" /></td>
-                    <td><fmt:message key="${user.role}" /></td>
-                    <td>
-                        <a href=controller?action=search-user&email=${user.email}><fmt:message key="edit"/></a>
-                    </td>
-                </tr>
+                    <tr>
+                        <td><c:out value="${user.id}"/></td>
+                        <td><c:out value="${user.email}"/></td>
+                        <td><c:out value="${user.name}"/></td>
+                        <td><c:out value="${user.surname}"/></td>
+                        <td><fmt:message key="${user.role}"/></td>
+                        <td>
+                            <a href=controller?action=search-user&email=${user.email}><fmt:message key="edit"/></a>
+                        </td>
+                    </tr>
                 </c:forEach>
                 </tbody>
             </table>
         </div>
-</div>
+    </div>
 
-<jsp:include page="fragments/footer.jsp"/>
+    <jsp:include page="fragments/footer.jsp"/>
 
 </body>
 </html>

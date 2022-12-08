@@ -6,13 +6,14 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <c:choose>
-  <c:when test="${sessionScope.role eq 'ADMIN'}">
-    <jsp:include page="adminMenu.jsp"/>
-  </c:when>
-  <c:when test="${sessionScope.role eq 'MODERATOR'}">
-  </c:when>
-  <c:when test="${sessionScope.role eq 'SPEAKER'}">
-  </c:when>
-  <c:when test="${sessionScope.role eq 'VISITOR'}">
-  </c:when>
+    <c:when test="${sessionScope.role eq 'ADMIN'}">
+        <jsp:include page="adminMenu.jsp"/>
+    </c:when>
+    <c:when test="${sessionScope.role eq 'MODERATOR'}">
+    </c:when>
+    <c:when test="${sessionScope.role eq 'SPEAKER'}">
+    </c:when>
+    <c:when test="${sessionScope.role eq 'VISITOR'}">
+        <jsp:include page="visitorMenu.jsp"/>
+    </c:when>
 </c:choose>

@@ -9,8 +9,8 @@ import ua.java.conferences.services.*;
 
 import java.util.List;
 
-import static ua.java.conferences.actions.constants.ActionConstants.*;
 import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
 public class ViewUsersAction implements Action {
