@@ -25,5 +25,7 @@ public interface UserService extends Service<UserResponseDTO> {
 
     void registerForEvent(long userId, long eventId) throws ServiceException;
 
+    void cancelRegistration(long userId, long eventId) throws ServiceException;
+
     boolean isRegistered(long userId, long eventId) throws ServiceException;
 }

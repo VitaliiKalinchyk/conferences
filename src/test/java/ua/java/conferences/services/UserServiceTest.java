@@ -227,6 +227,12 @@ class UserServiceTest {
     }
 
     @Test
+    void testCancelRegistration() throws DAOException {
+        doNothing().when(userDAO).cancelRegistration(isA(long.class), isA(long.class));
+        assertDoesNotThrow(() -> userService.cancelRegistration(ID, ID));
+    }
+
+    @Test
     void TestIsRegistered() throws DAOException, ServiceException {
         when(userDAO.isRegistered(ID, ID)).thenReturn(true);
         assertTrue(userService.isRegistered(ID, ID));

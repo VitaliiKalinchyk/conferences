@@ -20,5 +20,7 @@ public interface UserDAO extends EntityDAO<User> {
 
     void registerForEvent(long userId, long eventId) throws DAOException;
 
+    void cancelRegistration(long userId, long eventId) throws DAOException;
+
     boolean isRegistered(long userId, long eventId) throws DAOException;
 }

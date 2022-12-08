@@ -154,6 +154,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void cancelRegistration(long userId, long eventId) throws ServiceException {
+        try {
+            userDAO.cancelRegistration(userId, eventId);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+    }
+
+    @Override
     public boolean isRegistered(long userId, long eventId) throws ServiceException {
         boolean result;
         try {

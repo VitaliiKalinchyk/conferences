@@ -136,6 +136,16 @@ public class MysqlUserDAO implements UserDAO {
         }
     }
 
+    @Override
+    public void cancelRegistration(long userId, long eventId) throws DAOException {
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(CANCEL_REGISTRATION)) {
+            setIds(userId, eventId, preparedStatement);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
 
     @Override
     public void setUsersRole(long userId, Role role) throws DAOException {

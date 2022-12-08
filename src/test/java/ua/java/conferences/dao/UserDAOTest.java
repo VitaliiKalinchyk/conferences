@@ -132,6 +132,47 @@ class UserDAOTest {
     }
 
     @Test
+    void testCancelRegistration() throws DAOException {
+        User testUser = getTestUser();
+        userDAO.add(testUser);
+        Event testEvent = getTestEvent();
+        eventDAO.add(testEvent);
+        assertDoesNotThrow(() -> userDAO.registerForEvent(1, 1));
+
+        assertTrue(userDAO.isRegistered(1, 1));
+
+        assertDoesNotThrow(() -> userDAO.cancelRegistration(1, 1));
+        assertFalse(userDAO.isRegistered(1, 1));
+    }
+
+
+    @Test
+    void testCancelRegistrationForNoRegistered() throws DAOException {
+        User testUser = getTestUser();
+        userDAO.add(testUser);
+        Event testEvent = getTestEvent();
+        eventDAO.add(testEvent);
+
+        assertDoesNotThrow(() -> userDAO.cancelRegistration(1, 1));
+        assertFalse(userDAO.isRegistered(1, 1));
+    }
+
+    @Test
+    void testCancelRegistrationForNoEvent() throws DAOException {
+        User testUser = getTestUser();
+        userDAO.add(testUser);
+
+        assertDoesNotThrow(() -> userDAO.cancelRegistration(1, 1));
+        assertFalse(userDAO.isRegistered(1, 1));
+    }
+
+    @Test
+    void testCancelRegistrationForNoUserAndEvent() throws DAOException {
+        assertDoesNotThrow(() -> userDAO.cancelRegistration(1, 1));
+        assertFalse(userDAO.isRegistered(1, 1));
+    }
+
+    @Test
     void testRoleMethods() throws DAOException {
         User testUser = getTestUser();
         userDAO.add(testUser);
