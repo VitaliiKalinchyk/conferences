@@ -1,18 +1,14 @@
 package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.slf4j.*;
 import ua.java.conferences.actions.Action;
-import ua.java.conferences.exceptions.IncorrectFormatException;
-import ua.java.conferences.exceptions.NoSuchUserException;
-import ua.java.conferences.exceptions.ServiceException;
-import ua.java.conferences.services.ServiceFactory;
-import ua.java.conferences.services.UserService;
+import ua.java.conferences.exceptions.*;
+import ua.java.conferences.services.*;
 
-import static ua.java.conferences.actions.constants.ActionConstants.*;
-import static ua.java.conferences.actions.constants.Pages.ERROR_PAGE;
-import static ua.java.conferences.actions.constants.Pages.RESET_PASSWORD_PAGE;
+import static ua.java.conferences.actions.constants.ParameterValues.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
+import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
 public class ResetPasswordAction implements Action {

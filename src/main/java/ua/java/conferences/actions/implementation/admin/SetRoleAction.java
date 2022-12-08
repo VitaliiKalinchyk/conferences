@@ -7,8 +7,8 @@ import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
 
-import static ua.java.conferences.actions.constants.ActionConstants.*;
 import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
 public class SetRoleAction implements Action {

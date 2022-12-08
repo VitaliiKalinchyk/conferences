@@ -8,8 +8,10 @@ import ua.java.conferences.dto.request.UserRequestDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
-import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.ActionNames.*;
 import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.actions.constants.ParameterValues.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
 public class SignUpAction implements Action, ActionPost {
@@ -51,7 +53,7 @@ public class SignUpAction implements Action, ActionPost {
             path = ERROR_PAGE;
         }
         request.getSession().setAttribute(CURRENT_PATH, path);
-        return "controller?action=sign-up";
+        return getControllerDirective();
     }
 
     private UserRequestDTO getUserRequestDTO(HttpServletRequest request) {
@@ -66,5 +68,9 @@ public class SignUpAction implements Action, ActionPost {
     private static boolean isNotified(HttpServletRequest request) {
         String notification = request.getParameter(NOTIFICATION);
         return notification != null && notification.equals("on");
+    }
+
+    private static String getControllerDirective() {
+        return CONTROLLER_PAGE + "?" + ACTION + "=" + SIGN_UP_ACTION;
     }
 }

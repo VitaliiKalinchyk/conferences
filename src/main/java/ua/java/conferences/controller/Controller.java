@@ -5,9 +5,10 @@ import ua.java.conferences.actions.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import org.slf4j.*;
-import java.io.IOException;
 
-import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
+
+import java.io.IOException;
 
 public class Controller extends HttpServlet {
 

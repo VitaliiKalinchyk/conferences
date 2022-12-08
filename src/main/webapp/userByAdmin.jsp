@@ -38,15 +38,15 @@
     <form method="GET" action="controller">
         <input type="hidden" name="action" value="set-role">
         <input type="hidden" name="user-id" value=${requestScope.user.id}>
-        <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="set.role"/></button>
         <label>
-            <select name="role" class="form-select">
+            <select name="role" class="form-select mt-2">
                 <option value="VISITOR"><fmt:message key="visitor"/></option>
                 <option value="SPEAKER"><fmt:message key="speaker"/></option>
                 <option value="MODERATOR"><fmt:message key="moderator"/></option>
                 <option value="ADMIN"><fmt:message key="admin"/></option>
             </select>
         </label>
+        <button type="submit" class="btn btn-dark mt-3 mb-4"><fmt:message key="set.role"/></button>
     </form>
 
     <button class="btn btn-dark mt-4 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">

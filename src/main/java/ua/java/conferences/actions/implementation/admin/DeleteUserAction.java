@@ -6,8 +6,10 @@ import ua.java.conferences.actions.*;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
 
-import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.ActionNames.DELETE_USER_ACTION;
 import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.actions.constants.ParameterValues.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
 public class DeleteUserAction implements Action, ActionPost {
@@ -40,6 +42,10 @@ public class DeleteUserAction implements Action, ActionPost {
             path = ERROR_PAGE;
         }
         request.getSession().setAttribute(CURRENT_PATH, path);
-        return "controller?action=delete-user";
+        return getControllerDirective();
+    }
+
+    private static String getControllerDirective() {
+        return CONTROLLER_PAGE + "?" + ACTION + "=" + DELETE_USER_ACTION;
     }
 }
