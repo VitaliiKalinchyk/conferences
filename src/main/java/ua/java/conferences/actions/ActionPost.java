@@ -3,7 +3,7 @@ package ua.java.conferences.actions;
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.dto.request.UserRequestDTO;
 
-import static ua.java.conferences.actions.constants.ActionConstants.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
 
 public interface ActionPost {
 

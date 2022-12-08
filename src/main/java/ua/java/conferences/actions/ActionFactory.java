@@ -2,6 +2,7 @@ package ua.java.conferences.actions;
 
 import ua.java.conferences.actions.implementation.admin.*;
 import ua.java.conferences.actions.implementation.base.*;
+import ua.java.conferences.actions.implementation.visitor.*;
 
 import java.util.*;
 
@@ -28,6 +29,12 @@ public final class ActionFactory {
         ACTION_MAP.put(SEARCH_USER_ACTION, new SearchUserAction());
         ACTION_MAP.put(DELETE_USER_ACTION, new DeleteUserAction());
         ACTION_MAP.put(SET_ROLE_ACTION, new SetRoleAction());
+
+        ACTION_MAP.put(VIEW_UP_EVENTS_BY_VISITOR_ACTION, new ViewUpEventsByVisitorAction());
+        ACTION_MAP.put(VIEW_VISITORS_EVENTS_ACTION, new ViewVisitorsEventsAction());
+        ACTION_MAP.put(VIEW_EVENT_BY_VISITOR_ACTION, new ViewEventByVisitorAction());
+        ACTION_MAP.put(REGISTER_FOR_EVENT_ACTION, new RegisterForEventAction());
+        ACTION_MAP.put(CANCEL_REGISTRATION_ACTION, new CancelRegistrationAction());
 
     }
 

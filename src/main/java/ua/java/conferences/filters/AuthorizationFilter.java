@@ -6,8 +6,9 @@ import ua.java.conferences.filters.domains.*;
 
 import java.io.IOException;
 
-import static ua.java.conferences.actions.constants.ActionConstants.*;
 import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.actions.constants.ParameterValues.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class AuthorizationFilter implements Filter {
 
