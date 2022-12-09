@@ -1,6 +1,5 @@
 package ua.java.conferences.dao.mysql.constants;
 
-
 public final class EventSQLQueries {
 
     private EventSQLQueries() {}

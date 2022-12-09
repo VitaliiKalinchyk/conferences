@@ -18,7 +18,7 @@ public class MysqlUserDAO implements UserDAO {
     public void add(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_USER)) {
-            setStatementFields(user, preparedStatement);
+            setStatementFieldsForAddMethod(user, preparedStatement);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -188,7 +188,7 @@ public class MysqlUserDAO implements UserDAO {
                 .get();
     }
 
-    private void setStatementFields(User user, PreparedStatement preparedStatement) throws SQLException {
+    private void setStatementFieldsForAddMethod(User user, PreparedStatement preparedStatement) throws SQLException {
         int k = 0;
         preparedStatement.setString(++k, user.getEmail());
         preparedStatement.setString(++k, user.getPassword());

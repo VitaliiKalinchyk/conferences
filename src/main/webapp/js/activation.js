@@ -4,7 +4,5 @@ document.querySelectorAll('li > a').forEach((nav) => {
   if (nav.pathname === window.location.pathname ||
       window.location.pathname === startPath && nav.pathname === index) {
     nav.classList.add('active')
-  } else {
-    nav.classList.remove('active')
   }
 })

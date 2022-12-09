@@ -3,8 +3,10 @@ package ua.java.conferences.dao.mysql;
 import ua.java.conferences.dao.*;
 
 public class MysqlDAOFactory extends DAOFactory {
+
     private EventDAO eventDAO;
     private ReportDAO reportDAO;
+
     private UserDAO userDAO;
 
     public EventDAO getEventDAO() {
@@ -25,7 +27,6 @@ public class MysqlDAOFactory extends DAOFactory {
         if (userDAO == null) {
             userDAO = new MysqlUserDAO();
         }
-
         return userDAO;
     }
 }

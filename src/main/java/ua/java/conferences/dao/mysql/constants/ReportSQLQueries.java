@@ -2,7 +2,6 @@ package ua.java.conferences.dao.mysql.constants;
 
 public final class ReportSQLQueries {
 
-
     private ReportSQLQueries() {}
 
     public static final String ADD_REPORT = "INSERT INTO report (topic, event_id, user_id) VALUES (?, ?, ?)";
