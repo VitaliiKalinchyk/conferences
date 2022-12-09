@@ -23,7 +23,6 @@ public class SearchUserAction implements Action {
 
     @Override
     public String executeGet(HttpServletRequest request) {
-
         String path = USER_BY_EMAIL_PAGE;
         String email = request.getParameter(EMAIL);
         try {
