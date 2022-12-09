@@ -26,11 +26,15 @@ public class SearchUserAction implements Action {
         String path = USER_BY_EMAIL_PAGE;
         String email = request.getParameter(EMAIL);
         try {
-            UserResponseDTO user = userService.searchUser(email);
-            request.setAttribute(USER, user);
-        } catch (NoSuchUserException e) {
+            if (email == null) {
+                path = SEARCH_USERS_PAGE;
+            } else {
+                UserResponseDTO user = userService.searchUser(email);
+                request.setAttribute(USER, user);
+            }
+        } catch (NoSuchUserException | IncorrectFormatException e) {
             request.setAttribute(ERROR, e.getMessage());
-            path = request.getParameter(CURRENT_PAGE);
+            path = SEARCH_USERS_PAGE;
         } catch (ServiceException e) {
             logger.error(e.getMessage());
             path = ERROR_PAGE;

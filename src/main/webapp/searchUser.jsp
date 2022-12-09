@@ -30,7 +30,6 @@
 
   <form method="GET" action="controller">
     <input type="hidden" name="action" value="search-user">
-    <input type="hidden" name="current-page" value="searchUser.jsp">
 
     <div class="form-group">
       <c:if test="${not empty requestScope.message}">
