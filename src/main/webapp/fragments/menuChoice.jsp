@@ -12,6 +12,7 @@
     <c:when test="${sessionScope.role eq 'MODERATOR'}">
     </c:when>
     <c:when test="${sessionScope.role eq 'SPEAKER'}">
+        <jsp:include page="speakerMenu.jsp"/>
     </c:when>
     <c:when test="${sessionScope.role eq 'VISITOR'}">
         <jsp:include page="visitorMenu.jsp"/>

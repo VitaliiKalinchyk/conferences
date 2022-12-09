@@ -34,7 +34,12 @@ public final class EventSQLQueries {
             "SELECT * FROM event JOIN user_has_event ON id=user_has_event.event_id WHERE user_id=? AND " + PASSED;
 
     public static final String GET_SPEAKERS_EVENTS =
-            "SELECT * FROM event JOIN report ON event.id=report.event_id WHERE user_id=? AND " + UPCOMING;
+            "SELECT event.id, title, date, location, description FROM event JOIN report " +
+                    "ON event.id=report.event_id WHERE user_id=? AND " + UPCOMING + " GROUP BY event.id";
+
+    public static final String GET_PAST_SPEAKERS_EVENTS =
+            "SELECT event.id, title, date, location, description FROM event JOIN report " +
+                    "ON event.id=report.event_id WHERE user_id=? AND " + PASSED + " GROUP BY event.id";
 
     public static final String EDIT_EVENT = "UPDATE event SET title=?, date=?, location=?, description=? WHERE id=?";
 

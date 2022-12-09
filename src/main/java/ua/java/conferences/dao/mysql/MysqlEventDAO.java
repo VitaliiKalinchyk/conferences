@@ -91,6 +91,11 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     @Override
+    public List<Event> getPastEventsBySpeaker(long speakerId) throws DAOException {
+        return getUsersEvents(speakerId, GET_PAST_SPEAKERS_EVENTS);
+    }
+
+    @Override
     public void update(Event event) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_EVENT)) {

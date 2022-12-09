@@ -47,6 +47,8 @@ public final class DomainActionsSets {
 
     static {
         SPEAKER_ACTIONS.addAll(LOGGED_USER_ACTIONS);
+        SPEAKER_ACTIONS.add(VIEW_SPEAKERS_EVENTS_ACTION);
+        SPEAKER_ACTIONS.add(VIEW_EVENT_BY_SPEAKER_ACTION);
     }
 
     static {

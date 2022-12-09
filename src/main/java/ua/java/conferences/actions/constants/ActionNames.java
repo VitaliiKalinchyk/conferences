@@ -37,4 +37,8 @@ public final class ActionNames {
     public static final String REGISTER_FOR_EVENT_ACTION = "register-for-event";
 
     public static final String CANCEL_REGISTRATION_ACTION = "cancel-registration";
+
+    public static final String VIEW_SPEAKERS_EVENTS_ACTION = "view-speakers-events";
+
+    public static final String VIEW_EVENT_BY_SPEAKER_ACTION = "view-event-by-speaker";
 }

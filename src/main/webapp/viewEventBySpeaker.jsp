@@ -32,7 +32,6 @@
         <c:when test="${not empty requestScope.error}">
             <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
         </c:when>
-
         <c:otherwise>
 
             <p class="fs-6"><fmt:message key="date"/>: ${requestScope.event.date} </p>

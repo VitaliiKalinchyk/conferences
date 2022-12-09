@@ -140,6 +140,20 @@ class EventServiceTest {
     }
 
     @Test
+    void viewSpeakersPastEvents() throws DAOException, ServiceException {
+        List<Event> events = new ArrayList<>();
+        List<EventResponseDTO> eventDTOs = new ArrayList<>();
+        Event testEvent = getTestEvent();
+        testEvent.setDate(LocalDate.of(2010, 12, 12));
+        events.add(testEvent);
+        EventResponseDTO testEventResponseDTO = getTestEventResponseDTO();
+        testEventResponseDTO.setDate("2010-12-12");
+        eventDTOs.add(testEventResponseDTO);
+        when(eventDAO.getPastEventsBySpeaker(ID)).thenReturn(events);
+        assertIterableEquals(eventDTOs, eventService.viewSpeakersPastEvents(ID));
+    }
+
+    @Test
     void viewSortedEventsByUser() throws DAOException, ServiceException {
         List<Event> events = new ArrayList<>();
         List<EventResponseDTO> eventDTOs = new ArrayList<>();

@@ -18,6 +18,8 @@ public interface EventService extends Service<EventResponseDTO> {
 
     List<EventResponseDTO> viewSpeakersEvents(long speakerId) throws ServiceException;
 
+    List<EventResponseDTO> viewSpeakersPastEvents(long speakerId) throws ServiceException;
+
     List<EventResponseDTO> viewSortedEventsByUser(String sortField, String order) throws ServiceException;
 
     List<EventResponseDTO> viewSortedEventsByModerator(String filter, String sortField, String order) throws ServiceException;

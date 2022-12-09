@@ -30,7 +30,7 @@
 
     <c:choose>
         <c:when test="${empty requestScope.events}">
-            <p class="fs-6"><fmt:message key="zero.events"/></p>
+            <p class="fs-6"><fmt:message key="zero.speaker.events"/></p>
         </c:when>
         <c:otherwise>
             <div class="bd-example-snippet bd-code-snippet">
@@ -51,7 +51,7 @@
                                 <td><c:out value="${event.date}"/></td>
                                 <td><c:out value="${event.location}"/></td>
                                 <td>
-                                    <a href=controller?action=view-event-by-visitor&event-id=${event.id}><fmt:message
+                                    <a href=controller?action=view-event-by-speaker&event-id=${event.id}><fmt:message
                                             key="view"/></a>
                                 </td>
                             </tr>

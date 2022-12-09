@@ -2,6 +2,7 @@ package ua.java.conferences.actions;
 
 import ua.java.conferences.actions.implementation.admin.*;
 import ua.java.conferences.actions.implementation.base.*;
+import ua.java.conferences.actions.implementation.speaker.*;
 import ua.java.conferences.actions.implementation.visitor.*;
 
 import java.util.*;
@@ -35,6 +36,9 @@ public final class ActionFactory {
         ACTION_MAP.put(VIEW_EVENT_BY_VISITOR_ACTION, new ViewEventByVisitorAction());
         ACTION_MAP.put(REGISTER_FOR_EVENT_ACTION, new RegisterForEventAction());
         ACTION_MAP.put(CANCEL_REGISTRATION_ACTION, new CancelRegistrationAction());
+
+        ACTION_MAP.put(VIEW_SPEAKERS_EVENTS_ACTION, new ViewSpeakersEventsAction());
+        ACTION_MAP.put(VIEW_EVENT_BY_SPEAKER_ACTION, new ViewEventBySpeakerAction());
 
     }
 

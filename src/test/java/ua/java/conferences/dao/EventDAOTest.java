@@ -138,6 +138,22 @@ class EventDAOTest {
 
     @Test
     void testSpeakersEvents() throws DAOException {
+        Event testEvent = getTestEvent();
+        testEvent.setDate(LocalDate.of(2010, 1, 1));
+        eventDAO.add(testEvent);
+        userDAO.add(getTestUser());
+        User testUser = userDAO.getByEmail(getTestUser().getEmail()).orElse(getTestUser());
+        reportDAO.add(getTestReport());
+        Report testReport = reportDAO.getById(1).orElse(getTestReport());
+        reportDAO.setSpeaker(testReport.getId(), testUser.getId());
+        List<Event> events = eventDAO.getPastEventsBySpeaker(testUser.getId());
+        assertTrue(events.contains(testEvent));
+        assertEquals(1, events.size());
+    }
+
+
+    @Test
+    void testSpeakersPastEvents() throws DAOException {
         eventDAO.add(getTestEvent());
         Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle()).orElse(getTestEvent());
         userDAO.add(getTestUser());
@@ -148,6 +164,10 @@ class EventDAOTest {
         List<Event> events = eventDAO.getEventsBySpeaker(testUser.getId());
         assertTrue(events.contains(testEvent));
         assertEquals(1, events.size());
+
+        events = eventDAO.getEventsByVisitor(testUser.getId());
+        assertFalse(events.contains(testEvent));
+        assertEquals(0, events.size());
     }
 
     @Test
