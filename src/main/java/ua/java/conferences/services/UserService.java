@@ -21,11 +21,11 @@ public interface UserService extends Service<UserResponseDTO> {
 
     void changePassword(long userId, String oldPassword, String newPassword, String confirmPassword) throws ServiceException;
 
-    void setRole(long userId, int roleId) throws ServiceException;
+    void setRole(String userIdString, int roleId) throws ServiceException;
 
-    void registerForEvent(long userId, long eventId) throws ServiceException;
+    void registerForEvent(long userId, String eventIdString) throws ServiceException;
 
-    void cancelRegistration(long userId, long eventId) throws ServiceException;
+    void cancelRegistration(long userId, String eventIdString) throws ServiceException;
 
-    boolean isRegistered(long userId, long eventId) throws ServiceException;
+    boolean isRegistered(long userIdString, String eventIdString) throws ServiceException;
 }

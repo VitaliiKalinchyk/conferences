@@ -17,7 +17,6 @@ import static ua.java.conferences.utils.ValidatorUtil.*;
 
 public class EventServiceImpl implements EventService {
 
-
     private final EventDAO eventDAO;
 
     public EventServiceImpl(EventDAO eventDAO) {
@@ -37,13 +36,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponseDTO view(long eventId) throws ServiceException {
+    public EventResponseDTO view(String eventIdString) throws ServiceException {
+        long eventId = getEventId(eventIdString);
         EventResponseDTO eventDTO;
         try {
-            Event event = eventDAO.getById(eventId).orElse(null);
-            if (event == null) {
-                throw new NoSuchEventException();
-            }
+            Event event = eventDAO.getById(eventId).orElseThrow(NoSuchEventException::new);
             eventDTO = convertEventToDTO(event);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -55,10 +52,7 @@ public class EventServiceImpl implements EventService {
     public EventResponseDTO searchEvent(String title) throws ServiceException {
         EventResponseDTO eventDTO;
         try {
-            Event event = eventDAO.getByTitle(title).orElse(null);
-            if (event == null) {
-                throw new NoSuchEventException();
-            }
+            Event event = eventDAO.getByTitle(title).orElseThrow(NoSuchEventException::new);
             eventDTO = convertEventToDTO(event);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -72,7 +66,7 @@ public class EventServiceImpl implements EventService {
         try {
             List<Event> events = eventDAO.getEventsByVisitor(userId);
             events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
-        } catch (DAOException e) {
+        } catch (DAOException | NumberFormatException e) {
             throw new ServiceException(e);
         }
         return eventDTOS;
@@ -117,6 +111,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public List<EventResponseDTO> viewSortedEventsByUser(String sortField, String order) throws ServiceException {
         List<EventResponseDTO> eventDTOS = new ArrayList<>();
+        checkString(sortField, order);
         try {
             List<Event> events = eventDAO.getSortedEvents(UPCOMING, sortField, order);
             events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
@@ -127,8 +122,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventResponseDTO> viewSortedEventsByModerator(String filter, String sortField, String order) throws ServiceException {
+    public List<EventResponseDTO> viewSortedEventsByModerator(String filter, String sortField, String order)
+            throws ServiceException {
         List<EventResponseDTO> eventDTOS = new ArrayList<>();
+        checkString(filter, sortField, order);
         try {
             List<Event> events = eventDAO.getSortedEvents(filter, sortField, order);
             events.forEach(event -> eventDTOS.add(convertEventToFullDTO(event)));
@@ -151,7 +148,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void setVisitorsCount(long eventId, int visitorsCount) throws ServiceException {
+    public void setVisitorsCount(String eventIdString, String visitorsCountString) throws ServiceException {
+        long eventId = getEventId(eventIdString);
+        int visitorsCount = getInt(visitorsCountString);
         try {
             eventDAO.setVisitorsCount(eventId, visitorsCount);
         } catch (DAOException e) {
@@ -160,7 +159,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void delete(long eventId) throws ServiceException {
+    public void delete(String eventIdString) throws ServiceException {
+        long eventId = getEventId(eventIdString);
         try {
             eventDAO.delete(eventId);
         } catch (DAOException e) {

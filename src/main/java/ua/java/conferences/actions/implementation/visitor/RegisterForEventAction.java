@@ -31,7 +31,7 @@ public class RegisterForEventAction implements Action, ActionPost {
     public String executePost(HttpServletRequest request) {
         String path;
         long userId = ((UserResponseDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
-        long eventId = Long.parseLong(request.getParameter(EVENT_ID));
+        String eventId = request.getParameter(EVENT_ID);
         try {
             userService.registerForEvent(userId, eventId);
             return getRedirectControllerDirective(eventId);
@@ -42,7 +42,7 @@ public class RegisterForEventAction implements Action, ActionPost {
         return path;
     }
 
-    private String getRedirectControllerDirective(long eventId) {
+    private String getRedirectControllerDirective(String eventId) {
         return CONTROLLER_PAGE + "?" + ACTION + "=" + VIEW_EVENT_BY_VISITOR_ACTION + "&" + EVENT_ID + "=" + eventId;
     }
 }

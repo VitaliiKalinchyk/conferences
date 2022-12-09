@@ -7,12 +7,15 @@ public final class ParameterValues {
 
     public static final String SUCCEED_REGISTER = "succeed.registered";
 
+    public static final String SUCCEED_ADD = "succeed.add";
+
     public static final String SUCCEED_UPDATE = "succeed.update";
 
     public static final String SUCCEED_DELETE = "succeed.delete";
 
     public static final String ACCESS_DENIED = "access.denied";
 
+    public static final String OFFER_FORBIDDEN = "offer.forbidden";
 
     public static final String ID = "id";
 

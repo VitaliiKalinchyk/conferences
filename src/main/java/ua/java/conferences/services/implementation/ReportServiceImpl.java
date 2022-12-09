@@ -33,13 +33,11 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportResponseDTO view(long reportId) throws ServiceException {
+    public ReportResponseDTO view(String reportIdString) throws ServiceException {
         ReportResponseDTO reportDTO;
+        long reportId = getReportId(reportIdString);
         try {
-            Report report = reportDAO.getById(reportId).orElse(null);
-            if (report == null) {
-                throw new NoSuchReportException();
-            }
+            Report report = reportDAO.getById(reportId).orElseThrow(NoSuchReportException::new);
             reportDTO = convertReportToDTO(report);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -48,9 +46,10 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ReportResponseDTO> viewEventsReports(long eventId) throws ServiceException {
+    public List<ReportResponseDTO> viewEventsReports(String eventIdString) throws ServiceException {
         List<ReportResponseDTO> reportDTOS = new ArrayList<>();
         try {
+            long eventId = getLong(eventIdString);
             List<Report> reports = reportDAO.getEventsReports(eventId);
             reports.forEach(report -> reportDTOS.add(convertReportToDTO(report)));
         } catch (DAOException e) {
@@ -60,9 +59,10 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ReportResponseDTO> viewSpeakersReports(long speakerId) throws ServiceException {
+    public List<ReportResponseDTO> viewSpeakersReports(String speakerIdString) throws ServiceException {
         List<ReportResponseDTO> reportDTOS = new ArrayList<>();
         try {
+            long speakerId = getLong(speakerIdString);
             List<Report> reports = reportDAO.getSpeakersReports(speakerId);
             reports.forEach(report -> reportDTOS.add(convertSpeakersReportToDTO(report)));
         } catch (DAOException e) {
@@ -83,8 +83,10 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void setSpeaker(long reportId, long speakerId) throws ServiceException {
+    public void setSpeaker(String reportIdString, String speakerIdString) throws ServiceException {
+        long reportId = getReportId(reportIdString);
         try {
+            long speakerId = getLong(speakerIdString);
             reportDAO.setSpeaker(reportId, speakerId);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -92,7 +94,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void deleteSpeaker(long reportId) throws ServiceException {
+    public void deleteSpeaker(String reportIdString) throws ServiceException {
+        long reportId = getReportId(reportIdString);
         try {
             reportDAO.deleteSpeaker(reportId);
         } catch (DAOException e) {
@@ -101,7 +104,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void delete(long reportId) throws ServiceException {
+    public void delete(String reportIdString) throws ServiceException {
+        long reportId = getReportId(reportIdString);
         try {
             reportDAO.delete(reportId);
         } catch (DAOException e) {

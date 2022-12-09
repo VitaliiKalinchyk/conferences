@@ -33,9 +33,8 @@ public class DeleteUserAction implements Action, ActionPost {
     @Override
     public String executePost(HttpServletRequest request) {
         String path = SEARCH_USERS_PAGE;
-        long id = Long.parseLong(request.getParameter(USER_ID));
         try {
-            userService.delete(id);
+            userService.delete(request.getParameter(USER_ID));
             request.getSession().setAttribute(MESSAGE, SUCCEED_DELETE);
         } catch (ServiceException e) {
             logger.error(e.getMessage());

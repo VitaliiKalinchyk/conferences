@@ -41,4 +41,6 @@ public final class Pages {
     public static final String VIEW_SPEAKERS_EVENTS_PAGE = "viewSpeakersEvents.jsp";
 
     public static final String VIEW_EVENT_BY_SPEAKER_PAGE = "viewEventBySpeaker.jsp";
+
+    public static final String OFFER_REPORT_PAGE = "offerReportBySpeaker.jsp";
 }

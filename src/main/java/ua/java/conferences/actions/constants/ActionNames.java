@@ -41,4 +41,6 @@ public final class ActionNames {
     public static final String VIEW_SPEAKERS_EVENTS_ACTION = "view-speakers-events";
 
     public static final String VIEW_EVENT_BY_SPEAKER_ACTION = "view-event-by-speaker";
+
+    public static final String OFFER_REPORT_ACTION = "offer-report";
 }

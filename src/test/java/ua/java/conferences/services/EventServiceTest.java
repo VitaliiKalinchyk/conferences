@@ -84,13 +84,13 @@ class EventServiceTest {
     @Test
     void testViewEvent() throws DAOException, ServiceException {
         when(eventDAO.getById(ID)).thenReturn(Optional.of(getTestEvent()));
-        assertEquals(getTestEventResponseDTO(), eventService.view(ID));
+        assertEquals(getTestEventResponseDTO(), eventService.view(String.valueOf(ID)));
     }
 
     @Test
     void testViewNoEvent() throws DAOException {
         when(eventDAO.getById(ID)).thenReturn(Optional.empty());
-        assertThrows(NoSuchEventException.class,() -> eventService.view(ID));
+        assertThrows(NoSuchEventException.class,() -> eventService.view(String.valueOf(ID)));
     }
 
     @Test
@@ -182,13 +182,13 @@ class EventServiceTest {
     @Test
     void setVisitorsCount() throws DAOException {
         doNothing().when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
-        assertDoesNotThrow(() -> eventService.setVisitorsCount(ID, VISITORS));
+        assertDoesNotThrow(() -> eventService.setVisitorsCount(String.valueOf(ID), String.valueOf(VISITORS)));
     }
 
     @Test
     void deleteEvent() throws DAOException {
         doNothing().when(eventDAO).delete(isA(long.class));
-        assertDoesNotThrow(() -> eventService.delete(ID));
+        assertDoesNotThrow(() -> eventService.delete(String.valueOf(ID)));
     }
 
     private EventRequestDTO getTestEventRequestDTO() {

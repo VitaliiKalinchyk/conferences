@@ -3,7 +3,6 @@ package ua.java.conferences.actions.implementation.base;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.*;
 import ua.java.conferences.actions.*;
-
 import ua.java.conferences.dto.response.UserResponseDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
@@ -36,9 +35,8 @@ public class ChangePasswordAction implements Action, ActionPost {
     @Override
     public String executePost(HttpServletRequest request) {
         String path = CHANGE_PASSWORD_PAGE;
-        long id = ((UserResponseDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         try {
-            userServiceChangePassword(request, id);
+            userServiceChangePassword(request);
             request.getSession().setAttribute(MESSAGE, SUCCEED_UPDATE);
         } catch (IncorrectFormatException | IncorrectPasswordException | NoSuchUserException | PasswordMatchingException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
@@ -50,7 +48,8 @@ public class ChangePasswordAction implements Action, ActionPost {
         return getControllerDirective();
     }
 
-    private void userServiceChangePassword(HttpServletRequest request, long id) throws ServiceException {
+    private void userServiceChangePassword(HttpServletRequest request) throws ServiceException {
+        long id = ((UserResponseDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         String oldPassword = request.getParameter(OLD_PASSWORD);
         String password = request.getParameter(PASSWORD);
         String confirmPassword = request.getParameter(CONFIRM_PASSWORD);

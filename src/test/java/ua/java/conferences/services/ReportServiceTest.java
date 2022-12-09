@@ -40,13 +40,13 @@ class ReportServiceTest {
     @Test
     void testViewReport() throws DAOException, ServiceException {
         when(reportDAO.getById(ID)).thenReturn(Optional.of(getTestReport()));
-        assertEquals(getTestReportResponseDTO(), reportService.view(ID));
+        assertEquals(getTestReportResponseDTO(), reportService.view(String.valueOf(ID)));
     }
 
     @Test
     void testViewNoReport() throws DAOException {
         when(reportDAO.getById(ID)).thenReturn(Optional.empty());
-        assertThrows(NoSuchReportException.class,() -> reportService.view(ID));
+        assertThrows(NoSuchReportException.class,() -> reportService.view(String.valueOf(ID)));
     }
 
     @Test
@@ -56,7 +56,7 @@ class ReportServiceTest {
         reports.add(getTestReport());
         reportDTOs.add(getTestReportResponseDTO());
         when(reportDAO.getEventsReports(ID)).thenReturn(reports);
-        assertIterableEquals(reportDTOs, reportService.viewEventsReports(ID));
+        assertIterableEquals(reportDTOs, reportService.viewEventsReports(String.valueOf(ID)));
     }
 
     @Test
@@ -66,7 +66,7 @@ class ReportServiceTest {
         reports.add(getTestReport());
         reportDTOs.add(getTestSpeakerReportResponseDTO());
         when(reportDAO.getSpeakersReports(ID)).thenReturn(reports);
-        assertIterableEquals(reportDTOs, reportService.viewSpeakersReports(ID));
+        assertIterableEquals(reportDTOs, reportService.viewSpeakersReports(String.valueOf(ID)));
     }
 
     @Test
@@ -78,19 +78,19 @@ class ReportServiceTest {
     @Test
     void testSetSpeaker() throws DAOException {
         doNothing().when(reportDAO).setSpeaker(isA(long.class), isA(long.class));
-        assertDoesNotThrow(() -> reportService.setSpeaker(ID, ID));
+        assertDoesNotThrow(() -> reportService.setSpeaker(String.valueOf(ID), String.valueOf(ID)));
     }
 
     @Test
     void testDeleteSpeaker() throws DAOException {
         doNothing().when(reportDAO).deleteSpeaker(isA(long.class));
-        assertDoesNotThrow(() -> reportService.deleteSpeaker(ID));
+        assertDoesNotThrow(() -> reportService.deleteSpeaker(String.valueOf(ID)));
     }
 
     @Test
     void testDeleteReport() throws DAOException {
         doNothing().when(reportDAO).delete(isA(long.class));
-        assertDoesNotThrow(() -> reportService.delete(ID));
+        assertDoesNotThrow(() -> reportService.delete(String.valueOf(ID)));
     }
 
     private ReportRequestDTO getTestReportRequestDTO() {

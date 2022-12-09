@@ -72,11 +72,11 @@
                     </table>
                 </div>
             </div>
-
         </c:otherwise>
     </c:choose>
+</div>
 
-    <jsp:include page="fragments/footer.jsp"/>
+<jsp:include page="fragments/footer.jsp"/>
 
 </body>
 </html>

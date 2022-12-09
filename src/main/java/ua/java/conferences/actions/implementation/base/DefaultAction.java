@@ -1,8 +1,7 @@
 package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
-import ua.java.conferences.actions.Action;
-import ua.java.conferences.actions.ActionPost;
+import ua.java.conferences.actions.*;
 
 import static ua.java.conferences.actions.constants.Pages.INDEX_PAGE;
 

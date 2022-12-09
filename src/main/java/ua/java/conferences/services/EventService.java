@@ -26,5 +26,5 @@ public interface EventService extends Service<EventResponseDTO> {
 
     EventResponseDTO editEvent(EventRequestDTO eventDTO) throws ServiceException;
 
-    void setVisitorsCount(long eventId, int visitorsCount) throws ServiceException;
+    void setVisitorsCount(String eventIdString, String visitorsCountString) throws ServiceException;
 }

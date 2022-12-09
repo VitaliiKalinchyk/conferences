@@ -46,7 +46,9 @@
                         <td><c:out value="${event.date}"/></td>
                         <td><c:out value="${event.location}"/></td>
                         <td>
-                            <a href=controller?action=view-event-by-visitor&event-id=${event.id}><fmt:message key="view"/></a>
+                            <a class="link-dark" href=controller?action=view-event-by-visitor&event-id=${event.id}>
+                                <fmt:message key="view"/>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -54,8 +56,9 @@
             </table>
         </div>
     </div>
+</div>
 
-    <jsp:include page="fragments/footer.jsp"/>
+<jsp:include page="fragments/footer.jsp"/>
 
 </body>
 </html>

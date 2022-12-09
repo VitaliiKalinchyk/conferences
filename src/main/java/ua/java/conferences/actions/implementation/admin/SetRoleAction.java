@@ -24,7 +24,7 @@ public class SetRoleAction implements Action {
     @Override
     public String executeGet(HttpServletRequest request) {
         String path = USER_BY_EMAIL_PAGE;
-        long userId = Long.parseLong(request.getParameter(USER_ID));
+        String userId = request.getParameter(USER_ID);
         int roleId = Role.valueOf(request.getParameter(ROLE)).getValue();
         try {
             userService.setRole(userId, roleId);

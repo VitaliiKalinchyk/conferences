@@ -15,6 +15,12 @@ public class ReportRequestDTO implements Serializable {
 
     private long eventId;
 
+    public ReportRequestDTO(String topic, long speakerId, long eventId) {
+        setTopic(topic);
+        setSpeakerId(speakerId);
+        setEventId(eventId);
+    }
+
     public ReportRequestDTO(long id, String topic, long speakerId, long eventId) {
         setId(id);
         setTopic(topic);

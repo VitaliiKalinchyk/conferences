@@ -32,29 +32,38 @@
         <c:when test="${not empty requestScope.error}">
             <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
         </c:when>
-        <c:otherwise>
 
+        <c:otherwise>
             <p class="fs-6"><fmt:message key="date"/>: ${requestScope.event.date} </p>
             <p class="fs-6"><fmt:message key="location"/>: ${requestScope.event.location} </p>
             <p class="fs-6"><fmt:message key="description"/>: ${requestScope.event.description} </p>
 
             <c:if test="${requestScope.isComing}">
-                <jsp:include page="fragments/registerOrCancelRegistration.jsp"/>
+                <a class="btn btn-dark mt-4 mb-4"
+                   href="offerReportBySpeaker.jsp?title=${requestScope.event.title}&id=${requestScope.event.id}">
+                    <fmt:message key="offer.report"/>
+                </a>
             </c:if>
 
             <div class="bd-example-snippet bd-code-snippet">
                 <div class="bd-example">
                     <table class="table table-striped" aria-label="report-table">
+
                         <thead>
                         <tr>
                             <th scope="col"><fmt:message key="topic.name"/></th>
                             <th scope="col"><fmt:message key="speaker.name"/></th>
+                            <c:if test="${requestScope.isComing}">
+                                <th scope="col"><fmt:message key="action"/></th>
+                            </c:if>
                         </tr>
                         </thead>
+
                         <tbody>
                         <c:forEach var="report" items="${requestScope.reports}">
                             <tr>
                                 <td><c:out value="${report.topic}"/></td>
+
                                 <td>
                                     <c:choose>
                                         <c:when test="${empty report.speakerName}">
@@ -65,17 +74,38 @@
                                         </c:otherwise>
                                     </c:choose>
                                 </td>
+
+                                <td>
+                                    <c:if test="${requestScope.isComing}">
+                                        <c:choose>
+                                            <c:when test="${empty report.speakerName}">
+                                                <button class="btn btn-dark mt-0 mb-0" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModalDefault1">
+                                                    <fmt:message key="set.for.report"/>
+                                                </button>
+                                            </c:when>
+                                            <c:when test="${report.speakerId eq sessionScope.loggedUser.id}">
+                                                <button class="btn btn-dark mt-0 mb-0" data-bs-toggle="modal"
+                                                        data-bs-target="#exampleModalDefault2">
+                                                    <fmt:message key="decline.report"/>
+                                                </button>
+                                            </c:when>
+                                        </c:choose>
+                                    </c:if>
+                                </td>
                             </tr>
                         </c:forEach>
                         </tbody>
                     </table>
                 </div>
             </div>
-
         </c:otherwise>
     </c:choose>
+</div>
 
-    <jsp:include page="fragments/footer.jsp"/>
+<jsp:include page="fragments/footer.jsp"/>
+
+<jsp:include page="fragments/setOrRemoveModalsBySpeaker.jsp"/>
 
 </body>
 </html>

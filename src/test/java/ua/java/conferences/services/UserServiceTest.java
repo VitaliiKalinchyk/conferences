@@ -124,13 +124,13 @@ class UserServiceTest {
     @Test
     void testViewProfile() throws DAOException, ServiceException {
         when(userDAO.getById(ID)).thenReturn(Optional.of(getTestUser()));
-        assertEquals(getTestUserResponseDTO(), userService.view(ID));
+        assertEquals(getTestUserResponseDTO(), userService.view(String.valueOf(ID)));
     }
 
     @Test
     void testViewProfileNoUser() throws DAOException {
         when(userDAO.getById(ID)).thenReturn(Optional.empty());
-        assertThrows(NoSuchUserException.class,() -> userService.view(ID));
+        assertThrows(NoSuchUserException.class,() -> userService.view(String.valueOf(ID)));
     }
 
     @Test
@@ -186,7 +186,8 @@ class UserServiceTest {
         User testUser = getTestUser();
         testUser.setPassword(encode(PASSWORD));
         when(userDAO.getById(ID)).thenReturn(Optional.of(testUser));
-        assertThrows(IncorrectFormatException.class, () -> userService.changePassword(ID, PASSWORD, WRONG_PASSWORD, WRONG_PASSWORD));
+        assertThrows(IncorrectFormatException.class,
+                () -> userService.changePassword(ID, PASSWORD, WRONG_PASSWORD, WRONG_PASSWORD));
     }
 
     @Test
@@ -195,7 +196,8 @@ class UserServiceTest {
         User testUser = getTestUser();
         testUser.setPassword(encode(PASSWORD));
         when(userDAO.getById(ID)).thenReturn(Optional.of(testUser));
-        assertThrows(IncorrectPasswordException.class, () -> userService.changePassword(ID, WRONG_PASSWORD, PASSWORD, PASSWORD));
+        assertThrows(IncorrectPasswordException.class,
+                () -> userService.changePassword(ID, WRONG_PASSWORD, PASSWORD, PASSWORD));
     }
 
     @Test
@@ -204,44 +206,45 @@ class UserServiceTest {
         User testUser = getTestUser();
         testUser.setPassword(encode(PASSWORD));
         when(userDAO.getById(ID)).thenReturn(Optional.of(testUser));
-        assertThrows(PasswordMatchingException.class, () -> userService.changePassword(ID, PASSWORD, PASSWORD, WRONG_PASSWORD));
+        assertThrows(PasswordMatchingException.class,
+                () -> userService.changePassword(ID, PASSWORD, PASSWORD, WRONG_PASSWORD));
     }
 
 
     @Test
     void testSetRole() throws DAOException {
         doNothing().when(userDAO).setUsersRole(isA(long.class), isA(Role.class));
-        assertDoesNotThrow(() -> userService.setRole(ID, ROLE_ID));
+        assertDoesNotThrow(() -> userService.setRole(String.valueOf(ID), ROLE_ID));
     }
 
     @Test
     void testDeleteUser() throws DAOException {
         doNothing().when(userDAO).delete(isA(long.class));
-        assertDoesNotThrow(() -> userService.delete(ID));
+        assertDoesNotThrow(() -> userService.delete(String.valueOf(ID)));
     }
 
     @Test
     void testRegisterForEvent() throws DAOException {
         doNothing().when(userDAO).registerForEvent(isA(long.class), isA(long.class));
-        assertDoesNotThrow(() -> userService.registerForEvent(ID, ID));
+        assertDoesNotThrow(() -> userService.registerForEvent(ID, String.valueOf(ID)));
     }
 
     @Test
     void testCancelRegistration() throws DAOException {
         doNothing().when(userDAO).cancelRegistration(isA(long.class), isA(long.class));
-        assertDoesNotThrow(() -> userService.cancelRegistration(ID, ID));
+        assertDoesNotThrow(() -> userService.cancelRegistration(ID, String.valueOf(ID)));
     }
 
     @Test
     void TestIsRegistered() throws DAOException, ServiceException {
         when(userDAO.isRegistered(ID, ID)).thenReturn(true);
-        assertTrue(userService.isRegistered(ID, ID));
+        assertTrue(userService.isRegistered(ID, String.valueOf(ID)));
     }
 
     @Test
     void TestIsNotRegistered() throws DAOException, ServiceException {
         when(userDAO.isRegistered(ID, ID)).thenReturn(false);
-        assertFalse(userService.isRegistered(ID, ID));
+        assertFalse(userService.isRegistered(ID, String.valueOf(ID)));
     }
 
     @Test

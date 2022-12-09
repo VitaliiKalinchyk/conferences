@@ -10,13 +10,13 @@ public interface ReportService extends Service<ReportResponseDTO> {
 
     void createReport(ReportRequestDTO reportDTO) throws ServiceException;
 
-    List<ReportResponseDTO> viewEventsReports(long eventId) throws ServiceException;
+    List<ReportResponseDTO> viewEventsReports(String eventIdString) throws ServiceException;
 
-    List<ReportResponseDTO> viewSpeakersReports(long speakerId) throws ServiceException;
+    List<ReportResponseDTO> viewSpeakersReports(String speakerIdString) throws ServiceException;
 
     void updateReport(ReportRequestDTO reportDTO) throws ServiceException;
 
-    void setSpeaker(long reportId, long speakerId) throws ServiceException;
+    void setSpeaker(String reportIdString, String speakerIdString) throws ServiceException;
 
-    void deleteSpeaker(long reportId) throws ServiceException;
+    void deleteSpeaker(String reportIdString) throws ServiceException;
 }

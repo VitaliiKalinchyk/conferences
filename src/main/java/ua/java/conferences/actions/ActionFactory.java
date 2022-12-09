@@ -39,6 +39,7 @@ public final class ActionFactory {
 
         ACTION_MAP.put(VIEW_SPEAKERS_EVENTS_ACTION, new ViewSpeakersEventsAction());
         ACTION_MAP.put(VIEW_EVENT_BY_SPEAKER_ACTION, new ViewEventBySpeakerAction());
+        ACTION_MAP.put(OFFER_REPORT_ACTION, new OfferReportAction());
 
     }
 

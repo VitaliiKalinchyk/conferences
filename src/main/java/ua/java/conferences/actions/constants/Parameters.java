@@ -36,7 +36,11 @@ public final class Parameters {
 
     public static final String EVENTS = "events";
 
+    public static final String TITLE = "title";
+
     public static final String REPORTS = "reports";
+
+    public static final String TOPIC = "topic";
 
     public static final String SORT_FIELD = "sort-field";
 
@@ -51,8 +55,6 @@ public final class Parameters {
     public static final String CURRENT_PATH = "currentPath";
 
     public static final String ACTION = "action";
-
-    public static final String CURRENT_PAGE = "current-page";
 
     public static final String PASSED = "passed";
 

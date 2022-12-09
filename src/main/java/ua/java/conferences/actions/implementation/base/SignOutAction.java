@@ -4,8 +4,8 @@ import ua.java.conferences.actions.Action;
 
 import jakarta.servlet.http.*;
 
-import static ua.java.conferences.actions.constants.Pages.SIGN_IN_PAGE;
-import static ua.java.conferences.actions.constants.Parameters.SEND_REDIRECT;
+import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class SignOutAction implements Action {
 

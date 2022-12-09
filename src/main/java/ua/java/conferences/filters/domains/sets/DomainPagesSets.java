@@ -44,6 +44,7 @@ public final class DomainPagesSets {
 
     static {
         SPEAKER_PAGES.addAll(LOGGED_USER_PAGES);
+        SPEAKER_PAGES.add(OFFER_REPORT_PAGE);
     }
 
     static {

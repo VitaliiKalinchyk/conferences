@@ -63,7 +63,9 @@
                         <td><c:out value="${user.surname}"/></td>
                         <td><fmt:message key="${user.role}"/></td>
                         <td>
-                            <a href=controller?action=search-user&email=${user.email}><fmt:message key="edit"/></a>
+                            <a class="link-dark" href=controller?action=search-user&email=${user.email}>
+                                <fmt:message key="edit"/>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -71,8 +73,9 @@
             </table>
         </div>
     </div>
+</div>
 
-    <jsp:include page="fragments/footer.jsp"/>
+<jsp:include page="fragments/footer.jsp"/>
 
 </body>
 </html>

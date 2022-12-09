@@ -46,9 +46,9 @@ public class ViewEventBySpeakerAction implements Action {
     private void setAttributes(HttpServletRequest request, String parameterEventId, long userId) throws ServiceException {
         long eventId = getEventId(parameterEventId);
         checkAccess(userId, eventId);
-        EventResponseDTO event = eventService.view(eventId);
+        EventResponseDTO event = eventService.view(String.valueOf(parameterEventId));
         request.setAttribute(EVENT, event);
-        request.setAttribute(REPORTS, reportService.viewEventsReports(eventId));
+        request.setAttribute(REPORTS, reportService.viewEventsReports(parameterEventId));
         request.setAttribute(IS_COMING, isFutureEvent(event));
     }
 

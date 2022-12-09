@@ -25,6 +25,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void register(UserRequestDTO userDTO, String confirmPassword) throws ServiceException {
+        checkString(confirmPassword);
         validateUser(userDTO);
         checkPasswordMatching(userDTO.getPassword(), confirmPassword);
         User user = convertDTOToUser(userDTO);
@@ -37,6 +38,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserResponseDTO signIn(String login, String password) throws ServiceException {
+        checkString(login, password);
         UserResponseDTO userDTO;
         try {
             User user = userDAO.getByEmail(login).orElseThrow(IncorrectEmailException::new);
@@ -49,8 +51,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO view(long userId) throws ServiceException {
+    public UserResponseDTO view(String userIdString) throws ServiceException {
         UserResponseDTO userDTO;
+        long userId = getUserId(userIdString);
         try {
             User user = userDAO.getById(userId).orElseThrow(NoSuchUserException::new);
             userDTO = convertUserToDTO(user);
@@ -113,6 +116,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void changePassword(long userId, String oldPassword, String newPassword, String confirmPassword)
             throws ServiceException {
+        checkString(oldPassword, newPassword, confirmPassword);
         try {
             User user = userDAO.getById(userId).orElseThrow(NoSuchUserException::new);
             checkIfPasswordCorrect(oldPassword, user);
@@ -126,7 +130,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setRole(long userId, int roleId) throws ServiceException {
+    public void setRole(String userIdString, int roleId) throws ServiceException {
+        long userId = getUserId(userIdString);
         try {
             Role role = Role.getRole(roleId);
             userDAO.setUsersRole(userId, role);
@@ -136,7 +141,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void delete(long userId) throws ServiceException {
+    public void delete(String userIdString) throws ServiceException {
+        long userId = getUserId(userIdString);
         try {
             userDAO.delete(userId);
         } catch (DAOException e) {
@@ -145,8 +151,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerForEvent(long userId, long eventId) throws ServiceException {
+    public void registerForEvent(long userId, String eventIdString) throws ServiceException {
         try {
+            long eventId = getLong(eventIdString);
             userDAO.registerForEvent(userId, eventId);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -154,8 +161,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void cancelRegistration(long userId, long eventId) throws ServiceException {
+    public void cancelRegistration(long userId, String eventIdString) throws ServiceException {
         try {
+            long eventId = getLong(eventIdString);
             userDAO.cancelRegistration(userId, eventId);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -163,9 +171,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean isRegistered(long userId, long eventId) throws ServiceException {
+    public boolean isRegistered(long userId, String eventIdString) throws ServiceException {
         boolean result;
         try {
+            long eventId = getLong(eventIdString);
             result = userDAO.isRegistered(userId, eventId);
         } catch (DAOException e) {
             throw new ServiceException(e);
