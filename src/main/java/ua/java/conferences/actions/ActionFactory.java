@@ -40,7 +40,9 @@ public final class ActionFactory {
         ACTION_MAP.put(VIEW_SPEAKERS_EVENTS_ACTION, new ViewSpeakersEventsAction());
         ACTION_MAP.put(VIEW_EVENT_BY_SPEAKER_ACTION, new ViewEventBySpeakerAction());
         ACTION_MAP.put(OFFER_REPORT_ACTION, new OfferReportAction());
-
+        ACTION_MAP.put(OFFER_REPORT_PAGE_ACTION, new OfferReportPageAction());
+        ACTION_MAP.put(SET_SPEAKER_BY_SPEAKER_ACTION, new SetSpeakerBySpeakerAction());
+        ACTION_MAP.put(REMOVE_SPEAKER_BY_SPEAKER_ACTION, new RemoveSpeakerBySpeakerAction());
     }
 
     private ActionFactory() {}
@@ -51,9 +53,5 @@ public final class ActionFactory {
 
     public Action createAction(String actionName) {
         return ACTION_MAP.getOrDefault(actionName, new DefaultAction());
-    }
-
-    public ActionPost createActionPost(String actionName) {
-        return (ActionPost) ACTION_MAP.getOrDefault(actionName, new DefaultAction());
     }
 }

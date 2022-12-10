@@ -83,10 +83,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void setSpeaker(String reportIdString, String speakerIdString) throws ServiceException {
-        long reportId = getReportId(reportIdString);
+    public void setSpeaker(long reportId, long speakerId) throws ServiceException {
         try {
-            long speakerId = getLong(speakerIdString);
             reportDAO.setSpeaker(reportId, speakerId);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -94,8 +92,7 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void deleteSpeaker(String reportIdString) throws ServiceException {
-        long reportId = getReportId(reportIdString);
+    public void deleteSpeaker(long reportId) throws ServiceException {
         try {
             reportDAO.deleteSpeaker(reportId);
         } catch (DAOException e) {

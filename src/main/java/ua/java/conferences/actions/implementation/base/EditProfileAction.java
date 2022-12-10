@@ -1,42 +1,39 @@
 package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.*;
 import ua.java.conferences.actions.*;
 import ua.java.conferences.dto.request.UserRequestDTO;
 import ua.java.conferences.dto.response.UserResponseDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
-import static ua.java.conferences.actions.constants.ActionNames.EDIT_PROFILE_ACTION;
+import static ua.java.conferences.actions.ActionUtil.*;
+import static ua.java.conferences.actions.constants.ActionNames.*;
 import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.actions.constants.ParameterValues.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
-import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
-public class EditProfileAction implements Action, ActionPost {
-
-    private static final Logger logger = LoggerFactory.getLogger(EditProfileAction.class);
+public class EditProfileAction implements Action {
 
     private final UserService userService;
 
     public EditProfileAction() {
-        userService = ServiceFactory.getInstance(MYSQL).getUserService();
+        userService = ServiceFactory.getInstance(DB_IMPLEMENTATION).getUserService();
     }
 
     @Override
-    public String executeGet(HttpServletRequest request) {
-        String path = EDIT_PROFILE_PAGE;
-        path = getPath(request, path);
+    public String execute(HttpServletRequest request) throws ServiceException {
+        return isPost(request) ? executePost(request) : executeGet(request);
+    }
+
+    private String executeGet(HttpServletRequest request) {
         transferStringFromSessionToRequest(request, MESSAGE);
         transferStringFromSessionToRequest(request, ERROR);
         transferUserRequestDTOFromSessionToRequest(request);
-        return path;
+        return EDIT_PROFILE_PAGE;
     }
 
-    @Override
-    public String executePost(HttpServletRequest request) {
-        String path = EDIT_PROFILE_PAGE;
+    private String executePost(HttpServletRequest request) throws ServiceException {
         UserResponseDTO sessionUser = (UserResponseDTO) request.getSession().getAttribute(LOGGED_USER);
         UserRequestDTO user = getUserRequestDTO(request, sessionUser);
         try {
@@ -46,12 +43,8 @@ public class EditProfileAction implements Action, ActionPost {
         } catch (IncorrectFormatException | DuplicateEmailException e) {
             request.getSession().setAttribute(USER, user);
             request.getSession().setAttribute(ERROR, e.getMessage());
-        } catch (ServiceException e) {
-            logger.error(e.getMessage());
-            path = ERROR_PAGE;
         }
-        request.getSession().setAttribute(CURRENT_PATH, path);
-        return getControllerDirective();
+        return getActionToRedirect(EDIT_PROFILE_ACTION);
     }
 
     private UserRequestDTO getUserRequestDTO(HttpServletRequest request, UserResponseDTO currentUser) {
@@ -73,9 +66,5 @@ public class EditProfileAction implements Action, ActionPost {
         currentUser.setName(user.getName());
         currentUser.setSurname(user.getSurname());
         currentUser.setNotification(user.isNotification());
-    }
-
-    private static String getControllerDirective() {
-        return CONTROLLER_PAGE + "?" + ACTION + "=" + EDIT_PROFILE_ACTION;
     }
 }

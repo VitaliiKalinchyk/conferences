@@ -7,7 +7,7 @@ import static ua.java.conferences.actions.constants.Pages.ERROR_PAGE;
 
 public class ErrorAction implements Action {
     @Override
-    public String executeGet(HttpServletRequest req) {
+    public String execute(HttpServletRequest req) {
         return ERROR_PAGE;
     }
 }

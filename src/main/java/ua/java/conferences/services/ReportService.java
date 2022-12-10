@@ -16,7 +16,7 @@ public interface ReportService extends Service<ReportResponseDTO> {
 
     void updateReport(ReportRequestDTO reportDTO) throws ServiceException;
 
-    void setSpeaker(String reportIdString, String speakerIdString) throws ServiceException;
+    void setSpeaker(long reportIdString, long speakerIdString) throws ServiceException;
 
-    void deleteSpeaker(String reportIdString) throws ServiceException;
+    void deleteSpeaker(long reportId) throws ServiceException;
 }

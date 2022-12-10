@@ -78,13 +78,13 @@ class ReportServiceTest {
     @Test
     void testSetSpeaker() throws DAOException {
         doNothing().when(reportDAO).setSpeaker(isA(long.class), isA(long.class));
-        assertDoesNotThrow(() -> reportService.setSpeaker(String.valueOf(ID), String.valueOf(ID)));
+        assertDoesNotThrow(() -> reportService.setSpeaker(ID, ID));
     }
 
     @Test
     void testDeleteSpeaker() throws DAOException {
         doNothing().when(reportDAO).deleteSpeaker(isA(long.class));
-        assertDoesNotThrow(() -> reportService.deleteSpeaker(String.valueOf(ID)));
+        assertDoesNotThrow(() -> reportService.deleteSpeaker(ID));
     }
 
     @Test

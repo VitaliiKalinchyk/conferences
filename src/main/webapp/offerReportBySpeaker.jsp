@@ -36,13 +36,12 @@
         </c:when>
 
         <c:otherwise>
-
-            <p class="fs-6"><fmt:message key="event"/>: ${param.title} </p>
+            <p class="fs-6"><fmt:message key="event"/>: ${requestScope.event.title} </p>
 
             <form method="POST" action="controller">
                 <input type="hidden" name="action" value="offer-report">
-                <input type="hidden" name="event-id" value="${param.id}">
-                <input type="hidden" name="title" value="${param.title}">
+                <input type="hidden" name="event-id" value="${requestScope.event.id}">
+                <input type="hidden" name="title" value="${requestScope.event.title}">
 
                 <div class="form-group">
                     <c:if test="${not empty requestScope.message}">
@@ -58,8 +57,14 @@
                 <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="submit"/></button>
 
             </form>
+
+        <a class="link-dark" href=controller?action=view-event-by-speaker&event-id=${requestScope.event.id}>
+            <fmt:message key="back.to.conference"/>
+        </a>
         </c:otherwise>
     </c:choose>
+
+
 </div>
 
 <jsp:include page="fragments/footer.jsp"/>

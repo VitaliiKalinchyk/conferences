@@ -113,43 +113,89 @@ INSERT INTO event (id, title, date, location, description) VALUES
 (DEFAULT, 'Java for Students Spring 2023', '2023-04-17', 'Luhansk', 'Epam conference for Ukrainian students. Spring 2023'),
 (DEFAULT, 'Java for Students Summer 2023', '2023-06-01', 'Simferopol', 'Epam conference for Ukrainian students. Summer 2023');
 INSERT INTO user_has_event VALUES 
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
 (1, 6),
 (1, 7),
-(2, 6),
-(3, 7),
-(4, 7),
+(1, 8),
+(1, 9),
+(1, 10),
+(2, 1),
+(2, 2),
+(2, 3),
+(2, 4),
+(3, 8),
+(3, 9),
+(3, 10),
+(5, 1),
+(5, 3),
+(5, 5),
 (5, 7),
+(5, 9),
 (6, 1),
 (6, 2),
 (6, 3),
 (6, 4),
-(6, 5),
+(6, 8),
+(6, 9),
+(6, 10),
 (7, 2),
 (7, 3),
 (7, 4),
 (7, 5),
+(7, 8),
+(7, 9),
 (8, 2),
 (8, 4),
 (8, 5),
-(9, 2),
-(9, 5),
-(10, 5);
-UPDATE event SET visitors=1 WHERE id=1;
-UPDATE event SET visitors=4 WHERE id=2;
+(8, 8),
+(8, 9),
+(9, 7),
+(9, 8),
+(10, 5),
+(10, 1);
+UPDATE event SET visitors=5 WHERE id=1;
+UPDATE event SET visitors=2 WHERE id=2;
 UPDATE event SET visitors=2 WHERE id=3;
 UPDATE event SET visitors=3 WHERE id=4;
 UPDATE event SET visitors=3 WHERE id=5;
 INSERT INTO report (id, topic, event_id) VALUES 
+(DEFAULT, 'SQL. Introduction to SQL and JDBC', 1),
+(DEFAULT, 'SQL. Introduction to SQL and JDBC', 2),
+(DEFAULT, 'SQL. Introduction to SQL and JDBC', 3),
+(DEFAULT, 'SQL. Introduction to SQL and JDBC', 4),
+(DEFAULT, 'SQL. Introduction to SQL and JDBC', 5),
+(DEFAULT, 'SQL. Introduction to SQL and JDBC', 6),
 (DEFAULT, 'SQL. Introduction to SQL and JDBC', 7),
-(DEFAULT, 'Collections. Intoduction to Java Collections API', 7),
-(DEFAULT, 'IO. Intoduction to IO and NIO API', 7),
-(DEFAULT, 'Java 8. Functional interfaces, lambdas, Stream API', 7),
+(DEFAULT, 'SQL. Introduction to SQL and JDBC', 8),
+(DEFAULT, 'SQL. Introduction to SQL and JDBC', 9),
+(DEFAULT, 'SQL. Introduction to SQL and JDBC', 10),
+(DEFAULT, 'Collections. Intoduction to Java Collections API', 8),
+(DEFAULT, 'IO. Intoduction to IO and NIO API', 8),
+(DEFAULT, 'Java 8. Functional interfaces, lambdas, Stream API', 8),
 (DEFAULT, 'XML. Intoduction to XML and java.xml API', 7),
+(DEFAULT, 'XML. Intoduction to XML and java.xml API', 8),
 (DEFAULT, 'Generics. Intoduction to Generics', 6),
-(DEFAULT, 'Exceptions. Java exceptions, try-catch-finally, throw vs throws', 7);
-UPDATE report SET user_id=13 WHERE id=5;
+(DEFAULT, 'Generics. Intoduction to Generics', 8),
+(DEFAULT, 'Generics. Intoduction to Generics', 9),
+(DEFAULT, 'Exceptions. Java exceptions, try-catch-finally, throw vs throws', 7),
+(DEFAULT, 'Exceptions. Java exceptions, try-catch-finally, throw vs throws', 10);
+UPDATE report SET user_id=11 WHERE id=1;
 UPDATE report SET user_id=11 WHERE id=2;
 UPDATE report SET user_id=11 WHERE id=3;
-UPDATE report SET user_id=12 WHERE id=1;
+UPDATE report SET user_id=11 WHERE id=4;
+UPDATE report SET user_id=11 WHERE id=5;
+UPDATE report SET user_id=11 WHERE id=6;
+UPDATE report SET user_id=12 WHERE id=8;
+UPDATE report SET user_id=12 WHERE id=9;
+UPDATE report SET user_id=12 WHERE id=10;
+UPDATE report SET user_id=12 WHERE id=11;
+UPDATE report SET user_id=13 WHERE id=15;
+UPDATE report SET user_id=13 WHERE id=7;
+UPDATE report SET user_id=13 WHERE id=12;
+UPDATE report SET user_id=12 WHERE id=13;
 
-select * from user;
+select * from report;

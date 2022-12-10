@@ -42,5 +42,11 @@ public final class ActionNames {
 
     public static final String VIEW_EVENT_BY_SPEAKER_ACTION = "view-event-by-speaker";
 
+    public static final String OFFER_REPORT_PAGE_ACTION = "offer-report-page";
+
     public static final String OFFER_REPORT_ACTION = "offer-report";
+
+    public static final String SET_SPEAKER_BY_SPEAKER_ACTION = "set-speaker-by-speaker";
+
+    public static final String REMOVE_SPEAKER_BY_SPEAKER_ACTION = "remove-speaker-by-speaker";
 }

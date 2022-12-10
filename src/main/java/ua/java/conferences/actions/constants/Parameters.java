@@ -36,7 +36,7 @@ public final class Parameters {
 
     public static final String EVENTS = "events";
 
-    public static final String TITLE = "title";
+    public static final String REPORT_ID = "report-id";
 
     public static final String REPORTS = "reports";
 
@@ -47,8 +47,6 @@ public final class Parameters {
     public static final String SORT_ORDER = "order";
 
     public static final String ERROR = "error";
-
-    public static final String SEND_REDIRECT = "sendRedirect";
 
     public static final String MESSAGE = "message";
 
