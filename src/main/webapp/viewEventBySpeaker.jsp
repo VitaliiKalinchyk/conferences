@@ -78,6 +78,7 @@
 
                                 <td>
                                     <c:if test="${requestScope.isComing}">
+                                        <c:set var="reportId" value="${report.id}"/>
                                         <c:choose>
                                             <c:when test="${empty report.speakerName}">
                                                 <button class="btn btn-dark mt-0 mb-0" data-bs-toggle="modal"
@@ -99,6 +100,7 @@
                                                                 <form method="POST" action="controller">
                                                                     <input type="hidden" name="action" value="set-speaker-by-speaker">
                                                                     <input type="hidden" name="event-id" value="${requestScope.event.id}">
+                                                                    <input type="hidden" name="report-id" value="${reportId}">
                                                                     <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="yes"/></button>
                                                                 </form>
                                                             </div>
@@ -126,6 +128,7 @@
                                                                 <form method="POST" action="controller">
                                                                     <input type="hidden" name="action" value="remove-speaker-by-speaker">
                                                                     <input type="hidden" name="event-id" value="${requestScope.event.id}">
+                                                                    <input type="hidden" name="report-id" value="${reportId}">
                                                                     <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="yes"/></button>
                                                                 </form>
                                                             </div>

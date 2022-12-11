@@ -180,8 +180,10 @@ INSERT INTO report (id, topic, event_id) VALUES
 (DEFAULT, 'XML. Intoduction to XML and java.xml API', 8),
 (DEFAULT, 'Generics. Intoduction to Generics', 6),
 (DEFAULT, 'Generics. Intoduction to Generics', 8),
-(DEFAULT, 'Generics. Intoduction to Generics', 9),
 (DEFAULT, 'Exceptions. Java exceptions, try-catch-finally, throw vs throws', 7),
+(DEFAULT, 'Exceptions. Java exceptions, try-catch-finally, throw vs throws', 9),
+(DEFAULT, 'XML. Intoduction to XML and java.xml API', 9),
+(DEFAULT, 'Generics. Intoduction to Generics', 9),
 (DEFAULT, 'Exceptions. Java exceptions, try-catch-finally, throw vs throws', 10);
 UPDATE report SET user_id=11 WHERE id=1;
 UPDATE report SET user_id=11 WHERE id=2;
@@ -189,10 +191,12 @@ UPDATE report SET user_id=11 WHERE id=3;
 UPDATE report SET user_id=11 WHERE id=4;
 UPDATE report SET user_id=11 WHERE id=5;
 UPDATE report SET user_id=11 WHERE id=6;
+UPDATE report SET user_id=11 WHERE id=18;
+UPDATE report SET user_id=13 WHERE id=16;
 UPDATE report SET user_id=12 WHERE id=8;
 UPDATE report SET user_id=12 WHERE id=9;
 UPDATE report SET user_id=12 WHERE id=10;
-UPDATE report SET user_id=12 WHERE id=11;
+UPDATE report SET user_id=13 WHERE id=14;
 UPDATE report SET user_id=13 WHERE id=15;
 UPDATE report SET user_id=13 WHERE id=7;
 UPDATE report SET user_id=13 WHERE id=12;
