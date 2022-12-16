@@ -2,8 +2,7 @@ package ua.java.conferences.actions.implementation.speaker;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.*;
-import ua.java.conferences.dto.request.*;
-import ua.java.conferences.dto.response.*;
+import ua.java.conferences.dto.*;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
@@ -22,15 +21,21 @@ public class OfferReportAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        long speakerId = ((UserResponseDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
-        long eventId = Long.parseLong(request.getParameter(EVENT_ID));
-        String topic = request.getParameter(TOPIC);
+        ReportDTO reportDTO = getReportDTO(request);
         try {
-            reportService.createReport(new ReportRequestDTO(topic, speakerId, eventId));
+            reportService.addReport(reportDTO);
             request.getSession().setAttribute(MESSAGE, SUCCEED_ADD);
         } catch (IncorrectFormatException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
         }
-        return getActionToRedirect(OFFER_REPORT_PAGE_ACTION, EVENT_ID, String.valueOf(eventId));
+        return getActionToRedirect(OFFER_REPORT_PAGE_ACTION, EVENT_ID, String.valueOf(reportDTO.getEventId()));
+    }
+
+    private ReportDTO getReportDTO(HttpServletRequest request) {
+        return new  ReportDTO.Builder()
+                .setTopic(request.getParameter(TOPIC))
+                .setSpeakerId(((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId())
+                .setEventId(Long.parseLong(request.getParameter(EVENT_ID)))
+                .get();
     }
 }

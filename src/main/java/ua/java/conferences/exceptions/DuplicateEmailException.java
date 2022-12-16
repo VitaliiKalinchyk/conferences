@@ -1,8 +1,9 @@
 package ua.java.conferences.exceptions;
 
-public class DuplicateEmailException extends ServiceException {
+import static ua.java.conferences.exceptions.constants.Message.DUPLICATE_EMAIL;
 
+public class DuplicateEmailException extends ServiceException {
     public DuplicateEmailException() {
-        super("error.email.duplicate");
+        super(DUPLICATE_EMAIL);
     }
 }

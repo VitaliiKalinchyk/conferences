@@ -1,7 +1,6 @@
 package ua.java.conferences.controller;
 
 import ua.java.conferences.actions.*;
-
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import org.slf4j.*;

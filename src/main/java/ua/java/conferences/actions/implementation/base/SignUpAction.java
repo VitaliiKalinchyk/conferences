@@ -2,7 +2,7 @@ package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.*;
-import ua.java.conferences.dto.request.UserRequestDTO;
+import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
@@ -22,22 +22,22 @@ public class SignUpAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        return isPost(request) ? executePost(request) : executeGet(request);
+        return isPostMethod(request) ? executePost(request) : executeGet(request);
     }
 
     private String executeGet(HttpServletRequest request) {
         transferStringFromSessionToRequest(request, MESSAGE);
         transferStringFromSessionToRequest(request, ERROR);
-        transferUserRequestDTOFromSessionToRequest(request);
+        transferUserDTOFromSessionToRequest(request);
         return getPath(request);
     }
 
     private String executePost(HttpServletRequest request) throws ServiceException {
         String path = SIGN_IN_PAGE;
-        UserRequestDTO user = getUserRequestDTO(request);
+        UserDTO user = getUserDTO(request);
         request.getSession().setAttribute(USER, user);
         try {
-            userService.register(user, request.getParameter(CONFIRM_PASSWORD));
+            userService.add(user, request.getParameter(CONFIRM_PASSWORD));
             request.getSession().setAttribute(MESSAGE, SUCCEED_REGISTER);
         } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
@@ -47,13 +47,14 @@ public class SignUpAction implements Action {
         return getActionToRedirect(SIGN_UP_ACTION);
     }
 
-    private UserRequestDTO getUserRequestDTO(HttpServletRequest request) {
-        String email = request.getParameter(EMAIL);
-        String password = request.getParameter(PASSWORD);
-        String name = request.getParameter(NAME);
-        String surname = request.getParameter(SURNAME);
-        boolean isNotified = isNotified(request);
-        return new UserRequestDTO(email, password, name, surname, isNotified);
+    private UserDTO getUserDTO(HttpServletRequest request) {
+        return new UserDTO.Builder()
+                .setEmail(request.getParameter(EMAIL))
+                .setPassword(request.getParameter(PASSWORD))
+                .setName(request.getParameter(NAME))
+                .setSurname(request.getParameter(SURNAME))
+                .setNotification(isNotified(request))
+                .get();
     }
 
     private static boolean isNotified(HttpServletRequest request) {

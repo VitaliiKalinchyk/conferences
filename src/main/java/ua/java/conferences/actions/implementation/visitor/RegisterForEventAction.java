@@ -2,7 +2,7 @@ package ua.java.conferences.actions.implementation.visitor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.*;
-import ua.java.conferences.dto.response.UserResponseDTO;
+import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
 
@@ -20,7 +20,7 @@ public class RegisterForEventAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        long userId = ((UserResponseDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
+        long userId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         String eventId = request.getParameter(EVENT_ID);
         userService.registerForEvent(userId, eventId);
         return getActionToRedirect(VIEW_EVENT_BY_VISITOR_ACTION, EVENT_ID, eventId);

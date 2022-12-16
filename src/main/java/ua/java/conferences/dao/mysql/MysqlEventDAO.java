@@ -3,12 +3,13 @@ package ua.java.conferences.dao.mysql;
 import ua.java.conferences.connection.DataSource;
 import ua.java.conferences.dao.EventDAO;
 import ua.java.conferences.entities.*;
+import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.DAOException;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.sql.Date;
+import java.util.*;
 
 import static ua.java.conferences.dao.mysql.constants.EventSQLQueries.*;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
@@ -32,8 +33,7 @@ public class MysqlEventDAO implements EventDAO {
         Event event = null;
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_ID)) {
-            int k = 0;
-            preparedStatement.setLong(++k, id);
+            setId(id, preparedStatement);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     event = createEvent(resultSet);
@@ -44,6 +44,7 @@ public class MysqlEventDAO implements EventDAO {
         }
         return Optional.ofNullable(event);
     }
+
 
     @Override
     public Optional<Event> getByTitle(String title) throws DAOException {
@@ -65,34 +66,62 @@ public class MysqlEventDAO implements EventDAO {
 
     @Override
     public List<Event> getAll() throws DAOException {
-        return getEvents(GET_EVENTS);
-    }
-
-
-    @Override
-    public List<Event> getSortedEvents(String filter, String sortField, String order) throws DAOException {
-        String query = String.format(GET_SORTED_EVENTS, filter, sortField, order);
-        return getEvents(query);
-    }
-
-    @Override
-    public List<Event> getEventsByVisitor(long userId) throws DAOException {
-        return getUsersEvents(userId, GET_VISITORS_EVENTS);
-    }
-
-    @Override
-    public List<Event> getPastEventsByVisitor(long userId) throws DAOException {
-        return getUsersEvents(userId, GET_PAST_VISITORS_EVENTS);
+        List<Event> events = new ArrayList<>();
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENTS)) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    events.add(createEvent(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return events;
     }
 
     @Override
-    public List<Event> getEventsBySpeaker(long speakerId) throws DAOException {
-        return getUsersEvents(speakerId, GET_SPEAKERS_EVENTS);
+    public List<Event> getSorted(Sorting sorting, int offset, int records) throws DAOException {
+        List<Event> events = new ArrayList<>();
+        String query = String.format(GET_SORTED, getFilter(sorting.getFilter()), sorting.getSort(), sorting.getOrder());
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            int k = 0;
+            preparedStatement.setInt(++k, offset);
+            preparedStatement.setInt(++k, records);
+            preparedStatement.execute();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    events.add(createEvent(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return events;
     }
 
     @Override
-    public List<Event> getPastEventsBySpeaker(long speakerId) throws DAOException {
-        return getUsersEvents(speakerId, GET_PAST_SPEAKERS_EVENTS);
+    public List<Event> getSortedByUser(long userId, Sorting sorting, int offset, int records, String role)
+            throws DAOException {
+        List<Event> events = new ArrayList<>();
+        String query = getQueryForList(sorting, role);
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            int k = 0;
+            preparedStatement.setLong(++k, userId);
+            preparedStatement.setInt(++k, offset);
+            preparedStatement.setInt(++k, records);
+            preparedStatement.execute();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    events.add(createUserEvent(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return events;
     }
 
     @Override
@@ -102,18 +131,6 @@ public class MysqlEventDAO implements EventDAO {
             int k = 0;
             k = setStatementFields(event, preparedStatement, k);
             preparedStatement.setLong(++k, event.getId());
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void delete(long id) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EVENT)) {
-            int k = 0;
-            preparedStatement.setLong(++k, id);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -133,6 +150,58 @@ public class MysqlEventDAO implements EventDAO {
         }
     }
 
+    @Override
+    public void delete(long id) throws DAOException {
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EVENT)) {
+            setId(id, preparedStatement);
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+    }
+
+    @Override
+    public int getNumberOfRecords (long userId, Sorting sorting, String role) throws DAOException {
+        int numberOfRecords = 0;
+        String query = getRecordsQuery(userId, getFilter(sorting.getFilter()), role);
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            if (userId > 0) {
+                setId(userId, preparedStatement);
+            }
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    numberOfRecords = resultSet.getInt(NUMBER_OF_RECORDS);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return numberOfRecords;
+    }
+
+    private String getRecordsQuery(long userId, String filter, String role) {
+        if (userId == 0) {
+            return String.format(GET_NUMBER_OF_RECORDS, filter);
+        } else if (role.equals(Role.SPEAKER.name())) {
+            return String.format(GET_NUMBER_OF_RECORDS_BY_SPEAKER, filter);
+        }
+        return String.format(GET_NUMBER_OF_RECORDS_BY_VISITOR, filter);
+    }
+
+    private String getQueryForList(Sorting sorting, String role) {
+        String filter = getFilter(sorting.getFilter());
+        if (role.equals(Role.SPEAKER.name()))
+            return String.format(GET_SPEAKERS_EVENTS, filter, sorting.getSort(), sorting.getOrder());
+        return String.format(GET_VISITORS_EVENTS, filter, sorting.getSort(), sorting.getOrder());
+    }
+
+    private void setId(long id, PreparedStatement preparedStatement) throws SQLException {
+        int k = 0;
+        preparedStatement.setLong(++k, id);
+    }
+
     private int setStatementFields(Event event, PreparedStatement preparedStatement, int k) throws SQLException {
         preparedStatement.setString(++k, event.getTitle());
         preparedStatement.setDate(++k, Date.valueOf(event.getDate()));
@@ -141,40 +210,8 @@ public class MysqlEventDAO implements EventDAO {
         return k;
     }
 
-    private List<Event> getUsersEvents(long userId, String query) throws DAOException {
-        List<Event> events = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            int k = 0;
-            preparedStatement.setLong(++k, userId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    events.add(createUserEvent(resultSet));
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-        return events;
-    }
-
-    private List<Event> getEvents(String getEvents) throws DAOException {
-        List<Event> events = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(getEvents)) {
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    events.add(createEvent(resultSet));
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-        return events;
-    }
-
     private Event createEvent(ResultSet resultSet) throws SQLException {
-        return new Event.EventBuilder()
+        return new Event.Builder()
                 .setId(resultSet.getLong(ID))
                 .setTitle(resultSet.getString(TITLE))
                 .setDate(resultSet.getDate(DATE).toLocalDate())
@@ -187,12 +224,21 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     private Event createUserEvent(ResultSet resultSet) throws SQLException {
-        return new Event.EventBuilder()
+        return new Event.Builder()
                 .setId(resultSet.getLong(ID))
                 .setTitle(resultSet.getString(TITLE))
                 .setDate(resultSet.getDate(DATE).toLocalDate())
                 .setLocation(resultSet.getString(LOCATION))
                 .setDescription(resultSet.getString(DESCRIPTION))
                 .get();
+    }
+
+    private static String getFilter(String filter) {
+        if (filter.equalsIgnoreCase("passed")) {
+            return PASSED;
+        } else if (filter.equalsIgnoreCase("upcoming")) {
+            return UPCOMING;
+        }
+        return ANY_DATE;
     }
 }

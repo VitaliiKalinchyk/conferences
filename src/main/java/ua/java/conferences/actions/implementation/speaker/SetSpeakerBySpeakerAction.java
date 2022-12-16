@@ -2,7 +2,7 @@ package ua.java.conferences.actions.implementation.speaker;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.Action;
-import ua.java.conferences.dto.response.UserResponseDTO;
+import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
@@ -20,7 +20,7 @@ public class SetSpeakerBySpeakerAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        long speakerId = ((UserResponseDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
+        long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         long reportId = Long.parseLong(request.getParameter(REPORT_ID));
         String eventId = request.getParameter(EVENT_ID);
         reportService.setSpeaker(reportId, speakerId);

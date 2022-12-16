@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.Action;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import static ua.java.conferences.actions.ActionUtil.*;
 import static ua.java.conferences.actions.constants.ParameterValues.*;
@@ -20,19 +21,9 @@ public class ViewUpEventsByVisitorAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        String sortedField = getSortedField(request);
-        String order = getOrder(request);
-        request.setAttribute(EVENTS, eventService.viewSortedEventsByUser(sortedField, order));
+        Sorting sorting = Sorting.getEventSorting(UPCOMING, ID, ASCENDING_ORDER);
+        request.setAttribute(EVENTS, eventService
+                .getSorted(sorting, "0", String.valueOf(Integer.MAX_VALUE)));
         return VIEW_UP_EVENTS_BY_VISITOR_PAGE;
-    }
-
-    private String getSortedField(HttpServletRequest request) {
-        String parameter = request.getParameter(SORT_FIELD);
-        return parameter != null ? parameter : ID;
-    }
-
-    private String getOrder(HttpServletRequest request) {
-        String parameter = request.getParameter(SORT_ORDER);
-        return parameter != null ? parameter : ASCENDING_ORDER;
     }
 }

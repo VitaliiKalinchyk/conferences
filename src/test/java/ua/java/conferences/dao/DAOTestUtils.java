@@ -5,8 +5,8 @@ import ua.java.conferences.entities.*;
 
 import java.io.*;
 import java.sql.*;
-import java.time.LocalDate;
 
+import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
 
 public final class DAOTestUtils {
@@ -39,28 +39,32 @@ public final class DAOTestUtils {
     }
 
     public static User getTestUser() {
-        return new User.UserBuilder()
-                .setEmail("test@test.test")
-                .setName("Test")
-                .setSurname("Tester")
-                .setPassword("test_password")
+        return new User.Builder()
+                .setId(ID_VALUE)
+                .setEmail(EMAIL)
+                .setName(NAME)
+                .setSurname(SURNAME)
+                .setPassword(PASSWORD)
+                .setRoleId(ROLE_ID)
                 .get();
     }
 
     public static Event getTestEvent() {
-        return new Event.EventBuilder()
-                .setId(1)
-                .setTitle("Event")
-                .setDate(LocalDate.of(2022, 12, 28))
-                .setLocation("Kyiv")
-                .setDescription("test event")
+        return new Event.Builder()
+                .setId(ID_VALUE)
+                .setTitle(TITLE)
+                .setDate(DATE)
+                .setLocation(LOCATION)
+                .setDescription(DESCRIPTION)
                 .get();
     }
 
     public static Report getTestReport() {
-        return (new Report.ReportBuilder())
-                .setTopic("Report")
+        return (new Report.Builder())
+                .setId(ID_VALUE)
+                .setTopic(TOPIC)
                 .setEvent(getTestEvent())
+                .setSpeaker(getTestUser())
                 .get();
     }
 }

@@ -4,7 +4,6 @@ import jakarta.servlet.*;
 import java.io.IOException;
 
 public class EncodingFilter implements Filter {
-
     private String encoding;
 
     @Override

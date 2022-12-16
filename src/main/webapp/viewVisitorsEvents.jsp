@@ -8,8 +8,10 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 
+<c:set var="keyForTitle" value="${param.past eq 'past' ? 'view.visitors.past.events' : 'view.visitors.events'}"/>
+
 <head>
-    <title>Conference Smart App. <fmt:message key="view.visitors.events"/></title>
+    <title>Conference Smart App. <fmt:message key="${keyForTitle}"/></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -25,7 +27,7 @@
 <div class="col-lg-7 mx-auto p-4 py-md-5">
 
     <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-        <span class="fs-4"><fmt:message key="view.visitors.events"/></span>
+        <span class="fs-4"><fmt:message key="${keyForTitle}"/></span>
     </header>
 
     <c:choose>

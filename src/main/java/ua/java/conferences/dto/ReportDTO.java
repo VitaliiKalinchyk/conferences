@@ -1,43 +1,18 @@
-package ua.java.conferences.dto.response;
+package ua.java.conferences.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class ReportResponseDTO implements Serializable {
-
+public class ReportDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-
     private long id;
-
     private String topic;
-
     private long speakerId;
-
     private String speakerName;
-
     private long eventId;
-
     private String title;
-
     private String date;
-
     private String location;
-
-    public ReportResponseDTO(long id, String topic, long speakerId, String speakerName) {
-        setId(id);
-        setTopic(topic);
-        setSpeakerId(speakerId);
-        setSpeakerName(speakerName);
-    }
-
-    public ReportResponseDTO(long id, String topic, long eventId, String title, String date, String location) {
-        setId(id);
-        setTopic(topic);
-        setEventId(eventId);
-        setTitle(title);
-        setDate(date);
-        setLocation(location);
-    }
 
     public long getId() {
         return id;
@@ -107,10 +82,8 @@ public class ReportResponseDTO implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        ReportResponseDTO that = (ReportResponseDTO) o;
-        return id == that.id && speakerId == that.speakerId && eventId == that.eventId && topic.equals(that.topic)
-                && Objects.equals(speakerName, that.speakerName) && Objects.equals(title, that.title)
-                && Objects.equals(date, that.date) && Objects.equals(location, that.location);
+        ReportDTO that = (ReportDTO) o;
+        return id == that.id && topic.equals(that.topic);
     }
 
     @Override
@@ -120,7 +93,7 @@ public class ReportResponseDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ReportResponseDTO{" +
+        return "ReportDTO{" +
                 "id=" + getId() +
                 ", topic='" + getTopic() + '\'' +
                 ", speakerId=" + getSpeakerId() +
@@ -130,5 +103,56 @@ public class ReportResponseDTO implements Serializable {
                 ", date='" + getDate() + '\'' +
                 ", location='" + getLocation() + '\'' +
                 '}';
+    }
+
+    public static class Builder {
+        private final ReportDTO report;
+
+        public Builder() {
+            this.report = new ReportDTO();
+        }
+
+        public Builder setId(long id) {
+            report.setId(id);
+            return this;
+        }
+
+        public Builder setTopic(String topic) {
+            report.setTopic(topic);
+            return this;
+        }
+
+        public Builder setSpeakerId(long speakerId) {
+            report.setSpeakerId(speakerId);
+            return this;
+        }
+
+        public Builder setSpeakerName(String setSpeakerName) {
+            report.setSpeakerName(setSpeakerName);
+            return this;
+        }
+
+        public Builder setEventId(long eventId) {
+            report.setEventId(eventId);
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            report.setTitle(title);
+            return this;
+        }
+
+        public Builder setDate(String date) {
+            report.setTitle(date);
+            return this;
+        }
+
+        public Builder setLocation(String location) {
+            report.setLocation(location);
+            return this;
+        }
+        public ReportDTO get() {
+            return report;
+        }
     }
 }

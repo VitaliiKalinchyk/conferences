@@ -2,7 +2,7 @@ package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.*;
-import ua.java.conferences.dto.response.UserResponseDTO;
+import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 
@@ -22,7 +22,7 @@ public class ChangePasswordAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        return isPost(request) ? executePost(request) : executeGet(request);
+        return isPostMethod(request) ? executePost(request) : executeGet(request);
     }
     private String executeGet(HttpServletRequest request) {
         transferStringFromSessionToRequest(request, MESSAGE);
@@ -41,7 +41,7 @@ public class ChangePasswordAction implements Action {
     }
 
     private void userServiceChangePassword(HttpServletRequest request) throws ServiceException {
-        long id = ((UserResponseDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
+        long id = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         String oldPassword = request.getParameter(OLD_PASSWORD);
         String password = request.getParameter(PASSWORD);
         String confirmPassword = request.getParameter(CONFIRM_PASSWORD);

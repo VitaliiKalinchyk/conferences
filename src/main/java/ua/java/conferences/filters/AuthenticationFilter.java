@@ -3,7 +3,6 @@ package ua.java.conferences.filters;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.filters.domains.*;
-
 import java.io.IOException;
 
 import static ua.java.conferences.actions.constants.Pages.*;
@@ -27,8 +26,8 @@ public class AuthenticationFilter implements Filter {
         return httpRequest.getSession().getAttribute(LOGGED_USER) == null;
     }
 
-    private boolean isAccessDenied(HttpServletRequest httpRequest) {
-        Domain domain = DomainFactory.getAnonymousDomain(httpRequest);
+    private boolean isAccessDenied(HttpServletRequest request) {
+        Domain domain = DomainFactory.getAnonymousDomain(request.getServletPath(), request.getParameter(ACTION));
         return (domain.checkAccess());
     }
 }

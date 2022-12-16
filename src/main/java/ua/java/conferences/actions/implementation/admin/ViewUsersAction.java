@@ -19,7 +19,7 @@ public class ViewUsersAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        request.setAttribute(USERS, userService.viewUsers());
+        request.setAttribute(USERS, userService.getAll());
         return VIEW_USERS_PAGE;
     }
 }

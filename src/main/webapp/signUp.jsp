@@ -33,8 +33,8 @@
         <div class="form-group">
             <br>
             <label class="form-label fs-5" for="email"><fmt:message key="email"/>*: </label>
-            <input class="form-control" type="email" name="email" id="email" required
-                   value="${requestScope.user.email}">
+            <input class="form-control" type="email" name="email" id="email"
+                   pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" required value="${requestScope.user.email}">
             <c:if test="${fn:contains(error, 'email')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if>
@@ -44,7 +44,8 @@
         <div class="form-group">
             <label class="form-label fs-5" for="password"><fmt:message key="password"/>*: </label>
             <input class="form-control" type="password" name="password" id="password"
-                   title="<fmt:message key="password.requirements"/>" required>
+                   title="<fmt:message key="password.requirements"/>"
+                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$" required>
             <c:if test="${fn:contains(error, 'pass')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if>
@@ -54,6 +55,7 @@
         <div class="form-group">
             <label class="form-label fs-5" for="confirm-password"><fmt:message key="confirm.password"/>*: </label>
             <input class="form-control" type="password" name="confirm-password" id="confirm-password"
+                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$"
                    title="<fmt:message key="password.requirements"/>" required>
             <br>
         </div>
@@ -61,7 +63,8 @@
         <div class="form-group">
             <label class="form-label fs-5" for="name"><fmt:message key="name"/>*: </label>
             <input class="form-control" type="text" name="name" id="name"
-                   title="<fmt:message key="name.requirements"/>" required value="${requestScope.user.name}">
+                   title="<fmt:message key="name.requirements"/>" pattern="^[A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'\- ]{1,30}"
+                   required value="${requestScope.user.name}">
             <c:if test="${fn:contains(error, '.name')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if>
@@ -71,7 +74,8 @@
         <div class="form-group">
             <label class="form-label fs-5" for="surname"><fmt:message key="surname"/>*: </label>
             <input class="form-control" type="text" name="surname" id="surname"
-                   title="<fmt:message key="surname.requirements"/>" required value="${requestScope.user.surname}">
+                   title="<fmt:message key="surname.requirements"/>" pattern="^[A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'\- ]{1,30}"
+                   required value="${requestScope.user.surname}">
             <c:if test="${fn:contains(error, 'surname')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if>

@@ -1,25 +1,18 @@
 package ua.java.conferences.filters.domains.impl;
 
-import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.filters.domains.Domain;
-import ua.java.conferences.filters.domains.sets.DomainActionsSets;
-import ua.java.conferences.filters.domains.sets.DomainPagesSets;
-
+import ua.java.conferences.filters.domains.sets.*;
 import java.util.Set;
 
-public class AdminDomain implements Domain {
-
+public class AdminDomain extends Domain {
     Set<String> domainPages = DomainPagesSets.getAdminPages();
-
     Set<String> domainActions = DomainActionsSets.getAdminActions();
 
-    HttpServletRequest request;
-    public AdminDomain(HttpServletRequest request) {
-        this.request = request;
+    public AdminDomain(String servletPath, String action) {
+        super(servletPath, action);
     }
 
     public boolean checkPages() {
-        String servletPath = request.getServletPath();
         if (servletPath != null) {
             return domainPages.contains(servletPath.substring(1));
         }
@@ -27,7 +20,6 @@ public class AdminDomain implements Domain {
     }
 
     public boolean checkActions() {
-        String action = request.getParameter("action");
         if (action != null) {
             return domainActions.contains(action);
         }

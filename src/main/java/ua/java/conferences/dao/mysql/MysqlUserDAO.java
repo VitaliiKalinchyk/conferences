@@ -1,10 +1,11 @@
 package ua.java.conferences.dao.mysql;
 
 import ua.java.conferences.connection.DataSource;
-import ua.java.conferences.dao.UserDAO;
+import ua.java.conferences.dao.*;
 import ua.java.conferences.entities.*;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.DAOException;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import java.sql.*;
 import java.util.*;
@@ -63,37 +64,63 @@ public class MysqlUserDAO implements UserDAO {
 
     @Override
     public List<User> getAll() throws DAOException {
-        return getUsers(GET_USERS);
+        List<User> users = new ArrayList<>();
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(GET_USERS)) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    users.add(createUser(resultSet));
+                }
+            }
+        } catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return users;
     }
 
     @Override
-    public List<User> getSpeakers() throws DAOException {
-        return getUsers(GET_SPEAKERS);
+    public List<User> getSorted(Sorting sorting, int offset, int records) throws DAOException {
+        List<User> users = new ArrayList<>();
+        String query = String.format(GET_SORTED, sorting.getFilter(), sorting.getSort(), sorting.getOrder());
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            int k = 0;
+            preparedStatement.setInt(++k, offset);
+            preparedStatement.setInt(++k, records);
+            preparedStatement.execute();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    users.add(createUser(resultSet));
+                }
+            }
+        }catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return users;
+    }
+
+    @Override
+    public int getNumberOfRecords (Sorting sorting) throws DAOException {
+        int numberOfRecords = 0;
+        String query = String.format(GET_NUMBER_OF_RECORDS, sorting.getFilter());
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    numberOfRecords = resultSet.getInt(NUMBER_OF_RECORDS);
+                }
+            }
+        }catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return numberOfRecords;
     }
 
     @Override
     public void update(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(EDIT_USER)) {
-            int k = 0;
-            preparedStatement.setString(++k, user.getEmail());
-            preparedStatement.setString(++k, user.getName());
-            preparedStatement.setString(++k, user.getSurname());
-            preparedStatement.setInt(++k, user.isEmailNotification() ? 1 : 0);
-            preparedStatement.setLong(++k, user.getId());
-            preparedStatement.execute();
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-    }
-
-    @Override
-    public void updateEmail(User user) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(EDIT_EMAIL)) {
-            int k = 0;
-            preparedStatement.setString(++k, user.getEmail());
-            preparedStatement.setLong(++k, user.getId());
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_USER)) {
+            setStatementFieldsForUpdateMethod(user, preparedStatement);
             preparedStatement.execute();
         } catch (SQLException e) {
             throw new DAOException(e);
@@ -103,7 +130,7 @@ public class MysqlUserDAO implements UserDAO {
     @Override
     public void updatePassword(User user) throws DAOException {
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(EDIT_PASSWORD)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PASSWORD)) {
             int k = 0;
             preparedStatement.setString(++k, user.getPassword());
             preparedStatement.setLong(++k, user.getId());
@@ -148,12 +175,12 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public void setUsersRole(long userId, Role role) throws DAOException {
+    public void setUserRole(String userEmail, Role role) throws DAOException {
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_ROLE)) {
             int k = 0;
             preparedStatement.setInt(++k, role.getValue());
-            preparedStatement.setLong(++k, userId);
+            preparedStatement.setString(++k, userEmail);
             preparedStatement.execute();
         }catch (SQLException e) {
             throw new DAOException(e);
@@ -177,7 +204,7 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     private User createUser(ResultSet resultSet) throws SQLException {
-        return new User.UserBuilder()
+        return new User.Builder()
                 .setId(resultSet.getInt(ID))
                 .setEmail(resultSet.getString(EMAIL))
                 .setName(resultSet.getString(NAME))
@@ -197,19 +224,14 @@ public class MysqlUserDAO implements UserDAO {
         preparedStatement.setInt(++k, user.isEmailNotification() ? 1 : 0);
     }
 
-    private List<User> getUsers(String query) throws DAOException {
-        List<User> users = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    users.add(createUser(resultSet));
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-        return users;
+    private static void setStatementFieldsForUpdateMethod(User user, PreparedStatement preparedStatement)
+            throws SQLException {
+        int k = 0;
+        preparedStatement.setString(++k, user.getEmail());
+        preparedStatement.setString(++k, user.getName());
+        preparedStatement.setString(++k, user.getSurname());
+        preparedStatement.setInt(++k, user.isEmailNotification() ? 1 : 0);
+        preparedStatement.setLong(++k, user.getId());
     }
 
     private static void setIds(long userId, long eventId, PreparedStatement preparedStatement) throws SQLException {

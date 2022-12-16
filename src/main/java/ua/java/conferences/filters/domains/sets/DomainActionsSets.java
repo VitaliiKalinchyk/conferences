@@ -1,24 +1,17 @@
 package ua.java.conferences.filters.domains.sets;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static ua.java.conferences.actions.constants.ActionNames.*;
 
 public final class DomainActionsSets {
-
     private DomainActionsSets() {}
 
     private static final Set<String> ANONYMOUS_USER_ACTIONS = new HashSet<>();
-
     private static final Set<String> LOGGED_USER_ACTIONS = new HashSet<>();
-
     private static final Set<String> VISITOR_ACTIONS = new HashSet<>();
-
     private static final Set<String> SPEAKER_ACTIONS = new HashSet<>();
-
     private static final Set<String> MODERATOR_ACTIONS = new HashSet<>();
-
     private static final Set<String> ADMIN_ACTIONS = new HashSet<>();
 
     static {
@@ -48,6 +41,7 @@ public final class DomainActionsSets {
     static {
         SPEAKER_ACTIONS.addAll(LOGGED_USER_ACTIONS);
         SPEAKER_ACTIONS.add(VIEW_SPEAKERS_EVENTS_ACTION);
+        SPEAKER_ACTIONS.add(VIEW_SPEAKERS_REPORTS_ACTION);
         SPEAKER_ACTIONS.add(VIEW_EVENT_BY_SPEAKER_ACTION);
         SPEAKER_ACTIONS.add(OFFER_REPORT_PAGE_ACTION);
         SPEAKER_ACTIONS.add(OFFER_REPORT_ACTION);
@@ -57,6 +51,11 @@ public final class DomainActionsSets {
 
     static {
         MODERATOR_ACTIONS.addAll(LOGGED_USER_ACTIONS);
+        MODERATOR_ACTIONS.add(CREATE_EVENT_ACTION);
+        MODERATOR_ACTIONS.add(SEARCH_EVENT_ACTION);
+        MODERATOR_ACTIONS.add(DELETE_EVENT_ACTION);
+        MODERATOR_ACTIONS.add(EDIT_EVENT_PAGE_ACTION);
+        MODERATOR_ACTIONS.add(EDIT_EVENT_ACTION);
     }
 
     static {

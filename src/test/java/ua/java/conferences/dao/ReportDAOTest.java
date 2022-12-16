@@ -10,6 +10,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.dao.DAOTestUtils.*;
+import static ua.java.conferences.Constants.*;
 
 class ReportDAOTest {
 
@@ -19,144 +20,181 @@ class ReportDAOTest {
     }
 
     @Test
-    void testCrud() throws DAOException {
+    void testAdd() throws DAOException {
+        eventDAO.add(getTestEvent());
+        userDAO.add(getTestUser());
+        assertDoesNotThrow(() -> reportDAO.add(getTestReport()));
+    }
+
+    @Test
+    void testAddNoSpeaker() throws DAOException {
         eventDAO.add(getTestEvent());
         Report testReport = getTestReport();
+        testReport.setSpeaker(null);
         assertDoesNotThrow(() -> reportDAO.add(testReport));
-
-        Report resultReport = reportDAO.getById(1).orElse(null);
-        assertNotNull(resultReport);
-        assertNotEquals(0, resultReport.getId());
-        assertNotEquals(resultReport, testReport);
-        assertEquals(resultReport.getTopic(), testReport.getTopic());
-
-        List<Report> reports = reportDAO.getAll();
-        assertTrue(reports.contains(resultReport));
-        assertEquals(1, reports.size());
-
-        resultReport.setTopic("New Topic");
-        assertDoesNotThrow(() -> reportDAO.update(testReport));
-
-
-        Report changedReport = reportDAO.getById(resultReport.getId()).orElse(null);
-        assertNotNull(changedReport);
-        assertEquals(resultReport, changedReport);
-        assertDoesNotThrow(() -> reportDAO.delete(changedReport.getId()));
-
-        reports = reportDAO.getAll();
-        assertEquals(0, reports.size());
     }
 
     @Test
-    void testGetReport() throws DAOException {
-        Report testReport = getTestReport();
-        Event testEvent = getTestEvent();
-        eventDAO.add(testEvent);
-        testEvent = eventDAO.getByTitle(testEvent.getTitle()).orElse(testEvent);
-        User testSpeaker = getTestUser();
-        userDAO.add(testSpeaker);
-        testSpeaker = userDAO.getByEmail(testSpeaker.getEmail()).orElse(testSpeaker);
-        testReport.setEvent(testEvent);
-        testReport.setSpeaker(testSpeaker);
-        reportDAO.add(testReport);
-        testReport = reportDAO.getById(1).orElse(null);
-        assertNotNull(testReport);
-
-        User resultSpeaker = testReport.getSpeaker();
-        Event resultEvent = testReport.getEvent();
-
-        assertEquals(resultSpeaker, testSpeaker);
-        assertEquals(resultSpeaker.getName(), testSpeaker.getName());
-        assertEquals(resultSpeaker.getSurname(), testSpeaker.getSurname());
-        assertNotEquals(resultSpeaker.getEmail(), testSpeaker.getEmail());
-        assertEquals(resultEvent, testEvent);
-        assertEquals(resultEvent.getTitle(), testEvent.getTitle());
-        assertEquals(resultEvent.getDate(), testEvent.getDate());
-        assertEquals(resultEvent.getLocation(), testEvent.getLocation());
-        assertNotEquals(resultEvent.getDescription(), testEvent.getDescription());
-
-    }
-
-    @Test
-    void testGetAbsent() throws DAOException {
-        assertNull(reportDAO.getById(1).orElse(null));
-    }
-
-    @Test
-    void testBadInput() {
+    void testAddNoEvent() {
         assertThrows(DAOException.class, () -> reportDAO.add(getTestReport()));
     }
 
     @Test
+    void testAddNoSuchSpeaker() throws DAOException {
+        eventDAO.add(getTestEvent());
+        assertThrows(DAOException.class, () -> reportDAO.add(getTestReport()));
+    }
+
+    @Test
+    void testGetById() throws DAOException {
+        prepareDb();
+
+        Report resultReport = reportDAO.getById(ID_VALUE).orElse(null);
+        assertNotNull(resultReport);
+        assertEquals(getTestReport().getId(), resultReport.getId());
+    }
+
+    @Test
+    void testGetAbsent() throws DAOException {
+        assertNull(reportDAO.getById(ID_VALUE).orElse(null));
+    }
+
+    @Test
+    void testGetReport() throws DAOException {
+        prepareDb();
+
+        Report resultReport = reportDAO.getById(ID_VALUE).orElse(null);
+        assertNotNull(resultReport);
+
+        User resultSpeaker = resultReport.getSpeaker();
+        Event resultEvent = resultReport.getEvent();
+
+        assertEquals(resultSpeaker.getId(), getTestUser().getId());
+        assertEquals(resultSpeaker.getName(), getTestUser().getName());
+        assertEquals(resultSpeaker.getSurname(), getTestUser().getSurname());
+        assertEquals(resultEvent.getId(), getTestEvent().getId());
+        assertEquals(resultEvent.getTitle(), getTestEvent().getTitle());
+        assertEquals(resultEvent.getDate(), getTestEvent().getDate());
+        assertEquals(resultEvent.getLocation(), getTestEvent().getLocation());
+
+    }
+
+    @Test
+    void testGetAll() throws DAOException {
+        prepareDb();
+
+        List<Report> reports = reportDAO.getAll();
+        assertEquals(ONE, reports.size());
+    }
+
+    @Test
+    void testGetNoReports() throws DAOException {
+        List<Report> reports = reportDAO.getAll();
+        assertEquals(ZERO, reports.size());
+    }
+
+    @Test
+    void testUpdate() throws DAOException {
+        prepareDb();
+
+        assertDoesNotThrow(() -> reportDAO.update(getTestReport()));
+    }
+
+    @Test
+    void testUpdateWithResult() throws DAOException {
+        prepareDb();
+
+        Report testReport = getTestReport();
+        testReport.setTopic("Result");
+        reportDAO.update(testReport);
+
+        Report resultReport = reportDAO.getById(ID_VALUE).orElse(null);
+        assertNotNull(resultReport);
+        assertEquals(resultReport.getTopic(), testReport.getTopic());
+    }
+
+
+    @Test
+    void testUpdateNoReport() {
+        assertDoesNotThrow(() -> reportDAO.update(getTestReport()));
+    }
+
+    @Test
+    void testDelete() throws DAOException {
+        prepareDb();
+
+        assertDoesNotThrow(() -> reportDAO.delete(ID_VALUE));
+        List<Report> reports = reportDAO.getAll();
+        assertEquals(ZERO, reports.size());
+    }
+
+    @Test
+    void testDeleteNoReport() {
+        assertDoesNotThrow(() -> reportDAO.delete(ID_VALUE));
+    }
+
+    @Test
     void testGetEventsReports() throws DAOException {
-        Event testEvent = getTestEvent();
-        eventDAO.add(testEvent);
-        testEvent = eventDAO.getByTitle(testEvent.getTitle()).orElse(null);
-        assertNotNull(testEvent);
+        prepareDb();
 
-        Report testReport = getTestReport();
-        reportDAO.add(testReport);
-        testReport = reportDAO.getById(1L).orElse(null);
-        assertNotNull(testReport);
-
-        Event reportEvent = testReport.getEvent();
-        assertEquals(testEvent, reportEvent);
-
-        List<Report> reports = reportDAO.getEventsReports(testEvent.getId());
-        assertTrue(reports.contains(testReport));
-        assertEquals(1, reports.size());
+        List<Report> reports = reportDAO.getEventsReports(ID_VALUE);
+        assertEquals(ONE, reports.size());
     }
 
     @Test
-    void testWrongReport() throws DAOException {
-        Report testReport = getTestReport();
-        Event testEvent = getTestEvent();
-        eventDAO.add(testEvent);
-        List<Report> reports = reportDAO.getEventsReports(testEvent.getId());
-        assertFalse(reports.contains(testReport));
-        assertEquals(0, reports.size());
+    void testNoReport() throws DAOException {
+        eventDAO.add( getTestEvent());
+        List<Report> reports = reportDAO.getEventsReports(ID_VALUE);
+        assertEquals(ZERO, reports.size());
     }
 
     @Test
-    void testSpeakerForReport() throws DAOException {
-        Event testEvent = getTestEvent();
-        eventDAO.add(testEvent);
+    void testGetSpeakersReports() throws DAOException {
+        prepareDb();
+
+        List<Report> reports = reportDAO.getSpeakersReports(ID_VALUE);
+        assertEquals(ONE, reports.size());
+    }
+
+    @Test
+    void testSetSpeakerForReport() throws DAOException {
+        eventDAO.add(getTestEvent());
         Report testReport = getTestReport();
+        testReport.setSpeaker(null);
         reportDAO.add(testReport);
-        User testUser = getTestUser();
-        userDAO.add(testUser);
-        assertDoesNotThrow(() -> reportDAO.setSpeaker(1, 1));
+        userDAO.add(getTestUser());
+        assertDoesNotThrow(() -> reportDAO.setSpeaker(ID_VALUE, ID_VALUE));
 
-        List<Report> reports = reportDAO.getSpeakersReports(1);
-        assertEquals(1, reports.size());
+        List<Report> reports = reportDAO.getSpeakersReports(ID_VALUE);
+        assertEquals(ONE, reports.size());
 
-        testReport = reportDAO.getById(1).orElse(null);
+        testReport = reportDAO.getById(ID_VALUE).orElse(null);
         assertNotNull(testReport);
 
         User speaker = testReport.getSpeaker();
-        assertEquals(testUser.getName(), speaker.getName());
+        assertEquals(getTestUser().getName(), speaker.getName());
     }
 
     @Test
     void testDeleteSpeaker() throws DAOException {
-        Event testEvent = getTestEvent();
-        eventDAO.add(testEvent);
-        Report testReport = getTestReport();
-        reportDAO.add(testReport);
-        User testUser = getTestUser();
-        userDAO.add(testUser);
-        reportDAO.setSpeaker(1, 1);
+        prepareDb();
 
-        List<Report> reports = reportDAO.getSpeakersReports(1);
-        assertEquals(1, reports.size());
+        List<Report> reports = reportDAO.getSpeakersReports(ID_VALUE);
+        assertEquals(ONE, reports.size());
 
-        assertDoesNotThrow(() -> reportDAO.deleteSpeaker(1));
+        assertDoesNotThrow(() -> reportDAO.deleteSpeaker(ID_VALUE));
 
-        reports = reportDAO.getSpeakersReports(1);
-        assertEquals(0, reports.size());
+        reports = reportDAO.getSpeakersReports(ID_VALUE);
+        assertEquals(ZERO, reports.size());
 
-        testReport = reportDAO.getById(1).orElse(null);
+        Report testReport = reportDAO.getById(ID_VALUE).orElse(null);
         assertNotNull(testReport);
         assertNull(testReport.getSpeaker());
+    }
+
+    private static void prepareDb() throws DAOException {
+        eventDAO.add(getTestEvent());
+        userDAO.add(getTestUser());
+        reportDAO.add(getTestReport());
     }
 }

@@ -1,30 +1,24 @@
 package ua.java.conferences.services;
 
-import ua.java.conferences.dto.request.EventRequestDTO;
-import ua.java.conferences.dto.response.*;
+import ua.java.conferences.dto.EventDTO;
 import ua.java.conferences.exceptions.ServiceException;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import java.util.List;
 
-public interface EventService extends Service<EventResponseDTO> {
+public interface EventService extends Service<EventDTO> {
 
-    EventResponseDTO createEvent(EventRequestDTO eventDTO) throws ServiceException;
+    EventDTO addEvent(EventDTO eventDTO) throws ServiceException;
 
-    EventResponseDTO searchEvent(String title) throws ServiceException;
+    EventDTO getByTitle(String title) throws ServiceException;
 
-    List<EventResponseDTO> viewUsersEvents(long userId) throws ServiceException;
+    List<EventDTO>  getSorted(Sorting sorting, String offset, String records) throws ServiceException;
 
-    List<EventResponseDTO> viewPastUsersEvents(long userId) throws ServiceException;
+    List<EventDTO> getSortedByUser(long userId, Sorting sorting, String offset, String records, String role) throws ServiceException;
 
-    List<EventResponseDTO> viewSpeakersEvents(long speakerId) throws ServiceException;
+    int getNumberOfRecords(Sorting sorting) throws ServiceException;
 
-    List<EventResponseDTO> viewSpeakersPastEvents(long speakerId) throws ServiceException;
-
-    List<EventResponseDTO> viewSortedEventsByUser(String sortField, String order) throws ServiceException;
-
-    List<EventResponseDTO> viewSortedEventsByModerator(String filter, String sortField, String order) throws ServiceException;
-
-    EventResponseDTO editEvent(EventRequestDTO eventDTO) throws ServiceException;
+    int getNumberOfRecordsByUser(long id, Sorting sorting, String role) throws ServiceException;
 
     void setVisitorsCount(String eventIdString, String visitorsCountString) throws ServiceException;
 }

@@ -8,23 +8,29 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" ><span class="mb-0 h4 invisible">Conference Smart App</span></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse2" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse2"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse2">
             <ul class="navbar-nav me-auto mx-4 mb-4 mb-md-0">
                 <li class="nav-item">
                     <a class="nav-link text-decoration-underline" aria-current="page"
-                       href="controller?action=view-up-events-by-visitor"><fmt:message key="view.up.events.by.visitor"/></a>
+                       href="controller?action=view-up-events-by-visitor">
+                        <fmt:message key="view.up.events.by.visitor"/>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-decoration-underline" aria-current="page"
-                       href="controller?action=view-visitors-events"><fmt:message key="view.visitors.events"/></a>
+                       href="controller?action=view-visitors-events">
+                        <fmt:message key="view.visitors.events"/>
+                    </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-decoration-underline" aria-current="page"
                        href="controller?action=view-visitors-events&passed=passed">
-                        <fmt:message key="view.visitors.past.events"/></a>
+                        <fmt:message key="view.visitors.past.events"/>
+                    </a>
                 </li>
             </ul>
         </div>

@@ -1,8 +1,9 @@
 package ua.java.conferences.exceptions;
 
-public class PasswordMatchingException extends ServiceException{
+import static ua.java.conferences.exceptions.constants.Message.PASSWORD_MATCHING;
 
+public class PasswordMatchingException extends ServiceException{
     public PasswordMatchingException() {
-        super("error.pass.match");
+        super(PASSWORD_MATCHING);
     }
 }

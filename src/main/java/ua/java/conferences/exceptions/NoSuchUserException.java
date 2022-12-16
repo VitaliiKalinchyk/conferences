@@ -1,8 +1,9 @@
 package ua.java.conferences.exceptions;
 
-public class NoSuchUserException extends ServiceException {
+import static ua.java.conferences.exceptions.constants.Message.NO_USER;
 
+public class NoSuchUserException extends ServiceException {
     public NoSuchUserException() {
-        super("error.email.absent");
+        super(NO_USER);
     }
 }

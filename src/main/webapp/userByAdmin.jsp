@@ -28,6 +28,8 @@
         <span class="fs-4"><fmt:message key="view.user"/></span>
     </header>
 
+    <c:set var="user" value="${requestScope.user}"/>
+
     <main>
         <p class="fs-5"><fmt:message key="email"/>: ${requestScope.user.email}</p>
         <p class="fs-5"><fmt:message key="name"/>: ${requestScope.user.name}</p>
@@ -35,15 +37,23 @@
         <p class="fs-5"><fmt:message key="role"/>: <fmt:message key="${requestScope.user.role}"/></p>
     </main>
 
-    <form method="GET" action="controller">
+    <form method="POST" action="controller">
         <input type="hidden" name="action" value="set-role">
-        <input type="hidden" name="user-id" value=${requestScope.user.id}>
+        <input type="hidden" name="email" value=${requestScope.user.email}>
         <label>
             <select name="role" class="form-select mt-2">
-                <option value="VISITOR"><fmt:message key="visitor"/></option>
-                <option value="SPEAKER"><fmt:message key="speaker"/></option>
-                <option value="MODERATOR"><fmt:message key="moderator"/></option>
-                <option value="ADMIN"><fmt:message key="admin"/></option>
+                <option value="VISITOR" ${requestScope.user.role eq 'VISITOR' ? 'selected' : ''}>
+                    <fmt:message key="VISITOR"/>
+                </option>
+                <option value="SPEAKER" ${requestScope.user.role eq 'SPEAKER' ? 'selected' : ''}>
+                    <fmt:message key="SPEAKER"/>
+                </option>
+                <option value="MODERATOR" ${requestScope.user.role eq 'MODERATOR' ? 'selected' : ''}>
+                    <fmt:message key="MODERATOR"/>
+                </option>
+                <option value="ADMIN" ${requestScope.user.role eq 'ADMIN' ? 'selected' : ''}>
+                    <fmt:message key="ADMIN"/>
+                </option>
             </select>
         </label>
         <button type="submit" class="btn btn-dark mt-3 mb-4"><fmt:message key="set.role"/></button>
@@ -52,30 +62,11 @@
     <button class="btn btn-dark mt-4 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">
         <fmt:message key="delete"/>
     </button>
-
-    <div class="modal fade" id="exampleModalDefault" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content rounded-4 shadow">
-                <div class="modal-header border-bottom-0">
-                    <h1 class="modal-title fs-5 text-md-center"><fmt:message key="delete.account"/></h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body py-0">
-                    <p><fmt:message key="delete.account.confirmation"/></p>
-                </div>
-                <div class="modal-footer flex-column border-top-0">
-                    <form method="POST" action="controller">
-                        <input type="hidden" name="action" value="delete-user">
-                        <input type="hidden" name="user-id" value=${requestScope.user.id}>
-                        <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="yes"/></button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <jsp:include page="fragments/footer.jsp"/>
+
+<jsp:include page="fragments/deleteUserModal.jsp"/>
 
 </body>
 </html>

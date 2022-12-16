@@ -1,16 +1,18 @@
 package ua.java.conferences.services.implementation;
 
 import ua.java.conferences.dao.*;
-import ua.java.conferences.dto.request.UserRequestDTO;
-import ua.java.conferences.dto.response.UserResponseDTO;
+import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.entities.User;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.UserService;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import java.util.*;
 
-import static ua.java.conferences.exceptions.IncorrectFormatException.Message.*;
+import static ua.java.conferences.actions.constants.ParameterValues.*;
+import static ua.java.conferences.actions.constants.Parameters.*;
+import static ua.java.conferences.exceptions.constants.Message.*;
 import static ua.java.conferences.utils.ConvertorUtil.*;
 import static ua.java.conferences.utils.PasswordHashUtil.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;
@@ -24,8 +26,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void register(UserRequestDTO userDTO, String confirmPassword) throws ServiceException {
-        checkString(confirmPassword);
+    public void add(UserDTO userDTO, String confirmPassword) throws ServiceException {
+        checkStrings(confirmPassword);
         validateUser(userDTO);
         checkPasswordMatching(userDTO.getPassword(), confirmPassword);
         User user = convertDTOToUser(userDTO);
@@ -37,12 +39,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO signIn(String login, String password) throws ServiceException {
-        checkString(login, password);
-        UserResponseDTO userDTO;
+    public UserDTO signIn(String email, String password) throws ServiceException {
+        checkStrings(email, password);
+        UserDTO userDTO;
         try {
-            User user = userDAO.getByEmail(login).orElseThrow(IncorrectEmailException::new);
-            checkIfPasswordCorrect(password, user);
+            User user = userDAO.getByEmail(email).orElseThrow(NoSuchUserException::new);
+            verify(user.getPassword(), password);
             userDTO = convertUserToDTO(user);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -51,8 +53,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO view(String userIdString) throws ServiceException {
-        UserResponseDTO userDTO;
+    public UserDTO getById(String userIdString) throws ServiceException {
+        UserDTO userDTO;
         long userId = getUserId(userIdString);
         try {
             User user = userDAO.getById(userId).orElseThrow(NoSuchUserException::new);
@@ -64,9 +66,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO searchUser(String email) throws ServiceException {
-        validate(validateEmail(email), ENTER_CORRECT_EMAIL);
-        UserResponseDTO userDTO;
+    public UserDTO getByEmail(String email) throws ServiceException {
+        validateEmail(email);
+        UserDTO userDTO;
         try {
             User user = userDAO.getByEmail(email).orElseThrow(NoSuchUserException::new);
             userDTO = convertUserToDTO(user);
@@ -78,8 +80,8 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public List<UserResponseDTO> viewUsers() throws ServiceException {
-        List<UserResponseDTO> userDTOS = new ArrayList<>();
+    public List<UserDTO> getAll() throws ServiceException {
+        List<UserDTO> userDTOS = new ArrayList<>();
         try {
             List<User> users = userDAO.getAll();
             users.forEach(user -> userDTOS.add(convertUserToDTO(user)));
@@ -90,10 +92,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserResponseDTO> viewSpeakers() throws ServiceException {
-        List<UserResponseDTO> userDTOS = new ArrayList<>();
+    public List<UserDTO> getSortedUsers(Sorting sorting, String offset, String records) throws ServiceException {
+        List<UserDTO> userDTOS = new ArrayList<>();
         try {
-            List<User> users = userDAO.getSpeakers();
+            List<User> users = userDAO.getSorted(sorting, getInt(offset), getInt(records));
             users.forEach(user -> userDTOS.add(convertUserToDTO(user)));
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -102,7 +104,31 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponseDTO editProfile(UserRequestDTO userDTO) throws ServiceException {
+    public int getNumberOfRecords(Sorting sorting) throws ServiceException {
+        int records;
+        try {
+            records = userDAO.getNumberOfRecords(sorting);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return records;
+    }
+
+    @Override
+    public List<UserDTO> getSpeakers() throws ServiceException {
+        List<UserDTO> userDTOS = new ArrayList<>();
+        Sorting sorting = Sorting.getUserSorting(String.valueOf(Role.SPEAKER.getValue()), ID, ASCENDING_ORDER);
+        try {
+            List<User> speakers = userDAO.getSorted(sorting, 0, Integer.MAX_VALUE);
+            speakers.forEach(user -> userDTOS.add(convertUserToDTO(user)));
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return userDTOS;
+    }
+
+    @Override
+    public void update(UserDTO userDTO) throws ServiceException {
         validateUser(userDTO);
         User user = convertDTOToUser(userDTO);
         try {
@@ -110,19 +136,18 @@ public class UserServiceImpl implements UserService {
         } catch (DAOException e) {
             checkExceptionType(e);
         }
-        return convertUserToDTO(user);
     }
 
     @Override
     public void changePassword(long userId, String oldPassword, String newPassword, String confirmPassword)
             throws ServiceException {
-        checkString(oldPassword, newPassword, confirmPassword);
+        checkStrings(oldPassword, newPassword, confirmPassword);
         try {
             User user = userDAO.getById(userId).orElseThrow(NoSuchUserException::new);
-            checkIfPasswordCorrect(oldPassword, user);
+            verify(user.getPassword(), oldPassword);
             checkPasswordMatching(newPassword, confirmPassword);
-            validate(validatePassword(newPassword), ENTER_CORRECT_PASSWORD);
-            User userToUpdate = new User.UserBuilder().setId(userId).setPassword(encode(newPassword)).get();
+            validatePassword(newPassword);
+            User userToUpdate = new User.Builder().setId(userId).setPassword(encode(newPassword)).get();
             userDAO.updatePassword(userToUpdate);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -130,11 +155,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void setRole(String userIdString, int roleId) throws ServiceException {
-        long userId = getUserId(userIdString);
+    public void setRole(String userEmail, int roleId) throws ServiceException {
         try {
             Role role = Role.getRole(roleId);
-            userDAO.setUsersRole(userId, role);
+            userDAO.setUserRole(userEmail, role);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -196,24 +220,12 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void checkIfPasswordCorrect(String password, User user) throws IncorrectPasswordException {
-        if (!verify(user.getPassword(), password)) {
-            throw new IncorrectPasswordException();
-        }
-    }
-
-    private void validate(boolean validation, String exceptionMessage) throws IncorrectFormatException {
-        if (!validation) {
-            throw new IncorrectFormatException(exceptionMessage);
-        }
-    }
-
-    private void validateUser(UserRequestDTO userDTO) throws IncorrectFormatException {
-        validate(validateEmail(userDTO.getEmail()), ENTER_CORRECT_EMAIL);
+    private void validateUser(UserDTO userDTO) throws IncorrectFormatException {
+        validateEmail(userDTO.getEmail());
         if (userDTO.getPassword() != null) {
-            validate(validatePassword(userDTO.getPassword()), ENTER_CORRECT_PASSWORD);
+            validatePassword(userDTO.getPassword());
         }
-        validate(validateName(userDTO.getName()), ENTER_CORRECT_NAME);
-        validate(validateName(userDTO.getSurname()), ENTER_CORRECT_SURNAME);
+        validateName(userDTO.getName(), ENTER_CORRECT_NAME);
+        validateName(userDTO.getSurname(), ENTER_CORRECT_SURNAME);
     }
 }

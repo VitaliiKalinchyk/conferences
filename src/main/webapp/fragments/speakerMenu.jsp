@@ -8,7 +8,8 @@
 <nav class="navbar navbar-expand-md navbar-light bg-light">
     <div class="container-fluid">
         <a class="navbar-brand" ><span class="mb-0 h4 invisible">Conference Smart App</span></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse2" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse2"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse2">
@@ -19,8 +20,15 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-decoration-underline" aria-current="page"
-                       href="controller?action=view-speakers-events&passed=passed">
-                        <fmt:message key="view.visitors.past.events"/></a>
+                       href="controller?action=view-speakers-events&past=past">
+                        <fmt:message key="view.visitors.past.events"/>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-decoration-underline" aria-current="page"
+                       href="controller?action=view-speakers-reports">
+                        <fmt:message key="view.speakers.reports"/>
+                    </a>
                 </li>
             </ul>
         </div>

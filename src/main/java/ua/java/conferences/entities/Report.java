@@ -4,17 +4,11 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class Report implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
     private long id;
-
     private String topic;
-
     private Event event;
-
     private User speaker;
-
 
     public long getId() {
         return this.id;
@@ -53,7 +47,7 @@ public class Report implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Report report = (Report) o;
-        return id == report.id;
+        return id == report.id && topic.equals(report.topic);
     }
 
     @Override
@@ -71,30 +65,29 @@ public class Report implements Serializable {
                 '}';
     }
 
-    public static class ReportBuilder {
-
+    public static class Builder {
         private final Report report;
 
-        public ReportBuilder() {
+        public Builder() {
             this.report = new Report();
         }
 
-        public ReportBuilder setId(long id) {
+        public Builder setId(long id) {
             report.setId(id);
             return this;
         }
 
-        public ReportBuilder setTopic(String topic) {
+        public Builder setTopic(String topic) {
             report.setTopic(topic);
             return this;
         }
 
-        public ReportBuilder setEvent(Event event) {
+        public Builder setEvent(Event event) {
             report.setEvent(event);
             return this;
         }
 
-        public ReportBuilder setSpeaker(User speaker) {
+        public Builder setSpeaker(User speaker) {
             report.setSpeaker(speaker);
             return this;
         }

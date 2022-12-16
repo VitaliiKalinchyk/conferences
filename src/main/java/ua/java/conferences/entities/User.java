@@ -4,21 +4,13 @@ import java.io.Serializable;
 import java.util.Objects;
 
 public class User implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
     private long id;
-
     private String email;
-
     private transient String password;
-
     private String name;
-
     private String surname;
-
     private boolean emailNotification;
-
     private int roleId;
 
     public long getId() {
@@ -82,7 +74,7 @@ public class User implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
-        return id == user.id;
+        return id == user.id && email.equals(user.email) && name.equals(user.name) && surname.equals(user.surname);
     }
 
     @Override
@@ -103,45 +95,44 @@ public class User implements Serializable {
                 '}';
     }
 
-    public static final class UserBuilder {
-
+    public static final class Builder {
         private final User user;
 
-        public UserBuilder() {
+        public Builder() {
             this.user = new User();
         }
 
-        public UserBuilder setId(long id) {
+        public Builder setId(long id) {
             user.setId(id);
             return this;
         }
 
-        public UserBuilder setEmail(String email) {
+        public Builder setEmail(String email) {
             user.setEmail(email);
             return this;
         }
 
-        public UserBuilder setPassword(String password) {
+        public Builder setPassword(String password) {
             user.setPassword(password);
             return this;
         }
 
-        public UserBuilder setName(String name) {
+        public Builder setName(String name) {
             user.setName(name);
             return this;
         }
 
-        public UserBuilder setSurname(String surname) {
+        public Builder setSurname(String surname) {
             user.setSurname(surname);
             return this;
         }
 
-        public UserBuilder setEmailNotification(boolean b) {
+        public Builder setEmailNotification(boolean b) {
             user.setEmailNotification(b);
             return this;
         }
 
-        public UserBuilder setRoleId(int roleId) {
+        public Builder setRoleId(int roleId) {
             user.setRoleId(roleId);
             return this;
         }

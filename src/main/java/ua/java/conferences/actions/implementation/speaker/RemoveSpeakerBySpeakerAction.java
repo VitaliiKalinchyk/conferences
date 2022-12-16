@@ -22,6 +22,7 @@ public class RemoveSpeakerBySpeakerAction implements Action {
         long reportId = Long.parseLong(request.getParameter(REPORT_ID));
         String eventId = request.getParameter(EVENT_ID);
         reportService.deleteSpeaker(reportId);
-        return getActionToRedirect(VIEW_EVENT_BY_SPEAKER_ACTION, EVENT_ID, String.valueOf(eventId));
+        return eventId != null ? getActionToRedirect(VIEW_EVENT_BY_SPEAKER_ACTION, EVENT_ID, eventId)
+                : getActionToRedirect(VIEW_SPEAKERS_REPORTS_ACTION);
     }
 }

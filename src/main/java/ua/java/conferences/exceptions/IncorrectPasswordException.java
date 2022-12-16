@@ -1,8 +1,9 @@
 package ua.java.conferences.exceptions;
 
-public class IncorrectPasswordException extends ServiceException{
+import static ua.java.conferences.exceptions.constants.Message.WRONG_PASSWORD;
 
+public class IncorrectPasswordException extends ServiceException{
     public IncorrectPasswordException() {
-        super("error.pass.wrong");
+        super(WRONG_PASSWORD);
     }
 }

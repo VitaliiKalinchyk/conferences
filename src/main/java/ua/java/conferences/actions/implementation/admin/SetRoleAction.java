@@ -7,7 +7,7 @@ import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
 
 import static ua.java.conferences.actions.ActionUtil.*;
-import static ua.java.conferences.actions.constants.Pages.*;
+import static ua.java.conferences.actions.constants.ActionNames.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class SetRoleAction implements Action {
@@ -20,10 +20,10 @@ public class SetRoleAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        String userId = request.getParameter(USER_ID);
+        String email = request.getParameter(EMAIL);
         int roleId = Role.valueOf(request.getParameter(ROLE)).getValue();
-        userService.setRole(userId, roleId);
-        request.setAttribute(USER, userService.view(userId));
-        return USER_BY_EMAIL_PAGE;
+        userService.setRole(email, roleId);
+        request.setAttribute(USER, userService.getByEmail(email));
+        return getActionToRedirect(SEARCH_USER_ACTION, EMAIL, email);
     }
 }

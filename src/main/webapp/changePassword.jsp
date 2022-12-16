@@ -44,8 +44,9 @@
 
         <div class="form-group">
             <label class="form-label fs-5" for="password"><fmt:message key="new.password"/>*: </label>
-            <input class="form-control" type="password" name="password" id="password" title="<fmt:message
-                                        key="password.requirements"/>" required><br>
+            <input class="form-control" type="password" name="password" id="password"
+                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$"
+                   title="<fmt:message key="password.requirements"/>" required><br>
         </div>
         <div class="form-group">
             <label class="form-label fs-5" for="confirm-password"><fmt:message key="confirm.password"/>*: </label>

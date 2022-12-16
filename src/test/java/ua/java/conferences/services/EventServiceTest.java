@@ -2,23 +2,21 @@ package ua.java.conferences.services;
 
 import org.junit.jupiter.api.Test;
 import ua.java.conferences.dao.EventDAO;
-import ua.java.conferences.dto.request.EventRequestDTO;
-import ua.java.conferences.dto.response.*;
+import ua.java.conferences.dto.EventDTO;
 import ua.java.conferences.entities.Event;
-
+import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.implementation.EventServiceImpl;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.exceptions.IncorrectFormatException.Message.*;
-import static ua.java.conferences.dao.mysql.constants.EventSQLQueries.*;
+import static ua.java.conferences.exceptions.constants.Message.*;
 
 class EventServiceTest {
 
@@ -27,185 +25,243 @@ class EventServiceTest {
     private final EventService eventService = new EventServiceImpl(eventDAO);
 
     @Test
-    void testCreateEvent() throws DAOException {
+    void testAddEvent() throws DAOException {
         doNothing().when(eventDAO).add(isA(Event.class));
-        EventRequestDTO eventDTO = getTestEventRequestDTO();
-        assertDoesNotThrow(() -> eventService.createEvent(eventDTO));
+        assertDoesNotThrow(() -> eventService.addEvent(getTestEventDTO()));
     }
 
     @Test
-    void testCreateIncorrectTitle() throws DAOException {
+    void testAddIncorrectTitle() throws DAOException {
         doNothing().when(eventDAO).add(isA(Event.class));
-        EventRequestDTO eventDTO = new EventRequestDTO(ID, WRONG_TITLE,DATE_NAME, LOCATION, DESCRIPTION);
-        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.createEvent(eventDTO));
+        EventDTO eventDTO = getTestEventDTO();
+        eventDTO.setTitle(INCORRECT_TITLE);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
         assertEquals(ENTER_CORRECT_TITLE, e.getMessage());
     }
 
     @Test
-    void testCreateIncorrectDate() throws DAOException {
+    void testAddIncorrectDate() throws DAOException {
         doNothing().when(eventDAO).add(isA(Event.class));
-        EventRequestDTO eventDTO = new EventRequestDTO(ID, TITLE,WRONG_DATE_NAME, LOCATION, DESCRIPTION);
-        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.createEvent(eventDTO));
+        EventDTO eventDTO = getTestEventDTO();
+        eventDTO.setDate(INCORRECT_DATE_NAME);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
         assertEquals(ENTER_VALID_DATE, e.getMessage());
     }
 
     @Test
-    void testCreateIncorrectLocation() throws DAOException {
+    void testAddIncorrectLocation() throws DAOException {
         doNothing().when(eventDAO).add(isA(Event.class));
-        EventRequestDTO eventDTO = new EventRequestDTO(ID, TITLE,DATE_NAME, WRONG_LOCATION, DESCRIPTION);
-        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.createEvent(eventDTO));
+        EventDTO eventDTO = getTestEventDTO();
+        eventDTO.setLocation(INCORRECT_LOCATION);
+        System.out.println(eventDTO);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
         assertEquals(ENTER_CORRECT_LOCATION, e.getMessage());
     }
 
     @Test
-    void testCreateIncorrectDescription() throws DAOException {
+    void testAddIncorrectDescription() throws DAOException {
         doNothing().when(eventDAO).add(isA(Event.class));
-        EventRequestDTO eventDTO = new EventRequestDTO(ID, TITLE,DATE_NAME, LOCATION, WRONG_DESCRIPTION);
-        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.createEvent(eventDTO));
+        EventDTO eventDTO = getTestEventDTO();
+        eventDTO.setDescription(INCORRECT_DESCRIPTION);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
         assertEquals(ENTER_CORRECT_DESCRIPTION, e.getMessage());
     }
 
     @Test
-    void testDuplicateTitle() throws DAOException {
+    void testAddDuplicateTitle() throws DAOException {
         doThrow(new DAOException(new SQLException("Duplicate entry"))).when(eventDAO).add(isA(Event.class));
-        EventRequestDTO eventDTO = new EventRequestDTO(ID, TITLE,DATE_NAME, LOCATION, DESCRIPTION);
-        ServiceException e = assertThrows(ServiceException.class , () -> eventService.createEvent(eventDTO));
-        assertTrue(e.getMessage().contains("Duplicate entry"));
+        assertThrows(DuplicateTitleException.class, () -> eventService.addEvent(getTestEventDTO()));
     }
 
     @Test
-    void testDbIsDown() throws DAOException {
+    void testAddDbIsDown() throws DAOException {
         doThrow(new DAOException(new SQLException())).when(eventDAO).add(isA(Event.class));
-        EventRequestDTO eventDTO = new EventRequestDTO(ID, TITLE,DATE_NAME, LOCATION, DESCRIPTION);
-        ServiceException e = assertThrows(ServiceException.class , () -> eventService.createEvent(eventDTO));
+        ServiceException e = assertThrows(ServiceException.class , () -> eventService.addEvent(getTestEventDTO()));
         assertFalse(e.getMessage().contains("Duplicate entry"));
     }
 
     @Test
-    void testViewEvent() throws DAOException, ServiceException {
-        when(eventDAO.getById(ID)).thenReturn(Optional.of(getTestEvent()));
-        assertEquals(getTestEventResponseDTO(), eventService.view(String.valueOf(ID)));
+    void testGetById() throws DAOException, ServiceException {
+        when(eventDAO.getById(ID_VALUE)).thenReturn(Optional.of(getTestEvent()));
+        assertEquals(getTestEventDTO(), eventService.getById(String.valueOf(ID_VALUE)));
     }
 
     @Test
-    void testViewNoEvent() throws DAOException {
-        when(eventDAO.getById(ID)).thenReturn(Optional.empty());
-        assertThrows(NoSuchEventException.class,() -> eventService.view(String.valueOf(ID)));
+    void testGetByIdNoEvent() throws DAOException {
+        when(eventDAO.getById(ID_VALUE)).thenReturn(Optional.empty());
+        assertThrows(NoSuchEventException.class,() -> eventService.getById(String.valueOf(ID_VALUE)));
     }
 
     @Test
-    void testSearchEvent() throws DAOException, ServiceException {
+    void testGetByTitle() throws DAOException, ServiceException {
         when(eventDAO.getByTitle(TITLE)).thenReturn(Optional.of(getTestEvent()));
-        assertEquals(getTestEventResponseDTO(), eventService.searchEvent(TITLE));
+        assertEquals(getTestEventDTO(), eventService.getByTitle(TITLE));
     }
 
     @Test
-    void testSearchNoEvent() throws DAOException {
+    void testGetByTitleNoEvent() throws DAOException {
         when(eventDAO.getByTitle(TITLE)).thenReturn(Optional.empty());
-        assertThrows(NoSuchEventException.class,() -> eventService.searchEvent(TITLE));
+        assertThrows(NoSuchEventException.class,() -> eventService.getByTitle(TITLE));
     }
 
     @Test
-    void viewUsersEvents() throws DAOException, ServiceException {
+    void testGetAll() throws DAOException, ServiceException {
+        when(eventDAO.getAll()).thenReturn(List.of(getTestEvent()));
+        assertIterableEquals(List.of(getTestEventDTO()), eventService.getAll());
+    }
+
+    @Test
+    void testGetSorted() throws DAOException, ServiceException {
         List<Event> events = new ArrayList<>();
-        List<EventResponseDTO> eventDTOs = new ArrayList<>();
+        List<EventDTO> eventDTOs = new ArrayList<>();
         events.add(getTestEvent());
-        eventDTOs.add(getTestEventResponseDTO());
-        when(eventDAO.getEventsByVisitor(ID)).thenReturn(events);
-        assertIterableEquals(eventDTOs, eventService.viewUsersEvents(ID));
+        eventDTOs.add(getTestEventDTO());
+        Sorting sorting = Sorting.getEventSorting(PASSED, ID, ASC);
+        when(eventDAO.getSorted(sorting, ZERO, TEN)).thenReturn(events);
+        assertIterableEquals(eventDTOs, eventService.getSorted(sorting, "0", "10"));
     }
 
     @Test
-    void viewPastUsersEvents() throws DAOException, ServiceException {
+    void testGetSortedWrongOffset() throws DAOException, ServiceException {
         List<Event> events = new ArrayList<>();
-        List<EventResponseDTO> eventDTOs = new ArrayList<>();
-        Event testEvent = getTestEvent();
-        testEvent.setDate(LocalDate.of(2010, 12, 12));
-        events.add(testEvent);
-        EventResponseDTO testEventResponseDTO = getTestEventResponseDTO();
-        testEventResponseDTO.setDate("2010-12-12");
-        eventDTOs.add(testEventResponseDTO);
-        when(eventDAO.getPastEventsByVisitor(ID)).thenReturn(events);
-        assertIterableEquals(eventDTOs, eventService.viewPastUsersEvents(ID));
-    }
-
-    @Test
-    void viewSpeakersEvents() throws DAOException, ServiceException {
-        List<Event> events = new ArrayList<>();
-        List<EventResponseDTO> eventDTOs = new ArrayList<>();
         events.add(getTestEvent());
-        eventDTOs.add(getTestEventResponseDTO());
-        when(eventDAO.getEventsBySpeaker(ID)).thenReturn(events);
-        assertIterableEquals(eventDTOs, eventService.viewSpeakersEvents(ID));
+        Sorting sorting = Sorting.getEventSorting(PASSED, ID, ASC);
+        when(eventDAO.getSorted(sorting, ZERO, TEN)).thenReturn(events);
+        assertThrows(ServiceException.class, () -> eventService.getSorted(sorting, "a", "10"));
     }
 
     @Test
-    void viewSpeakersPastEvents() throws DAOException, ServiceException {
+    void testGetSortedWrongRecords() throws DAOException, ServiceException {
         List<Event> events = new ArrayList<>();
-        List<EventResponseDTO> eventDTOs = new ArrayList<>();
-        Event testEvent = getTestEvent();
-        testEvent.setDate(LocalDate.of(2010, 12, 12));
-        events.add(testEvent);
-        EventResponseDTO testEventResponseDTO = getTestEventResponseDTO();
-        testEventResponseDTO.setDate("2010-12-12");
-        eventDTOs.add(testEventResponseDTO);
-        when(eventDAO.getPastEventsBySpeaker(ID)).thenReturn(events);
-        assertIterableEquals(eventDTOs, eventService.viewSpeakersPastEvents(ID));
-    }
-
-    @Test
-    void viewSortedEventsByUser() throws DAOException, ServiceException {
-        List<Event> events = new ArrayList<>();
-        List<EventResponseDTO> eventDTOs = new ArrayList<>();
         events.add(getTestEvent());
-        eventDTOs.add(getTestEventResponseDTO());
-        when(eventDAO.getSortedEvents(UPCOMING, "title", ASC)).thenReturn(events);
-        assertIterableEquals(eventDTOs, eventService.viewSortedEventsByUser("title", ASC));
+        Sorting sorting = Sorting.getEventSorting(PASSED, ID, ASC);
+        when(eventDAO.getSorted(sorting, ZERO, TEN)).thenReturn(events);
+        assertThrows(ServiceException.class, () -> eventService.getSorted(sorting, "0", null));
     }
 
     @Test
-    void viewSortedEventsByModerator() throws DAOException, ServiceException {
+    void testGetSortedByUser() throws DAOException, ServiceException {
         List<Event> events = new ArrayList<>();
-        List<EventResponseDTO> eventDTOs = new ArrayList<>();
+        List<EventDTO> eventDTOs = new ArrayList<>();
         events.add(getTestEvent());
-        eventDTOs.add(getTestFullEventResponseDTO());
-        when(eventDAO.getSortedEvents(PASSED, "date", DESC)).thenReturn(events);
-        assertIterableEquals(eventDTOs, eventService.viewSortedEventsByModerator(PASSED, "date", DESC));
+        eventDTOs.add(getTestShortEventDTO());
+        Sorting sorting = Sorting.getEventSorting(PASSED, ID, ASC);
+        when(eventDAO.getSortedByUser(ID_VALUE, sorting, ZERO, TEN, ROLE_VISITOR)).thenReturn(events);
+        assertIterableEquals(eventDTOs, eventService.getSortedByUser(ID_VALUE, sorting, "0", "10", ROLE_VISITOR));
     }
 
     @Test
-    void testEditEvent() throws ServiceException, DAOException {
+    void testGetNumberOfRecords() throws DAOException, ServiceException {
+        Sorting sorting = Sorting.getEventSorting(UPCOMING, ID, ASC);
+        when(eventDAO.getNumberOfRecords(ZERO, sorting,  Role.MODERATOR.name())).thenReturn(TEN);
+        assertEquals(TEN, eventService.getNumberOfRecords(sorting));
+    }
+
+    @Test
+    void testGetNumberOfRecordsByUser() throws DAOException, ServiceException {
+        Sorting sorting = Sorting.getEventSorting(UPCOMING, ID, ASC);
+        when(eventDAO.getNumberOfRecords(ONE, sorting,  ROLE_VISITOR)).thenReturn(THREE);
+        assertEquals(THREE, eventService.getNumberOfRecordsByUser(ONE, sorting,  ROLE_VISITOR));
+    }
+
+    @Test
+    void testUpdate() throws DAOException {
         doNothing().when(eventDAO).update(isA(Event.class));
-        assertEquals(getTestEventResponseDTO(), eventService.editEvent(getTestEventRequestDTO()));
+        assertDoesNotThrow(() -> eventService.update(getTestEventDTO()));
+    }
+
+    @Test
+    void testUpdateIncorrectTitle() throws DAOException {
+        doNothing().when(eventDAO).update(isA(Event.class));
+        EventDTO eventDTO = getTestEventDTO();
+        eventDTO.setTitle(INCORRECT_TITLE);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.update(eventDTO));
+        assertEquals(ENTER_CORRECT_TITLE, e.getMessage());
+    }
+
+    @Test
+    void testUpdateIncorrectDate() throws DAOException {
+        doNothing().when(eventDAO).update(isA(Event.class));
+        EventDTO eventDTO = getTestEventDTO();
+        eventDTO.setDate(INCORRECT_DATE_NAME);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.update(eventDTO));
+        assertEquals(ENTER_VALID_DATE, e.getMessage());
+    }
+
+    @Test
+    void testUpdateIncorrectLocation() throws DAOException {
+        doNothing().when(eventDAO).update(isA(Event.class));
+        EventDTO eventDTO = getTestEventDTO();
+        eventDTO.setLocation(INCORRECT_LOCATION);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.update(eventDTO));
+        assertEquals(ENTER_CORRECT_LOCATION, e.getMessage());
+    }
+
+    @Test
+    void testUpdateIncorrectDescription() throws DAOException {
+        doNothing().when(eventDAO).update(isA(Event.class));
+        EventDTO eventDTO = getTestEventDTO();
+        eventDTO.setDescription(INCORRECT_DESCRIPTION);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.update(eventDTO));
+        assertEquals(ENTER_CORRECT_DESCRIPTION, e.getMessage());
+    }
+
+    @Test
+    void testUpdateDuplicateTitle() throws DAOException {
+        doThrow(new DAOException(new SQLException("Duplicate entry"))).when(eventDAO).update(isA(Event.class));
+        assertThrows(DuplicateTitleException.class, () -> eventService.update(getTestEventDTO()));
     }
 
     @Test
     void setVisitorsCount() throws DAOException {
         doNothing().when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
-        assertDoesNotThrow(() -> eventService.setVisitorsCount(String.valueOf(ID), String.valueOf(VISITORS)));
+        assertDoesNotThrow(() -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), String.valueOf(VISITORS)));
+    }
+
+    @Test
+    void setVisitorsCountWrongEventId() throws DAOException {
+        doNothing().when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
+        assertThrows(NoSuchEventException.class, () -> eventService.setVisitorsCount(NAME, String.valueOf(VISITORS)));
+    }
+
+    @Test
+    void setVisitorsCountWrongNumber() throws DAOException {
+        doNothing().when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
+        assertThrows(ServiceException.class, () -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), NAME));
     }
 
     @Test
     void deleteEvent() throws DAOException {
         doNothing().when(eventDAO).delete(isA(long.class));
-        assertDoesNotThrow(() -> eventService.delete(String.valueOf(ID)));
+        assertDoesNotThrow(() -> eventService.delete(String.valueOf(ID_VALUE)));
     }
 
-    private EventRequestDTO getTestEventRequestDTO() {
-        return new EventRequestDTO(ID, TITLE, DATE_NAME, LOCATION, DESCRIPTION);
+    private EventDTO getTestShortEventDTO() {
+        return new EventDTO.Builder()
+                .setId(ID_VALUE)
+                .setTitle(TITLE)
+                .setDate(DATE_NAME)
+                .setLocation(LOCATION)
+                .setDescription(DESCRIPTION)
+                .get();
     }
 
-    private EventResponseDTO getTestEventResponseDTO() {
-        return new EventResponseDTO(ID, TITLE, DATE_NAME, LOCATION, DESCRIPTION);
-    }
-
-    private EventResponseDTO getTestFullEventResponseDTO() {
-        return new EventResponseDTO(ID, TITLE, DATE_NAME, LOCATION, REPORTS, REGISTRATIONS, VISITORS);
+    private EventDTO getTestEventDTO() {
+        return new EventDTO.Builder()
+                .setId(ID_VALUE)
+                .setTitle(TITLE)
+                .setDate(DATE_NAME)
+                .setLocation(LOCATION)
+                .setDescription(DESCRIPTION)
+                .setReports(REPORTS)
+                .setRegistrations(REGISTRATIONS)
+                .setVisitors(VISITORS)
+                .get();
     }
 
     private Event getTestEvent() {
-        return new Event.EventBuilder()
-                .setId(ID)
+        return new Event.Builder()
+                .setId(ID_VALUE)
                 .setTitle(TITLE)
                 .setDate(DATE)
                 .setLocation(LOCATION)

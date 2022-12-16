@@ -2,6 +2,7 @@ package ua.java.conferences.actions;
 
 import ua.java.conferences.actions.implementation.admin.*;
 import ua.java.conferences.actions.implementation.base.*;
+import ua.java.conferences.actions.implementation.moderator.*;
 import ua.java.conferences.actions.implementation.speaker.*;
 import ua.java.conferences.actions.implementation.visitor.*;
 
@@ -10,9 +11,7 @@ import java.util.*;
 import static ua.java.conferences.actions.constants.ActionNames.*;
 
 public final class ActionFactory {
-
     private static final ActionFactory ACTION_FACTORY = new ActionFactory();
-
     private static final Map<String, Action> ACTION_MAP = new HashMap<>();
 
     static {
@@ -38,11 +37,18 @@ public final class ActionFactory {
         ACTION_MAP.put(CANCEL_REGISTRATION_ACTION, new CancelRegistrationAction());
 
         ACTION_MAP.put(VIEW_SPEAKERS_EVENTS_ACTION, new ViewSpeakersEventsAction());
+        ACTION_MAP.put(VIEW_SPEAKERS_REPORTS_ACTION, new ViewSpeakersReportsAction());
         ACTION_MAP.put(VIEW_EVENT_BY_SPEAKER_ACTION, new ViewEventBySpeakerAction());
         ACTION_MAP.put(OFFER_REPORT_ACTION, new OfferReportAction());
         ACTION_MAP.put(OFFER_REPORT_PAGE_ACTION, new OfferReportPageAction());
         ACTION_MAP.put(SET_SPEAKER_BY_SPEAKER_ACTION, new SetSpeakerBySpeakerAction());
         ACTION_MAP.put(REMOVE_SPEAKER_BY_SPEAKER_ACTION, new RemoveSpeakerBySpeakerAction());
+
+        ACTION_MAP.put(CREATE_EVENT_ACTION, new CreateEventAction());
+        ACTION_MAP.put(SEARCH_EVENT_ACTION, new SearchEventAction());
+        ACTION_MAP.put(DELETE_EVENT_ACTION, new DeleteEventAction());
+        ACTION_MAP.put(EDIT_EVENT_PAGE_ACTION, new EditEventPageAction());
+        ACTION_MAP.put(EDIT_EVENT_ACTION, new EditEventAction());
     }
 
     private ActionFactory() {}

@@ -2,7 +2,7 @@ package ua.java.conferences.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.*;
-import ua.java.conferences.dto.response.UserResponseDTO;
+import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
 import ua.java.conferences.exceptions.ServiceException;
@@ -22,7 +22,7 @@ public class SignInAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        return isPost(request) ? executePost(request) : executeGet(request);
+        return isPostMethod(request) ? executePost(request) : executeGet(request);
     }
 
     private String executeGet(HttpServletRequest request) {
@@ -38,7 +38,7 @@ public class SignInAction implements Action {
         try {
             setLoggedUser(request, userService.signIn(email, password));
             return path;
-        } catch (IncorrectEmailException | IncorrectPasswordException e) {
+        } catch (NoSuchUserException | IncorrectPasswordException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
             request.getSession().setAttribute(EMAIL, email);
             path = SIGN_IN_PAGE;
@@ -47,7 +47,7 @@ public class SignInAction implements Action {
         return getActionToRedirect(SIGN_IN_ACTION) ;
     }
 
-    private static void setLoggedUser(HttpServletRequest request, UserResponseDTO user) {
+    private static void setLoggedUser(HttpServletRequest request, UserDTO user) {
         request.getSession().setAttribute(LOGGED_USER, user);
         request.getSession().setAttribute(ROLE, user.getRole());
     }

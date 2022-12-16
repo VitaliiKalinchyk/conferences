@@ -1,32 +1,17 @@
-package ua.java.conferences.dto.response;
+package ua.java.conferences.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class UserResponseDTO implements Serializable {
-
+public class UserDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-
     private long id;
-
+    private String password;
     private String email;
-
     private String name;
-
     private String surname;
-
     private boolean notification;
-
     private String role;
-
-    public UserResponseDTO(long id, String email, String name, String surname, boolean notification, String role) {
-        setId(id);
-        setEmail(email);
-        setName(name);
-        setSurname(surname);
-        setNotification(notification);
-        setRole(role);
-    }
 
     public long getId() {
         return id;
@@ -42,6 +27,14 @@ public class UserResponseDTO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getName() {
@@ -80,25 +73,72 @@ public class UserResponseDTO implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        UserResponseDTO that = (UserResponseDTO) o;
-        return id == that.id && notification == that.notification && email.equals(that.email)
-                && name.equals(that.name) && surname.equals(that.surname) && role.equals(that.role);
+        UserDTO that = (UserDTO) o;
+        return email.equals(that.email) && name.equals(that.name) && surname.equals(that.surname);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, email, name, surname, notification, role);
+        return Objects.hash(id, password, email, name, surname, notification, role);
     }
 
     @Override
     public String toString() {
-        return "UserResponseDTO{" +
+        return "UserDTO{" +
                 "id=" + getId() +
                 ", email='" + getEmail() + '\'' +
+                ", password='" + getPassword() + '\'' +
                 ", name='" + getName() + '\'' +
                 ", surname='" + getSurname() + '\'' +
                 ", notification=" + isNotification() +
                 ", role='" + getRole() + '\'' +
                 '}';
+    }
+
+    public static class Builder {
+        private final UserDTO user;
+
+        public Builder() {
+            this.user = new UserDTO();
+        }
+
+        public Builder setId(long id) {
+            user.setId(id);
+            return this;
+        }
+
+        public Builder setEmail(String email) {
+            user.setEmail(email);
+            return this;
+        }
+
+        public Builder setPassword(String password) {
+            user.setPassword(password);
+            return this;
+        }
+
+        public Builder setName(String name) {
+            user.setName(name);
+            return this;
+        }
+
+        public Builder setSurname(String surname) {
+            user.setSurname(surname);
+            return this;
+        }
+
+        public Builder setRole(String role) {
+            user.setRole(role);
+            return this;
+        }
+
+        public Builder setNotification(boolean notification) {
+            user.setNotification(notification);
+            return this;
+        }
+
+        public UserDTO get() {
+            return user;
+        }
     }
 }

@@ -1,80 +1,69 @@
 package ua.java.conferences.utils;
 
-import ua.java.conferences.exceptions.NoSuchEventException;
-import ua.java.conferences.exceptions.NoSuchReportException;
-import ua.java.conferences.exceptions.NoSuchUserException;
-import ua.java.conferences.exceptions.ServiceException;
-
+import ua.java.conferences.exceptions.*;
 import java.time.LocalDate;
+
+import static ua.java.conferences.exceptions.constants.Message.*;
+import static ua.java.conferences.utils.constants.Regex.*;
 
 public final class ValidatorUtil {
 
-    private static final String EMAIL_REGEX = "^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
+    private ValidatorUtil() {}
 
-    private static final String PASSWORD_REGEX = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=\\S+$).{8,20}$";
-
-    //For names and surnames
-    private static final String NAME_REGEX = "^[A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'\\- ]{1,30}";
-
-    //for topics and titles and locations
-    private static final String COMPLEX_NAME_REGEX = "^[\\wА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\\-~`!@#$^&*()={} ]{2,70}";
-
-    private static final String DESCRIPTION_REGEX = "^[\\wА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\\-~`!@#$^&*()={} ]{1,200}";
-
-    private ValidatorUtil(){}
-
-    public static boolean validateEmail(String email) {
-        return email != null &&email.matches(EMAIL_REGEX);
+    public static void validateEmail(String email) throws IncorrectFormatException {
+        validateFormat(email, EMAIL_REGEX, ENTER_CORRECT_EMAIL);
     }
 
-    public static boolean validatePassword(String password) {
-        return password != null && password.matches(PASSWORD_REGEX);
+    public static void validatePassword(String password) throws IncorrectFormatException {
+        validateFormat(password, PASSWORD_REGEX, ENTER_CORRECT_PASSWORD);
     }
 
-    public static boolean validateName(String name) {
-        return name != null && name.matches(NAME_REGEX);
+
+    public static void validateName(String name, String message) throws IncorrectFormatException {
+        validateFormat(name, NAME_REGEX, message);
     }
 
-    public static boolean validateComplexName(String name) {
-        return name != null && name.matches(COMPLEX_NAME_REGEX);
+    public static void validateComplexName(String name, String message) throws IncorrectFormatException {
+        validateFormat(name, COMPLEX_NAME_REGEX, message);
     }
 
-    public static boolean validateDate(LocalDate date) {
-        return date != null && date.isAfter(LocalDate.now());
+    public static void validateDescription(String name) throws IncorrectFormatException {
+        validateFormat(name, DESCRIPTION_REGEX, ENTER_CORRECT_DESCRIPTION);
     }
 
-    public static boolean validateDescription(String name) {
-        return name != null && name.matches(DESCRIPTION_REGEX);
+    private static void validateFormat(String name, String regex,String message) throws IncorrectFormatException {
+        if (name == null || !name.matches(regex))
+            throw new IncorrectFormatException(message);
     }
 
-    public static long getEventId(String longString) throws NoSuchEventException {
+    public static void validateDate(LocalDate date) throws IncorrectFormatException {
+        if (date == null || !date.isAfter(LocalDate.now())) {
+            throw new IncorrectFormatException(ENTER_VALID_DATE);
+        }
+    }
+
+    public static long getEventId(String idString) throws ServiceException {
+        return checkId(idString, new NoSuchEventException());
+    }
+
+
+    public static long getReportId(String idString) throws ServiceException {
+        return checkId(idString, new NoSuchReportException());
+
+    }
+
+    public static long getUserId(String idString) throws ServiceException {
+        return checkId(idString, new NoSuchUserException());
+    }
+
+    private static long checkId(String idString, ServiceException exception) throws ServiceException {
         long eventId;
         try {
-            eventId = Long.parseLong(longString);
+            eventId = Long.parseLong(idString);
         } catch (NumberFormatException e) {
-            throw new NoSuchEventException();
+            throw exception;
         }
         return eventId;
-    }
-
-    public static long getReportId(String longString) throws NoSuchReportException {
-        long reportId;
-        try {
-            reportId = Long.parseLong(longString);
-        } catch (NumberFormatException e) {
-            throw new NoSuchReportException();
-        }
-        return reportId;
-    }
-
-    public static long getUserId(String longString) throws NoSuchUserException {
-        long userId;
-        try {
-            userId = Long.parseLong(longString);
-        } catch (NumberFormatException e) {
-            throw new NoSuchUserException();
-        }
-        return userId;
     }
 
     public static long getLong(String longString) throws ServiceException {
@@ -82,7 +71,7 @@ public final class ValidatorUtil {
         try {
             result = Long.parseLong(longString);
         } catch (NumberFormatException e) {
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
         return result;
     }
@@ -92,12 +81,12 @@ public final class ValidatorUtil {
         try {
             result = Integer.parseInt(intString);
         } catch (NumberFormatException e) {
-            throw new ServiceException();
+            throw new ServiceException(e);
         }
         return result;
     }
 
-    public static void checkString(String... strings) throws ServiceException {
+    public static void checkStrings(String... strings) throws ServiceException {
         for (String string : strings) {
             if (string == null) {
                 throw new ServiceException(new NullPointerException());

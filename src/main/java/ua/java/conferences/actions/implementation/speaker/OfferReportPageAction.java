@@ -2,9 +2,12 @@ package ua.java.conferences.actions.implementation.speaker;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.Action;
-import ua.java.conferences.dto.response.*;
+import ua.java.conferences.dto.EventDTO;
+import ua.java.conferences.dto.UserDTO;
+import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import static ua.java.conferences.actions.ActionUtil.*;
 import static ua.java.conferences.actions.constants.Pages.*;
@@ -22,7 +25,7 @@ public class OfferReportPageAction implements Action {
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
         transferAttributes(request);
-        long speakerId = ((UserResponseDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
+        long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         String parameterEventId = request.getParameter(EVENT_ID);
         try {
             request.setAttribute(EVENT, getEvent(parameterEventId, speakerId));
@@ -32,8 +35,10 @@ public class OfferReportPageAction implements Action {
         return OFFER_REPORT_PAGE;
     }
 
-    private EventResponseDTO getEvent(String parameterEventId, long userId) throws ServiceException {
-        return eventService.viewSpeakersEvents(userId)
+    private EventDTO getEvent(String parameterEventId, long userId) throws ServiceException {
+        Sorting sorting = Sorting.getEventSorting(UPCOMING, ID, ASCENDING_ORDER);
+        return eventService
+                .getSortedByUser(userId, sorting, "0", String.valueOf(Integer.MAX_VALUE), Role.SPEAKER.name())
                 .stream()
                 .filter(e -> String.valueOf(e.getId()).equals(parameterEventId))
                 .findAny()

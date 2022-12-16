@@ -21,7 +21,7 @@ public class SearchUserAction implements Action {
     public String execute(HttpServletRequest request) throws ServiceException {
         String path = USER_BY_EMAIL_PAGE;
         try {
-            request.setAttribute(USER, userService.searchUser(request.getParameter(EMAIL)));
+            request.setAttribute(USER, userService.getByEmail(request.getParameter(EMAIL)));
         } catch (NoSuchUserException | IncorrectFormatException e) {
             request.setAttribute(ERROR, e.getMessage());
             path = SEARCH_USERS_PAGE;

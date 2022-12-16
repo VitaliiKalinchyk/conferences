@@ -1,7 +1,6 @@
 package ua.java.conferences.dao;
 
 import ua.java.conferences.exceptions.DAOException;
-
 import java.util.*;
 
 public interface EntityDAO<T> {

@@ -1,7 +1,8 @@
 package ua.java.conferences.actions;
 
 import jakarta.servlet.http.HttpServletRequest;
-import ua.java.conferences.dto.request.UserRequestDTO;
+import ua.java.conferences.dto.EventDTO;
+import ua.java.conferences.dto.UserDTO;
 
 import java.util.StringJoiner;
 
@@ -13,7 +14,7 @@ public class ActionUtil {
 
     public static final String DB_IMPLEMENTATION = MYSQL;
 
-    public static boolean isPost(HttpServletRequest request) {
+    public static boolean isPostMethod(HttpServletRequest request) {
         return request.getMethod().equals("POST");
     }
 
@@ -21,11 +22,19 @@ public class ActionUtil {
         return (String) request.getSession().getAttribute(CURRENT_PATH);
     }
 
-    public static void transferUserRequestDTOFromSessionToRequest(HttpServletRequest request) {
-        UserRequestDTO user = (UserRequestDTO) request.getSession().getAttribute(USER);
+    public static void transferUserDTOFromSessionToRequest(HttpServletRequest request) {
+        UserDTO user = (UserDTO) request.getSession().getAttribute(USER);
         if (user != null) {
             request.setAttribute(USER, user);
             request.getSession().removeAttribute(USER);
+        }
+    }
+
+    public static void transferEventDTOFromSessionToRequest(HttpServletRequest request, String attributeName) {
+        EventDTO event = (EventDTO) request.getSession().getAttribute(EVENT);
+        if (event != null) {
+            request.setAttribute(attributeName, event);
+            request.getSession().removeAttribute(attributeName);
         }
     }
 

@@ -5,19 +5,13 @@ import java.util.*;
 import static ua.java.conferences.actions.constants.Pages.*;
 
 public final class DomainPagesSets {
-
     private DomainPagesSets() {}
 
     private static final Set<String> ANONYMOUS_USER_PAGES = new HashSet<>();
-
     private static final Set<String> LOGGED_USER_PAGES = new HashSet<>();
-
     private static final Set<String> VISITOR_PAGES = new HashSet<>();
-
     private static final Set<String> SPEAKER_PAGES = new HashSet<>();
-
     private static final Set<String> MODERATOR_PAGES = new HashSet<>();
-
     private static final Set<String> ADMIN_PAGES = new HashSet<>();
 
     static {
@@ -48,6 +42,9 @@ public final class DomainPagesSets {
 
     static {
         MODERATOR_PAGES.addAll(LOGGED_USER_PAGES);
+        MODERATOR_PAGES.add(CREATE_EVENT_PAGE);
+        MODERATOR_PAGES.add(SEARCH_EVENT_PAGE);
+        MODERATOR_PAGES.add(VIEW_EVENT_BY_MODERATOR_PAGE);
     }
 
     static {

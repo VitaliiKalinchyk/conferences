@@ -2,7 +2,9 @@ package ua.java.conferences.dao;
 
 import org.junit.jupiter.api.*;
 import ua.java.conferences.entities.*;
-import ua.java.conferences.exceptions.DAOException;
+import ua.java.conferences.entities.role.Role;
+import ua.java.conferences.exceptions.*;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
@@ -12,9 +14,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.dao.DAOTestUtils.*;
-import static ua.java.conferences.dao.mysql.constants.EventSQLQueries.*;
-import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
 
 class EventDAOTest {
 
@@ -24,214 +25,346 @@ class EventDAOTest {
     }
 
     @Test
-    void testCrud() throws DAOException {
-        Event testEvent = getTestEvent();
-        assertDoesNotThrow(() -> eventDAO.add(testEvent));
+    void testAdd() {
+        assertDoesNotThrow(() -> eventDAO.add(getTestEvent()));
+    }
 
-        Event resultEvent = eventDAO.getById(testEvent.getId()).orElse(null);
-        assertNotNull(resultEvent);
-        assertNotEquals(0, resultEvent.getId());
-        assertEquals(resultEvent.getTitle(), testEvent.getTitle());
-        assertEquals(resultEvent.getDate(), testEvent.getDate());
-        assertEquals(resultEvent.getLocation(), testEvent.getLocation());
-        assertEquals(resultEvent.getDescription(), testEvent.getDescription());
-        assertEquals(resultEvent.getVisitors(), testEvent.getVisitors());
-        assertEquals(resultEvent.getReports(), testEvent.getReports());
-        assertEquals(resultEvent.getRegistrations(), testEvent.getRegistrations());
+    @Test
+    void testTwoEvents() throws DAOException {
+        eventDAO.add(getTestEvent());
+        Event event = getTestEvent();
+        event.setTitle(ANOTHER_TITLE);
+        assertDoesNotThrow(() -> eventDAO.add(event));
+    }
+
+    @Test
+    void testAddTwice() throws DAOException {
+        eventDAO.add(getTestEvent());
+        DAOException exception = assertThrows((DAOException.class), () -> eventDAO.add(getTestEvent()));
+        assertTrue(exception.getMessage().contains(DUPLICATE));
+    }
+
+    @Test
+    void testGetById() throws DAOException {
+        eventDAO.add(getTestEvent());
+
+        Event event = eventDAO.getById(ID_VALUE).orElse(null);
+        assertNotNull(event);
+        assertEquals(event, getTestEvent());
+    }
+
+    @Test
+    void testGetByIdNoEvent() throws DAOException {
+        assertNull(eventDAO.getById(ID_VALUE).orElse(null));
+    }
+
+    @Test
+    void testGetByEmail() throws DAOException {
+        eventDAO.add(getTestEvent());
+
+        Event event = eventDAO.getByTitle(TITLE).orElse(null);
+        assertNotNull(event);
+        assertEquals(event, getTestEvent());
+    }
+
+    @Test
+    void testGetByEmailNoEvent() throws DAOException {
+        assertNull(eventDAO.getByTitle(TITLE).orElse(null));
+    }
+
+
+    @Test
+    void testGetAll() throws DAOException {
+        eventDAO.add(getTestEvent());
 
         List<Event> events = eventDAO.getAll();
-        assertTrue(events.contains(resultEvent));
-        assertEquals(1, events.size());
-
-        resultEvent.setTitle("Result");
-        assertDoesNotThrow(() -> eventDAO.update(resultEvent));
-        Event changedEvent = eventDAO.getByTitle(resultEvent.getTitle()).orElse(null);
-        assertNotNull(changedEvent);
-        assertEquals("Result", changedEvent.getTitle());
-        assertEquals(resultEvent, changedEvent);
-
-
-        assertDoesNotThrow(() -> eventDAO.delete(resultEvent.getId()));
-        events = eventDAO.getAll();
-        assertEquals(0, events.size());
+        assertTrue(events.contains(getTestEvent()));
+        assertEquals(ONE, events.size());
     }
 
     @Test
-    void testAddTwice() {
-        assertDoesNotThrow(() -> eventDAO.add(getTestEvent()));
-        DAOException exception = assertThrows((DAOException.class), () -> eventDAO.add(getTestEvent()));
-        assertTrue(exception.getMessage().contains("Duplicate entry"));
+    void testGetAllMoreUsers() throws DAOException {
+        eventDAO.add(getTestEvent());
+        Event event = getTestEvent();
+        event.setTitle(ANOTHER_TITLE);
+        eventDAO.add(event);
+        event.setTitle(ANOTHER_TITLE + ANOTHER_TITLE);
+        eventDAO.add(event);
+
+        List<Event> events = eventDAO.getAll();
+        assertTrue(events.contains(getTestEvent()));
+        assertEquals(THREE, events.size());
     }
 
     @Test
-    void testGetAbsent() throws DAOException {
-        assertNull(eventDAO.getByTitle(getTestEvent().getTitle()).orElse(null));
+    void testUpdate() throws DAOException {
+        eventDAO.add(getTestEvent());
+
+        assertDoesNotThrow(() -> eventDAO.update(getTestEvent()));
+    }
+
+    @Test
+    void testUpdateCheckUpdated() throws DAOException {
+        eventDAO.add(getTestEvent());
+
+        Event event = getTestEvent();
+        event.setTitle(ANOTHER_TITLE);
+        event.setLocation(ANOTHER_TITLE);
+        eventDAO.update(event);
+
+        Event resultEvent = eventDAO.getById(ID_VALUE).orElse(null);
+        assertNotNull(resultEvent);
+        assertEquals(resultEvent.getTitle(), event.getTitle());
+        assertEquals(resultEvent.getLocation(), event.getLocation());
+    }
+
+
+    @Test
+    void testUpdateDuplicateTitle() throws DAOException {
+        eventDAO.add(getTestEvent());
+
+        Event event = getTestEvent();
+        event.setId(2);
+        event.setTitle(ANOTHER_TITLE);
+        eventDAO.add(event);
+
+        event.setTitle(getTestEvent().getTitle());
+        DAOException exception = assertThrows((DAOException.class), () -> eventDAO.update(event));
+        assertTrue(exception.getMessage().contains(DUPLICATE));
     }
 
     @Test
     void testDelete() throws DAOException {
         eventDAO.add(getTestEvent());
-        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle()).orElse(getTestEvent());
-        reportDAO.add(getTestReport());
-        userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser().getEmail()).orElse(getTestUser());
-        userDAO.registerForEvent(testUser.getId(), testEvent.getId());
 
-        assertDoesNotThrow(() -> eventDAO.delete(testEvent.getId()));
-        assertEquals(0, eventDAO.getAll().size());
-        assertEquals(0, eventDAO.getEventsByVisitor(testUser.getId()).size());
-        assertEquals(0, reportDAO.getAll().size());
+        assertDoesNotThrow(() -> eventDAO.delete(ID_VALUE));
+        List<Event> events = eventDAO.getAll();
+        assertEquals(ZERO, events.size());
     }
 
     @Test
-    void testVisitors() throws DAOException {
-        int visitorsCount = 100;
-        Event testEvent = getTestEvent();
-        eventDAO.add(testEvent);
-        assertDoesNotThrow(() -> eventDAO.setVisitorsCount(testEvent.getId(), visitorsCount));
-
-        Event resultEvent = eventDAO.getByTitle(testEvent.getTitle()).orElse(testEvent);
-        assertEquals(visitorsCount, resultEvent.getVisitors());
+    void testDeleteNoEvent() {
+        assertDoesNotThrow(() -> eventDAO.delete(ID_VALUE));
     }
 
     @Test
-    void testUsersEvents() throws DAOException {
+    void testDeleteWithReportAndRegistration() throws DAOException {
         eventDAO.add(getTestEvent());
-        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle()).orElse(getTestEvent());
         userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser().getEmail()).orElse(getTestUser());
-        userDAO.registerForEvent(testUser.getId(), testEvent.getId());
-        List<Event> events = eventDAO.getEventsByVisitor(testUser.getId());
-        assertTrue(events.contains(testEvent));
-        assertEquals(1, events.size());
-    }
-
-    @Test
-    void testUsersPastEvents() throws DAOException {
-        Event testEvent = getTestEvent();
-        testEvent.setDate(LocalDate.of(2010, 1, 1));
-        eventDAO.add(testEvent);
-        testEvent = eventDAO.getByTitle(getTestEvent().getTitle()).orElse(getTestEvent());
-        userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser().getEmail()).orElse(getTestUser());
-        userDAO.registerForEvent(testUser.getId(), testEvent.getId());
-        List<Event> events = eventDAO.getPastEventsByVisitor(testUser.getId());
-        assertTrue(events.contains(testEvent));
-        assertEquals(1, events.size());
-
-        events = eventDAO.getEventsByVisitor(testUser.getId());
-        assertFalse(events.contains(testEvent));
-        assertEquals(0, events.size());
-    }
-
-    @Test
-    void testUsersEventsWrongMethod() throws DAOException {
-        eventDAO.add(getTestEvent());
-        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle()).orElse(getTestEvent());
-        userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser().getEmail()).orElse(getTestUser());
-        userDAO.registerForEvent(testUser.getId(), testEvent.getId());
-        List<Event> events = eventDAO.getEventsBySpeaker(testUser.getId());
-        assertFalse(events.contains(testEvent));
-        assertEquals(0, events.size());
-    }
-
-    @Test
-    void testSpeakersEvents() throws DAOException {
-        Event testEvent = getTestEvent();
-        testEvent.setDate(LocalDate.of(2010, 1, 1));
-        eventDAO.add(testEvent);
-        userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser().getEmail()).orElse(getTestUser());
         reportDAO.add(getTestReport());
-        Report testReport = reportDAO.getById(1).orElse(getTestReport());
-        reportDAO.setSpeaker(testReport.getId(), testUser.getId());
-        List<Event> events = eventDAO.getPastEventsBySpeaker(testUser.getId());
-        assertTrue(events.contains(testEvent));
-        assertEquals(1, events.size());
+        userDAO.registerForEvent(ID_VALUE, ID_VALUE);
+
+        assertDoesNotThrow(() -> eventDAO.delete(ID_VALUE));
+        assertEquals(ZERO, eventDAO.getAll().size());
+
+        assertFalse(userDAO.isRegistered(ID_VALUE, ID_VALUE));
+        assertEquals(ZERO, reportDAO.getAll().size());
     }
 
 
     @Test
-    void testSpeakersPastEvents() throws DAOException {
+    void testSetVisitors() throws DAOException {
         eventDAO.add(getTestEvent());
-        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle()).orElse(getTestEvent());
-        userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser().getEmail()).orElse(getTestUser());
-        reportDAO.add(getTestReport());
-        Report testReport = reportDAO.getById(1).orElse(getTestReport());
-        reportDAO.setSpeaker(testReport.getId(), testUser.getId());
-        List<Event> events = eventDAO.getEventsBySpeaker(testUser.getId());
-        assertTrue(events.contains(testEvent));
-        assertEquals(1, events.size());
+        assertDoesNotThrow(() -> eventDAO.setVisitorsCount(ID_VALUE, VISITORS));
 
-        events = eventDAO.getEventsByVisitor(testUser.getId());
-        assertFalse(events.contains(testEvent));
-        assertEquals(0, events.size());
+        Event resultEvent = eventDAO.getByTitle(TITLE).orElse(getTestEvent());
+        assertEquals(VISITORS, resultEvent.getVisitors());
     }
 
     @Test
-    void testSpeakersEventsWrongMethod() throws DAOException {
-        eventDAO.add(getTestEvent());
-        Event testEvent = eventDAO.getByTitle(getTestEvent().getTitle()).orElse(getTestEvent());
-        userDAO.add(getTestUser());
-        User testUser = userDAO.getByEmail(getTestUser().getEmail()).orElse(getTestUser());
-        reportDAO.add(getTestReport());
-        Report testReport = reportDAO.getById(1).orElse(getTestReport());
-        reportDAO.setSpeaker(testReport.getId(), testUser.getId());
-        List<Event> events = eventDAO.getEventsByVisitor(testUser.getId());
-        assertFalse(events.contains(testEvent));
-        assertEquals(0, events.size());
-    }
-
-    @Test
-    void testSortedEvents() throws DAOException {
+    void testGetAllUpcoming() throws DAOException, WrongParameterException {
         List<Event> events = getRandomEvents();
-        events.forEach(EventDAOTest::addEventToDb);
-        List<Event> dbEvents = eventDAO.getSortedEvents(UPCOMING, TITLE, ASC);
-        List<Event> sortedEvents = events.stream()
-                .filter(event -> event.getDate().isAfter(LocalDate.now()))
-                .sorted(Comparator.comparing(Event::getTitle)).collect(Collectors.toList());
-        assertIterableEquals(sortedEvents,dbEvents);
-
-        dbEvents = eventDAO.getSortedEvents(PASSED, TITLE, ASC);
-        sortedEvents = events.stream()
-                .filter(event -> event.getDate().isBefore(LocalDate.now()))
-                .sorted(Comparator.comparing(Event::getTitle)).collect(Collectors.toList());
-        assertIterableEquals(sortedEvents,dbEvents);
-
-        dbEvents = eventDAO.getSortedEvents(PASSED, DATE, DESC);
-        sortedEvents = events.stream()
-                .filter(event -> event.getDate().isBefore(LocalDate.now()))
-                .sorted((e1, e2) -> e2.getDate().compareTo(e1.getDate())).collect(Collectors.toList());
-        assertIterableEquals(sortedEvents,dbEvents);
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+        }
+        events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
+        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(UPCOMING, ID, ASC), ZERO, TEN);
+        assertIterableEquals(events, eventList);
     }
 
-    private static void addEventToDb(Event event) {
-        try {
-            eventDAO.add(event);
-        } catch (DAOException e) {
-            throw new RuntimeException(e);
+    @Test
+    void testGetAllUpcomingDesc() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomEvents();
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
         }
+        events = events.stream()
+                .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                .sorted(Comparator.comparing(Event::getId).reversed())
+                .collect(Collectors.toList());
+        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(UPCOMING, ID, DESC), ZERO, TEN);
+        assertIterableEquals(events, eventList);
+    }
+
+    @Test
+    void testGetAllPassed() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomEvents();
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+        }
+        events = events.stream().filter(event -> event.getDate().isBefore(LocalDate.now())).collect(Collectors.toList());
+        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(PASSED, ID, ASC), ZERO, TEN);
+        assertIterableEquals(events, eventList);
+    }
+
+    @Test
+    void testGetAllPassedDesc() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomEvents();
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+        }
+        events = events.stream()
+                .filter(event -> event.getDate().isBefore(LocalDate.now()))
+                .sorted(Comparator.comparing(Event::getId).reversed())
+                .collect(Collectors.toList());
+        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(PASSED, ID, DESC), ZERO, TEN);
+        assertIterableEquals(events, eventList);
+    }
+
+    @Test
+    void testSortedByTitle() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomEvents();
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+        }
+        events = events.stream()
+                .filter(event -> event.getDate().isAfter(LocalDate.now()))
+                .sorted(Comparator.comparing(Event::getTitle))
+                .collect(Collectors.toList());
+        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(UPCOMING, TITLE_FIELD, ASC), ZERO, TEN);
+        assertIterableEquals(events, eventList);
+    }
+
+    @Test
+    void testPagination() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomFutureEvents();
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+        }
+        events = events.stream()
+                .limit(THREE)
+                .collect(Collectors.toList());
+        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(UPCOMING, ID, ASC), ZERO, THREE);
+        assertIterableEquals(events, eventList);
+    }
+
+    @Test
+    void testPaginationNotZeroPosition() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomFutureEvents();
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+        }
+        events = events.stream()
+                .sorted(Comparator.comparing(Event::getTitle))
+                .skip(THREE)
+                .limit(THREE)
+                .collect(Collectors.toList());
+        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(UPCOMING, TITLE_FIELD, ASC), THREE, THREE);
+        assertIterableEquals(events, eventList);
+    }
+
+    @Test
+    void testVisitorsEvents() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomEvents();
+        userDAO.add(getTestUser());
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+            userDAO.registerForEvent(ID_VALUE, events.get(i).getId());
+        }
+        events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
+        List<Event> eventList = eventDAO.getSortedByUser(ID_VALUE, Sorting.getEventSorting(UPCOMING, ID, ASC),
+                ZERO, TEN, Role.VISITOR.name());
+        assertIterableEquals(events, eventList);
+    }
+
+    @Test
+    void testVisitorsPastEvents() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomEvents();
+        userDAO.add(getTestUser());
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+            userDAO.registerForEvent(ID_VALUE, events.get(i).getId());
+        }
+        events = events.stream().filter(event -> event.getDate().isBefore(LocalDate.now())).collect(Collectors.toList());
+        List<Event> eventList = eventDAO.getSortedByUser(ID_VALUE, Sorting.getEventSorting(PASSED, ID, ASC),
+                ZERO, TEN, Role.VISITOR.name());
+        assertIterableEquals(events, eventList);
+    }
+
+
+    @Test
+    void testSpeakersEvents() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomEvents();
+        userDAO.add(getTestUser());
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+            Report report = getTestReport();
+            report.setEvent(events.get(i));
+            reportDAO.add(report);
+        }
+        events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
+        List<Event> eventList = eventDAO.getSortedByUser(ID_VALUE, Sorting.getEventSorting(UPCOMING, ID, ASC),
+                ZERO, TEN, Role.SPEAKER.name());
+        assertIterableEquals(events, eventList);
+    }
+
+    @Test
+    void testGetNumberOfRecords() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomEvents();
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+        }
+        events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
+        int numberOfRecords = eventDAO.getNumberOfRecords(ZERO, Sorting.getEventSorting(UPCOMING, ID, ASC),
+                Role.MODERATOR.name());
+        assertEquals(events.size(), numberOfRecords);
+    }
+
+    @Test
+    void testGetNumberOfRecordsBySpeaker() throws DAOException, WrongParameterException {
+        List<Event> events = getRandomEvents();
+        userDAO.add(getTestUser());
+        for (int i = 0; i < 10; i++) {
+            eventDAO.add(events.get(i));
+            Report report = getTestReport();
+            report.setEvent(events.get(i));
+            reportDAO.add(report);
+        }
+        events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
+        int numberOfRecords = eventDAO.getNumberOfRecords(ID_VALUE,
+                Sorting.getEventSorting(UPCOMING, ID, ASC), Role.SPEAKER.name());
+        assertEquals(events.size(), numberOfRecords);
     }
 
     private List<Event> getRandomEvents() {
         List<Event> events = new ArrayList<>();
-        for (int i = 1; i < 11; i++) {
-            events.add(new Event.EventBuilder()
-                    .setId(i)
-                    .setTitle("title" + (20 - i))
-                    .setDate(randomDate())
-                    .setLocation(i + "Place")
-                    .setDescription("Dummy")
-                    .get());
+        for (int i = 0; i < 10; i++) {
+            events.add(getRandomEvent(i));
         }
         return events;
     }
 
+    private List<Event> getRandomFutureEvents() {
+        List<Event> events = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            Event randomEvent = getRandomEvent(i);
+            randomEvent.setDate(LocalDate.now().plusDays(ONE));
+            events.add(randomEvent);
+        }
+        return events;
+    }
+
+    private Event getRandomEvent(int i) {
+        Event event = getTestEvent();
+        event.setId(i + 1);
+        event.setTitle(new Random().nextInt(100) + TITLE + i);
+        event.setDate(randomDate());
+        return event;
+    }
+
     private LocalDate randomDate() {
         long minDay = LocalDate.of(2010, 1, 1).toEpochDay();
-        long maxDay = LocalDate.of(2029, 12, 31).toEpochDay();
+        long maxDay = LocalDate.of(2050, 12, 31).toEpochDay();
         long randomDay = ThreadLocalRandom.current().nextLong(minDay, maxDay);
         return LocalDate.ofEpochDay(randomDay);
     }

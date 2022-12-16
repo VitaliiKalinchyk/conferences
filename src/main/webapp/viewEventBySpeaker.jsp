@@ -31,6 +31,7 @@
     <c:choose>
         <c:when test="${not empty requestScope.error}">
             <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
+<%--            <c:redirect url="controller?action=view-speakers-events"/>--%>
         </c:when>
 
         <c:otherwise>
@@ -60,7 +61,6 @@
                         </thead>
 
                         <tbody>
-
                         <c:forEach var="report" items="${requestScope.reports}">
                             <tr>
                                 <td><c:out value="${report.topic}"/></td>
@@ -78,70 +78,33 @@
 
                                 <td>
                                     <c:if test="${requestScope.isComing}">
-                                        <c:set var="reportId" value="${report.id}"/>
                                         <c:choose>
                                             <c:when test="${empty report.speakerName}">
-                                                <button class="btn btn-dark mt-0 mb-0" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalDefault1">
-                                                    <fmt:message key="set.for.report"/>
-                                                </button>
-
-                                                <div class="modal fade" id="exampleModalDefault1" tabindex="-1" aria-labelledby="exampleModalDefault1" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content rounded-4 shadow">
-                                                            <div class="modal-header border-bottom-0">
-                                                                <h1 class="modal-title fs-5 text-md-center"><fmt:message key="set.for.report"/></h1>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body py-0">
-                                                                <p><fmt:message key="set.for.report.confirmation"/></p>
-                                                            </div>
-                                                            <div class="modal-footer flex-column border-top-0">
-                                                                <form method="POST" action="controller">
-                                                                    <input type="hidden" name="action" value="set-speaker-by-speaker">
-                                                                    <input type="hidden" name="event-id" value="${requestScope.event.id}">
-                                                                    <input type="hidden" name="report-id" value="${reportId}">
-                                                                    <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="yes"/></button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <form method="POST" action="controller">
+                                                    <input type="hidden" name="action" value="set-speaker-by-speaker">
+                                                    <input type="hidden" name="event-id" value="${requestScope.event.id}">
+                                                    <input type="hidden" name="report-id" value="${report.id}">
+                                                    <button type="submit" class="btn btn-dark mt-0 mb-0">
+                                                        <fmt:message key="set.for.report"/>
+                                                    </button>
+                                                </form>
                                             </c:when>
-                                            <c:when test="${report.speakerId eq sessionScope.loggedUser.id}">
-                                                <button class="btn btn-dark mt-0 mb-0" data-bs-toggle="modal"
-                                                        data-bs-target="#exampleModalDefault2">
-                                                    <fmt:message key="decline.report"/>
-                                                </button>
 
-                                                <div class="modal fade" id="exampleModalDefault2" tabindex="-1" aria-labelledby="exampleModalDefault2" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content rounded-4 shadow">
-                                                            <div class="modal-header border-bottom-0">
-                                                                <h1 class="modal-title fs-5 text-md-center"><fmt:message key="decline.report"/></h1>
-                                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body py-0">
-                                                                <p><fmt:message key="decline.report.confirmation"/></p>
-                                                            </div>
-                                                            <div class="modal-footer flex-column border-top-0">
-                                                                <form method="POST" action="controller">
-                                                                    <input type="hidden" name="action" value="remove-speaker-by-speaker">
-                                                                    <input type="hidden" name="event-id" value="${requestScope.event.id}">
-                                                                    <input type="hidden" name="report-id" value="${reportId}">
-                                                                    <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="yes"/></button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                            <c:when test="${report.speakerId eq sessionScope.loggedUser.id}">
+                                                <form method="POST" action="controller">
+                                                    <input type="hidden" name="action" value="remove-speaker-by-speaker">
+                                                    <input type="hidden" name="event-id" value="${requestScope.event.id}">
+                                                    <input type="hidden" name="report-id" value="${report.id}">
+                                                    <button type="submit" class="btn btn-dark mt-0 mb-0">
+                                                        <fmt:message key="decline.report"/>
+                                                    </button>
+                                                </form>
                                             </c:when>
                                         </c:choose>
                                     </c:if>
                                 </td>
                             </tr>
                         </c:forEach>
-
                         </tbody>
                     </table>
                 </div>
@@ -151,8 +114,6 @@
 </div>
 
 <jsp:include page="fragments/footer.jsp"/>
-
-
 
 </body>
 </html>

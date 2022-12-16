@@ -53,7 +53,9 @@
                 <form method="POST" action="controller">
                     <input type="hidden" name="action" value="cancel-registration">
                     <input type="hidden" name="event-id" value="${requestScope.event.id}">
-                    <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="cancel.registration"/></button>
+                    <button type="submit" class="btn btn-dark mt-4 mb-4">
+                        <fmt:message key="cancel.registration"/>
+                    </button>
                 </form>
             </div>
         </div>

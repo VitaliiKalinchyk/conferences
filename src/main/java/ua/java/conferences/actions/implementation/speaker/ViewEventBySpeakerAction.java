@@ -2,9 +2,12 @@ package ua.java.conferences.actions.implementation.speaker;
 
 import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.Action;
-import ua.java.conferences.dto.response.*;
+import ua.java.conferences.dto.EventDTO;
+import ua.java.conferences.dto.UserDTO;
+import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import java.time.LocalDate;
 
@@ -26,7 +29,7 @@ public class ViewEventBySpeakerAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        long speakerId = ((UserResponseDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
+        long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         String parameterEventId = request.getParameter(EVENT_ID);
         try {
             setAttributes(request, parameterEventId, speakerId);
@@ -37,21 +40,23 @@ public class ViewEventBySpeakerAction implements Action {
     }
 
     private void setAttributes(HttpServletRequest request, String parameterEventId, long userId) throws ServiceException {
-        EventResponseDTO event = getEvent(parameterEventId, userId);
+        EventDTO event = getEvent(parameterEventId, userId);
         request.setAttribute(EVENT, event);
         request.setAttribute(REPORTS, reportService.viewEventsReports(parameterEventId));
         request.setAttribute(IS_COMING, isFutureEvent(event));
     }
 
-    private EventResponseDTO getEvent(String parameterEventId, long userId) throws ServiceException {
-        return eventService.viewSpeakersEvents(userId)
-                .stream()
+    private EventDTO getEvent(String parameterEventId, long userId) throws ServiceException {
+        Sorting sorting = Sorting.getEventSorting(ANY_DATE, ID, ASCENDING_ORDER);
+        String zero = "0";
+        String max = String.valueOf(Integer.MAX_VALUE);
+        return eventService.getSortedByUser(userId, sorting, zero, max, Role.SPEAKER.name()).stream()
                 .filter(e -> String.valueOf(e.getId()).equals(parameterEventId))
                 .findAny()
                 .orElseThrow(NoSuchEventException::new);
     }
 
-    private static boolean isFutureEvent(EventResponseDTO event) {
+    private static boolean isFutureEvent(EventDTO event) {
         return LocalDate.now().isBefore(LocalDate.parse(event.getDate()));
     }
 }

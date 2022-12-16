@@ -1,46 +1,18 @@
-package ua.java.conferences.dto.response;
+package ua.java.conferences.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
 
-public class EventResponseDTO implements Serializable {
-
+public class EventDTO implements Serializable {
     private static final long serialVersionUID = 1L;
-
     private long id;
-
     private String title;
-
     private String date;
-
     private String location;
-
     private String description;
-
     private int reports;
-
     private int registrations;
-
     private int visitors;
-
-    public EventResponseDTO(long id, String title, String date, String location, String description) {
-        setId(id);
-        setTitle(title);
-        setDate(date);
-        setLocation(location);
-        setDescription(description);
-    }
-
-    public EventResponseDTO(long id, String title, String date, String location,
-                            int reports, int registrations, int visitors) {
-        setId(id);
-        setTitle(title);
-        setDate(date);
-        setLocation(location);
-        setReports(reports);
-        setRegistrations(registrations);
-        setVisitors(visitors);
-    }
 
     public long getId() {
         return id;
@@ -110,20 +82,18 @@ public class EventResponseDTO implements Serializable {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EventResponseDTO that = (EventResponseDTO) o;
-        return id == that.id && reports == that.reports && registrations == that.registrations
-                && visitors == that.visitors && title.equals(that.title) && date.equals(that.date)
-                && location.equals(that.location) && Objects.equals(description, that.description);
+        EventDTO that = (EventDTO) o;
+        return title.equals(that.title) && date.equals(that.date) && location.equals(that.location);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, date, location, reports, registrations, visitors);
+        return Objects.hash(title, date, location);
     }
 
     @Override
     public String toString() {
-        return "EventResponseDTO{" +
+        return "EventDTO{" +
                 "id=" + getId() +
                 ", title='" + getTitle() + '\'' +
                 ", date='" + getDate() + '\'' +
@@ -133,5 +103,57 @@ public class EventResponseDTO implements Serializable {
                 ", registrations=" + getRegistrations() +
                 ", visitors=" + getVisitors() +
                 '}';
+    }
+
+    public static class Builder {
+        private final EventDTO event;
+
+        public Builder() {
+            this.event = new EventDTO();
+        }
+
+        public Builder setId(long id) {
+            event.setId(id);
+            return this;
+        }
+
+        public Builder setTitle(String title) {
+            event.setTitle(title);
+            return this;
+        }
+
+        public Builder setDate(String date) {
+            event.setDate(date);
+            return this;
+        }
+
+        public Builder setLocation(String location) {
+            event.setLocation(location);
+            return this;
+        }
+
+        public Builder setDescription(String description) {
+            event.setDescription(description);
+            return this;
+        }
+
+        public Builder setRegistrations(int registrations) {
+            event.setRegistrations(registrations);
+            return this;
+        }
+
+        public Builder setVisitors(int visitors) {
+            event.setVisitors(visitors);
+            return this;
+        }
+
+        public Builder setReports(int reports) {
+            event.setReports(reports);
+            return this;
+        }
+
+        public EventDTO get() {
+            return event;
+        }
     }
 }

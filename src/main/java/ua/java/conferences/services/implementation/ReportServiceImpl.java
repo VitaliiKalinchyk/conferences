@@ -1,15 +1,14 @@
 package ua.java.conferences.services.implementation;
 
 import ua.java.conferences.dao.ReportDAO;
-import ua.java.conferences.dto.request.ReportRequestDTO;
-import ua.java.conferences.dto.response.*;
+import ua.java.conferences.dto.ReportDTO;
 import ua.java.conferences.entities.Report;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.ReportService;
 
 import java.util.*;
 
-import static ua.java.conferences.exceptions.IncorrectFormatException.Message.ENTER_CORRECT_TOPIC;
+import static ua.java.conferences.exceptions.constants.Message.ENTER_CORRECT_TOPIC;
 import static ua.java.conferences.utils.ConvertorUtil.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;
 
@@ -22,8 +21,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void createReport(ReportRequestDTO reportDTO) throws ServiceException {
-        validateReport(reportDTO);
+    public void addReport(ReportDTO reportDTO) throws ServiceException {
+        validateComplexName(reportDTO.getTopic(), ENTER_CORRECT_TOPIC);
         Report report = convertDTOToReport(reportDTO);
         try {
             reportDAO.add(report);
@@ -33,8 +32,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportResponseDTO view(String reportIdString) throws ServiceException {
-        ReportResponseDTO reportDTO;
+    public ReportDTO getById(String reportIdString) throws ServiceException {
+        ReportDTO reportDTO;
         long reportId = getReportId(reportIdString);
         try {
             Report report = reportDAO.getById(reportId).orElseThrow(NoSuchReportException::new);
@@ -46,8 +45,20 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ReportResponseDTO> viewEventsReports(String eventIdString) throws ServiceException {
-        List<ReportResponseDTO> reportDTOS = new ArrayList<>();
+    public List<ReportDTO> getAll() throws ServiceException {
+        List<ReportDTO> reportDTOS = new ArrayList<>();
+        try {
+            List<Report> reports = reportDAO.getAll();
+            reports.forEach(report -> reportDTOS.add(convertReportToDTO(report)));
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return reportDTOS;
+    }
+
+    @Override
+    public List<ReportDTO> viewEventsReports(String eventIdString) throws ServiceException {
+        List<ReportDTO> reportDTOS = new ArrayList<>();
         try {
             long eventId = getLong(eventIdString);
             List<Report> reports = reportDAO.getEventsReports(eventId);
@@ -59,12 +70,11 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ReportResponseDTO> viewSpeakersReports(String speakerIdString) throws ServiceException {
-        List<ReportResponseDTO> reportDTOS = new ArrayList<>();
+    public List<ReportDTO> viewSpeakersReports(long speakerId) throws ServiceException {
+        List<ReportDTO> reportDTOS = new ArrayList<>();
         try {
-            long speakerId = getLong(speakerIdString);
             List<Report> reports = reportDAO.getSpeakersReports(speakerId);
-            reports.forEach(report -> reportDTOS.add(convertSpeakersReportToDTO(report)));
+            reports.forEach(report -> reportDTOS.add(convertReportToDTO(report)));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -72,8 +82,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void updateReport(ReportRequestDTO reportDTO) throws ServiceException {
-        validateReport(reportDTO);
+    public void update(ReportDTO reportDTO) throws ServiceException {
+        validateComplexName(reportDTO.getTopic(), ENTER_CORRECT_TOPIC);
         Report report = convertDTOToReport(reportDTO);
         try {
             reportDAO.update(report);
@@ -107,12 +117,6 @@ public class ReportServiceImpl implements ReportService {
             reportDAO.delete(reportId);
         } catch (DAOException e) {
             throw new ServiceException(e);
-        }
-    }
-
-    private void validateReport(ReportRequestDTO reportDTO) throws IncorrectFormatException {
-        if (!validateComplexName(reportDTO.getTopic())) {
-            throw new IncorrectFormatException(ENTER_CORRECT_TOPIC);
         }
     }
 }

@@ -21,7 +21,7 @@ public class DeleteUserAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
-        return isPost(request) ? executePost(request) : executeGet(request);
+        return isPostMethod(request) ? executePost(request) : executeGet(request);
     }
 
     private String executeGet(HttpServletRequest request) {

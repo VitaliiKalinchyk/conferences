@@ -43,7 +43,7 @@ public class MysqlReportDAO implements ReportDAO {
             preparedStatement.setLong(++k, id);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
-                    report = createReportWithSpeakerAndEvent(resultSet);
+                    report = getReport(resultSet);
                 }
             }
         } catch (SQLException e) {
@@ -59,7 +59,7 @@ public class MysqlReportDAO implements ReportDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORTS)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    reports.add(createReportWithSpeakerAndEvent(resultSet));
+                    reports.add(getReport(resultSet));
                 }
             }
         } catch (SQLException e) {
@@ -70,14 +70,24 @@ public class MysqlReportDAO implements ReportDAO {
 
     @Override
     public List<Report> getEventsReports(long eventId) throws DAOException {
+        return getReports(eventId, GET_EVENTS_REPORTS);
+    }
+
+
+    @Override
+    public List<Report> getSpeakersReports(long speakerId) throws DAOException {
+        return getReports(speakerId, GET_SPEAKERS_REPORTS);
+    }
+
+    private List<Report> getReports(long eventId, String getEventsReports) throws DAOException {
         List<Report> reports = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENTS_REPORTS)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(getEventsReports)) {
             int k = 0;
             preparedStatement.setLong(++k, eventId);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
-                    reports.add(createReportWithSpeakerAndEvent(resultSet));
+                    reports.add(getReport(resultSet));
                 }
             }
         } catch (SQLException e) {
@@ -137,35 +147,10 @@ public class MysqlReportDAO implements ReportDAO {
         }
     }
 
-    @Override
-    public List<Report> getSpeakersReports(long speakerId) throws DAOException {
-        List<Report> reports = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(GET_SPEAKERS_REPORTS)) {
-            int k = 0;
-            preparedStatement.setLong(++k, speakerId);
-            try (ResultSet resultSet = preparedStatement.executeQuery()) {
-                while (resultSet.next()) {
-                    reports.add(createReport(resultSet));
-                }
-            }
-        } catch (SQLException e) {
-            throw new DAOException(e);
-        }
-        return reports;
-    }
-
-    private Report createReport(ResultSet resultSet) throws SQLException {
-        return new Report.ReportBuilder()
-                .setId(resultSet.getInt(ID))
-                .setTopic(resultSet.getString(TOPIC))
-                .get();
-    }
-
-    private Report createReportWithSpeakerAndEvent(ResultSet resultSet) throws SQLException {
+    private Report getReport(ResultSet resultSet) throws SQLException {
         Event event = getEvent(resultSet);
         User speaker = getSpeaker(resultSet);
-        return new Report.ReportBuilder()
+        return new Report.Builder()
                 .setId(resultSet.getInt(ID))
                 .setTopic(resultSet.getString(TOPIC))
                 .setEvent(event)
@@ -177,7 +162,7 @@ public class MysqlReportDAO implements ReportDAO {
         Event event = null;
         long eventId = resultSet.getLong(EVENT_ID);
         if (eventId !=0) {
-            event = new Event.EventBuilder()
+            event = new Event.Builder()
                     .setId(eventId)
                     .setTitle(resultSet.getString(TITLE))
                     .setDate(LocalDate.parse(resultSet.getString(DATE)))
@@ -191,7 +176,7 @@ public class MysqlReportDAO implements ReportDAO {
         User speaker = null;
         long userId = resultSet.getLong(USER_ID);
         if (userId !=0) {
-            speaker = new User.UserBuilder()
+            speaker = new User.Builder()
                     .setId(userId)
                     .setName(resultSet.getString(NAME))
                     .setSurname(resultSet.getString(SURNAME))

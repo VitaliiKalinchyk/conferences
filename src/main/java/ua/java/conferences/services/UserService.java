@@ -1,27 +1,27 @@
 package ua.java.conferences.services;
 
-import ua.java.conferences.dto.request.UserRequestDTO;
-import ua.java.conferences.dto.response.UserResponseDTO;
+import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import java.util.List;
 
-public interface UserService extends Service<UserResponseDTO> {
-    void register(UserRequestDTO userDTO, String confirmPassword) throws ServiceException;
+public interface UserService extends Service<UserDTO> {
+    void add(UserDTO userDTO, String confirmPassword) throws ServiceException;
 
-    UserResponseDTO signIn(String login, String password) throws ServiceException;
+    UserDTO signIn(String login, String password) throws ServiceException;
 
-    UserResponseDTO searchUser(String email) throws ServiceException;
+    UserDTO getByEmail(String email) throws ServiceException;
 
-    List<UserResponseDTO> viewUsers() throws ServiceException;
+    List<UserDTO> getSortedUsers(Sorting sorting, String offset, String records) throws ServiceException;
 
-    List<UserResponseDTO> viewSpeakers() throws ServiceException;
+    int getNumberOfRecords(Sorting sorting) throws ServiceException;
 
-    UserResponseDTO editProfile(UserRequestDTO userDTO) throws ServiceException;
+    List<UserDTO> getSpeakers() throws ServiceException;
 
     void changePassword(long userId, String oldPassword, String newPassword, String confirmPassword) throws ServiceException;
 
-    void setRole(String userIdString, int roleId) throws ServiceException;
+    void setRole(String userEmail, int roleId) throws ServiceException;
 
     void registerForEvent(long userId, String eventIdString) throws ServiceException;
 

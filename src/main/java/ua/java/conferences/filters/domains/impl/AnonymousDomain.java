@@ -1,25 +1,18 @@
 package ua.java.conferences.filters.domains.impl;
 
-import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.filters.domains.Domain;
 import ua.java.conferences.filters.domains.sets.*;
-
 import java.util.Set;
 
-public class AnonymousDomain implements Domain {
-
+public class AnonymousDomain extends Domain {
     Set<String> domainPages = DomainPagesSets.getAnonymousUserPages();
-
     Set<String> domainActions = DomainActionsSets.getAnonymousUserActions();
 
-    HttpServletRequest request;
-
-    public AnonymousDomain(HttpServletRequest request) {
-        this.request = request;
+    public AnonymousDomain(String servletPath, String action) {
+        super(servletPath, action);
     }
 
     public boolean checkPages() {
-        String servletPath = request.getServletPath();
         if (servletPath != null) {
             return domainPages.contains(servletPath.substring(1));
         }
@@ -27,7 +20,6 @@ public class AnonymousDomain implements Domain {
     }
 
     public boolean checkActions() {
-        String action = request.getParameter("action");
         if (action != null) {
             return domainActions.contains(action);
         }

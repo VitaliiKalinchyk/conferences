@@ -2,8 +2,7 @@ package ua.java.conferences.services;
 
 import org.junit.jupiter.api.Test;
 import ua.java.conferences.dao.ReportDAO;
-import ua.java.conferences.dto.request.ReportRequestDTO;
-import ua.java.conferences.dto.response.*;
+import ua.java.conferences.dto.ReportDTO;
 import ua.java.conferences.entities.*;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.implementation.ReportServiceImpl;
@@ -14,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.exceptions.IncorrectFormatException.Message.*;
+import static ua.java.conferences.exceptions.constants.Message.*;
 
 class ReportServiceTest {
 
@@ -25,103 +24,122 @@ class ReportServiceTest {
     @Test
     void testCreateReport() throws DAOException {
         doNothing().when(reportDAO).add(isA(Report.class));
-        ReportRequestDTO reportDTO = getTestReportRequestDTO();
-        assertDoesNotThrow(() -> reportService.createReport(reportDTO));
+        ReportDTO reportDTO = getReportDTO();
+        assertDoesNotThrow(() -> reportService.addReport(reportDTO));
     }
 
     @Test
-    void testCreateIncorrectReport() throws DAOException {
+    void testCreateIncorrectTopic() throws DAOException {
         doNothing().when(reportDAO).add(isA(Report.class));
-        ReportRequestDTO reportDTO = new ReportRequestDTO(ID, WRONG_TOPIC, ID, ID);
-        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> reportService.createReport(reportDTO));
+        ReportDTO reportDTO = getReportDTO();
+        reportDTO.setTopic(INCORRECT_TOPIC);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> reportService.addReport(reportDTO));
         assertEquals(ENTER_CORRECT_TOPIC, e.getMessage());
     }
 
     @Test
     void testViewReport() throws DAOException, ServiceException {
-        when(reportDAO.getById(ID)).thenReturn(Optional.of(getTestReport()));
-        assertEquals(getTestReportResponseDTO(), reportService.view(String.valueOf(ID)));
+        when(reportDAO.getById(ID_VALUE)).thenReturn(Optional.of(getTestReport()));
+        assertEquals(getReportDTO(), reportService.getById(String.valueOf(ID_VALUE)));
     }
 
     @Test
     void testViewNoReport() throws DAOException {
-        when(reportDAO.getById(ID)).thenReturn(Optional.empty());
-        assertThrows(NoSuchReportException.class,() -> reportService.view(String.valueOf(ID)));
+        when(reportDAO.getById(ID_VALUE)).thenReturn(Optional.empty());
+        assertThrows(NoSuchReportException.class,() -> reportService.getById(String.valueOf(ID_VALUE)));
+    }
+
+    @Test
+    void testGetAll() throws DAOException, ServiceException {
+        List<Report> reports = new ArrayList<>();
+        List<ReportDTO> reportDTOs = new ArrayList<>();
+        reports.add(getTestReport());
+        reportDTOs.add(getReportDTO());
+        when(reportDAO.getAll()).thenReturn(reports);
+        assertIterableEquals(reportDTOs, reportService.getAll());
     }
 
     @Test
     void testViewEventsReports() throws DAOException, ServiceException {
         List<Report> reports = new ArrayList<>();
-        List<ReportResponseDTO> reportDTOs = new ArrayList<>();
+        List<ReportDTO> reportDTOs = new ArrayList<>();
         reports.add(getTestReport());
-        reportDTOs.add(getTestReportResponseDTO());
-        when(reportDAO.getEventsReports(ID)).thenReturn(reports);
-        assertIterableEquals(reportDTOs, reportService.viewEventsReports(String.valueOf(ID)));
+        reportDTOs.add(getReportDTO());
+        when(reportDAO.getEventsReports(ID_VALUE)).thenReturn(reports);
+        assertIterableEquals(reportDTOs, reportService.viewEventsReports(String.valueOf(ID_VALUE)));
     }
 
     @Test
     void testViewSpeakersReports() throws DAOException, ServiceException {
         List<Report> reports = new ArrayList<>();
-        List<ReportResponseDTO> reportDTOs = new ArrayList<>();
+        List<ReportDTO> reportDTOs = new ArrayList<>();
         reports.add(getTestReport());
-        reportDTOs.add(getTestSpeakerReportResponseDTO());
-        when(reportDAO.getSpeakersReports(ID)).thenReturn(reports);
-        assertIterableEquals(reportDTOs, reportService.viewSpeakersReports(String.valueOf(ID)));
+        reportDTOs.add(getReportDTO());
+        when(reportDAO.getSpeakersReports(ID_VALUE)).thenReturn(reports);
+        assertIterableEquals(reportDTOs, reportService.viewSpeakersReports(ID_VALUE));
     }
 
     @Test
     void testUpdateReport() throws DAOException {
         doNothing().when(reportDAO).update(isA(Report.class));
-        assertDoesNotThrow(() -> reportService.updateReport(getTestReportRequestDTO()));
+        assertDoesNotThrow(() -> reportService.update(getReportDTO()));
+    }
+
+    @Test
+    void testUpdateReportIncorrectTopic() throws DAOException {
+        doNothing().when(reportDAO).update(isA(Report.class));
+        ReportDTO reportDTO = getReportDTO();
+        reportDTO.setTopic(INCORRECT_TOPIC);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> reportService.update(reportDTO));
+        assertEquals(ENTER_CORRECT_TOPIC, e.getMessage());
     }
 
     @Test
     void testSetSpeaker() throws DAOException {
         doNothing().when(reportDAO).setSpeaker(isA(long.class), isA(long.class));
-        assertDoesNotThrow(() -> reportService.setSpeaker(ID, ID));
+        assertDoesNotThrow(() -> reportService.setSpeaker(ID_VALUE, ID_VALUE));
     }
 
     @Test
     void testDeleteSpeaker() throws DAOException {
         doNothing().when(reportDAO).deleteSpeaker(isA(long.class));
-        assertDoesNotThrow(() -> reportService.deleteSpeaker(ID));
+        assertDoesNotThrow(() -> reportService.deleteSpeaker(ID_VALUE));
     }
 
     @Test
     void testDeleteReport() throws DAOException {
         doNothing().when(reportDAO).delete(isA(long.class));
-        assertDoesNotThrow(() -> reportService.delete(String.valueOf(ID)));
+        assertDoesNotThrow(() -> reportService.delete(String.valueOf(ID_VALUE)));
     }
 
-    private ReportRequestDTO getTestReportRequestDTO() {
-        return new ReportRequestDTO(ID, TOPIC, ID, ID);
-    }
-
-    private ReportResponseDTO getTestReportResponseDTO() {
-        return new ReportResponseDTO(ID, TOPIC, ID, SPEAKER_NAME);
-    }
-
-    private ReportResponseDTO getTestSpeakerReportResponseDTO() {
-        return new ReportResponseDTO(ID, TOPIC, ID, TITLE, DATE_NAME, LOCATION);
+    private ReportDTO getReportDTO() {
+        return new ReportDTO.Builder()
+                .setId(ID_VALUE)
+                .setTopic(TOPIC)
+                .setEventId(ID_VALUE)
+                .setTitle(TITLE)
+                .setDate(DATE_NAME)
+                .setLocation(LOCATION)
+                .get();
     }
 
     private Report getTestReport() {
-        User speaker = new User.UserBuilder()
-                .setId(ID)
+        User speaker = new User.Builder()
+                .setId(ID_VALUE)
                 .setEmail(EMAIL)
                 .setPassword(PASSWORD)
                 .setName(NAME)
                 .setSurname(SURNAME)
                 .get();
-        Event event = new Event.EventBuilder()
-                .setId(ID)
+        Event event = new Event.Builder()
+                .setId(ID_VALUE)
                 .setTitle(TITLE)
                 .setDate(DATE)
                 .setLocation(LOCATION)
                 .setDescription(DESCRIPTION)
                 .get();
-        return new Report.ReportBuilder()
-                .setId(ID)
+        return new Report.Builder()
+                .setId(ID_VALUE)
                 .setTopic(TOPIC)
                 .setEvent(event)
                 .setSpeaker(speaker)

@@ -48,7 +48,8 @@
                         <span class="text-success"><fmt:message key="${requestScope.message}"/></span>
                     </c:if><br>
                     <label class="form-label fs-5" for="topic"><fmt:message key="topic.name"/>: </label>
-                    <input class="form-control" name="topic" id="topic" required value="">
+                    <input class="form-control" name="topic" id="topic"
+                           pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!@#$^&*()={}| ]{2,70}" required value="">
                     <c:if test="${fn:contains(error, 'topic')}">
                         <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
                     </c:if><br>

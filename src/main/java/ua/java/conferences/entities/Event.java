@@ -5,23 +5,14 @@ import java.time.LocalDate;
 import java.util.Objects;
 
 public class Event implements Serializable {
-
     private static final long serialVersionUID = 1L;
-
     private long id;
-
     private String title;
-
     private LocalDate date;
-
     private String location;
-
     private String description;
-
     private int registrations;
-
     private int visitors;
-
     private int reports;
 
     public long getId() {
@@ -93,7 +84,7 @@ public class Event implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Event event = (Event) o;
-        return id == event.id;
+        return id == event.id && title.equals(event.title);
     }
 
     @Override
@@ -115,50 +106,49 @@ public class Event implements Serializable {
                 '}';
     }
 
-    public static class EventBuilder {
-
+    public static class Builder {
         private final Event event;
 
-        public EventBuilder() {
+        public Builder() {
             this.event = new Event();
         }
 
-        public EventBuilder setId(long id) {
+        public Builder setId(long id) {
             event.setId(id);
             return this;
         }
 
-        public EventBuilder setTitle(String title) {
+        public Builder setTitle(String title) {
             event.setTitle(title);
             return this;
         }
 
-        public EventBuilder setDate(LocalDate date) {
+        public Builder setDate(LocalDate date) {
             event.setDate(date);
             return this;
         }
 
-        public EventBuilder setLocation(String location) {
+        public Builder setLocation(String location) {
             event.setLocation(location);
             return this;
         }
 
-        public EventBuilder setDescription(String description) {
+        public Builder setDescription(String description) {
             event.setDescription(description);
             return this;
         }
 
-        public EventBuilder setRegistrations(int registrations) {
+        public Builder setRegistrations(int registrations) {
             event.setRegistrations(registrations);
             return this;
         }
 
-        public EventBuilder setVisitors(int visitors) {
+        public Builder setVisitors(int visitors) {
             event.setVisitors(visitors);
             return this;
         }
 
-        public EventBuilder setReports(int reports) {
+        public Builder setReports(int reports) {
             event.setReports(reports);
             return this;
         }

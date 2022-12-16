@@ -10,11 +10,8 @@ import java.sql.*;
 import java.util.Properties;
 
 public class DataSource {
-
     private static final Logger logger = LoggerFactory.getLogger(DataSource.class);
-
     private static final HikariConfig config = new HikariConfig();
-
     private static final HikariDataSource ds;
 
     static {

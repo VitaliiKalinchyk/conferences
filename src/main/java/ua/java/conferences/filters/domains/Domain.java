@@ -1,12 +1,19 @@
 package ua.java.conferences.filters.domains;
 
-public interface Domain {
+public abstract class Domain {
+    protected String servletPath;
+    protected String action;
 
-    default boolean checkAccess() {
+    protected Domain(String servletPath, String action) {
+        this.servletPath = servletPath;
+        this.action = action;
+    }
+
+    public boolean checkAccess() {
         return !checkPages() || !checkActions();
     }
 
-    boolean checkPages();
+    protected abstract boolean checkPages();
 
-    boolean checkActions();
+    protected abstract boolean checkActions();
 }

@@ -1,10 +1,12 @@
 package ua.java.conferences.utils;
 
 import org.junit.jupiter.api.Test;
+import ua.java.conferences.exceptions.IncorrectFormatException;
 
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static ua.java.conferences.exceptions.constants.Message.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;
 
 class ValidatorUtilTest {
@@ -12,120 +14,130 @@ class ValidatorUtilTest {
     @Test
     void testValidateEmail() {
         String email = "karl.kory@amber.com.tv";
-        assertTrue(validateEmail(email));
+        assertDoesNotThrow(() -> validateEmail(email));
     }
 
     @Test
     void testValidateBadEmail() {
         String email = "karl.kory.amber.com.tv";
-        assertFalse(validateEmail(email));
+        IncorrectFormatException exception = assertThrows(IncorrectFormatException.class, () -> validateEmail(email));
+        assertEquals(ENTER_CORRECT_EMAIL, exception.getMessage());
 
-        email = "karl.kory@amber";
-        assertFalse(validateEmail(email));
+        String email2 = "karl.kory@amber";
+        assertThrows(IncorrectFormatException.class, () -> validateEmail(email2));
 
-        email = "karl.kory@.amber";
-        assertFalse(validateEmail(email));
+        String email3 = "karl.kory@.amber";
+        assertThrows(IncorrectFormatException.class, () -> validateEmail(email3));
 
-        email = "@amber.com.tv";
-        assertFalse(validateEmail(email));
+        String email4 = "@amber.com.tv";
+        assertThrows(IncorrectFormatException.class, () -> validateEmail(email4));
 
-        email = "karl.kory@amber.com.t";
-        assertFalse(validateEmail(email));
+        String email5 = "karl.kory@amber.com.t";
+        assertThrows(IncorrectFormatException.class, () -> validateEmail(email5));
     }
 
     @Test
     void testValidatePassword() {
         String password = "Password1";
-        assertTrue(validatePassword(password));
+        assertDoesNotThrow(() -> validatePassword(password));
 
-        password = "Password1_";
-        assertTrue(validatePassword(password));
+        String password2 = "Password1_";
+        assertDoesNotThrow(() -> validatePassword(password2));
     }
 
     @Test
     void testValidateBadPassword() {
         String password = "NoDigitPass";
-        assertFalse(validatePassword(password));
+        IncorrectFormatException exception = assertThrows(IncorrectFormatException.class, () -> validatePassword(password));
+        assertEquals(ENTER_CORRECT_PASSWORD, exception.getMessage());
 
-        password = "no_upper_letters1";
-        assertFalse(validatePassword(password));
+        String password2 = "no_upper_letters1";
+        assertThrows(IncorrectFormatException.class, () -> validatePassword(password2));
 
-        password = "NO_LOW_CASE_1";
-        assertFalse(validatePassword(password));
+        String password3 = "NO_LOW_CASE_1";
+        assertThrows(IncorrectFormatException.class, () -> validatePassword(password3));
 
-        password = "Short1";
-        assertFalse(validatePassword(password));
+        String password4 = "Short1";
+        assertThrows(IncorrectFormatException.class, () -> validatePassword(password4));
 
-        password = "TooLongPassword1234567890";
-        assertFalse(validatePassword(password));
+        String password5 = "TooLongPassword1234567890";
+        assertThrows(IncorrectFormatException.class, () -> validatePassword(password5));
     }
 
     @Test
     void testValidateName() {
         String name = "Joe Biden";
-        assertTrue(validateName(name));
+        assertDoesNotThrow(() -> validateName(name, ENTER_CORRECT_NAME));
 
-        name = "Залужний";
-        assertTrue(validateName(name));
+        String name2 = "Залужний";
+        assertDoesNotThrow(() -> validateName(name2, ENTER_CORRECT_NAME));
 
-        name = "Квітка-Основ'яненко";
-        assertTrue(validateName(name));
+        String name3 = "Квітка-Основ'яненко";
+        assertDoesNotThrow(() -> validateName(name3, ENTER_CORRECT_NAME));
     }
 
     @Test
     void testValidateBadName() {
         String name = "Joe Biden 2";
-        assertFalse(validateName(name));
+        IncorrectFormatException exception =
+                assertThrows(IncorrectFormatException.class, () -> validateName(name, ENTER_CORRECT_NAME));
+        assertEquals(ENTER_CORRECT_NAME, exception.getMessage());
 
-        name = "Залужный";
-        assertFalse(validateName(name));
+        String name2 = "Залужный";
+        assertThrows(IncorrectFormatException.class, () -> validateName(name2, ENTER_CORRECT_NAME));
 
-        name = "Занадтодовгеім'ямаєбутинебільшетридцятисимволів";
-        assertFalse(validateName(name));
+        String name3 = "Занадтодовгеім'ямаєбутинебільшетридцятисимволів";
+        assertThrows(IncorrectFormatException.class, () -> validateName(name3, ENTER_CORRECT_NAME));
     }
 
     @Test
     void testValidateComplexName() {
         String topic = "SQL. Introduction to SQL and JDBC";
-        assertTrue(validateComplexName(topic));
+        assertDoesNotThrow(() -> validateComplexName(topic, ENTER_CORRECT_TOPIC));
 
         String title = "Java for Students Summer 2022";
-        assertTrue(validateComplexName(title));
+        assertDoesNotThrow(() -> validateComplexName(title, ENTER_CORRECT_TITLE));
 
         String location = "Київ, вул. Хрещатик 1";
-        assertTrue(validateComplexName(location));
+        assertDoesNotThrow(() -> validateComplexName(location, ENTER_CORRECT_LOCATION));
     }
 
     @Test
     void testValidateBadComplexName() {
         String topic = "A";
-        assertFalse(validateComplexName(topic));
+        IncorrectFormatException exception =
+                assertThrows(IncorrectFormatException.class, () -> validateComplexName(topic, ENTER_CORRECT_TOPIC));
+        assertEquals(ENTER_CORRECT_TOPIC, exception.getMessage());
 
         String title = "Java for Students Summer 2022. Занадто довге ім'я має бути не більше 70 символів";
-        assertFalse(validateComplexName(title));
+        exception = assertThrows(IncorrectFormatException.class, () -> validateComplexName(title, ENTER_CORRECT_TITLE));
+        assertEquals(ENTER_CORRECT_TITLE, exception.getMessage());
     }
 
     @Test
     void testValidateDate() {
         LocalDate localDate = LocalDate.now().plusDays(1);
-        assertTrue(validateDate(localDate));
+        assertDoesNotThrow(() -> validateDate(localDate));
     }
 
     @Test
     void testValidateBadDate() {
         LocalDate localDate = LocalDate.now().minusDays(1);
-        assertFalse(validateDate(localDate));
+        IncorrectFormatException exception = assertThrows(IncorrectFormatException.class, () -> validateDate(localDate));
+        assertEquals(ENTER_VALID_DATE, exception.getMessage());
     }
 
     @Test
     void testValidateDescription() {
         String description = "Epam conference for Ukrainian students. Winter 2023";
-        assertTrue(validateDescription(description));
+        assertDoesNotThrow(() -> validateDescription(description));
     }
 
     @Test
     void testValidateBadDescription() {
         String description = "";
-        assertFalse(validateDescription(description));
+        IncorrectFormatException exception =
+                assertThrows(IncorrectFormatException.class, () -> validateDescription(description));
+        assertEquals(ENTER_CORRECT_DESCRIPTION, exception.getMessage());
     }
 }

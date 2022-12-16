@@ -8,7 +8,8 @@
 <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="index.jsp"><span class="mb-0 h4">Conference Smart App</span></a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -48,8 +49,12 @@
             <form method="POST" class="d-flex" >
                 <label>
                     <select name="locale" onchange='submit();'>
-                        <option value="en" ${sessionScope.locale eq 'en' ? 'selected' : ''}><fmt:message key="en"/></option>
-                        <option value="uk_UA" ${sessionScope.locale eq 'uk_UA' ? 'selected' : ''}><fmt:message key="ua"/></option>
+                        <option value="en" ${sessionScope.locale eq 'en' ? 'selected' : ''}>
+                            <fmt:message key="en"/>
+                        </option>
+                        <option value="uk_UA" ${sessionScope.locale eq 'uk_UA' ? 'selected' : ''}>
+                            <fmt:message key="ua"/>
+                        </option>
                     </select>
                 </label>
             </form>

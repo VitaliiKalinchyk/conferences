@@ -1,17 +1,17 @@
 package ua.java.conferences.services.implementation;
 
 import ua.java.conferences.dao.EventDAO;
-import ua.java.conferences.dto.request.EventRequestDTO;
-import ua.java.conferences.dto.response.*;
+import ua.java.conferences.dto.EventDTO;
 import ua.java.conferences.entities.Event;
+import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.EventService;
+import ua.java.conferences.utils.sorting.Sorting;
 
 import java.time.LocalDate;
 import java.util.*;
 
-import static ua.java.conferences.dao.mysql.constants.EventSQLQueries.UPCOMING;
-import static ua.java.conferences.exceptions.IncorrectFormatException.Message.*;
+import static ua.java.conferences.exceptions.constants.Message.*;
 import static ua.java.conferences.utils.ConvertorUtil.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;
 
@@ -24,21 +24,21 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponseDTO createEvent(EventRequestDTO eventDTO) throws ServiceException {
+    public EventDTO addEvent(ua.java.conferences.dto.EventDTO eventDTO) throws ServiceException {
         validateEvent(eventDTO);
         Event event = convertDTOToEvent(eventDTO);
         try {
             eventDAO.add(event);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            checkExceptionType(e);
         }
         return convertEventToDTO(event);
     }
 
     @Override
-    public EventResponseDTO view(String eventIdString) throws ServiceException {
+    public EventDTO getById(String eventIdString) throws ServiceException {
         long eventId = getEventId(eventIdString);
-        EventResponseDTO eventDTO;
+        EventDTO eventDTO;
         try {
             Event event = eventDAO.getById(eventId).orElseThrow(NoSuchEventException::new);
             eventDTO = convertEventToDTO(event);
@@ -49,8 +49,8 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponseDTO searchEvent(String title) throws ServiceException {
-        EventResponseDTO eventDTO;
+    public EventDTO getByTitle(String title) throws ServiceException {
+        EventDTO eventDTO;
         try {
             Event event = eventDAO.getByTitle(title).orElseThrow(NoSuchEventException::new);
             eventDTO = convertEventToDTO(event);
@@ -61,22 +61,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventResponseDTO> viewUsersEvents(long userId) throws ServiceException {
-        List<EventResponseDTO> eventDTOS = new ArrayList<>();
+    public List<EventDTO> getAll() throws ServiceException {
+        List<EventDTO> eventDTOS = new ArrayList<>();
         try {
-            List<Event> events = eventDAO.getEventsByVisitor(userId);
-            events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
-        } catch (DAOException | NumberFormatException e) {
-            throw new ServiceException(e);
-        }
-        return eventDTOS;
-    }
-
-    @Override
-    public List<EventResponseDTO> viewPastUsersEvents(long userId) throws ServiceException {
-        List<EventResponseDTO> eventDTOS = new ArrayList<>();
-        try {
-            List<Event> events = eventDAO.getPastEventsByVisitor(userId);
+            List<Event> events = eventDAO.getAll();
             events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -85,10 +73,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventResponseDTO> viewSpeakersEvents(long speakerId) throws ServiceException {
-        List<EventResponseDTO> eventDTOS = new ArrayList<>();
+    public List<EventDTO> getSorted(Sorting sorting, String offset, String records) throws ServiceException {
+        List<EventDTO> eventDTOS = new ArrayList<>();
         try {
-            List<Event> events = eventDAO.getEventsBySpeaker(speakerId);
+            List<Event> events = eventDAO.getSorted(sorting, getInt(offset), getInt(records));
             events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -97,38 +85,12 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventResponseDTO> viewSpeakersPastEvents(long speakerId) throws ServiceException {
-        List<EventResponseDTO> eventDTOS = new ArrayList<>();
-        try {
-            List<Event> events = eventDAO.getPastEventsBySpeaker(speakerId);
-            events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return eventDTOS;
-    }
-
-    @Override
-    public List<EventResponseDTO> viewSortedEventsByUser(String sortField, String order) throws ServiceException {
-        List<EventResponseDTO> eventDTOS = new ArrayList<>();
-        checkString(sortField, order);
-        try {
-            List<Event> events = eventDAO.getSortedEvents(UPCOMING, sortField, order);
-            events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return eventDTOS;
-    }
-
-    @Override
-    public List<EventResponseDTO> viewSortedEventsByModerator(String filter, String sortField, String order)
+    public List<EventDTO> getSortedByUser(long userId, Sorting sorting, String offset, String records, String role)
             throws ServiceException {
-        List<EventResponseDTO> eventDTOS = new ArrayList<>();
-        checkString(filter, sortField, order);
+        List<EventDTO> eventDTOS = new ArrayList<>();
         try {
-            List<Event> events = eventDAO.getSortedEvents(filter, sortField, order);
-            events.forEach(event -> eventDTOS.add(convertEventToFullDTO(event)));
+            List<Event> events = eventDAO.getSortedByUser(userId, sorting, getInt(offset), getInt(records), role);
+            events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -136,15 +98,36 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventResponseDTO editEvent(EventRequestDTO eventDTO) throws ServiceException {
+    public int getNumberOfRecords(Sorting sorting) throws ServiceException {
+        int records;
+        try {
+            records = eventDAO.getNumberOfRecords(0, sorting, Role.MODERATOR.name());
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return records;
+    }
+
+    @Override
+    public int getNumberOfRecordsByUser(long id, Sorting sorting, String role) throws ServiceException {
+        int records;
+        try {
+            records = eventDAO.getNumberOfRecords(id, sorting, role);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return records;
+    }
+
+    @Override
+    public void update(EventDTO eventDTO) throws ServiceException {
         validateEvent(eventDTO);
         Event event = convertDTOToEvent(eventDTO);
         try {
             eventDAO.update(event);
         } catch (DAOException e) {
-            throw new ServiceException(e);
+            checkExceptionType(e);
         }
-        return convertEventToDTO(event);
     }
 
     @Override
@@ -168,18 +151,18 @@ public class EventServiceImpl implements EventService {
         }
     }
 
-    private void validateEvent(EventRequestDTO eventDTO) throws IncorrectFormatException {
-        if (!validateComplexName(eventDTO.getTitle())) {
-            throw new IncorrectFormatException(ENTER_CORRECT_TITLE);
+    private void checkExceptionType(DAOException e) throws ServiceException {
+        if (e.getMessage().contains("Duplicate")) {
+            throw new DuplicateTitleException();
+        } else {
+            throw new ServiceException(e);
         }
-        if (!validateDate(LocalDate.parse(eventDTO.getDate()))) {
-            throw new IncorrectFormatException(ENTER_VALID_DATE);
-        }
-        if (!validateComplexName(eventDTO.getLocation())) {
-            throw new IncorrectFormatException(ENTER_CORRECT_LOCATION);
-        }
-        if (!validateDescription(eventDTO.getDescription())) {
-            throw new IncorrectFormatException(ENTER_CORRECT_DESCRIPTION);
-        }
+    }
+
+    private void validateEvent(ua.java.conferences.dto.EventDTO eventDTO) throws IncorrectFormatException {
+        validateComplexName(eventDTO.getTitle(), ENTER_CORRECT_TITLE);
+        validateDate(LocalDate.parse(eventDTO.getDate()));
+        validateComplexName(eventDTO.getLocation(), ENTER_CORRECT_LOCATION);
+        validateDescription(eventDTO.getDescription());
     }
 }

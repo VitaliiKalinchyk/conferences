@@ -22,7 +22,7 @@ public class ResetPasswordAction implements Action {
     public String execute(HttpServletRequest request) throws ServiceException {
         String email = request.getParameter(EMAIL);
         try {
-            userService.searchUser(email);
+            userService.getByEmail(email);
             request.setAttribute(MESSAGE, CHECK_EMAIL);
             //send link via email
         } catch (IncorrectFormatException | NoSuchUserException e) {

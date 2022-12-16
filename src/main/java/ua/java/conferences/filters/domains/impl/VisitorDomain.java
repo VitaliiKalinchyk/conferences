@@ -1,25 +1,18 @@
 package ua.java.conferences.filters.domains.impl;
 
-import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.filters.domains.Domain;
 import ua.java.conferences.filters.domains.sets.*;
-
 import java.util.Set;
 
-public class VisitorDomain implements Domain {
-
+public class VisitorDomain extends Domain {
     Set<String> domainPages = DomainPagesSets.getVisitorPages();
-
     Set<String> domainActions = DomainActionsSets.getVisitorActions();
 
-    HttpServletRequest request;
-
-    public VisitorDomain(HttpServletRequest request) {
-        this.request = request;
+    public VisitorDomain(String servletPath, String action) {
+        super(servletPath, action);
     }
 
     public boolean checkPages() {
-        String servletPath = request.getServletPath();
         if (servletPath != null) {
             return domainPages.contains(servletPath.substring(1));
         }
@@ -27,7 +20,6 @@ public class VisitorDomain implements Domain {
     }
 
     public boolean checkActions() {
-        String action = request.getParameter("action");
         if (action != null) {
             return domainActions.contains(action);
         }

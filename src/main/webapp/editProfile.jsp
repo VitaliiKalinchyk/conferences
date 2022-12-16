@@ -31,7 +31,7 @@
     <form method="POST" action="controller">
         <input type="hidden" name="action" value="edit-profile">
         <c:set var="error" value="${requestScope.error}"/>
-        <c:set var="emailValue" value="${requestScope.user.email eq null ?
+        <c:set var="titleValue" value="${requestScope.user.email eq null ?
                                 sessionScope.loggedUser.email : requestScope.user.email}"/>
         <c:set var="nameValue" value="${requestScope.user.name eq null ?
                                 sessionScope.loggedUser.name : requestScope.user.name}"/>
@@ -45,7 +45,8 @@
                 <span class="text-success"><fmt:message key="${requestScope.message}"/></span>
             </c:if><br>
             <label class="form-label fs-5" for="email"><fmt:message key="email"/>: </label>
-            <input class="form-control" type="email" name="email" id="email" required value="${emailValue}">
+            <input class="form-control" type="email" name="email" id="email"
+                   pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" required value="${titleValue}">
             <c:if test="${fn:contains(error, 'email')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if><br>
@@ -53,8 +54,8 @@
 
         <div class="form-group">
             <label class="form-label fs-5" for="name"><fmt:message key="name"/>*: </label>
-            <input class="form-control" name="name" id="name" title="<fmt:message key="name.requirements"/>"
-                   required value="${nameValue}">
+            <input class="form-control" name="name" id="name" pattern="^[A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'\- ]{1,30}"
+                   title="<fmt:message key="name.requirements"/>" required value="${nameValue}">
             <c:if test="${fn:contains(error, '.name')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if><br>
@@ -62,8 +63,8 @@
 
         <div class="form-group">
             <label class="form-label fs-5" for="surname"><fmt:message key="surname"/>*: </label>
-            <input class="form-control" name="surname" id="surname" title="<fmt:message key="surname.requirements"/>"
-                   required value="${surnameValue}">
+            <input class="form-control" name="surname" id="surname" pattern="^[A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'\- ]{1,30}"
+                   title="<fmt:message key="surname.requirements"/>" required value="${surnameValue}">
             <c:if test="${fn:contains(error, 'surname')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if><br>
