@@ -166,8 +166,6 @@ class UserServiceTest {
         List<UserDTO> userDTOs = new ArrayList<>();
         users.add(getTestUser());
         userDTOs.add(getTestUserDTO());
-        System.out.println(users);
-        System.out.println(userDTOs);
         when(userDAO.getSorted(sorting, ZERO, Integer.MAX_VALUE)).thenReturn(users);
         assertIterableEquals(userDTOs, userService.getSortedUsers(sorting, "0", String.valueOf(Integer.MAX_VALUE)));
     }

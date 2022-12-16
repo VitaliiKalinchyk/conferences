@@ -53,7 +53,6 @@ class EventServiceTest {
         doNothing().when(eventDAO).add(isA(Event.class));
         EventDTO eventDTO = getTestEventDTO();
         eventDTO.setLocation(INCORRECT_LOCATION);
-        System.out.println(eventDTO);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
         assertEquals(ENTER_CORRECT_LOCATION, e.getMessage());
     }
