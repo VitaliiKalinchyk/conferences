@@ -1,7 +1,6 @@
 package ua.java.conferences.services;
 
 import ua.java.conferences.exceptions.ServiceException;
-
 import java.util.List;
 
 public interface Service<T> {

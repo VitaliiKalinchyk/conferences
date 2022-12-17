@@ -150,24 +150,24 @@ public class MysqlReportDAO implements ReportDAO {
     private Report getReport(ResultSet resultSet) throws SQLException {
         Event event = getEvent(resultSet);
         User speaker = getSpeaker(resultSet);
-        return new Report.Builder()
-                .setId(resultSet.getInt(ID))
-                .setTopic(resultSet.getString(TOPIC))
-                .setEvent(event)
-                .setSpeaker(speaker)
-                .get();
+        return Report.builder()
+                .id(resultSet.getInt(ID))
+                .topic(resultSet.getString(TOPIC))
+                .event(event)
+                .speaker(speaker)
+                .build();
     }
 
     private Event getEvent(ResultSet resultSet) throws SQLException {
         Event event = null;
         long eventId = resultSet.getLong(EVENT_ID);
         if (eventId !=0) {
-            event = new Event.Builder()
-                    .setId(eventId)
-                    .setTitle(resultSet.getString(TITLE))
-                    .setDate(LocalDate.parse(resultSet.getString(DATE)))
-                    .setLocation(resultSet.getString(LOCATION))
-                    .get();
+            event = Event.builder()
+                    .id(eventId)
+                    .title(resultSet.getString(TITLE))
+                    .date(LocalDate.parse(resultSet.getString(DATE)))
+                    .location(resultSet.getString(LOCATION))
+                    .build();
         }
         return event;
     }
@@ -176,11 +176,11 @@ public class MysqlReportDAO implements ReportDAO {
         User speaker = null;
         long userId = resultSet.getLong(USER_ID);
         if (userId !=0) {
-            speaker = new User.Builder()
-                    .setId(userId)
-                    .setName(resultSet.getString(NAME))
-                    .setSurname(resultSet.getString(SURNAME))
-                    .get();
+            speaker = User.builder()
+                    .id(userId)
+                    .name(resultSet.getString(NAME))
+                    .surname(resultSet.getString(SURNAME))
+                    .build();
         }
         return speaker;
     }

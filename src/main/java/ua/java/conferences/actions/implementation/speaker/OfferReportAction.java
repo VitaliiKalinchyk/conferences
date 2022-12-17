@@ -32,10 +32,10 @@ public class OfferReportAction implements Action {
     }
 
     private ReportDTO getReportDTO(HttpServletRequest request) {
-        return new  ReportDTO.Builder()
-                .setTopic(request.getParameter(TOPIC))
-                .setSpeakerId(((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId())
-                .setEventId(Long.parseLong(request.getParameter(EVENT_ID)))
-                .get();
+        return  ReportDTO.builder()
+                .topic(request.getParameter(TOPIC))
+                .speakerId(((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId())
+                .eventId(Long.parseLong(request.getParameter(EVENT_ID)))
+                .build();
     }
 }

@@ -47,13 +47,13 @@ public class EditProfileAction implements Action {
     }
 
     private UserDTO getUserDTO(HttpServletRequest request, UserDTO currentUser) {
-        return new UserDTO.Builder()
-                .setId(currentUser.getId())
-                .setEmail(request.getParameter(EMAIL))
-                .setName(request.getParameter(NAME))
-                .setSurname(request.getParameter(SURNAME))
-                .setNotification(isNotified(request))
-                .get();
+        return UserDTO.builder()
+                .id(currentUser.getId())
+                .email(request.getParameter(EMAIL))
+                .name(request.getParameter(NAME))
+                .surname(request.getParameter(SURNAME))
+                .notification(isNotified(request))
+                .build();
     }
 
     private boolean isNotified(HttpServletRequest request) {

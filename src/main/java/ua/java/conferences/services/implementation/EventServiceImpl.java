@@ -6,7 +6,6 @@ import ua.java.conferences.entities.Event;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.EventService;
-import ua.java.conferences.utils.sorting.Sorting;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -16,7 +15,6 @@ import static ua.java.conferences.utils.ConvertorUtil.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;
 
 public class EventServiceImpl implements EventService {
-
     private final EventDAO eventDAO;
 
     public EventServiceImpl(EventDAO eventDAO) {
@@ -73,10 +71,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDTO> getSorted(Sorting sorting, String offset, String records) throws ServiceException {
+    public List<EventDTO> getSorted(String query) throws ServiceException {
         List<EventDTO> eventDTOS = new ArrayList<>();
         try {
-            List<Event> events = eventDAO.getSorted(sorting, getInt(offset), getInt(records));
+            List<Event> events = eventDAO.getSorted(query);
             events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -85,11 +83,11 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public List<EventDTO> getSortedByUser(long userId, Sorting sorting, String offset, String records, String role)
+    public List<EventDTO> getSortedByUser(String query, Role role)
             throws ServiceException {
         List<EventDTO> eventDTOS = new ArrayList<>();
         try {
-            List<Event> events = eventDAO.getSortedByUser(userId, sorting, getInt(offset), getInt(records), role);
+            List<Event> events = eventDAO.getSortedByUser(query, role);
             events.forEach(event -> eventDTOS.add(convertEventToDTO(event)));
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -98,21 +96,10 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public int getNumberOfRecords(Sorting sorting) throws ServiceException {
+    public int getNumberOfRecords(String filter, Role role) throws ServiceException {
         int records;
         try {
-            records = eventDAO.getNumberOfRecords(0, sorting, Role.MODERATOR.name());
-        } catch (DAOException e) {
-            throw new ServiceException(e);
-        }
-        return records;
-    }
-
-    @Override
-    public int getNumberOfRecordsByUser(long id, Sorting sorting, String role) throws ServiceException {
-        int records;
-        try {
-            records = eventDAO.getNumberOfRecords(id, sorting, role);
+            records = eventDAO.getNumberOfRecords(filter, role);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

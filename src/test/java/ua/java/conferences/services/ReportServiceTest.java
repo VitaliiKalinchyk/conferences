@@ -113,36 +113,36 @@ class ReportServiceTest {
     }
 
     private ReportDTO getReportDTO() {
-        return new ReportDTO.Builder()
-                .setId(ID_VALUE)
-                .setTopic(TOPIC)
-                .setEventId(ID_VALUE)
-                .setTitle(TITLE)
-                .setDate(DATE_NAME)
-                .setLocation(LOCATION)
-                .get();
+        return ReportDTO.builder()
+                .id(ID_VALUE)
+                .topic(TOPIC)
+                .eventId(ID_VALUE)
+                .title(TITLE)
+                .date(DATE_NAME)
+                .location(LOCATION)
+                .build();
     }
 
     private Report getTestReport() {
-        User speaker = new User.Builder()
-                .setId(ID_VALUE)
-                .setEmail(EMAIL)
-                .setPassword(PASSWORD)
-                .setName(NAME)
-                .setSurname(SURNAME)
-                .get();
-        Event event = new Event.Builder()
-                .setId(ID_VALUE)
-                .setTitle(TITLE)
-                .setDate(DATE)
-                .setLocation(LOCATION)
-                .setDescription(DESCRIPTION)
-                .get();
-        return new Report.Builder()
-                .setId(ID_VALUE)
-                .setTopic(TOPIC)
-                .setEvent(event)
-                .setSpeaker(speaker)
-                .get();
+        User speaker = User.builder()
+                .id(ID_VALUE)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .name(NAME)
+                .surname(SURNAME)
+                .build();
+        Event event = Event.builder()
+                .id(ID_VALUE)
+                .title(TITLE)
+                .date(DATE)
+                .location(LOCATION)
+                .description(DESCRIPTION)
+                .build();
+        return Report.builder()
+                .id(ID_VALUE)
+                .topic(TOPIC)
+                .event(event)
+                .speaker(speaker)
+                .build();
     }
 }

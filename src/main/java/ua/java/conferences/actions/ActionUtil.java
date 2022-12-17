@@ -47,7 +47,7 @@ public class ActionUtil {
     }
 
     public static String getActionToRedirect(String action, String... parameters) {
-        String base = CONTROLLER_PAGE + "?" + ACTION + "=" +action;
+        String base = CONTROLLER_PAGE + "?" + ACTION + "=" + action;
         StringJoiner stringJoiner = new StringJoiner("&", "&", "");
         for (int i = 0; i < parameters.length; i+=2) {
             stringJoiner.add(parameters[i] + "=" + parameters[i + 1]);

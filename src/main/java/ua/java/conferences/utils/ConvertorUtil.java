@@ -6,79 +6,76 @@ import ua.java.conferences.entities.role.Role;
 
 import java.time.LocalDate;
 
-import static ua.java.conferences.utils.PasswordHashUtil.*;
-
 public final class ConvertorUtil {
 
     private ConvertorUtil() {}
 
     public static User convertDTOToUser(UserDTO userDTO) {
-        return new User.Builder()
-                .setId(userDTO.getId())
-                .setEmail(userDTO.getEmail())
-                .setPassword(encode(userDTO.getPassword()))
-                .setName(userDTO.getName())
-                .setSurname(userDTO.getSurname())
-                .setEmailNotification(userDTO.isNotification())
-                .get();
+        return User.builder()
+                .id(userDTO.getId())
+                .email(userDTO.getEmail())
+                .name(userDTO.getName())
+                .surname(userDTO.getSurname())
+                .emailNotification(userDTO.isNotification())
+                .build();
     }
 
     public static UserDTO convertUserToDTO(User user) {
-        return new UserDTO.Builder()
-                .setId(user.getId())
-                .setEmail(user.getEmail())
-                .setName(user.getName())
-                .setSurname(user.getSurname())
-                .setNotification(user.isEmailNotification())
-                .setRole(String.valueOf(Role.getRole(user.getRoleId())))
-                .get();
+        return UserDTO.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .surname(user.getSurname())
+                .notification(user.isEmailNotification())
+                .role(String.valueOf(Role.getRole(user.getRoleId())))
+                .build();
     }
 
     public static Report convertDTOToReport(ReportDTO reportDTO) {
         long speakerId = reportDTO.getSpeakerId();
-        return new Report.Builder()
-                .setId(reportDTO.getId())
-                .setTopic(reportDTO.getTopic())
-                .setSpeaker(speakerId != 0 ? new User.Builder().setId(speakerId).get() : null)
-                .setEvent(new Event.Builder().setId(reportDTO.getEventId()).get())
-                .get();
+        return Report.builder()
+                .id(reportDTO.getId())
+                .topic(reportDTO.getTopic())
+                .speaker(speakerId != 0 ? User.builder().id(speakerId).build() : null)
+                .event(Event.builder().id(reportDTO.getEventId()).build())
+                .build();
     }
 
     public static ReportDTO convertReportToDTO(Report report) {
         User speaker = report.getSpeaker();
         Event event = report.getEvent();
-        return new ReportDTO.Builder()
-                .setId(report.getId())
-                .setTopic(report.getTopic())
-                .setSpeakerId(speaker != null ?  speaker.getId() : 0)
-                .setSpeakerName(speaker != null ?  speaker.getName() + " " + speaker.getSurname() : "")
-                .setEventId(event != null ? event.getId() : 0)
-                .setTitle(event != null ? event.getTitle() : "")
-                .setDate(event != null ? event.getDate().toString() : "")
-                .setLocation(event != null ? event.getLocation() : "")
-                .get();
+        return ReportDTO.builder()
+                .id(report.getId())
+                .topic(report.getTopic())
+                .speakerId(speaker != null ?  speaker.getId() : 0)
+                .speakerName(speaker != null ?  speaker.getName() + " " + speaker.getSurname() : "")
+                .eventId(event != null ? event.getId() : 0)
+                .title(event != null ? event.getTitle() : "")
+                .date(event != null ? event.getDate().toString() : "")
+                .location(event != null ? event.getLocation() : "")
+                .build();
     }
 
     public static Event convertDTOToEvent(ua.java.conferences.dto.EventDTO eventDTO) {
-        return new Event.Builder()
-                .setId(eventDTO.getId())
-                .setTitle(eventDTO.getTitle())
-                .setDate(LocalDate.parse(eventDTO.getDate()))
-                .setLocation(eventDTO.getLocation())
-                .setDescription(eventDTO.getDescription())
-                .get();
+        return Event.builder()
+                .id(eventDTO.getId())
+                .title(eventDTO.getTitle())
+                .date(LocalDate.parse(eventDTO.getDate()))
+                .location(eventDTO.getLocation())
+                .description(eventDTO.getDescription())
+                .build();
     }
 
     public static EventDTO convertEventToDTO(Event event) {
-        return new EventDTO.Builder()
-                .setId(event.getId())
-                .setTitle(event.getTitle())
-                .setDate(event.getDate().toString())
-                .setLocation(event.getLocation())
-                .setDescription(event.getDescription())
-                .setRegistrations(event.getRegistrations())
-                .setVisitors(event.getVisitors())
-                .setReports(event.getReports())
-                .get();
+        return EventDTO.builder()
+                .id(event.getId())
+                .title(event.getTitle())
+                .date(event.getDate().toString())
+                .location(event.getLocation())
+                .description(event.getDescription())
+                .registrations(event.getRegistrations())
+                .visitors(event.getVisitors())
+                .reports(event.getReports())
+                .build();
     }
 }

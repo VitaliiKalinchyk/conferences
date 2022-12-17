@@ -13,7 +13,6 @@ import static ua.java.conferences.utils.ConvertorUtil.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;
 
 public class ReportServiceImpl implements ReportService {
-
     private final ReportDAO reportDAO;
 
     public ReportServiceImpl(ReportDAO reportDAO) {

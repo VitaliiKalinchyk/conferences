@@ -1,9 +1,6 @@
 package ua.java.conferences.connection;
 
 public final class ConnectionConstants {
-
-    private ConnectionConstants() {}
-
     public static final String URL_PROPERTY = "connection.url";
     public static final String USER_NAME = "user.name";
     public static final String PASSWORD = "password";
@@ -11,4 +8,6 @@ public final class ConnectionConstants {
     public static final String CACHE_SIZE = "prepStmtCacheSize";
     public static final String CACHE_SQL_LIMIT = "prepStmtCacheSqlLimit";
     public static final String DRIVER = "driver";
+
+    private ConnectionConstants() {}
 }

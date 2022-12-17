@@ -1,4 +1,4 @@
-package ua.java.conferences.filters.domains.sets;
+package ua.java.conferences.filters.domain;
 
 import java.util.*;
 

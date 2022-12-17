@@ -4,10 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.Action;
 import ua.java.conferences.dto.EventDTO;
 import ua.java.conferences.dto.UserDTO;
-import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.services.*;
-import ua.java.conferences.utils.sorting.Sorting;
 
 import java.util.List;
 
@@ -15,6 +13,8 @@ import static ua.java.conferences.actions.ActionUtil.*;
 import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.actions.constants.ParameterValues.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
+import static ua.java.conferences.entities.role.Role.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class ViewSpeakersEventsAction implements Action {
 
@@ -27,16 +27,17 @@ public class ViewSpeakersEventsAction implements Action {
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
         long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
-        String passed = request.getParameter(PAST);
+        String past = request.getParameter(PAST);
         List<EventDTO> events;
-        Sorting sorting;
-        if (passed != null && passed.equals(PAST)) {
-            sorting = Sorting.getEventSorting(PASSED, ID, ASCENDING_ORDER);
-        } else {
-            sorting = Sorting.getEventSorting(UPCOMING, ID, ASCENDING_ORDER);
-        }
-        events = eventService.getSortedByUser(speakerId, sorting, "0", String.valueOf(Integer.MAX_VALUE), Role.SPEAKER.name());
+        events = eventService.getSortedByUser(getQuery(speakerId, past), SPEAKER);
         request.setAttribute(EVENTS, events);
         return VIEW_SPEAKERS_EVENTS_PAGE;
+    }
+
+    private static String getQuery(long userId, String past) {
+        return visitorEventQueryBuilder()
+                .setIdFilter(userId)
+                .setDateFilter(past.equals(PAST) ? PASSED : UPCOMING)
+                .getQuery();
     }
 }

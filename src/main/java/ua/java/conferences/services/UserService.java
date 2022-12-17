@@ -2,24 +2,23 @@ package ua.java.conferences.services;
 
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
-import ua.java.conferences.utils.sorting.Sorting;
 
 import java.util.List;
 
 public interface UserService extends Service<UserDTO> {
-    void add(UserDTO userDTO, String confirmPassword) throws ServiceException;
+    void add(UserDTO userDTO, String password, String confirmPassword) throws ServiceException;
 
     UserDTO signIn(String login, String password) throws ServiceException;
 
     UserDTO getByEmail(String email) throws ServiceException;
 
-    List<UserDTO> getSortedUsers(Sorting sorting, String offset, String records) throws ServiceException;
+    List<UserDTO> getSortedUsers(String query) throws ServiceException;
 
-    int getNumberOfRecords(Sorting sorting) throws ServiceException;
+    int getNumberOfRecords(String filter) throws ServiceException;
 
     List<UserDTO> getSpeakers() throws ServiceException;
 
-    void changePassword(long userId, String oldPassword, String newPassword, String confirmPassword) throws ServiceException;
+    void changePassword(long userId, String password, String newPass, String confirmPass) throws ServiceException;
 
     void setRole(String userEmail, int roleId) throws ServiceException;
 

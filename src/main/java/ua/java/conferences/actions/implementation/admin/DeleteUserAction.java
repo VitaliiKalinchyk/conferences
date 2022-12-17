@@ -12,7 +12,6 @@ import static ua.java.conferences.actions.constants.ParameterValues.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class DeleteUserAction implements Action {
-
     private final UserService userService;
 
     public DeleteUserAction() {

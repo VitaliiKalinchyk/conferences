@@ -1,9 +1,12 @@
 package ua.java.conferences.entities;
 
+import lombok.*;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Objects;
 
+@Data
+@EqualsAndHashCode(of = {"id", "title"})
+@Builder
 public class Event implements Serializable {
     private static final long serialVersionUID = 1L;
     private long id;
@@ -14,147 +17,4 @@ public class Event implements Serializable {
     private int registrations;
     private int visitors;
     private int reports;
-
-    public long getId() {
-        return this.id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public String getTitle() {
-        return this.title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public LocalDate getDate() {
-        return this.date;
-    }
-
-    public void setDate(LocalDate date) {
-        this.date = date;
-    }
-
-    public String getLocation() {
-        return this.location;
-    }
-
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getDescription() {
-        return this.description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getRegistrations() {
-        return registrations;
-    }
-
-    public void setRegistrations(int registrations) {
-        this.registrations = registrations;
-    }
-
-    public int getVisitors() {
-        return this.visitors;
-    }
-
-    public void setVisitors(int visitors) {
-        this.visitors = visitors;
-    }
-
-    public int getReports() {
-        return reports;
-    }
-
-    public void setReports(int reports) {
-        this.reports = reports;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Event event = (Event) o;
-        return id == event.id && title.equals(event.title);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "Event{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", date=" + date +
-                ", location='" + location + '\'' +
-                ", description='" + description + '\'' +
-                ", registrations=" + registrations +
-                ", visitors=" + visitors +
-                ", reports=" + reports +
-                '}';
-    }
-
-    public static class Builder {
-        private final Event event;
-
-        public Builder() {
-            this.event = new Event();
-        }
-
-        public Builder setId(long id) {
-            event.setId(id);
-            return this;
-        }
-
-        public Builder setTitle(String title) {
-            event.setTitle(title);
-            return this;
-        }
-
-        public Builder setDate(LocalDate date) {
-            event.setDate(date);
-            return this;
-        }
-
-        public Builder setLocation(String location) {
-            event.setLocation(location);
-            return this;
-        }
-
-        public Builder setDescription(String description) {
-            event.setDescription(description);
-            return this;
-        }
-
-        public Builder setRegistrations(int registrations) {
-            event.setRegistrations(registrations);
-            return this;
-        }
-
-        public Builder setVisitors(int visitors) {
-            event.setVisitors(visitors);
-            return this;
-        }
-
-        public Builder setReports(int reports) {
-            event.setReports(reports);
-            return this;
-        }
-
-        public Event get() {
-            return event;
-        }
-    }
 }

@@ -37,7 +37,7 @@ public class SignUpAction implements Action {
         UserDTO user = getUserDTO(request);
         request.getSession().setAttribute(USER, user);
         try {
-            userService.add(user, request.getParameter(CONFIRM_PASSWORD));
+            userService.add(user, request.getParameter(PASSWORD), request.getParameter(CONFIRM_PASSWORD));
             request.getSession().setAttribute(MESSAGE, SUCCEED_REGISTER);
         } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
@@ -48,13 +48,12 @@ public class SignUpAction implements Action {
     }
 
     private UserDTO getUserDTO(HttpServletRequest request) {
-        return new UserDTO.Builder()
-                .setEmail(request.getParameter(EMAIL))
-                .setPassword(request.getParameter(PASSWORD))
-                .setName(request.getParameter(NAME))
-                .setSurname(request.getParameter(SURNAME))
-                .setNotification(isNotified(request))
-                .get();
+        return UserDTO.builder()
+                .email(request.getParameter(EMAIL))
+                .name(request.getParameter(NAME))
+                .surname(request.getParameter(SURNAME))
+                .notification(isNotified(request))
+                .build();
     }
 
     private static boolean isNotified(HttpServletRequest request) {

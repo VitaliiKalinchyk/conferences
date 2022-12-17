@@ -5,7 +5,6 @@ import ua.java.conferences.dao.*;
 import ua.java.conferences.entities.*;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.DAOException;
-import ua.java.conferences.utils.sorting.Sorting;
 
 import java.sql.*;
 import java.util.*;
@@ -79,14 +78,10 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public List<User> getSorted(Sorting sorting, int offset, int records) throws DAOException {
+    public List<User> getSorted(String query) throws DAOException {
         List<User> users = new ArrayList<>();
-        String query = String.format(GET_SORTED, sorting.getFilter(), sorting.getSort(), sorting.getOrder());
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            int k = 0;
-            preparedStatement.setInt(++k, offset);
-            preparedStatement.setInt(++k, records);
+             PreparedStatement preparedStatement = connection.prepareStatement(String.format(GET_SORTED, query))) {
             preparedStatement.execute();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -100,9 +95,9 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     @Override
-    public int getNumberOfRecords (Sorting sorting) throws DAOException {
+    public int getNumberOfRecords (String filter) throws DAOException {
         int numberOfRecords = 0;
-        String query = String.format(GET_NUMBER_OF_RECORDS, sorting.getFilter());
+        String query = String.format(GET_NUMBER_OF_RECORDS, filter);
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -204,15 +199,15 @@ public class MysqlUserDAO implements UserDAO {
     }
 
     private User createUser(ResultSet resultSet) throws SQLException {
-        return new User.Builder()
-                .setId(resultSet.getInt(ID))
-                .setEmail(resultSet.getString(EMAIL))
-                .setName(resultSet.getString(NAME))
-                .setSurname(resultSet.getString(SURNAME))
-                .setPassword(resultSet.getString(PASSWORD))
-                .setEmailNotification(resultSet.getInt(NOTIFICATION) == 1)
-                .setRoleId(resultSet.getInt(ROLE_ID))
-                .get();
+        return User.builder()
+                .id(resultSet.getInt(ID))
+                .email(resultSet.getString(EMAIL))
+                .name(resultSet.getString(NAME))
+                .surname(resultSet.getString(SURNAME))
+                .password(resultSet.getString(PASSWORD))
+                .emailNotification(resultSet.getInt(NOTIFICATION) == 1)
+                .roleId(resultSet.getInt(ROLE_ID))
+                .build();
     }
 
     private void setStatementFieldsForAddMethod(User user, PreparedStatement preparedStatement) throws SQLException {

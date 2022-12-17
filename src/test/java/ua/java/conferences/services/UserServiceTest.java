@@ -9,17 +9,15 @@ import ua.java.conferences.entities.User;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.implementation.UserServiceImpl;
-import ua.java.conferences.utils.sorting.Sorting;
 
 import java.sql.SQLException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.actions.constants.ParameterValues.ASCENDING_ORDER;
-import static ua.java.conferences.actions.constants.Parameters.ID;
-import static ua.java.conferences.utils.PasswordHashUtil.encode;
+import static ua.java.conferences.utils.PasswordHashUtil.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 class UserServiceTest {
     private final UserDAO userDAO = mock(UserDAO.class);
@@ -30,7 +28,7 @@ class UserServiceTest {
     void testCorrectRegistration() throws DAOException {
        doNothing().when(userDAO).add(isA(User.class));
        UserDTO userDTO = getTestUserDTO();
-       assertDoesNotThrow(() -> userService.add(userDTO, PASSWORD));
+       assertDoesNotThrow(() -> userService.add(userDTO, PASSWORD, PASSWORD));
     }
 
     @Test
@@ -39,7 +37,7 @@ class UserServiceTest {
         UserDTO userDTO = getTestUserDTO();
         userDTO.setEmail(INCORRECT_EMAIL);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
-                () -> userService.add(userDTO, PASSWORD));
+                () -> userService.add(userDTO, PASSWORD, PASSWORD));
         assertEquals(ENTER_CORRECT_EMAIL, e.getMessage());
     }
 
@@ -47,9 +45,8 @@ class UserServiceTest {
     void testWrongPassRegistration() throws DAOException {
         doNothing().when(userDAO).add(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
-        userDTO.setPassword(INCORRECT_PASSWORD);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
-                () -> userService.add(userDTO, PASSWORD));
+                () -> userService.add(userDTO, INCORRECT_PASSWORD, INCORRECT_PASSWORD));
         assertEquals(ENTER_CORRECT_PASSWORD, e.getMessage());
     }
 
@@ -59,7 +56,7 @@ class UserServiceTest {
         UserDTO userDTO = getTestUserDTO();
         userDTO.setName(INCORRECT_NAME);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
-                () -> userService.add(userDTO, PASSWORD));
+                () -> userService.add(userDTO, PASSWORD, PASSWORD));
         assertEquals(ENTER_CORRECT_NAME, e.getMessage());
     }
 
@@ -69,7 +66,7 @@ class UserServiceTest {
         UserDTO userDTO = getTestUserDTO();
         userDTO.setSurname(INCORRECT_SURNAME);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
-                () -> userService.add(userDTO, PASSWORD));
+                () -> userService.add(userDTO, PASSWORD, PASSWORD));
         assertEquals(ENTER_CORRECT_SURNAME, e.getMessage());
     }
 
@@ -78,7 +75,7 @@ class UserServiceTest {
         doThrow(new DAOException(new SQLException("Duplicate entry"))).when(userDAO).add(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
         DuplicateEmailException e = assertThrows(DuplicateEmailException.class ,
-                () -> userService.add(userDTO, PASSWORD));
+                () -> userService.add(userDTO, PASSWORD, PASSWORD));
         assertEquals(DUPLICATE_EMAIL, e.getMessage());
     }
 
@@ -87,7 +84,7 @@ class UserServiceTest {
         doNothing().when(userDAO).add(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
         PasswordMatchingException e = assertThrows(PasswordMatchingException.class ,
-                () -> userService.add(userDTO, INCORRECT_PASSWORD));
+                () -> userService.add(userDTO, PASSWORD, INCORRECT_PASSWORD));
         assertEquals(PASSWORD_MATCHING, e.getMessage());
     }
 
@@ -97,7 +94,7 @@ class UserServiceTest {
         doThrow(exception).when(userDAO).add(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
         ServiceException e = assertThrows(ServiceException.class ,
-                () -> userService.add(userDTO, PASSWORD));
+                () -> userService.add(userDTO, PASSWORD, PASSWORD));
         assertEquals(e.getCause(), exception);
         assertFalse(e.getMessage().contains("Duplicate entry"));
     }
@@ -161,20 +158,20 @@ class UserServiceTest {
 
     @Test
     void testViewSortedUsers() throws DAOException, ServiceException {
-        Sorting sorting = Sorting.getUserSorting(String.valueOf(Role.VISITOR.getValue()), ID, ASC);
         List<User> users = new ArrayList<>();
         List<UserDTO> userDTOs = new ArrayList<>();
         users.add(getTestUser());
         userDTOs.add(getTestUserDTO());
-        when(userDAO.getSorted(sorting, ZERO, Integer.MAX_VALUE)).thenReturn(users);
-        assertIterableEquals(userDTOs, userService.getSortedUsers(sorting, "0", String.valueOf(Integer.MAX_VALUE)));
+        String query = userQueryBuilder().getQuery();
+        when(userDAO.getSorted(query)).thenReturn(users);
+        assertIterableEquals(userDTOs, userService.getSortedUsers(query));
     }
 
     @Test
     void testNumberOfRecords() throws DAOException, ServiceException {
-        Sorting sorting = Sorting.getUserSorting(String.valueOf(Role.VISITOR.getValue()), ID, ASC);
-        when(userDAO.getNumberOfRecords(sorting)).thenReturn(1);
-        assertEquals(1, userService.getNumberOfRecords(sorting));
+        String filter = userQueryBuilder().getRecordQuery();
+        when(userDAO.getNumberOfRecords(filter)).thenReturn(1);
+        assertEquals(1, userService.getNumberOfRecords(filter));
     }
 
     @Test
@@ -183,8 +180,8 @@ class UserServiceTest {
         List<UserDTO> userDTOs = new ArrayList<>();
         users.add(getTestUser());
         userDTOs.add(getTestUserDTO());
-        Sorting sorting = Sorting.getUserSorting(String.valueOf(Role.SPEAKER.getValue()), ID, ASCENDING_ORDER);
-        when(userDAO.getSorted(sorting, 0, Integer.MAX_VALUE)).thenReturn(users);
+        String query = userQueryBuilder().setRoleFilter("3").getQuery();
+        when(userDAO.getSorted(query)).thenReturn(users);
         assertIterableEquals(userDTOs, userService.getSpeakers());
     }
 
@@ -207,8 +204,6 @@ class UserServiceTest {
     @Test
     void testWrongPassEditProfile() throws DAOException {
         doNothing().when(userDAO).update(isA(User.class));
-        UserDTO userDTO = getTestUserDTO();
-        userDTO.setPassword(null);
         assertDoesNotThrow(() -> userService.update(getTestUserDTO()));
     }
 
@@ -322,25 +317,24 @@ class UserServiceTest {
     }
 
     private UserDTO getTestUserDTO() {
-        return new UserDTO.Builder()
-                .setId(ONE)
-                .setEmail(EMAIL)
-                .setPassword(PASSWORD)
-                .setName(NAME)
-                .setSurname(SURNAME)
-                .setNotification(NOTIFICATION)
-                .setRole(ROLE_VISITOR)
-                .get();
+        return UserDTO.builder()
+                .id(ONE)
+                .email(EMAIL)
+                .name(NAME)
+                .surname(SURNAME)
+                .notification(NOTIFICATION)
+                .role(ROLE_VISITOR)
+                .build();
     }
 
     private User getTestUser() {
-        return new User.Builder()
-                .setId(ONE)
-                .setEmail(EMAIL)
-                .setPassword(PASSWORD)
-                .setName(NAME)
-                .setSurname(SURNAME)
-                .setRoleId(4)
-                .get();
+        return User.builder()
+                .id(ONE)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .name(NAME)
+                .surname(SURNAME)
+                .roleId(4)
+                .build();
     }
 }

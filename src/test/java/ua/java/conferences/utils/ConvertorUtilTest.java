@@ -15,8 +15,8 @@ class ConvertorUtilTest {
         User testUser = getTestUser();
         User dtoToUser = convertDTOToUser(getTestUserDTO());
         assertEquals(testUser, dtoToUser);
-        assertEquals(testUser.getId(), dtoToUser.getId());
-        assertEquals(testUser.isEmailNotification(), dtoToUser.isEmailNotification());
+        assertNull(dtoToUser.getPassword());
+        assertNotEquals(testUser.getPassword(), dtoToUser.getPassword());
     }
 
     @Test
@@ -25,8 +25,8 @@ class ConvertorUtilTest {
         UserDTO userToDTO = convertUserToDTO(getTestUser());
         assertEquals(testDTO, userToDTO);
         assertEquals(testDTO.getId(), userToDTO.getId());
-        assertNotEquals(testDTO.getPassword(), userToDTO.getPassword());
         assertEquals(testDTO.isNotification(), userToDTO.isNotification());
+        assertEquals(testDTO.getRole(), userToDTO.getRole());
     }
 
     @Test
@@ -34,7 +34,6 @@ class ConvertorUtilTest {
         Report testReport = getTestReport();
         Report dtoToReport = convertDTOToReport(getTestReportDTO());
         assertEquals(testReport, dtoToReport);
-        assertEquals(testReport.getTopic(), dtoToReport.getTopic());
         assertEquals(testReport.getEvent().getId(), dtoToReport.getEvent().getId());
         assertEquals(testReport.getSpeaker().getId(), dtoToReport.getSpeaker().getId());
     }
@@ -44,13 +43,12 @@ class ConvertorUtilTest {
         ReportDTO testDTO = getTestReportDTO();
         ReportDTO reportToDTO = convertReportToDTO(getTestReport());
         assertEquals(testDTO, reportToDTO);
-    }
-
-    @Test
-    void testConvertSpeakersReportToDTO() {
-        ReportDTO testDTO = getTestReportDTO();
-        ReportDTO reportToDTO = convertReportToDTO(getTestReport());
-        assertEquals(testDTO, reportToDTO);
+        assertEquals(testDTO.getEventId(), reportToDTO.getEventId());
+        assertEquals(testDTO.getTitle(), reportToDTO.getTitle());
+        assertEquals(testDTO.getDate(), reportToDTO.getDate());
+        assertEquals(testDTO.getLocation(), reportToDTO.getLocation());
+        assertEquals(testDTO.getSpeakerId(), reportToDTO.getSpeakerId());
+        assertEquals(testDTO.getSpeakerName(), reportToDTO.getSpeakerName());
     }
 
     @Test
@@ -58,10 +56,12 @@ class ConvertorUtilTest {
         Event testEvent = getTestEvent();
         Event dtoToEvent = convertDTOToEvent(getTestEventDTO());
         assertEquals(testEvent, dtoToEvent);
-        assertEquals(testEvent.getTitle(), dtoToEvent.getTitle());
         assertEquals(testEvent.getDate(), dtoToEvent.getDate());
         assertEquals(testEvent.getLocation(), dtoToEvent.getLocation());
         assertEquals(testEvent.getDescription(), dtoToEvent.getDescription());
+        assertNotEquals(testEvent.getReports(), dtoToEvent.getReports());
+        assertNotEquals(testEvent.getVisitors(), dtoToEvent.getVisitors());
+        assertNotEquals(testEvent.getRegistrations(), dtoToEvent.getRegistrations());
     }
 
     @Test
@@ -69,92 +69,81 @@ class ConvertorUtilTest {
         EventDTO testDTO = getTestEventDTO();
         EventDTO eventToDTO = convertEventToDTO(getTestEvent());
         assertEquals(testDTO, eventToDTO);
-    }
-
-    @Test
-    void testConvertEventToFullDTO() {
-        EventDTO testDTO = getTestFullEventDTO();
-        EventDTO eventToDTO = convertEventToDTO(getTestEvent());
-        assertEquals(testDTO, eventToDTO);
+        assertEquals(testDTO.getId(), eventToDTO.getId());
+        assertEquals(testDTO.getDescription(), eventToDTO.getDescription());
+        assertEquals(testDTO.getReports(), eventToDTO.getReports());
+        assertEquals(testDTO.getVisitors(), eventToDTO.getVisitors());
+        assertEquals(testDTO.getRegistrations(), eventToDTO.getRegistrations());
     }
 
     private UserDTO getTestUserDTO() {
-        return new UserDTO.Builder()
-                .setId(ID_VALUE)
-                .setEmail(EMAIL)
-                .setPassword(PASSWORD)
-                .setName(NAME)
-                .setSurname(SURNAME)
-                .setNotification(NOTIFICATION)
-                .setRole(ROLE_VISITOR)
-                .get();
+        return UserDTO.builder()
+                .id(ID_VALUE)
+                .email(EMAIL)
+                .name(NAME)
+                .surname(SURNAME)
+                .notification(NOTIFICATION)
+                .role(ROLE_VISITOR)
+                .build();
     }
 
     private ReportDTO getTestReportDTO() {
-        return new ReportDTO.Builder()
-                .setId(ID_VALUE)
-                .setTopic(TOPIC)
-                .setSpeakerId(ID_VALUE)
-                .setSpeakerName(SPEAKER_NAME)
-                .setEventId(ID_VALUE)
-                .setTitle(TITLE)
-                .setDate(DATE_NAME)
-                .setLocation(LOCATION)
-                .get();
+        return ReportDTO.builder()
+                .id(ID_VALUE)
+                .topic(TOPIC)
+                .speakerId(ID_VALUE)
+                .speakerName(SPEAKER_NAME)
+                .eventId(ID_VALUE)
+                .title(TITLE)
+                .date(DATE_NAME)
+                .location(LOCATION)
+                .build();
     }
 
     private EventDTO getTestEventDTO() {
-        return new EventDTO.Builder()
-                .setId(ID_VALUE)
-                .setTitle(TITLE)
-                .setDate(DATE_NAME)
-                .setLocation(LOCATION)
-                .setDescription(DESCRIPTION)
-                .get();
-    }
-
-    private EventDTO getTestFullEventDTO() {
-        return new EventDTO.Builder()
-                .setId(ID_VALUE)
-                .setTitle(TITLE)
-                .setDate(DATE_NAME)
-                .setLocation(LOCATION)
-                .setReports(REPORTS)
-                .setRegistrations(REGISTRATIONS)
-                .setVisitors(VISITORS)
-                .get();
+        return EventDTO.builder()
+                .id(ID_VALUE)
+                .title(TITLE)
+                .date(DATE_NAME)
+                .location(LOCATION)
+                .description(DESCRIPTION)
+                .location(LOCATION)
+                .reports(REPORTS)
+                .registrations(REGISTRATIONS)
+                .visitors(VISITORS)
+                .build();
     }
 
     private User getTestUser() {
-        return new User.Builder()
-                .setId(ID_VALUE)
-                .setEmail(EMAIL)
-                .setPassword(PASSWORD)
-                .setName(NAME)
-                .setSurname(SURNAME)
-                .setRoleId(ROLE_ID)
-                .get();
+        return User.builder()
+                .id(ID_VALUE)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .name(NAME)
+                .surname(SURNAME)
+                .roleId(ROLE_ID)
+                .build();
     }
 
     private Event getTestEvent() {
-        return new Event.Builder()
-                .setId(ID_VALUE)
-                .setTitle(TITLE)
-                .setDate(DATE)
-                .setLocation(LOCATION)
-                .setDescription(DESCRIPTION)
-                .setRegistrations(REGISTRATIONS)
-                .setVisitors(VISITORS)
-                .setReports(REPORTS)
-                .get();
+        return Event.builder()
+                .id(ID_VALUE)
+                .title(TITLE)
+                .date(DATE)
+                .location(LOCATION)
+                .description(DESCRIPTION)
+                .registrations(REGISTRATIONS)
+                .visitors(VISITORS)
+                .reports(REPORTS)
+                .build();
     }
 
     private Report getTestReport() {
-        return new Report.Builder()
-                .setId(ID_VALUE)
-                .setTopic(TOPIC)
-                .setSpeaker(getTestUser())
-                .setEvent(getTestEvent())
-                .get();
+        return Report.builder()
+                .id(ID_VALUE)
+                .topic(TOPIC)
+                .speaker(getTestUser())
+                .event(getTestEvent())
+                .build();
     }
 }

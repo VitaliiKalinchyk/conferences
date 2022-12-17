@@ -10,7 +10,6 @@ import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class SearchUserAction implements Action {
-
     private final UserService userService;
 
     public SearchUserAction() {

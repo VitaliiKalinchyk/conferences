@@ -13,7 +13,7 @@ public interface ReportService extends Service<ReportDTO> {
 
     List<ReportDTO> viewSpeakersReports(long speakerId) throws ServiceException;
 
-    void setSpeaker(long reportIdString, long speakerIdString) throws ServiceException;
+    void setSpeaker(long reportIdString, long speakerId) throws ServiceException;
 
     void deleteSpeaker(long reportId) throws ServiceException;
 }

@@ -39,32 +39,32 @@ public final class DAOTestUtils {
     }
 
     public static User getTestUser() {
-        return new User.Builder()
-                .setId(ID_VALUE)
-                .setEmail(EMAIL)
-                .setName(NAME)
-                .setSurname(SURNAME)
-                .setPassword(PASSWORD)
-                .setRoleId(ROLE_ID)
-                .get();
+        return User.builder()
+                .id(ID_VALUE)
+                .email(EMAIL)
+                .name(NAME)
+                .surname(SURNAME)
+                .password(PASSWORD)
+                .roleId(ROLE_ID)
+                .build();
     }
 
     public static Event getTestEvent() {
-        return new Event.Builder()
-                .setId(ID_VALUE)
-                .setTitle(TITLE)
-                .setDate(DATE)
-                .setLocation(LOCATION)
-                .setDescription(DESCRIPTION)
-                .get();
+        return Event.builder()
+                .id(ID_VALUE)
+                .title(TITLE)
+                .date(DATE)
+                .location(LOCATION)
+                .description(DESCRIPTION)
+                .build();
     }
 
     public static Report getTestReport() {
-        return (new Report.Builder())
-                .setId(ID_VALUE)
-                .setTopic(TOPIC)
-                .setEvent(getTestEvent())
-                .setSpeaker(getTestUser())
-                .get();
+        return Report.builder()
+                .id(ID_VALUE)
+                .topic(TOPIC)
+                .event(getTestEvent())
+                .speaker(getTestUser())
+                .build();
     }
 }

@@ -2,12 +2,12 @@ package ua.java.conferences.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
-import ua.java.conferences.filters.domains.*;
 import java.io.IOException;
 
 import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.actions.constants.ParameterValues.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
+import static ua.java.conferences.filters.domain.Domain.getDomain;
 
 public class AuthenticationFilter implements Filter {
 
@@ -22,12 +22,11 @@ public class AuthenticationFilter implements Filter {
         }
     }
 
-    private static boolean isNoLoggedUser(HttpServletRequest httpRequest) {
-        return httpRequest.getSession().getAttribute(LOGGED_USER) == null;
+    private static boolean isNoLoggedUser(HttpServletRequest request) {
+        return request.getSession().getAttribute(LOGGED_USER) == null;
     }
 
     private boolean isAccessDenied(HttpServletRequest request) {
-        Domain domain = DomainFactory.getAnonymousDomain(request.getServletPath(), request.getParameter(ACTION));
-        return (domain.checkAccess());
+        return (getDomain(request.getServletPath(), request.getParameter(ACTION)).checkAccess());
     }
 }

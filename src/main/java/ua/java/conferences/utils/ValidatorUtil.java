@@ -8,8 +8,6 @@ import static ua.java.conferences.utils.constants.Regex.*;
 
 public final class ValidatorUtil {
 
-    private ValidatorUtil() {}
-
     public static void validateEmail(String email) throws IncorrectFormatException {
         validateFormat(email, EMAIL_REGEX, ENTER_CORRECT_EMAIL);
     }
@@ -39,6 +37,12 @@ public final class ValidatorUtil {
     public static void validateDate(LocalDate date) throws IncorrectFormatException {
         if (date == null || !date.isAfter(LocalDate.now())) {
             throw new IncorrectFormatException(ENTER_VALID_DATE);
+        }
+    }
+
+    public static void checkPasswordMatching(String password, String confirmPassword) throws PasswordMatchingException {
+        if (!password.equals(confirmPassword)) {
+            throw new PasswordMatchingException();
         }
     }
 
@@ -93,4 +97,6 @@ public final class ValidatorUtil {
             }
         }
     }
+
+    private ValidatorUtil() {}
 }

@@ -43,11 +43,11 @@ public class CreateEventAction implements Action {
     }
 
     private EventDTO getEventDTO(HttpServletRequest request) {
-        return new EventDTO.Builder()
-                .setTitle(request.getParameter(TITLE))
-                .setDate(request.getParameter(DATE))
-                .setLocation(request.getParameter(LOCATION))
-                .setDescription(request.getParameter(DESCRIPTION))
-                .get();
+        return EventDTO.builder()
+                .title(request.getParameter(TITLE))
+                .date(request.getParameter(DATE))
+                .location(request.getParameter(LOCATION))
+                .description(request.getParameter(DESCRIPTION))
+                .build();
     }
 }

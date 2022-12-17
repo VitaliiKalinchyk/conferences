@@ -7,7 +7,6 @@ import ua.java.conferences.entities.Event;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.implementation.EventServiceImpl;
-import ua.java.conferences.utils.sorting.Sorting;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -17,6 +16,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 class EventServiceTest {
 
@@ -115,27 +115,9 @@ class EventServiceTest {
         List<EventDTO> eventDTOs = new ArrayList<>();
         events.add(getTestEvent());
         eventDTOs.add(getTestEventDTO());
-        Sorting sorting = Sorting.getEventSorting(PASSED, ID, ASC);
-        when(eventDAO.getSorted(sorting, ZERO, TEN)).thenReturn(events);
-        assertIterableEquals(eventDTOs, eventService.getSorted(sorting, "0", "10"));
-    }
-
-    @Test
-    void testGetSortedWrongOffset() throws DAOException, ServiceException {
-        List<Event> events = new ArrayList<>();
-        events.add(getTestEvent());
-        Sorting sorting = Sorting.getEventSorting(PASSED, ID, ASC);
-        when(eventDAO.getSorted(sorting, ZERO, TEN)).thenReturn(events);
-        assertThrows(ServiceException.class, () -> eventService.getSorted(sorting, "a", "10"));
-    }
-
-    @Test
-    void testGetSortedWrongRecords() throws DAOException, ServiceException {
-        List<Event> events = new ArrayList<>();
-        events.add(getTestEvent());
-        Sorting sorting = Sorting.getEventSorting(PASSED, ID, ASC);
-        when(eventDAO.getSorted(sorting, ZERO, TEN)).thenReturn(events);
-        assertThrows(ServiceException.class, () -> eventService.getSorted(sorting, "0", null));
+        String query = eventQueryBuilder().getQuery();
+        when(eventDAO.getSorted(query)).thenReturn(events);
+        assertIterableEquals(eventDTOs, eventService.getSorted(query));
     }
 
     @Test
@@ -144,23 +126,23 @@ class EventServiceTest {
         List<EventDTO> eventDTOs = new ArrayList<>();
         events.add(getTestEvent());
         eventDTOs.add(getTestShortEventDTO());
-        Sorting sorting = Sorting.getEventSorting(PASSED, ID, ASC);
-        when(eventDAO.getSortedByUser(ID_VALUE, sorting, ZERO, TEN, ROLE_VISITOR)).thenReturn(events);
-        assertIterableEquals(eventDTOs, eventService.getSortedByUser(ID_VALUE, sorting, "0", "10", ROLE_VISITOR));
+        String query = visitorEventQueryBuilder().getQuery();
+        when(eventDAO.getSortedByUser(query, Role.VISITOR)).thenReturn(events);
+        assertIterableEquals(eventDTOs, eventService.getSortedByUser(query, Role.VISITOR));
     }
 
     @Test
     void testGetNumberOfRecords() throws DAOException, ServiceException {
-        Sorting sorting = Sorting.getEventSorting(UPCOMING, ID, ASC);
-        when(eventDAO.getNumberOfRecords(ZERO, sorting,  Role.MODERATOR.name())).thenReturn(TEN);
-        assertEquals(TEN, eventService.getNumberOfRecords(sorting));
+        String filter = visitorEventQueryBuilder().getRecordQuery();
+        when(eventDAO.getNumberOfRecords(filter,  Role.MODERATOR)).thenReturn(TEN);
+        assertEquals(TEN, eventService.getNumberOfRecords(filter, Role.MODERATOR));
     }
 
     @Test
     void testGetNumberOfRecordsByUser() throws DAOException, ServiceException {
-        Sorting sorting = Sorting.getEventSorting(UPCOMING, ID, ASC);
-        when(eventDAO.getNumberOfRecords(ONE, sorting,  ROLE_VISITOR)).thenReturn(THREE);
-        assertEquals(THREE, eventService.getNumberOfRecordsByUser(ONE, sorting,  ROLE_VISITOR));
+        String filter = visitorEventQueryBuilder().getRecordQuery();
+        when(eventDAO.getNumberOfRecords(filter,  Role.VISITOR)).thenReturn(THREE);
+        assertEquals(THREE, eventService.getNumberOfRecords(filter,  Role.VISITOR));
     }
 
     @Test
@@ -236,38 +218,38 @@ class EventServiceTest {
     }
 
     private EventDTO getTestShortEventDTO() {
-        return new EventDTO.Builder()
-                .setId(ID_VALUE)
-                .setTitle(TITLE)
-                .setDate(DATE_NAME)
-                .setLocation(LOCATION)
-                .setDescription(DESCRIPTION)
-                .get();
+        return EventDTO.builder()
+                .id(ID_VALUE)
+                .title(TITLE)
+                .date(DATE_NAME)
+                .location(LOCATION)
+                .description(DESCRIPTION)
+                .build();
     }
 
     private EventDTO getTestEventDTO() {
-        return new EventDTO.Builder()
-                .setId(ID_VALUE)
-                .setTitle(TITLE)
-                .setDate(DATE_NAME)
-                .setLocation(LOCATION)
-                .setDescription(DESCRIPTION)
-                .setReports(REPORTS)
-                .setRegistrations(REGISTRATIONS)
-                .setVisitors(VISITORS)
-                .get();
+        return EventDTO.builder()
+                .id(ID_VALUE)
+                .title(TITLE)
+                .date(DATE_NAME)
+                .location(LOCATION)
+                .description(DESCRIPTION)
+                .reports(REPORTS)
+                .registrations(REGISTRATIONS)
+                .visitors(VISITORS)
+                .build();
     }
 
     private Event getTestEvent() {
-        return new Event.Builder()
-                .setId(ID_VALUE)
-                .setTitle(TITLE)
-                .setDate(DATE)
-                .setLocation(LOCATION)
-                .setDescription(DESCRIPTION)
-                .setReports(REPORTS)
-                .setRegistrations(REGISTRATIONS)
-                .setVisitors(VISITORS)
-                .get();
+        return Event.builder()
+                .id(ID_VALUE)
+                .title(TITLE)
+                .date(DATE)
+                .location(LOCATION)
+                .description(DESCRIPTION)
+                .reports(REPORTS)
+                .registrations(REGISTRATIONS)
+                .visitors(VISITORS)
+                .build();
     }
 }

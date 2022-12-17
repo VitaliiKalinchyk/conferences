@@ -11,19 +11,12 @@ import static ua.java.conferences.actions.constants.Parameters.*;
 import java.io.IOException;
 
 public class Controller extends HttpServlet {
-
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);
-
     private static final ActionFactory ACTION_FACTORY = ActionFactory.getActionFactory();
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String path = process(request);
-        if (areAttributesAbsent(request)) {
-            response.sendRedirect(path);
-        } else {
-            request.getRequestDispatcher(path).forward(request, response);
-        }
+        request.getRequestDispatcher(process(request)).forward(request, response);
     }
 
     @Override
@@ -32,19 +25,13 @@ public class Controller extends HttpServlet {
     }
 
     private String process(HttpServletRequest request) {
-        String actionName = request.getParameter(ACTION);
-        Action action = ACTION_FACTORY.createAction(actionName);
-        String path;
+        Action action = ACTION_FACTORY.createAction(request.getParameter(ACTION));
+        String path = ERROR_PAGE;
         try {
             path = action.execute(request);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            path = ERROR_PAGE;
         }
         return path;
-    }
-
-    private boolean areAttributesAbsent(HttpServletRequest request) {
-        return !request.getAttributeNames().hasMoreElements();
     }
 }

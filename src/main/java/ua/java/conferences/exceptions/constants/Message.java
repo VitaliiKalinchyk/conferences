@@ -17,7 +17,6 @@ public class Message {
     public static final String NO_REPORT = "error.report.absent";
     public static final String NO_USER = "error.email.absent";
     public static final String PASSWORD_MATCHING = "error.pass.match";
-    public static final String INCORRECT_PARAMETER = "error.parameter.wrong";
 
     private Message() {}
 }

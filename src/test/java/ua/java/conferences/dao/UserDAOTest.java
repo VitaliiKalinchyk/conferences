@@ -3,9 +3,7 @@ package ua.java.conferences.dao;
 import org.junit.jupiter.api.*;
 import ua.java.conferences.entities.*;
 import ua.java.conferences.entities.role.Role;
-import ua.java.conferences.exceptions.DAOException;
-import ua.java.conferences.exceptions.WrongParameterException;
-import ua.java.conferences.utils.sorting.Sorting;
+import ua.java.conferences.exceptions.*;
 
 import java.io.*;
 import java.sql.SQLException;
@@ -15,6 +13,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.dao.DAOTestUtils.*;
 import static ua.java.conferences.Constants.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 class UserDAOTest {
 
@@ -231,37 +230,38 @@ class UserDAOTest {
     }
 
     @Test
-    void testGetAllSorted() throws DAOException, WrongParameterException {
+    void testGetAllSorted() throws DAOException {
         userDAO.add(getTestUser());
-        List<User> sorted = userDAO.getSorted(Sorting.getUserSorting("4", EMAIL_FIELD, ASC), ZERO, TEN);
+        List<User> sorted = userDAO.getSorted(userQueryBuilder().getQuery());
         assertFalse(sorted.isEmpty());
         assertEquals(ONE, sorted.size());
     }
 
     @Test
-    void testGetAllSortedByName() throws DAOException, WrongParameterException {
+    void testGetAllSortedByName() throws DAOException {
         List<User> users = getRandomUsers();
         for (int i = 0; i < 10; i++) {
             userDAO.add(users.get(i));
         }
         users.sort(Comparator.comparing(User::getName));
-        List<User> sorted = userDAO.getSorted(Sorting.getUserSorting(ANY_ROLE, NAME_FIELD, ASC), ZERO, TEN);
+        List<User> sorted = userDAO.getSorted(userQueryBuilder().setSortField(NAME_FIELD).getQuery());
         assertIterableEquals(users, sorted);
     }
 
     @Test
-    void testGetAllSortedByNameDesc() throws DAOException, WrongParameterException {
+    void testGetAllSortedByNameDesc() throws DAOException {
         List<User> users = getRandomUsers();
         for (int i = 0; i < 10; i++) {
             userDAO.add(users.get(i));
         }
         users.sort(Comparator.comparing(User::getName).reversed());
-        List<User> sorted = userDAO.getSorted(Sorting.getUserSorting(ANY_ROLE, NAME_FIELD, DESC), ZERO, TEN);
+        String query = userQueryBuilder().setSortField(NAME_FIELD).setOrder(DESC).getQuery();
+        List<User> sorted = userDAO.getSorted(query);
         assertIterableEquals(users, sorted);
     }
 
     @Test
-    void testGetAllSortedByNamePagination() throws DAOException, WrongParameterException {
+    void testGetAllSortedByNamePagination() throws DAOException {
         List<User> users = getRandomUsers();
         for (int i = 0; i < 10; i++) {
             userDAO.add(users.get(i));
@@ -270,12 +270,17 @@ class UserDAOTest {
                 .sorted(Comparator.comparing(User::getEmail).reversed())
                 .limit(THREE)
                 .collect(Collectors.toList());
-        List<User> sorted = userDAO.getSorted(Sorting.getUserSorting(ANY_ROLE, EMAIL_FIELD, DESC), ZERO, THREE);
+        String query = userQueryBuilder()
+                .setSortField(EMAIL_FIELD)
+                .setLimits("0", "3")
+                .setOrder(DESC)
+                .getQuery();
+        List<User> sorted = userDAO.getSorted(query);
         assertIterableEquals(users, sorted);
     }
 
     @Test
-    void testGetAllSortedByNamePaginationOffsetThree() throws DAOException, WrongParameterException {
+    void testGetAllSortedByNamePaginationOffsetThree() throws DAOException {
         List<User> users = getRandomUsers();
         for (int i = 0; i < 10; i++) {
             userDAO.add(users.get(i));
@@ -285,22 +290,33 @@ class UserDAOTest {
                 .skip(THREE)
                 .limit(THREE)
                 .collect(Collectors.toList());
-        List<User> sorted = userDAO.getSorted(Sorting.getUserSorting(ANY_ROLE, NAME_FIELD, ASC), THREE, THREE);
+        String query = userQueryBuilder()
+                .setSortField(NAME_FIELD)
+                .setLimits("3", "3")
+                .getQuery();
+        List<User> sorted = userDAO.getSorted(query);
         assertIterableEquals(users, sorted);
     }
 
     @Test
-    void testGetSpeakers() throws DAOException, WrongParameterException {
+    void testGetSpeakers() throws DAOException {
         List<User> speakers = getSpeakers();
         speakers.sort(Comparator.comparing(User::getName));
-        List<User> sorted = userDAO.getSorted(Sorting.getUserSorting(String.valueOf(THREE), NAME_FIELD, ASC), ZERO, TEN);
+        String query = userQueryBuilder()
+                .setRoleFilter("3")
+                .setSortField(NAME_FIELD)
+                .getQuery();
+        List<User> sorted = userDAO.getSorted(query);
         assertIterableEquals(speakers, sorted);
     }
 
     @Test
-    void testGetNumberOfRecords() throws DAOException, WrongParameterException {
+    void testGetNumberOfRecords() throws DAOException {
         List<User> speakers = getSpeakers();
-        int numberOfRecords = userDAO.getNumberOfRecords(Sorting.getUserSorting(String.valueOf(THREE), NAME_FIELD, ASC));
+        String query = userQueryBuilder()
+                .setRoleFilter("3")
+                .getRecordQuery();
+        int numberOfRecords = userDAO.getNumberOfRecords(query);
         assertEquals(speakers.size(), numberOfRecords);
     }
 

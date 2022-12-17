@@ -5,7 +5,6 @@ import ua.java.conferences.dao.EventDAO;
 import ua.java.conferences.entities.*;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.DAOException;
-import ua.java.conferences.utils.sorting.Sorting;
 
 import java.sql.*;
 import java.sql.Date;
@@ -13,6 +12,7 @@ import java.util.*;
 
 import static ua.java.conferences.dao.mysql.constants.EventSQLQueries.*;
 import static ua.java.conferences.dao.mysql.constants.SQLFields.*;
+import static ua.java.conferences.entities.role.Role.*;
 
 public class MysqlEventDAO implements EventDAO {
 
@@ -81,14 +81,10 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getSorted(Sorting sorting, int offset, int records) throws DAOException {
+    public List<Event> getSorted(String query) throws DAOException {
         List<Event> events = new ArrayList<>();
-        String query = String.format(GET_SORTED, getFilter(sorting.getFilter()), sorting.getSort(), sorting.getOrder());
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            int k = 0;
-            preparedStatement.setInt(++k, offset);
-            preparedStatement.setInt(++k, records);
+             PreparedStatement preparedStatement = connection.prepareStatement(String.format(GET_SORTED, query))) {
             preparedStatement.execute();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -102,16 +98,10 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     @Override
-    public List<Event> getSortedByUser(long userId, Sorting sorting, int offset, int records, String role)
-            throws DAOException {
+    public List<Event> getSortedByUser(String query, Role role) throws DAOException {
         List<Event> events = new ArrayList<>();
-        String query = getQueryForList(sorting, role);
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            int k = 0;
-            preparedStatement.setLong(++k, userId);
-            preparedStatement.setInt(++k, offset);
-            preparedStatement.setInt(++k, records);
+             PreparedStatement preparedStatement = connection.prepareStatement(getQueryForList(query, role))) {
             preparedStatement.execute();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -162,14 +152,10 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     @Override
-    public int getNumberOfRecords (long userId, Sorting sorting, String role) throws DAOException {
+    public int getNumberOfRecords (String filter, Role role) throws DAOException {
         int numberOfRecords = 0;
-        String query = getRecordsQuery(userId, getFilter(sorting.getFilter()), role);
         try (Connection connection = DataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
-            if (userId > 0) {
-                setId(userId, preparedStatement);
-            }
+             PreparedStatement preparedStatement = connection.prepareStatement(getRecordsQuery(filter, role))) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {
                     numberOfRecords = resultSet.getInt(NUMBER_OF_RECORDS);
@@ -181,20 +167,17 @@ public class MysqlEventDAO implements EventDAO {
         return numberOfRecords;
     }
 
-    private String getRecordsQuery(long userId, String filter, String role) {
-        if (userId == 0) {
-            return String.format(GET_NUMBER_OF_RECORDS, filter);
-        } else if (role.equals(Role.SPEAKER.name())) {
-            return String.format(GET_NUMBER_OF_RECORDS_BY_SPEAKER, filter);
+    private String getRecordsQuery(String filter, Role role) {
+        switch (role) {
+            case VISITOR: return String.format(GET_NUMBER_OF_RECORDS_BY_VISITOR, filter);
+            case SPEAKER: return String.format(GET_NUMBER_OF_RECORDS_BY_SPEAKER, filter);
+            default: return String.format(GET_NUMBER_OF_RECORDS, filter);
         }
-        return String.format(GET_NUMBER_OF_RECORDS_BY_VISITOR, filter);
     }
 
-    private String getQueryForList(Sorting sorting, String role) {
-        String filter = getFilter(sorting.getFilter());
-        if (role.equals(Role.SPEAKER.name()))
-            return String.format(GET_SPEAKERS_EVENTS, filter, sorting.getSort(), sorting.getOrder());
-        return String.format(GET_VISITORS_EVENTS, filter, sorting.getSort(), sorting.getOrder());
+    private String getQueryForList(String query, Role role) {
+        return role == SPEAKER ? String.format(GET_SPEAKERS_EVENTS, query)
+                               : String.format(GET_VISITORS_EVENTS, query);
     }
 
     private void setId(long id, PreparedStatement preparedStatement) throws SQLException {
@@ -211,34 +194,25 @@ public class MysqlEventDAO implements EventDAO {
     }
 
     private Event createEvent(ResultSet resultSet) throws SQLException {
-        return new Event.Builder()
-                .setId(resultSet.getLong(ID))
-                .setTitle(resultSet.getString(TITLE))
-                .setDate(resultSet.getDate(DATE).toLocalDate())
-                .setLocation(resultSet.getString(LOCATION))
-                .setDescription(resultSet.getString(DESCRIPTION))
-                .setRegistrations(resultSet.getInt(REGISTRATIONS))
-                .setVisitors(resultSet.getInt(VISITORS))
-                .setReports(resultSet.getInt(REPORTS))
-                .get();
+        return Event.builder()
+                .id(resultSet.getLong(ID))
+                .title(resultSet.getString(TITLE))
+                .date(resultSet.getDate(DATE).toLocalDate())
+                .location(resultSet.getString(LOCATION))
+                .description(resultSet.getString(DESCRIPTION))
+                .registrations(resultSet.getInt(REGISTRATIONS))
+                .visitors(resultSet.getInt(VISITORS))
+                .reports(resultSet.getInt(REPORTS))
+                .build();
     }
 
     private Event createUserEvent(ResultSet resultSet) throws SQLException {
-        return new Event.Builder()
-                .setId(resultSet.getLong(ID))
-                .setTitle(resultSet.getString(TITLE))
-                .setDate(resultSet.getDate(DATE).toLocalDate())
-                .setLocation(resultSet.getString(LOCATION))
-                .setDescription(resultSet.getString(DESCRIPTION))
-                .get();
-    }
-
-    private static String getFilter(String filter) {
-        if (filter.equalsIgnoreCase("passed")) {
-            return PASSED;
-        } else if (filter.equalsIgnoreCase("upcoming")) {
-            return UPCOMING;
-        }
-        return ANY_DATE;
+        return Event.builder()
+                .id(resultSet.getLong(ID))
+                .title(resultSet.getString(TITLE))
+                .date(resultSet.getDate(DATE).toLocalDate())
+                .location(resultSet.getString(LOCATION))
+                .description(resultSet.getString(DESCRIPTION))
+                .build();
     }
 }

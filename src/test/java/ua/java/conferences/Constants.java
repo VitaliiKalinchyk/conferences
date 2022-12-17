@@ -8,7 +8,6 @@ public final class Constants {
     public static final int ONE = 1;
     public static final int THREE = 3;
     public static final int TEN = 10;
-    public static final String ID = "id";
     public static final String EMAIL = "em@em.com";
     public static final String ANOTHER_EMAIL = "a@a.com";
     public static final String INCORRECT_EMAIL = "em.com";
@@ -23,7 +22,6 @@ public final class Constants {
     public static final String SPEAKER_NAME = "Joe Yi";
     public static final boolean NOTIFICATION = false;
     public static final String ROLE_VISITOR = "VISITOR";
-    public static final String ANY_ROLE = "%";
     public static final int ROLE_ID = 4;
     public static final String TOPIC = "Report topic";
     public static final String INCORRECT_TOPIC = "";

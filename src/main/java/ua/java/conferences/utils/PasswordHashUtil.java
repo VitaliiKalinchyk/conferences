@@ -9,8 +9,6 @@ public final class PasswordHashUtil {
     private static final int MEMORY = 15*1024;
     private static final int PARALLELISM = 1;
 
-    private PasswordHashUtil(){}
-
     public static String encode(String password) {
         return password != null ? argon2.hash(ITERATIONS,MEMORY,PARALLELISM, password.toCharArray()) : "";
     }
@@ -20,4 +18,6 @@ public final class PasswordHashUtil {
             throw new IncorrectPasswordException();
         }
     }
+
+    private PasswordHashUtil(){}
 }

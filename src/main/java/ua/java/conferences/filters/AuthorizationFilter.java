@@ -2,12 +2,12 @@ package ua.java.conferences.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
-import ua.java.conferences.filters.domains.*;
 import java.io.IOException;
 
 import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.actions.constants.ParameterValues.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
+import static ua.java.conferences.filters.domain.Domain.*;
 
 public class AuthorizationFilter implements Filter {
 
@@ -24,7 +24,6 @@ public class AuthorizationFilter implements Filter {
     }
 
     private boolean isAccessDenied(HttpServletRequest request, String role) {
-        Domain domain = DomainFactory.getRoleDomain(request.getServletPath(), request.getParameter(ACTION), role);
-        return (domain.checkAccess());
+        return (getDomain(request.getServletPath(), request.getParameter(ACTION), role).checkAccess());
     }
 }

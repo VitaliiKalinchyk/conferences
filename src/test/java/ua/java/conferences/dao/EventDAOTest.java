@@ -4,7 +4,6 @@ import org.junit.jupiter.api.*;
 import ua.java.conferences.entities.*;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
-import ua.java.conferences.utils.sorting.Sorting;
 
 import java.io.FileNotFoundException;
 import java.sql.SQLException;
@@ -16,6 +15,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.dao.DAOTestUtils.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 class EventDAOTest {
 
@@ -59,7 +59,7 @@ class EventDAOTest {
     }
 
     @Test
-    void testGetByEmail() throws DAOException {
+    void testGetByTitle() throws DAOException {
         eventDAO.add(getTestEvent());
 
         Event event = eventDAO.getByTitle(TITLE).orElse(null);
@@ -68,7 +68,7 @@ class EventDAOTest {
     }
 
     @Test
-    void testGetByEmailNoEvent() throws DAOException {
+    void testGetByTitleNoEvent() throws DAOException {
         assertNull(eventDAO.getByTitle(TITLE).orElse(null));
     }
 
@@ -172,18 +172,19 @@ class EventDAOTest {
     }
 
     @Test
-    void testGetAllUpcoming() throws DAOException, WrongParameterException {
+    void testGetAllUpcoming() throws DAOException {
         List<Event> events = getRandomEvents();
         for (int i = 0; i < 10; i++) {
             eventDAO.add(events.get(i));
         }
+        String query = eventQueryBuilder().setDateFilter(UPCOMING).getQuery();
         events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
-        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(UPCOMING, ID, ASC), ZERO, TEN);
+        List<Event> eventList = eventDAO.getSorted(query);
         assertIterableEquals(events, eventList);
     }
 
     @Test
-    void testGetAllUpcomingDesc() throws DAOException, WrongParameterException {
+    void testGetAllUpcomingDesc() throws DAOException {
         List<Event> events = getRandomEvents();
         for (int i = 0; i < 10; i++) {
             eventDAO.add(events.get(i));
@@ -192,23 +193,27 @@ class EventDAOTest {
                 .filter(event -> event.getDate().isAfter(LocalDate.now()))
                 .sorted(Comparator.comparing(Event::getId).reversed())
                 .collect(Collectors.toList());
-        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(UPCOMING, ID, DESC), ZERO, TEN);
+        String query = eventQueryBuilder().setDateFilter(UPCOMING).setOrder(DESC).getQuery();
+        List<Event> eventList = eventDAO.getSorted(query);
         assertIterableEquals(events, eventList);
     }
 
     @Test
-    void testGetAllPassed() throws DAOException, WrongParameterException {
+    void testGetAllPassed() throws DAOException {
         List<Event> events = getRandomEvents();
         for (int i = 0; i < 10; i++) {
             eventDAO.add(events.get(i));
         }
-        events = events.stream().filter(event -> event.getDate().isBefore(LocalDate.now())).collect(Collectors.toList());
-        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(PASSED, ID, ASC), ZERO, TEN);
+        events = events.stream()
+                .filter(event -> event.getDate().isBefore(LocalDate.now()))
+                .collect(Collectors.toList());
+        String query = eventQueryBuilder().setDateFilter(PASSED).setOrder(ASC).getQuery();
+        List<Event> eventList = eventDAO.getSorted(query);
         assertIterableEquals(events, eventList);
     }
 
     @Test
-    void testGetAllPassedDesc() throws DAOException, WrongParameterException {
+    void testGetAllPassedDesc() throws DAOException {
         List<Event> events = getRandomEvents();
         for (int i = 0; i < 10; i++) {
             eventDAO.add(events.get(i));
@@ -217,12 +222,13 @@ class EventDAOTest {
                 .filter(event -> event.getDate().isBefore(LocalDate.now()))
                 .sorted(Comparator.comparing(Event::getId).reversed())
                 .collect(Collectors.toList());
-        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(PASSED, ID, DESC), ZERO, TEN);
+        String query = eventQueryBuilder().setDateFilter(PASSED).setOrder(DESC).getQuery();
+        List<Event> eventList = eventDAO.getSorted(query);
         assertIterableEquals(events, eventList);
     }
 
     @Test
-    void testSortedByTitle() throws DAOException, WrongParameterException {
+    void testSortedByTitle() throws DAOException {
         List<Event> events = getRandomEvents();
         for (int i = 0; i < 10; i++) {
             eventDAO.add(events.get(i));
@@ -231,12 +237,16 @@ class EventDAOTest {
                 .filter(event -> event.getDate().isAfter(LocalDate.now()))
                 .sorted(Comparator.comparing(Event::getTitle))
                 .collect(Collectors.toList());
-        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(UPCOMING, TITLE_FIELD, ASC), ZERO, TEN);
+        String query = eventQueryBuilder()
+                .setDateFilter(UPCOMING)
+                .setSortField(TITLE_FIELD)
+                .getQuery();
+        List<Event> eventList = eventDAO.getSorted(query);
         assertIterableEquals(events, eventList);
     }
 
     @Test
-    void testPagination() throws DAOException, WrongParameterException {
+    void testPagination() throws DAOException {
         List<Event> events = getRandomFutureEvents();
         for (int i = 0; i < 10; i++) {
             eventDAO.add(events.get(i));
@@ -244,12 +254,16 @@ class EventDAOTest {
         events = events.stream()
                 .limit(THREE)
                 .collect(Collectors.toList());
-        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(UPCOMING, ID, ASC), ZERO, THREE);
+        String query = eventQueryBuilder()
+                .setDateFilter(UPCOMING)
+                .setLimits("0", "3")
+                .getQuery();
+        List<Event> eventList = eventDAO.getSorted(query);
         assertIterableEquals(events, eventList);
     }
 
     @Test
-    void testPaginationNotZeroPosition() throws DAOException, WrongParameterException {
+    void testPaginationNotZeroPosition() throws DAOException {
         List<Event> events = getRandomFutureEvents();
         for (int i = 0; i < 10; i++) {
             eventDAO.add(events.get(i));
@@ -259,12 +273,16 @@ class EventDAOTest {
                 .skip(THREE)
                 .limit(THREE)
                 .collect(Collectors.toList());
-        List<Event> eventList = eventDAO.getSorted(Sorting.getEventSorting(UPCOMING, TITLE_FIELD, ASC), THREE, THREE);
+        String query = eventQueryBuilder()
+                .setSortField(TITLE_FIELD)
+                .setLimits("3", "3")
+                .getQuery();
+        List<Event> eventList = eventDAO.getSorted(query);
         assertIterableEquals(events, eventList);
     }
 
     @Test
-    void testVisitorsEvents() throws DAOException, WrongParameterException {
+    void testVisitorsEvents() throws DAOException {
         List<Event> events = getRandomEvents();
         userDAO.add(getTestUser());
         for (int i = 0; i < 10; i++) {
@@ -272,13 +290,16 @@ class EventDAOTest {
             userDAO.registerForEvent(ID_VALUE, events.get(i).getId());
         }
         events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
-        List<Event> eventList = eventDAO.getSortedByUser(ID_VALUE, Sorting.getEventSorting(UPCOMING, ID, ASC),
-                ZERO, TEN, Role.VISITOR.name());
+        String query = visitorEventQueryBuilder()
+                .setIdFilter(ID_VALUE)
+                .setDateFilter(UPCOMING)
+                .getQuery();
+        List<Event> eventList = eventDAO.getSortedByUser(query, Role.VISITOR);
         assertIterableEquals(events, eventList);
     }
 
     @Test
-    void testVisitorsPastEvents() throws DAOException, WrongParameterException {
+    void testVisitorsPastEvents() throws DAOException {
         List<Event> events = getRandomEvents();
         userDAO.add(getTestUser());
         for (int i = 0; i < 10; i++) {
@@ -286,14 +307,17 @@ class EventDAOTest {
             userDAO.registerForEvent(ID_VALUE, events.get(i).getId());
         }
         events = events.stream().filter(event -> event.getDate().isBefore(LocalDate.now())).collect(Collectors.toList());
-        List<Event> eventList = eventDAO.getSortedByUser(ID_VALUE, Sorting.getEventSorting(PASSED, ID, ASC),
-                ZERO, TEN, Role.VISITOR.name());
+        String query = visitorEventQueryBuilder()
+                .setIdFilter(ID_VALUE)
+                .setDateFilter(PASSED)
+                .getQuery();
+        List<Event> eventList = eventDAO.getSortedByUser(query, Role.VISITOR);
         assertIterableEquals(events, eventList);
     }
 
 
     @Test
-    void testSpeakersEvents() throws DAOException, WrongParameterException {
+    void testSpeakersEvents() throws DAOException {
         List<Event> events = getRandomEvents();
         userDAO.add(getTestUser());
         for (int i = 0; i < 10; i++) {
@@ -303,25 +327,30 @@ class EventDAOTest {
             reportDAO.add(report);
         }
         events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
-        List<Event> eventList = eventDAO.getSortedByUser(ID_VALUE, Sorting.getEventSorting(UPCOMING, ID, ASC),
-                ZERO, TEN, Role.SPEAKER.name());
+        String query = eventQueryBuilder()
+                .setIdFilter(ID_VALUE)
+                .setDateFilter(UPCOMING)
+                .getQuery();
+        List<Event> eventList = eventDAO.getSortedByUser(query, Role.SPEAKER);
         assertIterableEquals(events, eventList);
     }
 
     @Test
-    void testGetNumberOfRecords() throws DAOException, WrongParameterException {
+    void testGetNumberOfRecords() throws DAOException {
         List<Event> events = getRandomEvents();
         for (int i = 0; i < 10; i++) {
             eventDAO.add(events.get(i));
         }
         events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
-        int numberOfRecords = eventDAO.getNumberOfRecords(ZERO, Sorting.getEventSorting(UPCOMING, ID, ASC),
-                Role.MODERATOR.name());
+        String query = eventQueryBuilder()
+                .setDateFilter(UPCOMING)
+                .getRecordQuery();
+        int numberOfRecords = eventDAO.getNumberOfRecords(query, Role.MODERATOR);
         assertEquals(events.size(), numberOfRecords);
     }
 
     @Test
-    void testGetNumberOfRecordsBySpeaker() throws DAOException, WrongParameterException {
+    void testGetNumberOfRecordsBySpeaker() throws DAOException {
         List<Event> events = getRandomEvents();
         userDAO.add(getTestUser());
         for (int i = 0; i < 10; i++) {
@@ -331,8 +360,11 @@ class EventDAOTest {
             reportDAO.add(report);
         }
         events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
-        int numberOfRecords = eventDAO.getNumberOfRecords(ID_VALUE,
-                Sorting.getEventSorting(UPCOMING, ID, ASC), Role.SPEAKER.name());
+        String query = eventQueryBuilder()
+                .setIdFilter(ID_VALUE)
+                .setDateFilter(UPCOMING)
+                .getRecordQuery();
+        int numberOfRecords = eventDAO.getNumberOfRecords(query, Role.SPEAKER);
         assertEquals(events.size(), numberOfRecords);
     }
 

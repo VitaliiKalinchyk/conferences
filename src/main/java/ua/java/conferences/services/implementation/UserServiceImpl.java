@@ -6,16 +6,14 @@ import ua.java.conferences.entities.User;
 import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.UserService;
-import ua.java.conferences.utils.sorting.Sorting;
 
 import java.util.*;
 
-import static ua.java.conferences.actions.constants.ParameterValues.*;
-import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
 import static ua.java.conferences.utils.ConvertorUtil.*;
 import static ua.java.conferences.utils.PasswordHashUtil.*;
 import static ua.java.conferences.utils.ValidatorUtil.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class UserServiceImpl implements UserService {
 
@@ -26,11 +24,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void add(UserDTO userDTO, String confirmPassword) throws ServiceException {
-        checkStrings(confirmPassword);
+    public void add(UserDTO userDTO, String password, String confirmPassword) throws ServiceException {
         validateUser(userDTO);
-        checkPasswordMatching(userDTO.getPassword(), confirmPassword);
+        validatePassword(password);
+        checkPasswordMatching(password, confirmPassword);
         User user = convertDTOToUser(userDTO);
+        user.setPassword(encode(password));
         try {
             userDAO.add(user);
         } catch (DAOException e) {
@@ -92,10 +91,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserDTO> getSortedUsers(Sorting sorting, String offset, String records) throws ServiceException {
+    public List<UserDTO> getSortedUsers(String query) throws ServiceException {
         List<UserDTO> userDTOS = new ArrayList<>();
         try {
-            List<User> users = userDAO.getSorted(sorting, getInt(offset), getInt(records));
+            List<User> users = userDAO.getSorted(query);
             users.forEach(user -> userDTOS.add(convertUserToDTO(user)));
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -104,10 +103,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int getNumberOfRecords(Sorting sorting) throws ServiceException {
+    public int getNumberOfRecords(String filter) throws ServiceException {
         int records;
         try {
-            records = userDAO.getNumberOfRecords(sorting);
+            records = userDAO.getNumberOfRecords(filter);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
@@ -117,9 +116,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<UserDTO> getSpeakers() throws ServiceException {
         List<UserDTO> userDTOS = new ArrayList<>();
-        Sorting sorting = Sorting.getUserSorting(String.valueOf(Role.SPEAKER.getValue()), ID, ASCENDING_ORDER);
         try {
-            List<User> speakers = userDAO.getSorted(sorting, 0, Integer.MAX_VALUE);
+            List<User> speakers = userDAO.getSorted(userQueryBuilder().setRoleFilter("3").getQuery());
             speakers.forEach(user -> userDTOS.add(convertUserToDTO(user)));
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -139,15 +137,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(long userId, String oldPassword, String newPassword, String confirmPassword)
+    public void changePassword(long userId, String password, String newPass, String confirmPass)
             throws ServiceException {
-        checkStrings(oldPassword, newPassword, confirmPassword);
+        checkStrings(password, newPass, confirmPass);
         try {
             User user = userDAO.getById(userId).orElseThrow(NoSuchUserException::new);
-            verify(user.getPassword(), oldPassword);
-            checkPasswordMatching(newPassword, confirmPassword);
-            validatePassword(newPassword);
-            User userToUpdate = new User.Builder().setId(userId).setPassword(encode(newPassword)).get();
+            verify(user.getPassword(), password);
+            checkPasswordMatching(newPass, confirmPass);
+            validatePassword(newPass);
+            User userToUpdate = User.builder().id(userId).password(encode(newPass)).build();
             userDAO.updatePassword(userToUpdate);
         } catch (DAOException e) {
             throw new ServiceException(e);
@@ -214,17 +212,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    private void checkPasswordMatching(String password, String confirmPassword) throws PasswordMatchingException {
-        if (!password.equals(confirmPassword)) {
-            throw new PasswordMatchingException();
-        }
-    }
-
     private void validateUser(UserDTO userDTO) throws IncorrectFormatException {
         validateEmail(userDTO.getEmail());
-        if (userDTO.getPassword() != null) {
-            validatePassword(userDTO.getPassword());
-        }
         validateName(userDTO.getName(), ENTER_CORRECT_NAME);
         validateName(userDTO.getSurname(), ENTER_CORRECT_SURNAME);
     }

@@ -4,15 +4,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import ua.java.conferences.actions.Action;
 import ua.java.conferences.dto.EventDTO;
 import ua.java.conferences.dto.UserDTO;
-import ua.java.conferences.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.services.*;
-import ua.java.conferences.utils.sorting.Sorting;
 
 import static ua.java.conferences.actions.ActionUtil.*;
 import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.actions.constants.ParameterValues.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
+import static ua.java.conferences.entities.role.Role.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class OfferReportPageAction implements Action {
 
@@ -36,10 +36,10 @@ public class OfferReportPageAction implements Action {
     }
 
     private EventDTO getEvent(String parameterEventId, long userId) throws ServiceException {
-        Sorting sorting = Sorting.getEventSorting(UPCOMING, ID, ASCENDING_ORDER);
-        return eventService
-                .getSortedByUser(userId, sorting, "0", String.valueOf(Integer.MAX_VALUE), Role.SPEAKER.name())
-                .stream()
+        String query = eventQueryBuilder()
+                .setIdFilter(userId)
+                .getQuery();
+        return eventService.getSortedByUser(query, SPEAKER).stream()
                 .filter(e -> String.valueOf(e.getId()).equals(parameterEventId))
                 .findAny()
                 .orElseThrow(NoSuchEventException::new);
