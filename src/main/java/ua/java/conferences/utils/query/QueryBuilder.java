@@ -1,65 +1,61 @@
 package ua.java.conferences.utils.query;
 
-import org.slf4j.*;
-
 import java.util.*;
 
 import static ua.java.conferences.actions.constants.ParameterValues.*;
 
 public abstract class QueryBuilder {
-    private static final Logger logger = LoggerFactory.getLogger(QueryBuilder.class);
     private final List<String> filters = new ArrayList<>();
     private String sortField;
     private String order = ASCENDING_ORDER;
     private int offset = 0;
-    private int records = Integer.MAX_VALUE;
+    private int records = 5;
 
     protected QueryBuilder(String sortField) {
         this.sortField = sortField;
     }
 
-    public QueryBuilder setIdFilter(long idFilter) {
-        filters.add("user_id=" + idFilter);
+    public QueryBuilder setUserIdFilter(long userIdFilter) {
+        filters.add("user_id=" + userIdFilter);
         return this;
     }
 
     public QueryBuilder setDateFilter(String dateFilter) {
-        if (dateFilter.equals(PASSED)) {
+        if (dateFilter != null && dateFilter.equals(PASSED)) {
             filters.add("date < now()");
-        } else if (dateFilter.equals(UPCOMING)) {
+        } else if (dateFilter != null && dateFilter.equals(UPCOMING)) {
             filters.add("date > now()");
         }
         return this;
     }
 
     public QueryBuilder setRoleFilter(String roleFilter) {
-        try {
-            Integer.parseInt(roleFilter);
+        if (roleFilter != null && isPositiveInt(roleFilter)) {
             filters.add("role_id=" + roleFilter);
-        } catch (NumberFormatException e) {
-            logger.error(e.getMessage());
         }
         return this;
     }
 
     public QueryBuilder setSortField(String sortField) {
-        this.sortField = checkSortField(sortField);
+        if (sortField != null) {
+            this.sortField = checkSortField(sortField);
+        }
         return this;
     }
 
     public QueryBuilder setOrder(String order) {
-        if (order.equalsIgnoreCase(DESCENDING_ORDER)) {
+        if (order != null && order.equalsIgnoreCase(DESCENDING_ORDER)) {
             this.order = DESCENDING_ORDER;
         }
         return this;
     }
 
     public QueryBuilder setLimits(String offset, String records) {
-        try {
+        if (offset != null && isPositiveInt(offset)) {
             this.offset = Integer.parseInt(offset);
+        }
+        if (records != null && isPositiveInt(records)) {
             this.records = Integer.parseInt(records);
-        } catch (NumberFormatException e) {
-            this.records = 10;
         }
         return this;
     }
@@ -92,4 +88,16 @@ public abstract class QueryBuilder {
     }
 
     protected abstract String checkSortField(String sortField);
+
+    private boolean isPositiveInt(String intString) {
+        try {
+            int i = Integer.parseInt(intString);
+            if (i < 0) {
+                return false;
+            }
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
 }

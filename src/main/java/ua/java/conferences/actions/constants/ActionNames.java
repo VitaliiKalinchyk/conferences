@@ -13,7 +13,7 @@ public final class ActionNames {
     public static final String VIEW_USERS_ACTION = "view-users";
     public static final String DELETE_USER_ACTION = "delete-user";
     public static final String SET_ROLE_ACTION = "set-role";
-    public static final String VIEW_UP_EVENTS_BY_VISITOR_ACTION = "view-up-events-by-visitor";
+    public static final String VIEW_UPCOMING_EVENTS_ACTION = "view-upcoming-events";
     public static final String VIEW_VISITORS_EVENTS_ACTION = "view-visitors-events";
     public static final String VIEW_EVENT_BY_VISITOR_ACTION = "view-event-by-visitor";
     public static final String REGISTER_FOR_EVENT_ACTION = "register-for-event";

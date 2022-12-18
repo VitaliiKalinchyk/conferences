@@ -291,7 +291,7 @@ class EventDAOTest {
         }
         events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
         String query = visitorEventQueryBuilder()
-                .setIdFilter(ID_VALUE)
+                .setUserIdFilter(ID_VALUE)
                 .setDateFilter(UPCOMING)
                 .getQuery();
         List<Event> eventList = eventDAO.getSortedByUser(query, Role.VISITOR);
@@ -308,7 +308,7 @@ class EventDAOTest {
         }
         events = events.stream().filter(event -> event.getDate().isBefore(LocalDate.now())).collect(Collectors.toList());
         String query = visitorEventQueryBuilder()
-                .setIdFilter(ID_VALUE)
+                .setUserIdFilter(ID_VALUE)
                 .setDateFilter(PASSED)
                 .getQuery();
         List<Event> eventList = eventDAO.getSortedByUser(query, Role.VISITOR);
@@ -328,7 +328,7 @@ class EventDAOTest {
         }
         events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
         String query = eventQueryBuilder()
-                .setIdFilter(ID_VALUE)
+                .setUserIdFilter(ID_VALUE)
                 .setDateFilter(UPCOMING)
                 .getQuery();
         List<Event> eventList = eventDAO.getSortedByUser(query, Role.SPEAKER);
@@ -361,7 +361,7 @@ class EventDAOTest {
         }
         events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
         String query = eventQueryBuilder()
-                .setIdFilter(ID_VALUE)
+                .setUserIdFilter(ID_VALUE)
                 .setDateFilter(UPCOMING)
                 .getRecordQuery();
         int numberOfRecords = eventDAO.getNumberOfRecords(query, Role.SPEAKER);

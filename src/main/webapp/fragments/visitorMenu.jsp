@@ -16,7 +16,7 @@
             <ul class="navbar-nav me-auto mx-4 mb-4 mb-md-0">
                 <li class="nav-item">
                     <a class="nav-link text-decoration-underline" aria-current="page"
-                       href="controller?action=view-up-events-by-visitor">
+                       href="controller?action=view-upcoming-events">
                         <fmt:message key="view.up.events.by.visitor"/>
                     </a>
                 </li>
@@ -24,12 +24,6 @@
                     <a class="nav-link text-decoration-underline" aria-current="page"
                        href="controller?action=view-visitors-events">
                         <fmt:message key="view.visitors.events"/>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-decoration-underline" aria-current="page"
-                       href="controller?action=view-visitors-events&passed=passed">
-                        <fmt:message key="view.visitors.past.events"/>
                     </a>
                 </li>
             </ul>

@@ -30,7 +30,7 @@ public final class ActionFactory {
         ACTION_MAP.put(DELETE_USER_ACTION, new DeleteUserAction());
         ACTION_MAP.put(SET_ROLE_ACTION, new SetRoleAction());
 
-        ACTION_MAP.put(VIEW_UP_EVENTS_BY_VISITOR_ACTION, new ViewUpEventsByVisitorAction());
+        ACTION_MAP.put(VIEW_UPCOMING_EVENTS_ACTION, new ViewUpEventsByVisitorAction());
         ACTION_MAP.put(VIEW_VISITORS_EVENTS_ACTION, new ViewVisitorsEventsAction());
         ACTION_MAP.put(VIEW_EVENT_BY_VISITOR_ACTION, new ViewEventByVisitorAction());
         ACTION_MAP.put(REGISTER_FOR_EVENT_ACTION, new RegisterForEventAction());

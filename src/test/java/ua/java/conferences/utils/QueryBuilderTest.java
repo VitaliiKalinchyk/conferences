@@ -26,7 +26,7 @@ class QueryBuilderTest {
 
     @Test
     void testSetIdFilter() {
-        String query = eventQueryBuilder().setIdFilter(10).getQuery();
+        String query = eventQueryBuilder().setUserIdFilter(10).getQuery();
         assertTrue(query.contains(" user_id=" + TEN + " "));
     }
 
@@ -39,7 +39,7 @@ class QueryBuilderTest {
     @Test
     void testSetIdFilterWrongClass() {
         QueryBuilder queryBuilder = userQueryBuilder();
-        assertThrows(UnsupportedOperationException.class, () -> queryBuilder.setIdFilter(10));
+        assertThrows(UnsupportedOperationException.class, () -> queryBuilder.setUserIdFilter(10));
     }
 
     @Test
@@ -176,7 +176,7 @@ class QueryBuilderTest {
     void testGetQueryForEvent() {
         String check = " WHERE user_id=3 AND date < now() GROUP BY event.id ORDER BY title DESC LIMIT 3, 3";
         String query = eventQueryBuilder()
-                .setIdFilter(3)
+                .setUserIdFilter(3)
                 .setDateFilter(PASSED)
                 .setSortField(TITLE_FIELD)
                 .setOrder(DESC)
@@ -190,7 +190,7 @@ class QueryBuilderTest {
     void testGetQueryForVisitorEvent() {
         String check = " WHERE user_id=3 AND date < now() ORDER BY title DESC LIMIT 3, 3";
         String query = visitorEventQueryBuilder()
-                .setIdFilter(3)
+                .setUserIdFilter(3)
                 .setDateFilter(PASSED)
                 .setSortField(TITLE_FIELD)
                 .setOrder(DESC)
@@ -215,7 +215,7 @@ class QueryBuilderTest {
     void testGetRecordQueryForEvent() {
         String check = " WHERE user_id=3 AND date < now() ";
         String query = eventQueryBuilder()
-                .setIdFilter(3)
+                .setUserIdFilter(3)
                 .setDateFilter(PASSED)
                 .getRecordQuery()
                 .replaceAll("\\s+", " ");

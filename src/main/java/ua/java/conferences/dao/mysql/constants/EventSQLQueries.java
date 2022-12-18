@@ -11,8 +11,8 @@ public final class EventSQLQueries {
     public static final String GET_EVENT_BY_TITLE =  UTIL_GET_EVENT +"WHERE event.title=?" + GROUP_BY;
     public static final String GET_EVENTS =  UTIL_GET_EVENT + GROUP_BY;
     public static final String GET_SORTED = UTIL_GET_EVENT + " %s";
-    public static final String GET_VISITORS_EVENTS = "SELECT * FROM event JOIN user_has_event " +
-            "ON id=user_has_event.event_id %s";
+    public static final String GET_VISITORS_EVENTS = "SELECT * FROM event JOIN user_has_event ON " +
+            "id=user_has_event.event_id %s";
     public static final String GET_SPEAKERS_EVENTS = "SELECT * FROM event JOIN report ON event.id=report.event_id  %s";
     public static final String GET_NUMBER_OF_RECORDS = "SELECT COUNT(event.id) AS numberOfRecords FROM event %s";
     public static final String GET_NUMBER_OF_RECORDS_BY_VISITOR = "SELECT COUNT(event.id) AS numberOfRecords " +

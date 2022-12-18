@@ -20,12 +20,6 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-decoration-underline" aria-current="page"
-                       href="controller?action=view-speakers-events&past=past">
-                        <fmt:message key="view.visitors.past.events"/>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-decoration-underline" aria-current="page"
                        href="controller?action=view-speakers-reports">
                         <fmt:message key="view.speakers.reports"/>
                     </a>

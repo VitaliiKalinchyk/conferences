@@ -31,7 +31,7 @@ public class UserQueryBuilder extends QueryBuilder {
     }
 
     @Override
-    public UserQueryBuilder setIdFilter(long idFilter) {
+    public UserQueryBuilder setUserIdFilter(long userIdFilter) {
         throw new UnsupportedOperationException();
     }
 
