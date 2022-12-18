@@ -1,17 +1,13 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 
-<c:set var="keyForTitle" value="${param.past eq 'past' ? 'view.visitors.past.events' : 'view.visitors.events'}"/>
-
 <head>
-    <title>Conference Smart App. <fmt:message key="${keyForTitle}"/></title>
+    <title>Conference Smart App. <fmt:message key="your.events"/></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">

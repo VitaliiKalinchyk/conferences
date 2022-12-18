@@ -1,7 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
@@ -16,7 +14,7 @@
             <ul class="navbar-nav me-auto mx-4 mb-4 mb-md-0">
                 <li class="nav-item">
                     <a class="nav-link text-decoration-underline" aria-current="page"
-                       href="controller?action=view-speakers-events"><fmt:message key="view.visitors.events"/></a>
+                       href="controller?action=view-speakers-events"><fmt:message key="your.events"/></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-decoration-underline" aria-current="page"

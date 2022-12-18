@@ -1,15 +1,18 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <div class="col-lg-7 mx-auto p-4 py-md-5">
 
     <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-        <span class="fs-4"><fmt:message key="view.visitors.events"/></span>
+        <span class="fs-4"><fmt:message key="your.events"/></span>
     </header>
+
+    <c:if test="${empty requestScope.events}">
+        <p class="fs-6"><fmt:message key="zero.events"/></p>
+    </c:if>
 
     <form method="GET" action="controller" class="flex">
         <input type="hidden" name="action" value="view-visitors-events">
@@ -71,7 +74,8 @@
         </div>
     </div>
 
-    <c:set var="href" value="controller?action=view-visitors-events&date=${param.date}&sort=${param.sort}&order=${param.order}&"  scope="request"/>
+    <c:set var="href" scope="request"
+           value="controller?action=view-visitors-events&date=${param.date}&sort=${param.sort}&order=${param.order}&"/>
     <jsp:include page="/fragments/pagination.jsp"/>
 
 </div>

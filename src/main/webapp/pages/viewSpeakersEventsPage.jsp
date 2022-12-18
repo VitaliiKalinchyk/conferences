@@ -7,12 +7,22 @@
 <div class="col-lg-7 mx-auto p-4 py-md-5">
 
     <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-        <span class="fs-4"><fmt:message key="view.up.events.by.visitor"/></span>
+        <span class="fs-4"><fmt:message key="your.events"/></span>
     </header>
 
+    <c:if test="${empty requestScope.events}">
+        <p class="fs-6"><fmt:message key="zero.events"/></p>
+    </c:if>
 
     <form method="GET" action="controller" class="flex">
-        <input type="hidden" name="action" value="view-upcoming-events">
+        <input type="hidden" name="action" value="view-speakers-events">
+        <label>
+            <select name="date" class="form-select mt-2">
+                <option><fmt:message key="select.date"/></option>
+                <option value="upcoming" ${param.date eq "upcoming" ? "selected" : ""}><fmt:message key="upcoming"/></option>
+                <option value="passed" ${param.date eq "passed" ? "selected" : ""}><fmt:message key="passed"/></option>
+            </select>
+        </label>
         <label>
             <select name="sort" class="form-select mt-2">
                 <option value="id"><fmt:message key="select.sort"/></option>
@@ -53,7 +63,7 @@
                         <td><c:out value="${event.date}"/></td>
                         <td><c:out value="${event.location}"/></td>
                         <td>
-                            <a class="link-dark" href=controller?action=view-event-by-visitor&event-id=${event.id}>
+                            <a class="link-dark" href=controller?action=view-event-by-speaker&event-id=${event.id}>
                                 <fmt:message key="view"/>
                             </a>
                         </td>
@@ -64,6 +74,9 @@
         </div>
     </div>
 
-    <c:set var="href" value="controller?action=view-upcoming-events&sort=${param.sort}&order=${param.order}&" scope="request"/>
+
+    <c:set var="href" scope="request"
+           value="controller?action=view-speakers-events&date=${param.date}&sort=${param.sort}&order=${param.order}&"/>
     <jsp:include page="/fragments/pagination.jsp"/>
+
 </div>
