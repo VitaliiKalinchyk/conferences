@@ -48,7 +48,7 @@ public class ViewEventBySpeakerAction implements Action {
 
     private EventDTO getEvent(String parameterEventId, long userId) throws ServiceException {
         String query = eventQueryBuilder()
-                .setIdFilter(userId)
+                .setUserIdFilter(userId)
                 .getQuery();
         return eventService.getSortedByUser(query, SPEAKER).stream()
                 .filter(e -> String.valueOf(e.getId()).equals(parameterEventId))

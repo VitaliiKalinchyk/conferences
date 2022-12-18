@@ -27,17 +27,17 @@ public class ViewSpeakersEventsAction implements Action {
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
         long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
-        String past = request.getParameter(PAST);
+        String dateFilter = request.getParameter(PAST) != null ? PASSED : UPCOMING;
         List<EventDTO> events;
-        events = eventService.getSortedByUser(getQuery(speakerId, past), SPEAKER);
+        events = eventService.getSortedByUser(getQuery(speakerId, dateFilter), SPEAKER);
         request.setAttribute(EVENTS, events);
         return VIEW_SPEAKERS_EVENTS_PAGE;
     }
 
-    private static String getQuery(long userId, String past) {
-        return visitorEventQueryBuilder()
-                .setIdFilter(userId)
-                .setDateFilter(past.equals(PAST) ? PASSED : UPCOMING)
+    private static String getQuery(long speakerId, String dateFilter) {
+        return eventQueryBuilder()
+                .setUserIdFilter(speakerId)
+                .setDateFilter(dateFilter)
                 .getQuery();
     }
 }

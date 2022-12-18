@@ -35,9 +35,9 @@
         </c:when>
 
         <c:otherwise>
-            <p class="fs-6"><fmt:message key="date"/>: ${requestScope.event.date} </p>
-            <p class="fs-6"><fmt:message key="location"/>: ${requestScope.event.location} </p>
-            <p class="fs-6"><fmt:message key="description"/>: ${requestScope.event.description} </p>
+            <p class="fs-5"><fmt:message key="date"/>: ${requestScope.event.date}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                <fmt:message key="location"/>: ${requestScope.event.location}</p>
+            <p class="fs-5"><fmt:message key="description"/>: ${requestScope.event.description} </p>
 
             <c:if test="${requestScope.isComing}">
                 <a class="btn btn-dark mt-4 mb-4"
@@ -99,6 +99,7 @@
                                                         <fmt:message key="decline.report"/>
                                                     </button>
                                                 </form>
+
                                             </c:when>
                                         </c:choose>
                                     </c:if>

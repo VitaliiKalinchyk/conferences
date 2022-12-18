@@ -27,8 +27,13 @@ public final class Parameters {
     public static final String REPORT_ID = "report-id";
     public static final String REPORTS = "reports";
     public static final String TOPIC = "topic";
-    public static final String SORT_FIELD = "sort-field";
-    public static final String SORT_ORDER = "order";
+    public static final String SORT = "sort";
+    public static final String ORDER = "order";
+    public static final String OFFSET = "offset";
+    public static final String CURRENT_PAGE = "currentPage";
+    public static final String START = "start";
+    public static final String END = "end";
+    public static final String RECORDS = "records";
     public static final String ERROR = "error";
     public static final String MESSAGE = "message";
     public static final String CURRENT_PATH = "currentPath";
@@ -36,6 +41,7 @@ public final class Parameters {
     public static final String PAST = "past";
     public static final String REGISTRATIONS = "registrations";
     public static final String VISITORS = "visitors";
+    public static final String PAGES = "pages";
 
     private Parameters() {}
 }
