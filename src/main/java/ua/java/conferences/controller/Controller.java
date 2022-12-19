@@ -20,7 +20,7 @@ public class Controller extends HttpServlet {
         if (isAttributesPresent(request)) {
             request.getRequestDispatcher(path).forward(request, response);
         } else {
-            response.sendRedirect(process(request));
+            response.sendRedirect(path);
         }
     }
 

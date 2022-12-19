@@ -11,10 +11,12 @@ public final class ParameterValues {
     public static final String OFFER_FORBIDDEN = "offer.forbidden";
     public static final String PASSED = "passed";
     public static final String UPCOMING = "upcoming";
-    public static final String ANY_DATE = "";
     public static final String ASCENDING_ORDER = "ASC";
     public static final String DESCENDING_ORDER = "DESC";
-    public static final String ANY_ROLE = "%";
+    public static final String REGISTER = "register";
+    public static final String CANCEL = "cancel";
+    public static final String SET = "set";
+    public static final String REMOVE = "remove";
 
     private ParameterValues() {}
 }

@@ -29,7 +29,8 @@
             </div>
             <div class="modal-footer flex-column border-top-0">
                 <form method="POST" action="controller">
-                    <input type="hidden" name="action" value="register-for-event">
+                    <input type="hidden" name="action" value="register-or-cancel">
+                    <input type="hidden" name="todo" value="register">
                     <input type="hidden" name="event-id" value="${requestScope.event.id}">
                     <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="register"/></button>
                 </form>
@@ -50,7 +51,8 @@
             </div>
             <div class="modal-footer flex-column border-top-0">
                 <form method="POST" action="controller">
-                    <input type="hidden" name="action" value="cancel-registration">
+                    <input type="hidden" name="action" value="register-or-cancel">
+                    <input type="hidden" name="todo" value="cancel">
                     <input type="hidden" name="event-id" value="${requestScope.event.id}">
                     <button type="submit" class="btn btn-dark mt-4 mb-4">
                         <fmt:message key="cancel.registration"/>

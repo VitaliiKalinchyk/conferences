@@ -26,6 +26,7 @@ public final class Pages {
     public static final String SEARCH_EVENT_PAGE = "searchEvent.jsp";
     public static final String VIEW_EVENT_BY_MODERATOR_PAGE = "viewEventByModerator.jsp";
     public static final String EDIT_EVENT_PAGE = "editEvent.jsp";
+    public static final String VIEW_REPORT_PAGE = "viewReport.jsp";
 
     private Pages() {}
 }

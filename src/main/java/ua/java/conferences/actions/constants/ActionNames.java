@@ -16,20 +16,21 @@ public final class ActionNames {
     public static final String VIEW_UPCOMING_EVENTS_ACTION = "view-upcoming-events";
     public static final String VIEW_VISITORS_EVENTS_ACTION = "view-visitors-events";
     public static final String VIEW_EVENT_BY_VISITOR_ACTION = "view-event-by-visitor";
-    public static final String REGISTER_FOR_EVENT_ACTION = "register-for-event";
-    public static final String CANCEL_REGISTRATION_ACTION = "cancel-registration";
+    public static final String REGISTER_OR_CANCEL_ACTION = "register-or-cancel";
     public static final String VIEW_SPEAKERS_EVENTS_ACTION = "view-speakers-events";
     public static final String VIEW_SPEAKERS_REPORTS_ACTION = "view-speakers-reports";
     public static final String VIEW_EVENT_BY_SPEAKER_ACTION = "view-event-by-speaker";
-    public static final String OFFER_REPORT_PAGE_ACTION = "offer-report-page";
     public static final String OFFER_REPORT_ACTION = "offer-report";
-    public static final String SET_SPEAKER_BY_SPEAKER_ACTION = "set-speaker-by-speaker";
-    public static final String REMOVE_SPEAKER_BY_SPEAKER_ACTION = "remove-speaker-by-speaker";
+    public static final String SET_OR_REMOVE_SPEAKER_BY_SPEAKER_ACTION = "set-or-remove-speaker-by-speaker";
     public static final String CREATE_EVENT_ACTION = "create-event";
     public static final String SEARCH_EVENT_ACTION = "search-event";
     public static final String DELETE_EVENT_ACTION = "delete-event";
-    public static final String EDIT_EVENT_PAGE_ACTION = "edit-event-page";
     public static final String EDIT_EVENT_ACTION = "edit-event";
+    public static final String SET_VISITORS_ACTION = "set-visitors";
+    public static final String VIEW_REPORT_ACTION = "view-report";
+    public static final String CHANGE_TOPIC_ACTION = "change-topic";
+    public static final String DELETE_REPORT_ACTION = "delete-report";
+    public static final String SET_OR_REMOVE_SPEAKER_ACTION = "set-or-remove-speaker";
 
     private ActionNames() {}
 }

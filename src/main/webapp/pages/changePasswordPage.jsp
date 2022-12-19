@@ -33,7 +33,8 @@
         <div class="form-group">
             <label class="form-label fs-5" for="confirm-password"><fmt:message key="confirm.password"/>*: </label>
             <input class="form-control" type="password" name="confirm-password" id="confirm-password"
-                                        title="<fmt:message key="password.requirements"/>" required><br>
+                   pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$"
+                   title="<fmt:message key="password.requirements"/>" required><br>
         </div>
 
         <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="change.password"/></button>

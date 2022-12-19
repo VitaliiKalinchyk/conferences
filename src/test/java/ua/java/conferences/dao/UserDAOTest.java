@@ -240,7 +240,7 @@ class UserDAOTest {
     @Test
     void testGetAllSortedByName() throws DAOException {
         List<User> users = getRandomUsers();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             userDAO.add(users.get(i));
         }
         users.sort(Comparator.comparing(User::getName));
@@ -251,7 +251,7 @@ class UserDAOTest {
     @Test
     void testGetAllSortedByNameDesc() throws DAOException {
         List<User> users = getRandomUsers();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             userDAO.add(users.get(i));
         }
         users.sort(Comparator.comparing(User::getName).reversed());
@@ -263,7 +263,7 @@ class UserDAOTest {
     @Test
     void testGetAllSortedByNamePagination() throws DAOException {
         List<User> users = getRandomUsers();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             userDAO.add(users.get(i));
         }
         users = users.stream()
@@ -282,7 +282,7 @@ class UserDAOTest {
     @Test
     void testGetAllSortedByNamePaginationOffsetThree() throws DAOException {
         List<User> users = getRandomUsers();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             userDAO.add(users.get(i));
         }
         users = users.stream()
@@ -323,7 +323,7 @@ class UserDAOTest {
 
     private List<User> getSpeakers() throws DAOException {
         List<User> users = getRandomUsers();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             userDAO.add(users.get(i));
         }
         List<User> speakers = new ArrayList<>();
@@ -338,7 +338,7 @@ class UserDAOTest {
 
     private List<User> getRandomUsers() {
         List<User> users = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             users.add(getRandomUser(i));
         }
         return users;

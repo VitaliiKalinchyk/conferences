@@ -144,7 +144,7 @@ class QueryBuilderTest {
     @Test
     void testSetLimitsNoLimits() {
         String query = userQueryBuilder().getQuery();
-        assertTrue(query.contains(" LIMIT 0, " + Integer.MAX_VALUE));
+        assertTrue(query.contains(" LIMIT 0, 5"));
     }
 
     @Test
@@ -156,7 +156,7 @@ class QueryBuilderTest {
     @Test
     void testSetWrongLimits() {
         String query = userQueryBuilder().setLimits("a", "a").getQuery();
-        assertTrue(query.contains(" LIMIT 0, 10"));
+        assertTrue(query.contains(" LIMIT 0, 5"));
     }
 
     @Test

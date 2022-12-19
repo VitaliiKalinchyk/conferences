@@ -9,22 +9,21 @@ public final class PaginationUtil {
     public static void paginate(int totalRecords, HttpServletRequest request) {
         int records = getInt(request.getParameter(RECORDS), 1, 5);
         int offset = getInt(request.getParameter(OFFSET), 0, 0);
-        int pages = totalRecords / records + (totalRecords % records != 0 ? 1 : 0);
-        int currentPage = (offset / records) + 1;
-        int start = currentPage == pages ? Math.max(currentPage - 2, 1)
-                                         : Math.max(currentPage - 1, 1);
-        int end = Math.min(start + 2, pages);
-        setAttributes(request, records, offset, pages, currentPage, start, end);
+        setAttributes(request, totalRecords, records, offset);
     }
 
-    private static void setAttributes(HttpServletRequest request, int records, int offset, int pages, int currentPage,
-                                      int start, int end) {
+    private static void setAttributes(HttpServletRequest request, int totalRecords, int records, int offset) {
+        int pages = totalRecords / records + (totalRecords % records != 0 ? 1 : 0);
+        int currentPage = offset / records + 1;
+        int startPage = currentPage == pages ? Math.max(currentPage - 2, 1)
+                                         : Math.max(currentPage - 1, 1);
+        int endPage = Math.min(startPage + 2, pages);
         request.setAttribute(RECORDS, records);
         request.setAttribute(OFFSET, offset);
         request.setAttribute(PAGES, pages);
         request.setAttribute(CURRENT_PAGE, currentPage);
-        request.setAttribute(START, start);
-        request.setAttribute(END, end);
+        request.setAttribute(START, startPage);
+        request.setAttribute(END, endPage);
     }
 
     private static int getInt(String value, int min, int defaultValue) {
@@ -33,8 +32,7 @@ public final class PaginationUtil {
             if (records >= min) {
                 return records;
             }
-        } catch (NumberFormatException | NullPointerException e) {
-            e.printStackTrace();
+        } catch (NumberFormatException e) {
             return defaultValue;
         }
         return defaultValue;

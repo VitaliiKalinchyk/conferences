@@ -35,7 +35,8 @@
                         <td><c:out value="${report.location}"/></td>
                         <td>
                             <form method="POST" action="controller">
-                                <input type="hidden" name="action" value="remove-speaker-by-speaker">
+                                <input type="hidden" name="action" value="set-or-remove-speaker-by-speaker">
+                                <input type="hidden" name="todo" value="remove">
                                 <input type="hidden" name="report-id" value="${report.id}">
                                 <button type="submit" class="btn btn-dark mt-0 mb-0">
                                     <fmt:message key="decline.report"/>

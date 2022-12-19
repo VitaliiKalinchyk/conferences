@@ -6,7 +6,7 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <jsp:useBean id="now" class="java.util.Date"/>
 <fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="nowFormatted"/>
-<c:set var="isFuture" value="${nowFormatted le requestScope.event.date}"/>
+<c:set var="isComing" value="${nowFormatted le requestScope.event.date}"/>
 
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
@@ -25,29 +25,90 @@
 
 <jsp:include page="fragments/menuChoice.jsp"/>
 
-<div class="col-lg-5 mx-auto p-4 py-md-5">
+<div class="col-lg-6 mx-auto p-4 py-md-5">
 
     <header class="d-flex align-items-center pb-0 mb-3 border-bottom">
         <span class="fs-4">${requestScope.event.title}</span>
     </header>
 
-    <main>
+    <div>
         <p class="fs-5"><fmt:message key="date"/>: ${requestScope.event.date}&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
             <fmt:message key="location"/>: ${requestScope.event.location}</p>
         <p class="fs-5"><fmt:message key="description"/>: ${requestScope.event.description}</p>
-        Number of reports: ${requestScope.event.reports}
-        Number of registrations: ${requestScope.event.registrations}
-        Number of visitors: ${requestScope.event.visitors}
-    </main>
+        <p class="fs-5">
+            <fmt:message key="reports"/>: ${requestScope.event.reports} &nbsp&nbsp
+            <fmt:message key="registrations"/>: ${requestScope.event.registrations} &nbsp&nbsp
+            <c:if test="${not isComing}">
+                <fmt:message key="visitors"/>: ${requestScope.event.visitors}
+            </c:if>
+        </p>
+    </div>
 
-    <c:if test="${isFuture}">
-        <a href="controller?action=edit-event-page&event-id=${requestScope.event.id}"
-           class="btn btn-dark mt-4 mb-4"><fmt:message key="edit.event"/></a>
+    <c:choose>
+        <c:when test="${isComing}">
+            <a href="controller?action=edit-event&event-id=${requestScope.event.id}"
+               class="btn btn-dark mt-4 mb-4"><fmt:message key="edit.event"/></a>
 
-        <button class="btn btn-dark mt-4 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">
-            <fmt:message key="delete"/>
-        </button>
-    </c:if>
+            <button class="btn btn-dark mt-4 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">
+                <fmt:message key="delete"/>
+            </button>
+        </c:when>
+
+        <c:otherwise>
+            <form method="POST" action="controller">
+                <input type="hidden" name="action" value="set-visitors">
+                <input type="hidden" name="event-id" value=${requestScope.event.id}>
+                <label class="form-label fs-5" for="visitors"><fmt:message key="set.visitors"/>: </label>
+                <input class="col-1" type="number" min="0" value="${requestScope.event.visitors}"
+                       name="visitors" id="visitors">&nbsp&nbsp&nbsp&nbsp&nbsp
+                <button type="submit" class="btn btn-dark mt-3 mb-4"><fmt:message key="submit"/></button>
+            </form>
+        </c:otherwise>
+    </c:choose>
+
+    <div class="bd-example-snippet bd-code-snippet">
+        <div class="bd-example">
+            <table class="table table-striped" aria-label="report-table">
+                <thead>
+                <tr>
+                    <th scope="col"><fmt:message key="topic.name"/></th>
+                    <th scope="col"><fmt:message key="speaker.name"/></th>
+                    <c:if test="${isComing}">
+                        <th scope="col"><fmt:message key="action"/></th>
+                    </c:if>
+                </tr>
+                </thead>
+
+                <tbody>
+                <c:forEach var="report" items="${requestScope.reports}">
+                    <tr>
+                        <td><c:out value="${report.topic}"/></td>
+
+                        <td>
+                            <c:choose>
+                                <c:when test="${empty report.speakerName}">
+                                    <span class="text-danger"><fmt:message key='not.available'/></span>
+                                </c:when>
+                                <c:otherwise>
+                                    ${report.speakerName}
+                                </c:otherwise>
+                            </c:choose>
+                        </td>
+
+                        <td>
+                            <c:if test="${isComing}">
+                                <a class="link-dark" href="controller?action=view-report&report-id=${report.id}">
+                                    <fmt:message key="edit"/>
+                                </a>
+                            </c:if>
+                        </td>
+                    </tr>
+                </c:forEach>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
 </div>
 

@@ -8,13 +8,15 @@ import ua.java.conferences.services.*;
 
 import static ua.java.conferences.actions.ActionUtil.*;
 import static ua.java.conferences.actions.constants.ActionNames.*;
+import static ua.java.conferences.actions.constants.ParameterValues.CANCEL;
+import static ua.java.conferences.actions.constants.ParameterValues.REGISTER;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
-public class RegisterForEventAction implements Action {
+public class RegisterOrCancel implements Action {
 
     private final UserService userService;
 
-    public RegisterForEventAction() {
+    public RegisterOrCancel() {
         userService = ServiceFactory.getInstance(DB_IMPLEMENTATION).getUserService();
     }
 
@@ -22,7 +24,16 @@ public class RegisterForEventAction implements Action {
     public String execute(HttpServletRequest request) throws ServiceException {
         long userId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         String eventId = request.getParameter(EVENT_ID);
-        userService.registerForEvent(userId, eventId);
+        String todo = request.getParameter(TODO);
+        registerOrCancel(userId, eventId, todo);
         return getActionToRedirect(VIEW_EVENT_BY_VISITOR_ACTION, EVENT_ID, eventId);
+    }
+
+    private void registerOrCancel(long userId, String eventId, String todo) throws ServiceException {
+        if (todo.equals(REGISTER)) {
+            userService.registerForEvent(userId, eventId);
+        } else if (todo.equals(CANCEL)) {
+            userService.cancelRegistration(userId, eventId);
+        }
     }
 }

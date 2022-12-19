@@ -6,6 +6,7 @@ public final class Parameters {
     public static final String USER = "user";
     public static final String LOGGED_USER = "loggedUser";
     public static final String USERS = "users";
+    public static final String SPEAKERS = "speakers";
     public static final String ROLE = "role";
     public static final String EMAIL = "email";
     public static final String PASSWORD = "password";
@@ -25,6 +26,7 @@ public final class Parameters {
     public static final String LOCATION = "location";
     public static final String DESCRIPTION = "description";
     public static final String REPORT_ID = "report-id";
+    public static final String REPORT = "report";
     public static final String REPORTS = "reports";
     public static final String TOPIC = "topic";
     public static final String SORT = "sort";
@@ -38,7 +40,7 @@ public final class Parameters {
     public static final String MESSAGE = "message";
     public static final String CURRENT_PATH = "currentPath";
     public static final String ACTION = "action";
-    public static final String PAST = "past";
+    public static final String TODO = "todo";
     public static final String REGISTRATIONS = "registrations";
     public static final String VISITORS = "visitors";
     public static final String PAGES = "pages";

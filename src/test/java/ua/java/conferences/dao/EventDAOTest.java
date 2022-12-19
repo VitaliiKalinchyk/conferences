@@ -174,7 +174,7 @@ class EventDAOTest {
     @Test
     void testGetAllUpcoming() throws DAOException {
         List<Event> events = getRandomEvents();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
         }
         String query = eventQueryBuilder().setDateFilter(UPCOMING).getQuery();
@@ -186,7 +186,7 @@ class EventDAOTest {
     @Test
     void testGetAllUpcomingDesc() throws DAOException {
         List<Event> events = getRandomEvents();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
         }
         events = events.stream()
@@ -201,7 +201,7 @@ class EventDAOTest {
     @Test
     void testGetAllPassed() throws DAOException {
         List<Event> events = getRandomEvents();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
         }
         events = events.stream()
@@ -215,7 +215,7 @@ class EventDAOTest {
     @Test
     void testGetAllPassedDesc() throws DAOException {
         List<Event> events = getRandomEvents();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
         }
         events = events.stream()
@@ -230,7 +230,7 @@ class EventDAOTest {
     @Test
     void testSortedByTitle() throws DAOException {
         List<Event> events = getRandomEvents();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
         }
         events = events.stream()
@@ -248,7 +248,7 @@ class EventDAOTest {
     @Test
     void testPagination() throws DAOException {
         List<Event> events = getRandomFutureEvents();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
         }
         events = events.stream()
@@ -265,7 +265,7 @@ class EventDAOTest {
     @Test
     void testPaginationNotZeroPosition() throws DAOException {
         List<Event> events = getRandomFutureEvents();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
         }
         events = events.stream()
@@ -285,7 +285,7 @@ class EventDAOTest {
     void testVisitorsEvents() throws DAOException {
         List<Event> events = getRandomEvents();
         userDAO.add(getTestUser());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
             userDAO.registerForEvent(ID_VALUE, events.get(i).getId());
         }
@@ -302,7 +302,7 @@ class EventDAOTest {
     void testVisitorsPastEvents() throws DAOException {
         List<Event> events = getRandomEvents();
         userDAO.add(getTestUser());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
             userDAO.registerForEvent(ID_VALUE, events.get(i).getId());
         }
@@ -320,7 +320,7 @@ class EventDAOTest {
     void testSpeakersEvents() throws DAOException {
         List<Event> events = getRandomEvents();
         userDAO.add(getTestUser());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
             Report report = getTestReport();
             report.setEvent(events.get(i));
@@ -338,7 +338,7 @@ class EventDAOTest {
     @Test
     void testGetNumberOfRecords() throws DAOException {
         List<Event> events = getRandomEvents();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
         }
         events = events.stream().filter(event -> event.getDate().isAfter(LocalDate.now())).collect(Collectors.toList());
@@ -353,7 +353,7 @@ class EventDAOTest {
     void testGetNumberOfRecordsBySpeaker() throws DAOException {
         List<Event> events = getRandomEvents();
         userDAO.add(getTestUser());
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             eventDAO.add(events.get(i));
             Report report = getTestReport();
             report.setEvent(events.get(i));
@@ -370,7 +370,7 @@ class EventDAOTest {
 
     private List<Event> getRandomEvents() {
         List<Event> events = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             events.add(getRandomEvent(i));
         }
         return events;
@@ -378,7 +378,7 @@ class EventDAOTest {
 
     private List<Event> getRandomFutureEvents() {
         List<Event> events = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 5; i++) {
             Event randomEvent = getRandomEvent(i);
             randomEvent.setDate(LocalDate.now().plusDays(ONE));
             events.add(randomEvent);
