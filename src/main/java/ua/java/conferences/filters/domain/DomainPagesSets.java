@@ -44,7 +44,7 @@ public final class DomainPagesSets {
         MODERATOR_PAGES.addAll(LOGGED_USER_PAGES);
         MODERATOR_PAGES.add(CREATE_EVENT_PAGE);
         MODERATOR_PAGES.add(SEARCH_EVENT_PAGE);
-        MODERATOR_PAGES.add(VIEW_EVENT_BY_MODERATOR_PAGE);
+        MODERATOR_PAGES.add(VIEW_EVENT_PAGE);
     }
 
     static {

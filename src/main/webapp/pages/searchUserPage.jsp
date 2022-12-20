@@ -5,7 +5,6 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <div class="col-lg-5 mx-auto p-4 py-md-5">
-
   <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
     <span class="fs-4"><fmt:message key="search.users"/></span>
   </header>
@@ -27,7 +26,5 @@
     </div>
 
     <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="search"/></button>
-
   </form>
-
 </div>

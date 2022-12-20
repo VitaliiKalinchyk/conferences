@@ -10,7 +10,6 @@ import static ua.java.conferences.actions.constants.ActionNames.SEARCH_EVENT_ACT
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class SetVisitorsAction implements Action {
-
     private final EventService eventService;
 
     public SetVisitorsAction() {

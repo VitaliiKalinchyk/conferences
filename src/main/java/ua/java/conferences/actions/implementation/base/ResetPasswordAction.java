@@ -11,7 +11,6 @@ import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.actions.constants.Pages.*;
 
 public class ResetPasswordAction implements Action {
-
     private final UserService userService;
 
     public ResetPasswordAction() {

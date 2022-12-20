@@ -13,7 +13,6 @@ import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class SignInAction implements Action {
-
     private final UserService userService;
 
     public SignInAction() {

@@ -6,27 +6,9 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <jsp:useBean id="now" class="java.util.Date"/>
 <fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="nowFormatted"/>
-<c:set var="isComing" value="${nowFormatted le requestScope.event.date}"/>
-
-<!DOCTYPE html>
-<html lang="${sessionScope.locale}">
-
-<head>
-    <title>Conference Smart App. <fmt:message key="view.event"/></title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.min.js"></script>
-</head>
-
-<body>
-
-<jsp:include page="fragments/mainMenu.jsp"/>
-
-<jsp:include page="fragments/menuChoice.jsp"/>
+<c:set var="isComing" value="${nowFormatted le requestScope.event.date}" scope="request"/>
 
 <div class="col-lg-6 mx-auto p-4 py-md-5">
-
     <header class="d-flex align-items-center pb-0 mb-3 border-bottom">
         <span class="fs-4">${requestScope.event.title}</span>
     </header>
@@ -52,6 +34,10 @@
             <button class="btn btn-dark mt-4 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModalDefault">
                 <fmt:message key="delete"/>
             </button>
+
+            <button class="btn btn-dark mt-4 mb-4" data-bs-toggle="modal" data-bs-target="#exampleModalDefault2">
+                <fmt:message key="add.report"/>
+            </button>
         </c:when>
 
         <c:otherwise>
@@ -65,6 +51,10 @@
             </form>
         </c:otherwise>
     </c:choose>
+
+    <br><c:if test="${not empty requestScope.message}">
+        <span class="text-success"><fmt:message key="${requestScope.message}"/></span>
+    </c:if><br>
 
     <div class="bd-example-snippet bd-code-snippet">
         <div class="bd-example">
@@ -108,13 +98,4 @@
             </table>
         </div>
     </div>
-
-
 </div>
-
-<jsp:include page="fragments/footer.jsp"/>
-
-<jsp:include page="fragments/deleteEventModal.jsp"/>
-
-</body>
-</html>

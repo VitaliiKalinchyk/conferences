@@ -12,7 +12,6 @@ import static ua.java.conferences.actions.constants.ParameterValues.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class DeleteEventAction implements Action {
-
     private final EventService eventService;
 
     public DeleteEventAction() {

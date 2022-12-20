@@ -13,7 +13,6 @@ import static ua.java.conferences.utils.PaginationUtil.*;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class ViewUsersAction implements Action {
-
     private final UserService userService;
 
     public ViewUsersAction() {

@@ -15,7 +15,6 @@ import static ua.java.conferences.utils.PaginationUtil.paginate;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class ViewSpeakersEventsAction implements Action {
-
     private final EventService eventService;
 
     public ViewSpeakersEventsAction() {

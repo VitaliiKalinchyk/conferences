@@ -14,11 +14,8 @@ import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.actions.constants.Pages.*;
 
 public class ViewEventByVisitorAction implements Action {
-
     private final EventService eventService;
-
     private final ReportService reportService;
-
     private final UserService userService;
 
     public ViewEventByVisitorAction() {

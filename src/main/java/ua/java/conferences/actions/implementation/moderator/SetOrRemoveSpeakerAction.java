@@ -11,7 +11,6 @@ import static ua.java.conferences.actions.constants.ParameterValues.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class SetOrRemoveSpeakerAction implements Action {
-
     private final ReportService reportService;
 
     public SetOrRemoveSpeakerAction() {

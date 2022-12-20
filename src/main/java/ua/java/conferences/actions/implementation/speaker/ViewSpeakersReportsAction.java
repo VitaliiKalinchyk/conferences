@@ -11,7 +11,6 @@ import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class ViewSpeakersReportsAction implements Action {
-
     private final ReportService reportService;
 
     public ViewSpeakersReportsAction() {

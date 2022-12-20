@@ -22,9 +22,10 @@ public final class Pages {
     public static final String VIEW_SPEAKERS_REPORTS_PAGE = "viewSpeakersReports.jsp";
     public static final String VIEW_EVENT_BY_SPEAKER_PAGE = "viewEventBySpeaker.jsp";
     public static final String OFFER_REPORT_PAGE = "offerReportBySpeaker.jsp";
+    public static final String VIEW_EVENTS_PAGE = "viewEvents.jsp";
     public static final String CREATE_EVENT_PAGE = "createEvent.jsp";
     public static final String SEARCH_EVENT_PAGE = "searchEvent.jsp";
-    public static final String VIEW_EVENT_BY_MODERATOR_PAGE = "viewEventByModerator.jsp";
+    public static final String VIEW_EVENT_PAGE = "viewEvent.jsp";
     public static final String EDIT_EVENT_PAGE = "editEvent.jsp";
     public static final String VIEW_REPORT_PAGE = "viewReport.jsp";
 

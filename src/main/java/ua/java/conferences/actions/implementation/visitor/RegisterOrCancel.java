@@ -8,8 +8,7 @@ import ua.java.conferences.services.*;
 
 import static ua.java.conferences.actions.ActionUtil.*;
 import static ua.java.conferences.actions.constants.ActionNames.*;
-import static ua.java.conferences.actions.constants.ParameterValues.CANCEL;
-import static ua.java.conferences.actions.constants.ParameterValues.REGISTER;
+import static ua.java.conferences.actions.constants.ParameterValues.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class RegisterOrCancel implements Action {

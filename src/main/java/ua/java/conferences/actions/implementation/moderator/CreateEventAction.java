@@ -12,7 +12,6 @@ import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class CreateEventAction implements Action {
-
     private final EventService eventService;
 
     public CreateEventAction() {

@@ -7,7 +7,7 @@
 <html lang="${sessionScope.locale}">
 
 <head>
-    <title>Conference Smart App. <fmt:message key="view.report"/></title>
+    <title>Conference Smart App. <fmt:message key="view.event"/></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -20,11 +20,13 @@
 
 <jsp:include page="fragments/menuChoice.jsp"/>
 
-<jsp:include page="pages/viewReportPage.jsp"/>
+<jsp:include page="pages/viewEventByModeratorPage.jsp"/>
 
 <jsp:include page="fragments/footer.jsp"/>
 
-<jsp:include page="fragments/deleteReportModal.jsp"/>
+<jsp:include page="fragments/deleteEventModal.jsp"/>
+
+<jsp:include page="fragments/addReportModal.jsp"/>
 
 </body>
 </html>

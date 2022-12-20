@@ -11,7 +11,6 @@ import static ua.java.conferences.actions.constants.ActionNames.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class SetRoleAction implements Action {
-
     private final UserService userService;
 
     public SetRoleAction() {

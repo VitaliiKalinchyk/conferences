@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setBundle basename="resources"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
@@ -7,10 +9,11 @@
 <html lang="${sessionScope.locale}">
 
 <head>
-    <title>Conference Smart App. <fmt:message key="view.report"/></title>
+    <title>Conference Smart App. <fmt:message key="events"/></title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/darkPagination.css">
     <script src="js/bootstrap.min.js"></script>
 </head>
 
@@ -20,11 +23,9 @@
 
 <jsp:include page="fragments/menuChoice.jsp"/>
 
-<jsp:include page="pages/viewReportPage.jsp"/>
+<jsp:include page="pages/viewEventsPage.jsp"/>
 
 <jsp:include page="fragments/footer.jsp"/>
-
-<jsp:include page="fragments/deleteReportModal.jsp"/>
 
 </body>
 </html>

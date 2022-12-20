@@ -5,7 +5,6 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <div class="col-lg-5 mx-auto p-4 py-md-5">
-
     <header class="d-flex align-items-center pb-0 mb-3 border-bottom">
         <span class="fs-4"><fmt:message key="change.password"/></span>
     </header>
@@ -39,5 +38,4 @@
 
         <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="change.password"/></button>
     </form>
-
 </div>

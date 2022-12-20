@@ -12,7 +12,6 @@ import static ua.java.conferences.actions.constants.Pages.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class SearchEventAction implements Action {
-
     private final EventService eventService;
     private final ReportService reportService;
 
@@ -24,7 +23,7 @@ public class SearchEventAction implements Action {
     @Override
     public String execute(HttpServletRequest request) throws ServiceException {
         transferStringFromSessionToRequest(request, MESSAGE);
-        String path = VIEW_EVENT_BY_MODERATOR_PAGE;
+        String path = VIEW_EVENT_PAGE;
         try {
             EventDTO event = getEventDTO(request);
             request.setAttribute(EVENT, event);

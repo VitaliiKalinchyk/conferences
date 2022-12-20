@@ -11,7 +11,6 @@ import static ua.java.conferences.actions.constants.ParameterValues.*;
 import static ua.java.conferences.actions.constants.Parameters.*;
 
 public class DeleteReportAction implements Action {
-
     private final ReportService reportService;
 
     public DeleteReportAction() {

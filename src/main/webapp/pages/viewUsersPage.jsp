@@ -5,7 +5,6 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <div class="col-lg-7 mx-auto p-4 py-md-5">
-
     <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
         <span class="fs-4"><fmt:message key="users"/></span>
     </header>
@@ -77,5 +76,6 @@
     </div>
 
     <c:set var="href" value="controller?action=view-users&role=${param.role}&sort=${param.sort}&order=${param.order}&" scope="request"/>
+
     <jsp:include page="/fragments/pagination.jsp"/>
 </div>

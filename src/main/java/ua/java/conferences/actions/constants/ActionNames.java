@@ -22,11 +22,13 @@ public final class ActionNames {
     public static final String VIEW_EVENT_BY_SPEAKER_ACTION = "view-event-by-speaker";
     public static final String OFFER_REPORT_ACTION = "offer-report";
     public static final String SET_OR_REMOVE_SPEAKER_BY_SPEAKER_ACTION = "set-or-remove-speaker-by-speaker";
+    public static final String VIEW_EVENTS_ACTION = "view-events";
     public static final String CREATE_EVENT_ACTION = "create-event";
     public static final String SEARCH_EVENT_ACTION = "search-event";
     public static final String DELETE_EVENT_ACTION = "delete-event";
     public static final String EDIT_EVENT_ACTION = "edit-event";
     public static final String SET_VISITORS_ACTION = "set-visitors";
+    public static final String CREATE_REPORT_ACTION = "create-report";
     public static final String VIEW_REPORT_ACTION = "view-report";
     public static final String CHANGE_TOPIC_ACTION = "change-topic";
     public static final String DELETE_REPORT_ACTION = "delete-report";

@@ -17,9 +17,7 @@ import static ua.java.conferences.entities.role.Role.*;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class ViewEventBySpeakerAction implements Action {
-
     private final EventService eventService;
-
     private final ReportService reportService;
 
     public ViewEventBySpeakerAction() {

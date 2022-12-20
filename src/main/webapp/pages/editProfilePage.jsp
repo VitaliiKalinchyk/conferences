@@ -6,7 +6,6 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <div class="col-lg-5 mx-auto p-4 py-md-5">
-
     <header class="d-flex align-items-center pb-0 mb-3 border-bottom">
         <span class="fs-4"><fmt:message key="edit.profile"/></span>
     </header>
@@ -65,5 +64,4 @@
     <p class="fs-6 col-md-8">
         <a href="changePassword.jsp" class="link-dark"><fmt:message key="change.password"/></a>
     </p>
-
 </div>

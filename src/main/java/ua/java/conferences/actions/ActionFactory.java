@@ -41,12 +41,14 @@ public final class ActionFactory {
         ACTION_MAP.put(OFFER_REPORT_ACTION, new OfferReportAction());
         ACTION_MAP.put(SET_OR_REMOVE_SPEAKER_BY_SPEAKER_ACTION, new SetOrRemoveSpeakerBySpeakerAction());
 
+        ACTION_MAP.put(VIEW_EVENTS_ACTION, new ViewEventsAction());
         ACTION_MAP.put(CREATE_EVENT_ACTION, new CreateEventAction());
         ACTION_MAP.put(SEARCH_EVENT_ACTION, new SearchEventAction());
         ACTION_MAP.put(DELETE_EVENT_ACTION, new DeleteEventAction());
         ACTION_MAP.put(EDIT_EVENT_ACTION, new EditEventAction());
         ACTION_MAP.put(SET_VISITORS_ACTION, new SetVisitorsAction());
         ACTION_MAP.put(VIEW_REPORT_ACTION, new ViewReportAction());
+        ACTION_MAP.put(CREATE_REPORT_ACTION, new CreateReportAction());
         ACTION_MAP.put(CHANGE_TOPIC_ACTION, new ChangeTopicAction());
         ACTION_MAP.put(DELETE_REPORT_ACTION, new DeleteReportAction());
         ACTION_MAP.put(SET_OR_REMOVE_SPEAKER_ACTION, new SetOrRemoveSpeakerAction());

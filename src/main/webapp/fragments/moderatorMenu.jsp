@@ -13,6 +13,10 @@
         <div class="collapse navbar-collapse" id="navbarCollapse2">
             <ul class="navbar-nav me-auto mx-4 mb-4 mb-md-0">
                 <li class="nav-item">
+                    <a class="nav-link text-decoration-underline" aria-current="page"
+                       href="controller?action=view-events"><fmt:message key="events"/></a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link text-decoration-underline" aria-current="page" href="createEvent.jsp">
                         <fmt:message key="create.event"/>
                     </a>

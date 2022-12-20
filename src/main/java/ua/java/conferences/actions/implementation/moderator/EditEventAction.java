@@ -15,7 +15,6 @@ import static ua.java.conferences.actions.constants.Parameters.*;
 import static ua.java.conferences.actions.constants.ParameterValues.*;
 
 public class EditEventAction implements Action {
-
     private final EventService eventService;
 
     public EditEventAction() {

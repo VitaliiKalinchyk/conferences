@@ -4,9 +4,9 @@
 <fmt:setBundle basename="resources"/>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
-<div class="col-lg-7 mx-auto p-4 py-md-5">
+<div class="col-lg-8 mx-auto p-4 py-md-5">
     <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
-        <span class="fs-4"><fmt:message key="your.events"/></span>
+        <span class="fs-4"><fmt:message key="events"/></span>
     </header>
 
     <c:if test="${empty requestScope.events}">
@@ -14,7 +14,7 @@
     </c:if>
 
     <form method="GET" action="controller" class="flex">
-        <input type="hidden" name="action" value="view-speakers-events">
+        <input type="hidden" name="action" value="view-events">
         <label>
             <select name="date" class="form-select mt-2">
                 <option><fmt:message key="select.date"/></option>
@@ -28,6 +28,9 @@
                 <option value="title" ${param.sort eq "title" ? "selected" : ""}><fmt:message key="title"/></option>
                 <option value="date" ${param.sort eq "date" ? "selected" : ""}><fmt:message key="date"/></option>
                 <option value="location" ${param.sort eq "location" ? "selected" : ""}><fmt:message key="location"/></option>
+                <option value="reports" ${param.sort eq "reports" ? "selected" : ""}><fmt:message key="reports"/></option>
+                <option value="registrations" ${param.sort eq "registrations" ? "selected" : ""}><fmt:message key="registrations"/></option>
+                <option value="visitors" ${param.sort eq "visitors" ? "selected" : ""}><fmt:message key="visitors"/></option>
             </select>
         </label>
         <label>
@@ -52,6 +55,9 @@
                     <th scope="col"><fmt:message key="title"/></th>
                     <th scope="col"><fmt:message key="date"/></th>
                     <th scope="col"><fmt:message key="location"/></th>
+                    <th scope="col"><fmt:message key="reports"/></th>
+                    <th scope="col"><fmt:message key="registrations"/></th>
+                    <th scope="col"><fmt:message key="visitors"/></th>
                     <th scope="col"><fmt:message key="action"/></th>
                 </tr>
                 </thead>
@@ -61,8 +67,11 @@
                         <td><c:out value="${event.title}"/></td>
                         <td><c:out value="${event.date}"/></td>
                         <td><c:out value="${event.location}"/></td>
+                        <td><c:out value="${event.reports}"/></td>
+                        <td><c:out value="${event.registrations}"/></td>
+                        <td><c:out value="${event.visitors}"/></td>
                         <td>
-                            <a class="link-dark" href=controller?action=view-event-by-speaker&event-id=${event.id}>
+                            <a class="link-dark" href=controller?action=search-event&event-id=${event.id}>
                                 <fmt:message key="view"/>
                             </a>
                         </td>
@@ -75,7 +84,7 @@
 
 
     <c:set var="href" scope="request"
-           value="controller?action=view-speakers-events&date=${param.date}&sort=${param.sort}&order=${param.order}&"/>
+           value="controller?action=view-events&date=${param.date}&sort=${param.sort}&order=${param.order}&"/>
 
     <jsp:include page="/fragments/pagination.jsp"/>
 </div>

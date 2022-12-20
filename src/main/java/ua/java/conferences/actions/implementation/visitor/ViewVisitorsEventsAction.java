@@ -15,7 +15,6 @@ import static ua.java.conferences.utils.PaginationUtil.*;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class ViewVisitorsEventsAction implements Action {
-
     private final EventService eventService;
 
     public ViewVisitorsEventsAction() {
