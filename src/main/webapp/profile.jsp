@@ -23,7 +23,7 @@
 
 <div class="col-lg-7 mx-auto p-4 py-md-5">
 
-    <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+    <header class="d-flex align-items-center pb-3 mb-4 border-bottom">
         <span class="fs-4"><fmt:message key="profile.info"/></span>
     </header>
 
@@ -48,7 +48,7 @@
         </c:choose><br>
     </main>
 
-    <a href="editProfile.jsp" class="btn btn-dark mt-4 mb-4"><fmt:message key="edit.profile"/></a>
+    <a href="editProfile.jsp" class="btn btn-dark mt-0 mb-1"><fmt:message key="edit.profile"/></a>
 
 </div>
 

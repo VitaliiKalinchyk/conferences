@@ -1,0 +1,80 @@
+package ua.java.conferences.controller.actions.implementation.speaker;
+
+import jakarta.servlet.http.HttpServletRequest;
+import ua.java.conferences.controller.context.AppContext;
+import ua.java.conferences.controller.actions.Action;
+import ua.java.conferences.dto.*;
+import ua.java.conferences.exceptions.*;
+import ua.java.conferences.model.services.*;
+
+import java.time.LocalDate;
+
+import static ua.java.conferences.controller.actions.ActionUtil.*;
+import static ua.java.conferences.controller.actions.constants.ActionNames.*;
+import static ua.java.conferences.controller.actions.constants.Pages.*;
+import static ua.java.conferences.controller.actions.constants.ParameterValues.*;
+import static ua.java.conferences.controller.actions.constants.Parameters.*;
+import static ua.java.conferences.model.entities.role.Role.SPEAKER;
+import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
+
+public class OfferReportAction implements Action {
+    private final ReportService reportService;
+    private final EventService eventService;
+
+    public OfferReportAction(AppContext appContext) {
+        reportService = appContext.getReportService();
+        eventService = appContext.getEventService();
+    }
+
+    @Override
+    public String execute(HttpServletRequest request) throws ServiceException {
+        return isPostMethod(request) ? executePost(request) : executeGet(request);
+    }
+
+    private String executeGet(HttpServletRequest request) throws ServiceException {
+        transferAttributes(request);
+        long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
+        try {
+            EventDTO event = getEvent(request.getParameter(EVENT_ID), speakerId);
+            request.setAttribute(EVENT, event);
+        } catch (NoSuchEventException e) {
+            request.setAttribute(ERROR, OFFER_FORBIDDEN);
+        }
+        return OFFER_REPORT_PAGE;
+    }
+
+    private EventDTO getEvent(String parameterEventId, long userId) throws ServiceException {
+        String query = eventQueryBuilder()
+                .setUserIdFilter(userId)
+                .getQuery();
+        return eventService.getSortedByUser(query, SPEAKER).stream()
+                .filter(e -> String.valueOf(e.getId()).equals(parameterEventId))
+                .filter(e -> LocalDate.now().isBefore(LocalDate.parse(e.getDate())))
+                .findAny()
+                .orElseThrow(NoSuchEventException::new);
+    }
+
+    private void transferAttributes(HttpServletRequest request) {
+        transferStringFromSessionToRequest(request, MESSAGE);
+        transferStringFromSessionToRequest(request, ERROR);
+    }
+
+    private String executePost(HttpServletRequest request) throws ServiceException {
+        ReportDTO reportDTO = getReportDTO(request);
+        try {
+            reportService.addReport(reportDTO);
+            request.getSession().setAttribute(MESSAGE, SUCCEED_ADD);
+        } catch (IncorrectFormatException e) {
+            request.getSession().setAttribute(ERROR, e.getMessage());
+        }
+        return getActionToRedirect(OFFER_REPORT_ACTION, EVENT_ID, String.valueOf(reportDTO.getEventId()));
+    }
+
+    private ReportDTO getReportDTO(HttpServletRequest request) {
+        return  ReportDTO.builder()
+                .topic(request.getParameter(TOPIC))
+                .speakerId(((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId())
+                .eventId(Long.parseLong(request.getParameter(EVENT_ID)))
+                .build();
+    }
+}

@@ -7,7 +7,7 @@ import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
-import static ua.java.conferences.utils.ValidatorUtil.*;
+import static ua.java.conferences.model.utils.ValidatorUtil.*;
 
 class ValidatorUtilTest {
 

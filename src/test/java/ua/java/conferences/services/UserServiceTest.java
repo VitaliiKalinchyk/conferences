@@ -3,21 +3,22 @@ package ua.java.conferences.services;
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
-import ua.java.conferences.dao.UserDAO;
+import ua.java.conferences.model.dao.UserDAO;
 import ua.java.conferences.dto.UserDTO;
-import ua.java.conferences.entities.User;
-import ua.java.conferences.entities.role.Role;
+import ua.java.conferences.model.entities.User;
+import ua.java.conferences.model.entities.role.Role;
 import ua.java.conferences.exceptions.*;
-import ua.java.conferences.services.implementation.UserServiceImpl;
+import ua.java.conferences.model.services.UserService;
+import ua.java.conferences.model.services.implementation.UserServiceImpl;
 
 import java.sql.SQLException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.utils.PasswordHashUtil.*;
+import static ua.java.conferences.model.utils.PasswordHashUtil.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
-import static ua.java.conferences.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
 
 class UserServiceTest {
     private final UserDAO userDAO = mock(UserDAO.class);

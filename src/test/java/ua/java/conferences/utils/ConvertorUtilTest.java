@@ -2,11 +2,13 @@ package ua.java.conferences.utils;
 
 import org.junit.jupiter.api.Test;
 import ua.java.conferences.dto.*;
-import ua.java.conferences.entities.*;
+import ua.java.conferences.model.entities.Event;
+import ua.java.conferences.model.entities.Report;
+import ua.java.conferences.model.entities.User;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.utils.ConvertorUtil.*;
+import static ua.java.conferences.model.utils.ConvertorUtil.*;
 
 class ConvertorUtilTest {
 
@@ -107,7 +109,6 @@ class ConvertorUtilTest {
                 .date(DATE_NAME)
                 .location(LOCATION)
                 .description(DESCRIPTION)
-                .location(LOCATION)
                 .reports(REPORTS)
                 .registrations(REGISTRATIONS)
                 .visitors(VISITORS)

@@ -1,11 +1,14 @@
 package ua.java.conferences.services;
 
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.dao.ReportDAO;
+import ua.java.conferences.model.dao.ReportDAO;
 import ua.java.conferences.dto.ReportDTO;
-import ua.java.conferences.entities.*;
 import ua.java.conferences.exceptions.*;
-import ua.java.conferences.services.implementation.ReportServiceImpl;
+import ua.java.conferences.model.entities.Event;
+import ua.java.conferences.model.entities.Report;
+import ua.java.conferences.model.entities.User;
+import ua.java.conferences.model.services.ReportService;
+import ua.java.conferences.model.services.implementation.ReportServiceImpl;
 
 import java.util.*;
 

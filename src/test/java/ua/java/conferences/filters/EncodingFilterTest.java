@@ -3,6 +3,8 @@ package ua.java.conferences.filters;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.junit.jupiter.api.Test;
+import ua.java.conferences.actions.MyRequest;
+import ua.java.conferences.controller.filters.EncodingFilter;
 
 import java.io.IOException;
 
@@ -23,23 +25,5 @@ class EncodingFilterTest {
         MyRequest myRequest = new MyRequest(request);
         filter.doFilter(myRequest, response, chain);
         assertEquals("UTF-8", myRequest.getCharacterEncoding());
-    }
-
-    private static class MyRequest extends HttpServletRequestWrapper {
-        private String encoding;
-
-        public MyRequest(HttpServletRequest request) {
-            super(request);
-        }
-
-        @Override
-        public String getCharacterEncoding() {
-            return encoding;
-        }
-
-        @Override
-        public void setCharacterEncoding(String enc) {
-            encoding = enc;
-        }
     }
 }

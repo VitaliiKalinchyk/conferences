@@ -1,14 +1,14 @@
 package ua.java.conferences.controller;
 
-import ua.java.conferences.actions.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
 import org.slf4j.*;
-
-import static ua.java.conferences.actions.constants.Pages.*;
-import static ua.java.conferences.actions.constants.Parameters.*;
+import ua.java.conferences.controller.actions.*;
 
 import java.io.IOException;
+
+import static ua.java.conferences.controller.actions.constants.Pages.ERROR_PAGE;
+import static ua.java.conferences.controller.actions.constants.Parameters.ACTION;
 
 public class Controller extends HttpServlet {
     private static final Logger logger = LoggerFactory.getLogger(Controller.class);

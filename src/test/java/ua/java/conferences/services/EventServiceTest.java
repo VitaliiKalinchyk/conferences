@@ -1,12 +1,13 @@
 package ua.java.conferences.services;
 
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.dao.EventDAO;
+import ua.java.conferences.model.dao.EventDAO;
 import ua.java.conferences.dto.EventDTO;
-import ua.java.conferences.entities.Event;
-import ua.java.conferences.entities.role.Role;
+import ua.java.conferences.model.entities.Event;
+import ua.java.conferences.model.entities.role.Role;
 import ua.java.conferences.exceptions.*;
-import ua.java.conferences.services.implementation.EventServiceImpl;
+import ua.java.conferences.model.services.EventService;
+import ua.java.conferences.model.services.implementation.EventServiceImpl;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -16,7 +17,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
-import static ua.java.conferences.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
 
 class EventServiceTest {
 

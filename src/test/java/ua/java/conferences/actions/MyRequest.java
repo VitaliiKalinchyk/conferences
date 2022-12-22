@@ -2,12 +2,14 @@ package ua.java.conferences.actions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
+import jakarta.servlet.http.HttpSession;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class MyRequest extends HttpServletRequestWrapper {
     private final Map<String, Object> attributes = new HashMap<>();
+    private final HttpSession session = new MySession();
+    private String encoding;
 
     public MyRequest(HttpServletRequest request) {
         super(request);
@@ -21,5 +23,20 @@ public class MyRequest extends HttpServletRequestWrapper {
     @Override
     public Object getAttribute(String name) {
         return attributes.get(name);
+    }
+
+    @Override
+    public HttpSession getSession() {
+        return session;
+    }
+
+    @Override
+    public String getCharacterEncoding() {
+        return encoding;
+    }
+
+    @Override
+    public void setCharacterEncoding(String enc) {
+        encoding = enc;
     }
 }

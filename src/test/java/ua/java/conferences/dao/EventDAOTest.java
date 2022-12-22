@@ -1,8 +1,9 @@
 package ua.java.conferences.dao;
 
 import org.junit.jupiter.api.*;
-import ua.java.conferences.entities.*;
-import ua.java.conferences.entities.role.Role;
+import ua.java.conferences.model.entities.Event;
+import ua.java.conferences.model.entities.Report;
+import ua.java.conferences.model.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 
 import java.io.FileNotFoundException;
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.dao.DAOTestUtils.*;
-import static ua.java.conferences.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
 
 class EventDAOTest {
 

@@ -1,9 +1,10 @@
 package ua.java.conferences.services;
 
 import org.junit.jupiter.api.Test;
+import ua.java.conferences.model.services.ServiceFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
+import static ua.java.conferences.model.dao.constants.DbImplementations.MYSQL;
 
 class ServiceFactoryTest {
 

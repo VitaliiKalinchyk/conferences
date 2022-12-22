@@ -1,13 +1,19 @@
 package ua.java.conferences.dao;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
-import ua.java.conferences.entities.*;
+import ua.java.conferences.model.dao.DAOFactory;
+import ua.java.conferences.model.dao.EventDAO;
+import ua.java.conferences.model.dao.ReportDAO;
+import ua.java.conferences.model.dao.UserDAO;
+import ua.java.conferences.model.entities.Event;
+import ua.java.conferences.model.entities.Report;
+import ua.java.conferences.model.entities.User;
 
 import java.io.*;
 import java.sql.*;
 
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.dao.constants.DbImplementations.MYSQL;
+import static ua.java.conferences.model.dao.constants.DbImplementations.MYSQL;
 
 public final class DAOTestUtils {
 
