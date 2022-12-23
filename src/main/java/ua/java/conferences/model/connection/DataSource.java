@@ -11,6 +11,7 @@ import java.util.Properties;
 
 public class DataSource {
     private static final Logger logger = LoggerFactory.getLogger(DataSource.class);
+    private static final String CONNECTION_FILE = "connection.properties";
     private static final HikariConfig config = new HikariConfig();
     private static final HikariDataSource ds;
 
@@ -34,8 +35,7 @@ public class DataSource {
 
     private static Properties getProperties() {
         Properties properties = new Properties();
-        String connectionFile = "connection.properties";
-        try (InputStream resource = DataSource.class.getClassLoader().getResourceAsStream(connectionFile)){
+        try (InputStream resource = DataSource.class.getClassLoader().getResourceAsStream(CONNECTION_FILE)){
             properties.load(resource);
         } catch (IOException e) {
             logger.error(e.getMessage());
