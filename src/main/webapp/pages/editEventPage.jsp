@@ -39,7 +39,7 @@
 
                 <div class="form-group">
 
-                    <label class="form-label fs-5" for="title"><fmt:message key="title"/>: </label>
+                    <label class="form-label fs-5" for="title"><fmt:message key="title"/>*: </label>
                     <input class="form-control" name="title" id="title"
                            pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!@#$^&*()={}| ]{2,70}"
                            required value="${titleValue}">

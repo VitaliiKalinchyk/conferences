@@ -6,7 +6,7 @@
 <fmt:setBundle basename="resources"/>
 
 <div class="col-lg-5 mx-auto p-4 py-md-5">
-  <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+  <header class="d-flex align-items-center pb-3 mb-3 border-bottom">
     <span class="fs-4"><fmt:message key="search.event"/></span>
   </header>
 
@@ -25,7 +25,7 @@
     </c:if><br>
     </div>
 
-    <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="search"/></button>
+    <button type="submit" class="btn btn-dark mt-3 mb-4"><fmt:message key="search"/></button>
 
   </form>
 </div>

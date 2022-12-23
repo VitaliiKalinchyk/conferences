@@ -20,7 +20,7 @@
             <p class="fs-5"><fmt:message key="description"/>: ${requestScope.event.description} </p>
 
             <c:if test="${requestScope.isComing}">
-                <a class="btn btn-dark mt-4 mb-4"
+                <a class="btn btn-dark mt-2 mb-4"
                    href="controller?action=offer-report&event-id=${requestScope.event.id}">
                     <fmt:message key="offer.report"/>
                 </a>

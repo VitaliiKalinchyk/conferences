@@ -1,14 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
-<%@ taglib uri = "http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="resources"/>
 
 <div class="col-lg-5 mx-auto p-4 py-md-5">
     <header class="d-flex align-items-center pb-0 mb-3 border-bottom">
         <span class="fs-4"><fmt:message key="create.event"/></span>
-    </header>
+    </header><br>
 
     <form method="POST" action="controller">
         <input type="hidden" name="action" value="create-event">

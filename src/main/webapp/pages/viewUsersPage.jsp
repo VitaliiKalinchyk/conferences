@@ -26,9 +26,8 @@
             </div>
             <div class="flex-column">
                 <label for="records"><fmt:message key="number.records"/></label>
-                <input class="col-2" type="number" min="1"
-                       value="${not empty requestScope.records ? requestScope.records : "5"}"
-                       name="records" id="records">
+                <input class="col-2" type="number" min="1" name="records" id="records"
+                       value="${not empty requestScope.records ? requestScope.records : "5"}">&nbsp&nbsp&nbsp&nbsp&nbsp
                 <button type="submit" class="btn btn-dark mt-2 mb-3"><fmt:message key="submit"/></button>
             </div>
         </div>
@@ -46,9 +45,12 @@
                     <c:set var="bySurname" value="sort=surname&"/>
                     <c:set var="idOrder" value="order=${empty param.sort ? 'DESC' :
                             param.sort ne 'id' || empty param.order || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
-                    <c:set var="emailOrder" value="order=${param.sort ne 'email' || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
-                    <c:set var="nameOrder" value="order=${param.sort ne 'name' || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
-                    <c:set var="surnameOrder" value="order=${param.sort ne 'surname' || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
+                    <c:set var="emailOrder"
+                           value="order=${param.sort ne 'email' || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
+                    <c:set var="nameOrder"
+                           value="order=${param.sort ne 'name' || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
+                    <c:set var="surnameOrder"
+                           value="order=${param.sort ne 'surname' || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
                     <c:set var="limits" value="&offset=0&records=${param.records}"/>
 
                     <th scope="col">
