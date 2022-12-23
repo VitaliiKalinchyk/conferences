@@ -8,7 +8,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
-import static ua.java.conferences.model.utils.PaginationUtil.paginate;
+import static ua.java.conferences.utils.PaginationUtil.paginate;
 
 class PaginationUtilTest {
     private final HttpServletRequest request = mock(HttpServletRequest.class);

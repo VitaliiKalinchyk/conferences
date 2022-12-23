@@ -1,4 +1,4 @@
-package ua.java.conferences.model.utils.query;
+package ua.java.conferences.utils.query;
 
 import java.util.*;
 
@@ -8,13 +8,14 @@ public class UserQueryBuilder extends QueryBuilder {
     private static final Set<String> USER_SORT_FIELDS_SET = new HashSet<>();
 
     static {
+        USER_SORT_FIELDS_SET.add(ID);
         USER_SORT_FIELDS_SET.add(EMAIL);
         USER_SORT_FIELDS_SET.add(NAME);
         USER_SORT_FIELDS_SET.add(SURNAME);
     }
 
     public UserQueryBuilder() {
-        super("id");
+        super(ID);
     }
 
     @Override

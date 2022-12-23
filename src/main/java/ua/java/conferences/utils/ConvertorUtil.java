@@ -1,4 +1,4 @@
-package ua.java.conferences.model.utils;
+package ua.java.conferences.utils;
 
 import ua.java.conferences.dto.*;
 import ua.java.conferences.model.entities.*;

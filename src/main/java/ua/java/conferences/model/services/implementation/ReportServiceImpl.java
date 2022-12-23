@@ -9,8 +9,8 @@ import ua.java.conferences.model.services.ReportService;
 import java.util.*;
 
 import static ua.java.conferences.exceptions.constants.Message.ENTER_CORRECT_TOPIC;
-import static ua.java.conferences.model.utils.ConvertorUtil.*;
-import static ua.java.conferences.model.utils.ValidatorUtil.*;
+import static ua.java.conferences.utils.ConvertorUtil.*;
+import static ua.java.conferences.utils.ValidatorUtil.*;
 
 public class ReportServiceImpl implements ReportService {
     private final ReportDAO reportDAO;

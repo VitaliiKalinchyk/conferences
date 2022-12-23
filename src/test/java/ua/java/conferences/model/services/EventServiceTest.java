@@ -19,7 +19,7 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
-import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 class EventServiceTest {
 

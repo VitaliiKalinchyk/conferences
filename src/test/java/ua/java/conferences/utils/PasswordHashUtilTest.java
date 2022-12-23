@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import ua.java.conferences.exceptions.IncorrectPasswordException;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ua.java.conferences.model.utils.PasswordHashUtil.*;
+import static ua.java.conferences.utils.PasswordHashUtil.*;
 
 class PasswordHashUtilTest {
     private static final String password = "PassWord1";

@@ -8,7 +8,7 @@ import ua.java.conferences.model.entities.User;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.model.utils.ConvertorUtil.*;
+import static ua.java.conferences.utils.ConvertorUtil.*;
 
 class ConvertorUtilTest {
 

@@ -1,14 +1,14 @@
 package ua.java.conferences.utils;
 
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.model.utils.query.EventQueryBuilder;
-import ua.java.conferences.model.utils.query.QueryBuilder;
-import ua.java.conferences.model.utils.query.UserQueryBuilder;
-import ua.java.conferences.model.utils.query.VisitorEventQueryBuilder;
+import ua.java.conferences.utils.query.EventQueryBuilder;
+import ua.java.conferences.utils.query.QueryBuilder;
+import ua.java.conferences.utils.query.UserQueryBuilder;
+import ua.java.conferences.utils.query.VisitorEventQueryBuilder;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 class QueryBuilderTest {
 

@@ -6,13 +6,13 @@ import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.*;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.model.services.*;
-import ua.java.conferences.model.utils.query.QueryBuilder;
+import ua.java.conferences.utils.query.QueryBuilder;
 
 import static ua.java.conferences.controller.actions.constants.Pages.VIEW_SPEAKERS_EVENTS_PAGE;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.model.entities.role.Role.SPEAKER;
-import static ua.java.conferences.model.utils.PaginationUtil.paginate;
-import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.utils.PaginationUtil.paginate;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class ViewSpeakersEventsAction implements Action {
     private final EventService eventService;

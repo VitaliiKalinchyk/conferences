@@ -1,4 +1,4 @@
-package ua.java.conferences.model.utils;
+package ua.java.conferences.utils;
 
 import de.mkammerer.argon2.*;
 import ua.java.conferences.exceptions.IncorrectPasswordException;

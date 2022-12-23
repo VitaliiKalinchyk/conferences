@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 class UserDAOTest {
 

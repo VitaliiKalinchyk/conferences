@@ -6,13 +6,13 @@ import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.model.services.*;
-import ua.java.conferences.model.utils.query.QueryBuilder;
+import ua.java.conferences.utils.query.QueryBuilder;
 
 import static ua.java.conferences.controller.actions.constants.Pages.VIEW_VISITORS_EVENTS_PAGE;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.model.entities.role.Role.VISITOR;
-import static ua.java.conferences.model.utils.PaginationUtil.*;
-import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.utils.PaginationUtil.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class ViewVisitorsEventsAction implements Action {
     private final EventService eventService;

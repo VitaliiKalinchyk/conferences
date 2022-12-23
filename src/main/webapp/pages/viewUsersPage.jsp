@@ -5,41 +5,33 @@
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 
 <div class="col-lg-7 mx-auto p-4 py-md-5">
-    <header class="d-flex align-items-center pb-3 mb-5 border-bottom">
+    <header class="d-flex align-items-center pb-3 mb-3 border-bottom">
         <span class="fs-4"><fmt:message key="users"/></span>
     </header>
 
-    <form method="GET" action="controller" class="flex">
-        <input type="hidden" name="action" value="view-users">
-        <label>
-            <select name="role" class="form-select mt-2">
-                <option><fmt:message key="select.role"/></option>
-                <option value="4" ${param.role eq "4" ? "selected" : ""}><fmt:message key="VISITOR"/></option>
-                <option value="3" ${param.role eq "3" ? "selected" : ""}><fmt:message key="SPEAKER"/></option>
-                <option value="2" ${param.role eq "2" ? "selected" : ""}><fmt:message key="MODERATOR"/></option>
-                <option value="1" ${param.role eq "1" ? "selected" : ""}><fmt:message key="ADMIN"/></option>
-            </select>
-        </label>
-        <label>
-            <select name="sort" class="form-select mt-2">
-                <option value="id"><fmt:message key="select.sort"/></option>
-                <option value="email" ${param.sort eq "email" ? "selected" : ""}><fmt:message key="email"/></option>
-                <option value="name" ${param.sort eq "name" ? "selected" : ""}><fmt:message key="name"/></option>
-                <option value="surname" ${param.sort eq "surname" ? "selected" : ""}><fmt:message key="surname"/></option>
-            </select>
-        </label>
-        <label>
-            <select name="order" class="form-select mt-2">
-                <option value="ASC"><fmt:message key="select.order"/></option>
-                <option value="ASC" ${param.order eq "ASC" ? "selected" : ""}><fmt:message key="asc"/></option>
-                <option value="DESC" ${param.order eq "DESC" ? "selected" : ""}><fmt:message key="desc"/></option>
-            </select>
-        </label>
-        <input type="hidden" name="offset" value="0">
-        <label for="records"><fmt:message key="number.records"/></label>
-        <input class="col-1" type="number" min="1" value="${not empty requestScope.records ? requestScope.records : "5"}"
-               name="records" id="records">&nbsp&nbsp&nbsp&nbsp&nbsp
-        <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="submit"/></button>
+    <form method="GET" action="controller">
+        <div class="d-flex justify-content-between">
+            <input type="hidden" name="action" value="view-users">
+            <input type="hidden" name="offset" value="0">
+            <div class="flex-column">
+                <label>
+                    <select name="role" class="form-select mt-2" onchange='submit();'>
+                        <option><fmt:message key="select.role"/></option>
+                        <option value="4" ${param.role eq "4" ? "selected" : ""}><fmt:message key="VISITOR"/></option>
+                        <option value="3" ${param.role eq "3" ? "selected" : ""}><fmt:message key="SPEAKER"/></option>
+                        <option value="2" ${param.role eq "2" ? "selected" : ""}><fmt:message key="MODERATOR"/></option>
+                        <option value="1" ${param.role eq "1" ? "selected" : ""}><fmt:message key="ADMIN"/></option>
+                    </select>
+                </label>
+            </div>
+            <div class="flex-column">
+                <label for="records"><fmt:message key="number.records"/></label>
+                <input class="col-2" type="number" min="1"
+                       value="${not empty requestScope.records ? requestScope.records : "5"}"
+                       name="records" id="records">
+                <button type="submit" class="btn btn-dark mt-2 mb-3"><fmt:message key="submit"/></button>
+            </div>
+        </div>
     </form>
 
     <div class="bd-example-snippet bd-code-snippet">
@@ -47,10 +39,42 @@
             <table class="table table-striped" aria-label="user-table">
                 <thead>
                 <tr>
-                    <th scope="col"><fmt:message key="id"/></th>
-                    <th scope="col"><fmt:message key="email"/></th>
-                    <th scope="col"><fmt:message key="name"/></th>
-                    <th scope="col"><fmt:message key="surname"/></th>
+                    <c:set var="base" value="controller?action=view-users&role=${param.role}&"/>
+                    <c:set var="byId" value="sort=id&"/>
+                    <c:set var="byEmail" value="sort=email&"/>
+                    <c:set var="byName" value="sort=name&"/>
+                    <c:set var="bySurname" value="sort=surname&"/>
+                    <c:set var="idOrder" value="order=${empty param.sort ? 'DESC' :
+                            param.sort ne 'id' || empty param.order || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
+                    <c:set var="emailOrder" value="order=${param.sort ne 'email' || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
+                    <c:set var="nameOrder" value="order=${param.sort ne 'name' || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
+                    <c:set var="surnameOrder" value="order=${param.sort ne 'surname' || param.order eq 'DESC' ? 'ASC' : 'DESC'}"/>
+                    <c:set var="limits" value="&offset=0&records=${param.records}"/>
+
+                    <th scope="col">
+                        <fmt:message key="id"/>
+                        <a href="${base.concat(byId).concat(idOrder).concat(limits)}">
+                            <i class="bi bi-arrow-down-up link-dark"></i>
+                        </a>
+                    </th>
+                    <th scope="col">
+                        <fmt:message key="email"/>
+                        <a href="${base.concat(byEmail).concat(emailOrder).concat(limits)}">
+                            <i class="bi bi-arrow-down-up link-dark"></i>
+                        </a>
+                    </th>
+                    <th scope="col">
+                        <fmt:message key="name"/>
+                        <a href="${base.concat(byName).concat(nameOrder).concat(limits)}">
+                            <i class="bi bi-arrow-down-up link-dark"></i>
+                        </a>
+                    </th>
+                    <th scope="col">
+                        <fmt:message key="surname"/>
+                        <a href="${base.concat(bySurname).concat(surnameOrder).concat(limits)}">
+                            <i class="bi bi-arrow-down-up link-dark"></i>
+                        </a>
+                    </th>
                     <th scope="col"><fmt:message key="role"/></th>
                     <th scope="col"><fmt:message key="action"/></th>
                 </tr>
@@ -75,7 +99,8 @@
         </div>
     </div>
 
-    <c:set var="href" value="controller?action=view-users&role=${param.role}&sort=${param.sort}&order=${param.order}&" scope="request"/>
+    <c:set var="href" value="controller?action=view-users&role=${param.role}&sort=${param.sort}&order=${param.order}&"
+           scope="request"/>
 
     <jsp:include page="/fragments/pagination.jsp"/>
 </div>

@@ -15,7 +15,7 @@ import static ua.java.conferences.controller.actions.constants.Pages.*;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.*;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.model.entities.role.Role.SPEAKER;
-import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class OfferReportAction implements Action {
     private final ReportService reportService;

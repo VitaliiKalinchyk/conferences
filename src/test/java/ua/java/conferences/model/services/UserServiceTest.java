@@ -17,9 +17,9 @@ import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.model.utils.PasswordHashUtil.*;
+import static ua.java.conferences.utils.PasswordHashUtil.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
-import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 class UserServiceTest {
     private final UserDAO userDAO = mock(UserDAO.class);

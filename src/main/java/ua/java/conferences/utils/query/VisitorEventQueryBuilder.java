@@ -1,4 +1,4 @@
-package ua.java.conferences.model.utils.query;
+package ua.java.conferences.utils.query;
 
 public class VisitorEventQueryBuilder extends EventQueryBuilder {
     @Override

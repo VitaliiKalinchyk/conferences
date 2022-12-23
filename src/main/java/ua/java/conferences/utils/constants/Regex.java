@@ -1,4 +1,4 @@
-package ua.java.conferences.model.utils.constants;
+package ua.java.conferences.utils.constants;
 
 public class Regex {
     public static final String EMAIL_REGEX = "^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";

@@ -5,12 +5,12 @@ import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.model.services.*;
-import ua.java.conferences.model.utils.query.QueryBuilder;
+import ua.java.conferences.utils.query.QueryBuilder;
 
 import static ua.java.conferences.controller.actions.constants.Pages.*;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
-import static ua.java.conferences.model.utils.PaginationUtil.*;
-import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.utils.PaginationUtil.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class ViewUsersAction implements Action {
     private final UserService userService;

@@ -1,33 +1,33 @@
-package ua.java.conferences.model.utils;
+package ua.java.conferences.utils;
 
 import ua.java.conferences.exceptions.*;
+import ua.java.conferences.utils.constants.Regex;
 
 import java.time.LocalDate;
 
 import static ua.java.conferences.exceptions.constants.Message.*;
-import static ua.java.conferences.model.utils.constants.Regex.*;
 
 public final class ValidatorUtil {
 
     public static void validateEmail(String email) throws IncorrectFormatException {
-        validateFormat(email, EMAIL_REGEX, ENTER_CORRECT_EMAIL);
+        validateFormat(email, Regex.EMAIL_REGEX, ENTER_CORRECT_EMAIL);
     }
 
     public static void validatePassword(String password) throws IncorrectFormatException {
-        validateFormat(password, PASSWORD_REGEX, ENTER_CORRECT_PASSWORD);
+        validateFormat(password, Regex.PASSWORD_REGEX, ENTER_CORRECT_PASSWORD);
     }
 
 
     public static void validateName(String name, String message) throws IncorrectFormatException {
-        validateFormat(name, NAME_REGEX, message);
+        validateFormat(name, Regex.NAME_REGEX, message);
     }
 
     public static void validateComplexName(String name, String message) throws IncorrectFormatException {
-        validateFormat(name, COMPLEX_NAME_REGEX, message);
+        validateFormat(name, Regex.COMPLEX_NAME_REGEX, message);
     }
 
     public static void validateDescription(String name) throws IncorrectFormatException {
-        validateFormat(name, DESCRIPTION_REGEX, ENTER_CORRECT_DESCRIPTION);
+        validateFormat(name, Regex.DESCRIPTION_REGEX, ENTER_CORRECT_DESCRIPTION);
     }
 
     private static void validateFormat(String name, String regex,String message) throws IncorrectFormatException {

@@ -10,10 +10,10 @@ import ua.java.conferences.model.services.UserService;
 import java.util.*;
 
 import static ua.java.conferences.exceptions.constants.Message.*;
-import static ua.java.conferences.model.utils.ConvertorUtil.*;
-import static ua.java.conferences.model.utils.PasswordHashUtil.*;
-import static ua.java.conferences.model.utils.ValidatorUtil.*;
-import static ua.java.conferences.model.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.utils.ConvertorUtil.*;
+import static ua.java.conferences.utils.PasswordHashUtil.*;
+import static ua.java.conferences.utils.ValidatorUtil.*;
+import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
 public class UserServiceImpl implements UserService {
 
