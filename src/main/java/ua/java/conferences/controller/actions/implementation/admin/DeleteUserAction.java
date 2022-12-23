@@ -26,7 +26,7 @@ public class DeleteUserAction implements Action {
 
     private String executeGet(HttpServletRequest request) {
         transferStringFromSessionToRequest(request, MESSAGE);
-        return SEARCH_USERS_PAGE;
+        return SEARCH_USER_PAGE;
     }
 
     private String executePost(HttpServletRequest request) throws ServiceException {

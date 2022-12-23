@@ -1,10 +1,7 @@
-package ua.java.conferences.actions;
+package ua.java.conferences.controller.actions;
 
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.controller.actions.Action;
-import ua.java.conferences.controller.actions.ActionFactory;
-import ua.java.conferences.controller.actions.implementation.base.DefaultAction;
-import ua.java.conferences.controller.actions.implementation.base.SignInAction;
+import ua.java.conferences.controller.actions.implementation.base.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.controller.actions.ActionFactory.getActionFactory;

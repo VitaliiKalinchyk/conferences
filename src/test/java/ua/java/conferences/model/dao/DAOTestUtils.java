@@ -1,13 +1,7 @@
-package ua.java.conferences.dao;
+package ua.java.conferences.model.dao;
 
 import org.apache.ibatis.jdbc.ScriptRunner;
-import ua.java.conferences.model.dao.DAOFactory;
-import ua.java.conferences.model.dao.EventDAO;
-import ua.java.conferences.model.dao.ReportDAO;
-import ua.java.conferences.model.dao.UserDAO;
-import ua.java.conferences.model.entities.Event;
-import ua.java.conferences.model.entities.Report;
-import ua.java.conferences.model.entities.User;
+import ua.java.conferences.model.entities.*;
 
 import java.io.*;
 import java.sql.*;

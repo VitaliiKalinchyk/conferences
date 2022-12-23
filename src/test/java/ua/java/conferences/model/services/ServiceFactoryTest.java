@@ -1,7 +1,6 @@
-package ua.java.conferences.services;
+package ua.java.conferences.model.services;
 
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.model.services.ServiceFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ua.java.conferences.model.dao.constants.DbImplementations.MYSQL;

@@ -1,14 +1,15 @@
-package ua.java.conferences.services;
+package ua.java.conferences.model.services;
 
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.*;
 
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 import ua.java.conferences.model.dao.UserDAO;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.model.entities.User;
 import ua.java.conferences.model.entities.role.Role;
 import ua.java.conferences.exceptions.*;
-import ua.java.conferences.model.services.UserService;
 import ua.java.conferences.model.services.implementation.UserServiceImpl;
 
 import java.sql.SQLException;
@@ -32,40 +33,87 @@ class UserServiceTest {
        assertDoesNotThrow(() -> userService.add(userDTO, PASSWORD, PASSWORD));
     }
 
-    @Test
-    void testWrongEmailRegistration() throws DAOException {
+    @ParameterizedTest
+    @ValueSource(strings = {"email", "email.com", "email@com", "email@epam.m", "email@epam.mmmmmmmm", "email@epam.444"})
+    void testWrongEmailRegistration(String email) throws DAOException {
         doNothing().when(userDAO).add(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
-        userDTO.setEmail(INCORRECT_EMAIL);
+        userDTO.setEmail(email);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
                 () -> userService.add(userDTO, PASSWORD, PASSWORD));
         assertEquals(ENTER_CORRECT_EMAIL, e.getMessage());
     }
 
-    @Test
-    void testWrongPassRegistration() throws DAOException {
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testNullEmailRegistration(String email) throws DAOException {
+        doNothing().when(userDAO).add(isA(User.class));
+        UserDTO userDTO = getTestUserDTO();
+        userDTO.setEmail(email);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
+                () -> userService.add(userDTO, PASSWORD, PASSWORD));
+        assertEquals(ENTER_CORRECT_EMAIL, e.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"Pass1", "PASSWORD", "password", "12345678", "PASSWORD1", "password1", "password1Password1234"})
+    void testWrongPassRegistration(String password) throws DAOException {
         doNothing().when(userDAO).add(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
-                () -> userService.add(userDTO, INCORRECT_PASSWORD, INCORRECT_PASSWORD));
+                () -> userService.add(userDTO, password, password));
         assertEquals(ENTER_CORRECT_PASSWORD, e.getMessage());
     }
 
-    @Test
-    void testWrongNameRegistration() throws DAOException {
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testNullPassRegistration(String password) throws DAOException {
         doNothing().when(userDAO).add(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
-        userDTO.setName(INCORRECT_NAME);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
+                () -> userService.add(userDTO, password, password));
+        assertEquals(ENTER_CORRECT_PASSWORD, e.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "123", "!!!", "$*$", "Julian 2", "X Æ A-12"})
+    void testWrongNameRegistration(String name) throws DAOException {
+        doNothing().when(userDAO).add(isA(User.class));
+        UserDTO userDTO = getTestUserDTO();
+        userDTO.setName(name);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
                 () -> userService.add(userDTO, PASSWORD, PASSWORD));
         assertEquals(ENTER_CORRECT_NAME, e.getMessage());
     }
 
-    @Test
-    void testWrongSurnameRegistration() throws DAOException {
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testNullNameRegistration(String name) throws DAOException {
         doNothing().when(userDAO).add(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
-        userDTO.setSurname(INCORRECT_SURNAME);
+        userDTO.setName(name);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
+                () -> userService.add(userDTO, PASSWORD, PASSWORD));
+        assertEquals(ENTER_CORRECT_NAME, e.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "123", "!!!", "$*$", "Julian 2", "X Æ A-12"})
+    void testWrongSurnameRegistration(String surname) throws DAOException {
+        doNothing().when(userDAO).add(isA(User.class));
+        UserDTO userDTO = getTestUserDTO();
+        userDTO.setSurname(surname);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
+                () -> userService.add(userDTO, PASSWORD, PASSWORD));
+        assertEquals(ENTER_CORRECT_SURNAME, e.getMessage());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testNullSurnameRegistration(String surname) throws DAOException {
+        doNothing().when(userDAO).add(isA(User.class));
+        UserDTO userDTO = getTestUserDTO();
+        userDTO.setSurname(surname);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
                 () -> userService.add(userDTO, PASSWORD, PASSWORD));
         assertEquals(ENTER_CORRECT_SURNAME, e.getMessage());

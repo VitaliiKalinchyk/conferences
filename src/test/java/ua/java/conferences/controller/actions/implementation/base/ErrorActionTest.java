@@ -1,8 +1,7 @@
-package ua.java.conferences.actions.implementation.base;
+package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.controller.actions.implementation.base.ErrorAction;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;

@@ -27,6 +27,6 @@ public class AuthenticationFilter implements Filter {
     }
 
     private boolean isAccessDenied(HttpServletRequest request) {
-        return (getDomain(request.getServletPath(), request.getParameter(ACTION)).checkAccess());
+        return getDomain(request.getServletPath(), request.getParameter(ACTION)).checkAccess();
     }
 }

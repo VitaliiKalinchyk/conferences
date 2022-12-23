@@ -1,10 +1,10 @@
-package ua.java.conferences.actions.implementation.base;
+package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.actions.MyRequest;
-import ua.java.conferences.actions.MySession;
-import ua.java.conferences.controller.actions.implementation.base.SignOutAction;
+import ua.java.conferences.controller.actions.MyRequest;
+import ua.java.conferences.controller.actions.MySession;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -17,6 +17,6 @@ class SignOutActionTest {
     void testExecute() {
         MyRequest myRequest = new MyRequest(request);
         assertEquals(SIGN_IN_PAGE, new SignOutAction().execute(myRequest));
-        assertFalse(((MySession)myRequest.getSession()).isValid);
+        Assertions.assertFalse(((MySession)myRequest.getSession()).isValid);
     }
 }

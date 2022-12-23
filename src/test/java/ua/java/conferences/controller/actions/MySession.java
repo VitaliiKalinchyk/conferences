@@ -1,4 +1,4 @@
-package ua.java.conferences.actions;
+package ua.java.conferences.controller.actions;
 
 import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.HttpSession;

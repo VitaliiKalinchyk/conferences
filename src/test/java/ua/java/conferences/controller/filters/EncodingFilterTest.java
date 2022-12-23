@@ -1,10 +1,9 @@
-package ua.java.conferences.filters;
+package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.actions.MyRequest;
-import ua.java.conferences.controller.filters.EncodingFilter;
+import ua.java.conferences.controller.actions.MyRequest;
 
 import java.io.IOException;
 

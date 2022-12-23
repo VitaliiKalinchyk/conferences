@@ -1,12 +1,14 @@
-package ua.java.conferences.services;
+package ua.java.conferences.model.services;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import ua.java.conferences.model.dao.EventDAO;
 import ua.java.conferences.dto.EventDTO;
 import ua.java.conferences.model.entities.Event;
 import ua.java.conferences.model.entities.role.Role;
 import ua.java.conferences.exceptions.*;
-import ua.java.conferences.model.services.EventService;
 import ua.java.conferences.model.services.implementation.EventServiceImpl;
 
 import java.sql.SQLException;
@@ -31,11 +33,22 @@ class EventServiceTest {
         assertDoesNotThrow(() -> eventService.addEvent(getTestEventDTO()));
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = {"q", "ё", "11111111111111111111111111111111111111111111111111111111111111111111111"})
     void testAddIncorrectTitle() throws DAOException {
         doNothing().when(eventDAO).add(isA(Event.class));
         EventDTO eventDTO = getTestEventDTO();
         eventDTO.setTitle(INCORRECT_TITLE);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
+        assertEquals(ENTER_CORRECT_TITLE, e.getMessage());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testAddNullEmptyTitle(String title) throws DAOException {
+        doNothing().when(eventDAO).add(isA(Event.class));
+        EventDTO eventDTO = getTestEventDTO();
+        eventDTO.setTitle(title);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
         assertEquals(ENTER_CORRECT_TITLE, e.getMessage());
     }
@@ -49,20 +62,32 @@ class EventServiceTest {
         assertEquals(ENTER_VALID_DATE, e.getMessage());
     }
 
-    @Test
-    void testAddIncorrectLocation() throws DAOException {
+    @ParameterizedTest
+    @ValueSource(strings = {"q", "ё", "11111111111111111111111111111111111111111111111111111111111111111111111"})
+    void testAddIncorrectLocation(String location) throws DAOException {
         doNothing().when(eventDAO).add(isA(Event.class));
         EventDTO eventDTO = getTestEventDTO();
-        eventDTO.setLocation(INCORRECT_LOCATION);
+        eventDTO.setLocation(location);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
         assertEquals(ENTER_CORRECT_LOCATION, e.getMessage());
     }
 
-    @Test
-    void testAddIncorrectDescription() throws DAOException {
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testAddNullEmptyLocation(String location) throws DAOException {
         doNothing().when(eventDAO).add(isA(Event.class));
         EventDTO eventDTO = getTestEventDTO();
-        eventDTO.setDescription(INCORRECT_DESCRIPTION);
+        eventDTO.setLocation(location);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
+        assertEquals(ENTER_CORRECT_LOCATION, e.getMessage());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testAddIncorrectDescription(String description) throws DAOException {
+        doNothing().when(eventDAO).add(isA(Event.class));
+        EventDTO eventDTO = getTestEventDTO();
+        eventDTO.setDescription(description);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
         assertEquals(ENTER_CORRECT_DESCRIPTION, e.getMessage());
     }

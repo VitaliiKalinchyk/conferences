@@ -1,13 +1,13 @@
-package ua.java.conferences.services;
+package ua.java.conferences.model.services;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.ValueSource;
 import ua.java.conferences.model.dao.ReportDAO;
 import ua.java.conferences.dto.ReportDTO;
 import ua.java.conferences.exceptions.*;
-import ua.java.conferences.model.entities.Event;
-import ua.java.conferences.model.entities.Report;
-import ua.java.conferences.model.entities.User;
-import ua.java.conferences.model.services.ReportService;
+import ua.java.conferences.model.entities.*;
 import ua.java.conferences.model.services.implementation.ReportServiceImpl;
 
 import java.util.*;
@@ -31,11 +31,22 @@ class ReportServiceTest {
         assertDoesNotThrow(() -> reportService.addReport(reportDTO));
     }
 
-    @Test
-    void testCreateIncorrectTopic() throws DAOException {
+    @ParameterizedTest
+    @ValueSource(strings = {"q", "ё", "11111111111111111111111111111111111111111111111111111111111111111111111"})
+    void testCreateIncorrectTopic(String topic) throws DAOException {
         doNothing().when(reportDAO).add(isA(Report.class));
         ReportDTO reportDTO = getReportDTO();
-        reportDTO.setTopic(INCORRECT_TOPIC);
+        reportDTO.setTopic(topic);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> reportService.addReport(reportDTO));
+        assertEquals(ENTER_CORRECT_TOPIC, e.getMessage());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testCreateNullTopic(String topic) throws DAOException {
+        doNothing().when(reportDAO).add(isA(Report.class));
+        ReportDTO reportDTO = getReportDTO();
+        reportDTO.setTopic(topic);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> reportService.addReport(reportDTO));
         assertEquals(ENTER_CORRECT_TOPIC, e.getMessage());
     }

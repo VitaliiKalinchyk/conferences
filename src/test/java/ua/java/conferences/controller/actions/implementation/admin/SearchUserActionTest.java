@@ -1,11 +1,10 @@
-package ua.java.conferences.actions.implementation.admin;
+package ua.java.conferences.controller.actions.implementation.admin;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-import ua.java.conferences.actions.MyRequest;
-import ua.java.conferences.controller.actions.implementation.admin.SearchUserAction;
+import ua.java.conferences.controller.actions.MyRequest;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
@@ -42,7 +41,7 @@ class SearchUserActionTest {
         when(appContext.getUserService()).thenReturn(userService);
         when(userService.getByEmail(email)).thenThrow(new IncorrectFormatException(ENTER_CORRECT_EMAIL));
 
-        assertEquals(SEARCH_USERS_PAGE, new SearchUserAction(appContext).execute(myRequest));
+        assertEquals(SEARCH_USER_PAGE, new SearchUserAction(appContext).execute(myRequest));
         assertEquals(ENTER_CORRECT_EMAIL, myRequest.getAttribute(ERROR));
     }
 
@@ -54,7 +53,7 @@ class SearchUserActionTest {
         when(appContext.getUserService()).thenReturn(userService);
         when(userService.getByEmail(email)).thenThrow(new IncorrectFormatException(ENTER_CORRECT_EMAIL));
 
-        assertEquals(SEARCH_USERS_PAGE, new SearchUserAction(appContext).execute(myRequest));
+        assertEquals(SEARCH_USER_PAGE, new SearchUserAction(appContext).execute(myRequest));
         assertEquals(ENTER_CORRECT_EMAIL, myRequest.getAttribute(ERROR));
     }
 
@@ -66,7 +65,7 @@ class SearchUserActionTest {
         when(appContext.getUserService()).thenReturn(userService);
         when(userService.getByEmail(email)).thenThrow(new NoSuchUserException());
 
-        assertEquals(SEARCH_USERS_PAGE, new SearchUserAction(appContext).execute(myRequest));
+        assertEquals(SEARCH_USER_PAGE, new SearchUserAction(appContext).execute(myRequest));
         assertEquals(NO_USER, myRequest.getAttribute(ERROR));
     }
 

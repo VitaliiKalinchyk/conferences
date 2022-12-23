@@ -1,4 +1,4 @@
-package ua.java.conferences.dao;
+package ua.java.conferences.model.dao;
 
 import org.junit.jupiter.api.*;
 import ua.java.conferences.exceptions.DAOException;
@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ua.java.conferences.dao.DAOTestUtils.*;
+import static ua.java.conferences.model.dao.DAOTestUtils.*;
 import static ua.java.conferences.Constants.*;
 
 class ReportDAOTest {

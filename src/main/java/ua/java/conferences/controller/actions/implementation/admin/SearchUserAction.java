@@ -23,7 +23,7 @@ public class SearchUserAction implements Action {
             request.setAttribute(USER, userService.getByEmail(request.getParameter(EMAIL)));
         } catch (NoSuchUserException | IncorrectFormatException e) {
             request.setAttribute(ERROR, e.getMessage());
-            path = SEARCH_USERS_PAGE;
+            path = SEARCH_USER_PAGE;
         }
         return path;
     }
