@@ -16,12 +16,7 @@ public class Controller extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String path = process(request);
-        if (isAttributesPresent(request)) {
-            request.getRequestDispatcher(path).forward(request, response);
-        } else {
-            response.sendRedirect(path);
-        }
+        request.getRequestDispatcher(process(request)).forward(request, response);
     }
 
     @Override
@@ -38,9 +33,5 @@ public class Controller extends HttpServlet {
             logger.error(e.getMessage());
         }
         return path;
-    }
-
-    private boolean isAttributesPresent (HttpServletRequest request) {
-        return request.getAttributeNames().hasMoreElements();
     }
 }
