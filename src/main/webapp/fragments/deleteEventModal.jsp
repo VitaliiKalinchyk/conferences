@@ -16,8 +16,8 @@
             <div class="modal-footer flex-column border-top-0">
                 <form method="POST" action="controller">
                     <input type="hidden" name="action" value="delete-event">
-                    <input type="hidden" name="event-id" value=${requestScope.event.id}>
-                    <input type="hidden" name="title" value=${requestScope.event.title}>
+                    <input type="hidden" name="event-id" value="${requestScope.event.id}">
+                    <input type="hidden" name="title" value="${requestScope.event.title}">
                     <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="yes"/></button>
                 </form>
             </div>

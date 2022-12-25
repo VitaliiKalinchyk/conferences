@@ -39,22 +39,28 @@ public class DeleteEventAction implements Action {
 
     private String executePost(HttpServletRequest request) throws ServiceException {
         String eventId = request.getParameter(EVENT_ID);
-        String title = request.getParameter(TITLE);
+        sendEmail(eventId, request.getParameter(TITLE));
         eventService.delete(eventId);
         request.getSession().setAttribute(MESSAGE, SUCCEED_DELETE);
-        sendEmail(eventId, title);
         return getActionToRedirect(DELETE_EVENT_ACTION);
     }
 
 
     private void sendEmail(String eventId, String title) throws ServiceException {
         for (UserDTO participant : userService.getParticipants(eventId, Role.VISITOR)) {
-            String body = String.format(MESSAGE_EVENT_DELETED, participant.getName(), title);
-            emailSender.send(SUBJECT_NOTIFICATION, body, participant.getEmail());
+            Thread thread = new Thread(
+                    () -> {
+                        String body = String.format(MESSAGE_EVENT_DELETED, participant.getName(), title);
+                        emailSender.send(SUBJECT_NOTIFICATION, body, participant.getEmail());});
+            thread.start();
+
         }
         for (UserDTO participant : userService.getParticipants(eventId, Role.SPEAKER)) {
-            String body = String.format(MESSAGE_EVENT_DELETED, participant.getName(), title);
-            emailSender.send(SUBJECT_NOTIFICATION, body, participant.getEmail());
+            Thread thread = new Thread(
+                    () -> {
+                        String body = String.format(MESSAGE_EVENT_DELETED, participant.getName(), title);
+                        emailSender.send(SUBJECT_NOTIFICATION, body, participant.getEmail());});
+            thread.start();
         }
 
     }

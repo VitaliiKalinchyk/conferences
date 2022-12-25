@@ -10,26 +10,24 @@ import java.util.Properties;
 public class EmailSender {
     private static final Logger logger = LoggerFactory.getLogger(EmailSender.class);
     private static final String EMAIL_FILE = "email.properties";
-    private static final String USER = "user";
-    private static final String PASSWORD = "password";
+    private static final Properties PROPERTIES = getProperties();
+    private static final String USER = PROPERTIES.getProperty("user");
+    private static final String PASSWORD = PROPERTIES.getProperty("password");
+    private static final Session SESSION = getSession();
 
 
     public void send(String subject, String body, String sendTo) {
-        Properties properties = getProperties();
-        String user = properties.getProperty(USER);
-        String password = properties.getProperty(PASSWORD);
-        Session session = getSession(properties, user, password);
-        MimeMessage message = new MimeMessage(session);
+        MimeMessage message = new MimeMessage(SESSION);
         try {
-            sendEmail(subject, body, sendTo, user, message);
+            sendEmail(subject, body, sendTo, message);
         } catch (MessagingException e) {
             logger.error(e.getMessage());
         }
     }
 
-    private void sendEmail(String subject, String body, String sendTo, String from, MimeMessage message)
+    private void sendEmail(String subject, String body, String sendTo, MimeMessage message)
             throws MessagingException {
-        message.setFrom(new InternetAddress(from));
+        message.setFrom(new InternetAddress(USER));
         message.setSubject(subject);
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(sendTo));
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
@@ -40,16 +38,16 @@ public class EmailSender {
         Transport.send(message);
     }
 
-    private Session getSession(Properties properties, String user, String password) {
-        return Session.getDefaultInstance(properties, new Authenticator() {
+    private static Session getSession() {
+        return Session.getDefaultInstance(PROPERTIES, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(user, password);
+                return new PasswordAuthentication(USER, PASSWORD);
             }
         });
     }
 
-    private Properties getProperties() {
+    private static Properties getProperties() {
         Properties properties = new Properties();
         try (InputStream resource = EmailSender.class.getClassLoader().getResourceAsStream(EMAIL_FILE)){
             properties.load(resource);

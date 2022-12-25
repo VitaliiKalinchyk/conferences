@@ -83,7 +83,6 @@ public class MysqlUserDAO implements UserDAO {
         List<User> users = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(String.format(GET_SORTED, query))) {
-            preparedStatement.execute();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     users.add(createUser(resultSet));
@@ -103,7 +102,6 @@ public class MysqlUserDAO implements UserDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             int k = 0;
             preparedStatement.setLong(++k, eventId);
-            preparedStatement.execute();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
                     users.add(createUser(resultSet));
