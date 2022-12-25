@@ -77,7 +77,6 @@ public class UserServiceImpl implements UserService {
         return userDTO;
     }
 
-
     @Override
     public List<UserDTO> getAll() throws ServiceException {
         List<UserDTO> userDTOS = new ArrayList<>();
@@ -95,6 +94,18 @@ public class UserServiceImpl implements UserService {
         List<UserDTO> userDTOS = new ArrayList<>();
         try {
             List<User> users = userDAO.getSorted(query);
+            users.forEach(user -> userDTOS.add(convertUserToDTO(user)));
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return userDTOS;
+    }
+
+    @Override
+    public List<UserDTO> getParticipants(String eventId, Role role) throws ServiceException {
+        List<UserDTO> userDTOS = new ArrayList<>();
+        try {
+            List<User> users = userDAO.getParticipants(Long.parseLong(eventId), role);
             users.forEach(user -> userDTOS.add(convertUserToDTO(user)));
         } catch (DAOException e) {
             throw new ServiceException(e);

@@ -11,6 +11,7 @@ public class ReportDTO implements Serializable {
     private long id;
     private String topic;
     private long speakerId;
+    private String speakerEmail;
     private String speakerName;
     private long eventId;
     private String title;

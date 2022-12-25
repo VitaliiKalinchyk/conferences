@@ -11,6 +11,7 @@ public interface UserDAO extends EntityDAO<User> {
     Optional<User> getByEmail(String email) throws DAOException;
 
     List<User> getSorted(String query) throws DAOException;
+    List<User> getParticipants(long eventId, Role role) throws DAOException;
 
     int getNumberOfRecords(String filter) throws DAOException;
 

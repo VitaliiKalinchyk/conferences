@@ -91,16 +91,16 @@ INSERT INTO user (email, password, name, surname) VALUES
 ('eighth@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Eighth', 'Junior'),
 ('ninth@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Ninth', 'JustForFun'),
 ('tenth@gmail.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'James', 'Gosling'),
-('Maxim_Veres@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Maxim', 'Veres'),
-('Yuriy_Mischeryakov@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Yuriy', 'Mischeryakov'),
-('Dmytro_Kolesnikov@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Dmytro', 'Kolesnikov'),
-('moderator1@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Main', 'Moderator'),
-('moderator2@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Support', 'Moderator'),
-('admin@epam.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Admin', 'Admin');
-UPDATE user SET role_id=3 WHERE email LIKE '%@epam.com';
-UPDATE user SET role_id=2 WHERE email='moderator1@epam.com';
-UPDATE user SET role_id=2 WHERE email='moderator2@epam.com';
-UPDATE user SET role_id=1 WHERE email='admin@epam.com';
+('Maxim_Veres@epam1.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Maxim', 'Veres'),
+('Yuriy_Mischeryakov@epam1.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Yuriy', 'Mischeryakov'),
+('Dmytro_Kolesnikov@epam1.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Dmytro', 'Kolesnikov'),
+('moderator1@epam1.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Main', 'Moderator'),
+('moderator2@epam1.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Support', 'Moderator'),
+('admin@epam1.com', '$argon2i$v=19$m=15360,t=2,p=1$bYZeAKEO9XMyEr2dlXtZFQ$7hniqf5oE7fF0/nm3Qhbjd2VbvaPF4nuYoLKo1O4acE', 'Admin', 'Admin');
+UPDATE user SET role_id=3 WHERE email LIKE '%@epam1.com';
+UPDATE user SET role_id=2 WHERE email='moderator1@epam1.com';
+UPDATE user SET role_id=2 WHERE email='moderator2@epam1.com';
+UPDATE user SET role_id=1 WHERE email='admin@epam1.com';
 INSERT INTO event (id, title, date, location, description) VALUES 
 (DEFAULT, 'Java for Students Autumn 2021', '2021-10-29', 'Lutsk', 'Epam conference for Ukrainian students. Autumn 2022'),
 (DEFAULT, 'Java for Switchers Spring', '2022-03-13', 'Dnipro', 'Epam conference for switchers'),
@@ -202,4 +202,4 @@ UPDATE report SET user_id=13 WHERE id=7;
 UPDATE report SET user_id=13 WHERE id=12;
 UPDATE report SET user_id=12 WHERE id=13;
 
-select * from report;
+select email, name from user JOIN report ON user.id=report.user_id WHERE report.id=8;

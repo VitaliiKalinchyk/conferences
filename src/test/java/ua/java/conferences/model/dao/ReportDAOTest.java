@@ -50,7 +50,6 @@ class ReportDAOTest {
     @Test
     void testGetById() throws DAOException {
         prepareDb();
-
         Report resultReport = reportDAO.getById(ID_VALUE).orElse(null);
         assertNotNull(resultReport);
         assertEquals(getTestReport().getId(), resultReport.getId());
@@ -72,6 +71,7 @@ class ReportDAOTest {
         Event resultEvent = resultReport.getEvent();
 
         assertEquals(resultSpeaker.getId(), getTestUser().getId());
+        assertEquals(resultSpeaker.getEmail(), getTestUser().getEmail());
         assertEquals(resultSpeaker.getName(), getTestUser().getName());
         assertEquals(resultSpeaker.getSurname(), getTestUser().getSurname());
         assertEquals(resultEvent.getId(), getTestEvent().getId());
@@ -175,6 +175,7 @@ class ReportDAOTest {
 
         User speaker = testReport.getSpeaker();
         assertEquals(getTestUser().getName(), speaker.getName());
+        assertEquals(getTestUser().getEmail(), speaker.getEmail());
     }
 
     @Test

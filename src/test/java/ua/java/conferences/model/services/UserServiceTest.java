@@ -217,6 +217,16 @@ class UserServiceTest {
     }
 
     @Test
+    void testGetParticipants() throws DAOException, ServiceException {
+        List<User> users = new ArrayList<>();
+        List<UserDTO> userDTOs = new ArrayList<>();
+        users.add(getTestUser());
+        userDTOs.add(getTestUserDTO());
+        when(userDAO.getParticipants(1, Role.VISITOR)).thenReturn(users);
+        assertIterableEquals(userDTOs, userService.getParticipants("1", Role.VISITOR));
+    }
+
+    @Test
     void testNumberOfRecords() throws DAOException, ServiceException {
         String filter = userQueryBuilder().getRecordQuery();
         when(userDAO.getNumberOfRecords(filter)).thenReturn(1);

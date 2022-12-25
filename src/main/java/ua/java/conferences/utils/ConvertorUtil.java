@@ -48,6 +48,7 @@ public final class ConvertorUtil {
                 .id(report.getId())
                 .topic(report.getTopic())
                 .speakerId(speaker != null ?  speaker.getId() : 0)
+                .speakerEmail(speaker != null ?  speaker.getEmail() : "")
                 .speakerName(speaker != null ?  speaker.getName() + " " + speaker.getSurname() : "")
                 .eventId(event != null ? event.getId() : 0)
                 .title(event != null ? event.getTitle() : "")

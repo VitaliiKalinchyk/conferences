@@ -50,6 +50,7 @@ class ConvertorUtilTest {
         assertEquals(testDTO.getDate(), reportToDTO.getDate());
         assertEquals(testDTO.getLocation(), reportToDTO.getLocation());
         assertEquals(testDTO.getSpeakerId(), reportToDTO.getSpeakerId());
+        assertEquals(testDTO.getSpeakerEmail(), reportToDTO.getSpeakerEmail());
         assertEquals(testDTO.getSpeakerName(), reportToDTO.getSpeakerName());
     }
 
@@ -94,6 +95,7 @@ class ConvertorUtilTest {
                 .id(ID_VALUE)
                 .topic(TOPIC)
                 .speakerId(ID_VALUE)
+                .speakerEmail(EMAIL)
                 .speakerName(SPEAKER_NAME)
                 .eventId(ID_VALUE)
                 .title(TITLE)

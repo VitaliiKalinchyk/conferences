@@ -6,18 +6,22 @@ import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.model.services.*;
+import ua.java.conferences.utils.EmailSender;
 
 import static ua.java.conferences.controller.actions.ActionUtil.*;
 import static ua.java.conferences.controller.actions.constants.ActionNames.SIGN_UP_ACTION;
 import static ua.java.conferences.controller.actions.constants.Pages.*;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.SUCCEED_REGISTER;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
+import static ua.java.conferences.utils.constants.Email.*;
 
 public class SignUpAction implements Action {
     private final UserService userService;
+    private final EmailSender emailSender;
 
     public SignUpAction(AppContext appContext) {
         userService = appContext.getUserService();
+        emailSender = appContext.getEmailSender();
     }
 
     @Override
@@ -39,6 +43,7 @@ public class SignUpAction implements Action {
         try {
             userService.add(user, request.getParameter(PASSWORD), request.getParameter(CONFIRM_PASSWORD));
             request.getSession().setAttribute(MESSAGE, SUCCEED_REGISTER);
+            emailSender.send(SUBJECT_GREETINGS, String.format(MESSAGE_GREETINGS, user.getName()), user.getEmail());
         } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
             path = SIGN_UP_PAGE;

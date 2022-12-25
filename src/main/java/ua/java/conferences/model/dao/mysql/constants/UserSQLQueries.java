@@ -5,6 +5,10 @@ public final class UserSQLQueries {
     public static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id=?";
     public static final String GET_USER_BY_EMAIL = "SELECT * FROM user WHERE email=?";
     public static final String GET_USERS = "SELECT * FROM user";
+    public static final String GET_PARTICIPANTS = "SELECT * FROM user JOIN user_has_event " +
+            "ON user.id=user_has_event.user_id WHERE event_id=?";
+    public static final String GET_SPEAKERS = "SELECT * FROM user JOIN report ON user.id=report.user_id " +
+            "WHERE event_id=? GROUP BY user.id";
     public static final String GET_SORTED = "SELECT * FROM user %s";
     public static final String GET_NUMBER_OF_RECORDS = "SELECT COUNT(id) AS numberOfRecords FROM user %s";
     public static final String UPDATE_USER = "UPDATE user SET email=?, name=?, surname=?, notification=? WHERE id=?";

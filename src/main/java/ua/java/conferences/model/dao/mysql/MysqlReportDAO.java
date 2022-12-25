@@ -178,6 +178,7 @@ public class MysqlReportDAO implements ReportDAO {
         if (userId !=0) {
             speaker = User.builder()
                     .id(userId)
+                    .email(resultSet.getString(EMAIL))
                     .name(resultSet.getString(NAME))
                     .surname(resultSet.getString(SURNAME))
                     .build();

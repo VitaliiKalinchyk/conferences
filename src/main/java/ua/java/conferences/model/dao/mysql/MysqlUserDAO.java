@@ -11,6 +11,7 @@ import java.util.*;
 
 import static ua.java.conferences.model.dao.mysql.constants.UserSQLQueries.*;
 import static ua.java.conferences.model.dao.mysql.constants.SQLFields.*;
+import static ua.java.conferences.model.entities.role.Role.VISITOR;
 
 public class MysqlUserDAO implements UserDAO {
 
@@ -82,6 +83,26 @@ public class MysqlUserDAO implements UserDAO {
         List<User> users = new ArrayList<>();
         try (Connection connection = DataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(String.format(GET_SORTED, query))) {
+            preparedStatement.execute();
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    users.add(createUser(resultSet));
+                }
+            }
+        }catch (SQLException e) {
+            throw new DAOException(e);
+        }
+        return users;
+    }
+
+    @Override
+    public List<User> getParticipants(long eventId, Role role) throws DAOException {
+        List<User> users = new ArrayList<>();
+        String query = role == VISITOR ? GET_PARTICIPANTS : GET_SPEAKERS;
+        try (Connection connection = DataSource.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            int k = 0;
+            preparedStatement.setLong(++k, eventId);
             preparedStatement.execute();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {

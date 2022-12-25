@@ -2,6 +2,7 @@ package ua.java.conferences.model.services;
 
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
+import ua.java.conferences.model.entities.role.Role;
 
 import java.util.List;
 
@@ -13,6 +14,8 @@ public interface UserService extends Service<UserDTO> {
     UserDTO getByEmail(String email) throws ServiceException;
 
     List<UserDTO> getSortedUsers(String query) throws ServiceException;
+
+    List<UserDTO> getParticipants(String eventId, Role role) throws ServiceException;
 
     int getNumberOfRecords(String filter) throws ServiceException;
 

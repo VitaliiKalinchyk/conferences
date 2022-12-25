@@ -26,8 +26,7 @@
         <slf4j.version>2.0.5</slf4j.version>
         <log4j.version>2.19.0</log4j.version>
         <lombok.version>1.18.24</lombok.version>
-        <mail-api.version>2.1.0</mail-api.version>
-        <mail.version>1.0.0</mail.version>
+        <mail.version>1.6.2</mail.version>
     </properties>
 
     <dependencies>
@@ -119,17 +118,16 @@
             <version>${lombok.version}</version>
         </dependency>
         <dependency>
-            <groupId>jakarta.mail</groupId>
-            <artifactId>jakarta.mail-api</artifactId>
-            <version>${mail-api.version}</version>
+            <groupId>javax.mail</groupId>
+            <artifactId>javax.mail-api</artifactId>
+            <version>${mail.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.angus</groupId>
-            <artifactId>jakarta.mail</artifactId>
+            <groupId>com.sun.mail</groupId>
+            <artifactId>javax.mail</artifactId>
             <version>${mail.version}</version>
         </dependency>
     </dependencies>
-
     <build>
         <plugins>
             <plugin>
