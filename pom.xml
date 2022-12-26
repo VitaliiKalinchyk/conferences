@@ -139,7 +139,6 @@
             <artifactId>jakarta.json</artifactId>
             <version>${json.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>
