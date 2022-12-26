@@ -16,8 +16,14 @@
             <div class="modal-footer flex-column border-top-0">
                 <form method="POST" action="controller">
                     <input type="hidden" name="action" value="delete-report">
-                    <input type="hidden" name="report-id" value=${requestScope.report.id}>
-                    <input type="hidden" name="event-id" value=${requestScope.report.eventId}>
+                    <input type="hidden" name="report-id" value="${requestScope.report.id}">
+                    <input type="hidden" name="topic" value="${requestScope.report.topic}">
+                    <input type="hidden" name="event-id" value="${requestScope.report.eventId}">
+                    <input type="hidden" name="title" value="${requestScope.report.title}">
+                    <input type="hidden" name="date" value="${requestScope.report.date}">
+                    <input type="hidden" name="location" value="${requestScope.report.location}">
+                    <input type="hidden" name="email" value="${requestScope.report.speakerEmail}">
+                    <input type="hidden" name="name" value="${requestScope.report.speakerName}">
                     <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="yes"/></button>
                 </form>
             </div>

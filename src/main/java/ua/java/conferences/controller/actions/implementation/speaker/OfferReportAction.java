@@ -6,6 +6,7 @@ import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.*;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.model.services.*;
+import ua.java.conferences.utils.EmailSender;
 
 import java.time.LocalDate;
 
@@ -16,14 +17,19 @@ import static ua.java.conferences.controller.actions.constants.ParameterValues.*
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.model.entities.role.Role.SPEAKER;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
+import static ua.java.conferences.utils.constants.Email.*;
 
 public class OfferReportAction implements Action {
     private final ReportService reportService;
     private final EventService eventService;
+    private final UserService userService;
+    private final EmailSender emailSender;
 
     public OfferReportAction(AppContext appContext) {
         reportService = appContext.getReportService();
         eventService = appContext.getEventService();
+        userService = appContext.getUserService();
+        emailSender = appContext.getEmailSender();
     }
 
     @Override
@@ -64,6 +70,7 @@ public class OfferReportAction implements Action {
         try {
             reportService.addReport(reportDTO);
             request.getSession().setAttribute(MESSAGE, SUCCEED_ADD);
+            sendEmail(reportDTO);
         } catch (IncorrectFormatException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
         }
@@ -71,10 +78,24 @@ public class OfferReportAction implements Action {
     }
 
     private ReportDTO getReportDTO(HttpServletRequest request) {
+        UserDTO speaker = (UserDTO) request.getSession().getAttribute(LOGGED_USER);
         return  ReportDTO.builder()
                 .topic(request.getParameter(TOPIC))
-                .speakerId(((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId())
+                .speakerId(speaker.getId())
                 .eventId(Long.parseLong(request.getParameter(EVENT_ID)))
+                .title(request.getParameter(TITLE))
+                .speakerName(speaker.getName() + " " + speaker.getSurname())
                 .build();
+    }
+
+    private void sendEmail(ReportDTO report) throws ServiceException {
+        for (UserDTO moderator : userService.getModerators()) {
+            new Thread(
+                    () -> {
+                        String body = String.format(MESSAGE_OFFER_REPORT, moderator.getName(), report.getSpeakerName(),
+                                report.getTopic(), report.getTitle());
+                        emailSender.send(SUBJECT_NOTIFICATION, body, moderator.getEmail());})
+                    .start();
+        }
     }
 }

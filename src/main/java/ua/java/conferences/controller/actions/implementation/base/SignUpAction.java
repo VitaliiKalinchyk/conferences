@@ -43,13 +43,18 @@ public class SignUpAction implements Action {
         try {
             userService.add(user, request.getParameter(PASSWORD), request.getParameter(CONFIRM_PASSWORD));
             request.getSession().setAttribute(MESSAGE, SUCCEED_REGISTER);
-            emailSender.send(SUBJECT_GREETINGS, String.format(MESSAGE_GREETINGS, user.getName()), user.getEmail());
+            sendEmail(user);
         } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
             path = SIGN_UP_PAGE;
         }
         request.getSession().setAttribute(CURRENT_PATH, path);
         return getActionToRedirect(SIGN_UP_ACTION);
+    }
+
+    private void sendEmail(UserDTO user) {
+        String body = String.format(MESSAGE_GREETINGS, user.getName());
+        new Thread(() -> emailSender.send(SUBJECT_GREETINGS, body, user.getEmail())).start();
     }
 
     private UserDTO getUserDTO(HttpServletRequest request) {

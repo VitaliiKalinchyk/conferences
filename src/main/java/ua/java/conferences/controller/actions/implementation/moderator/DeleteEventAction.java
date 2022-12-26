@@ -48,20 +48,19 @@ public class DeleteEventAction implements Action {
 
     private void sendEmail(String eventId, String title) throws ServiceException {
         for (UserDTO participant : userService.getParticipants(eventId, Role.VISITOR)) {
-            Thread thread = new Thread(
+            new Thread(
                     () -> {
                         String body = String.format(MESSAGE_EVENT_DELETED, participant.getName(), title);
-                        emailSender.send(SUBJECT_NOTIFICATION, body, participant.getEmail());});
-            thread.start();
+                        emailSender.send(SUBJECT_NOTIFICATION, body, participant.getEmail());})
+                    .start();
 
         }
         for (UserDTO participant : userService.getParticipants(eventId, Role.SPEAKER)) {
-            Thread thread = new Thread(
+            new Thread(
                     () -> {
                         String body = String.format(MESSAGE_EVENT_DELETED, participant.getName(), title);
-                        emailSender.send(SUBJECT_NOTIFICATION, body, participant.getEmail());});
-            thread.start();
+                        emailSender.send(SUBJECT_NOTIFICATION, body, participant.getEmail());})
+                    .start();
         }
-
     }
 }

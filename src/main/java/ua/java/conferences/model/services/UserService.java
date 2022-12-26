@@ -21,7 +21,11 @@ public interface UserService extends Service<UserDTO> {
 
     List<UserDTO> getSpeakers() throws ServiceException;
 
+    List<UserDTO> getModerators() throws ServiceException;
+
     void changePassword(long userId, String password, String newPass, String confirmPass) throws ServiceException;
+
+    String changePassword(long userId) throws ServiceException;
 
     void setRole(String userEmail, int roleId) throws ServiceException;
 

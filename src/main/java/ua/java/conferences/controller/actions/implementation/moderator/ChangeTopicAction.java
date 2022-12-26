@@ -40,7 +40,7 @@ public class ChangeTopicAction implements Action {
         ReportDTO report = reportService.getById(String.valueOf(reportDTO.getId()));
         String body = String.format(MESSAGE_TOPIC_CHANGED, report.getSpeakerName(), report.getTitle(),
                 report.getLocation(), report.getDate(), report.getTopic(), report.getEventId());
-        emailSender.send(SUBJECT_NOTIFICATION, body, report.getSpeakerEmail());
+        new Thread(() -> emailSender.send(SUBJECT_NOTIFICATION, body, report.getSpeakerEmail())).start();
     }
 
     private ReportDTO getReportDTO(HttpServletRequest request) {

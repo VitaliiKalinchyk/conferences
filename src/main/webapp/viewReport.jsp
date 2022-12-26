@@ -36,6 +36,8 @@
                     <input type="hidden" name="action" value="set-or-remove-speaker">
                     <input type="hidden" name="todo" value="remove">
                     <input type="hidden" name="report-id" value="${requestScope.report.id}">
+                    <input type="hidden" name="email" value="${requestScope.report.speakerEmail}">
+                    <input type="hidden" name="name" value="${requestScope.report.speakerName}">
                     <button type="submit" class="btn btn-dark mt-3 mb-4"><fmt:message key="remove.speaker"/></button>
                 </form>
             </c:when>

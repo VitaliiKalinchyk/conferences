@@ -54,6 +54,8 @@
                                 <input type="hidden" name="action" value="set-or-remove-speaker-by-speaker">
                                 <input type="hidden" name="todo" value="remove">
                                 <input type="hidden" name="report-id" value="${report.id}">
+                                <input type="hidden" name="topic" value="${report.topic}">
+                                <input type="hidden" name="title" value="${report.title}">
                                 <button type="submit" class="btn btn-dark mt-0 mb-0">
                                     <fmt:message key="decline.report"/>
                                 </button>

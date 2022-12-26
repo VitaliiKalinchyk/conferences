@@ -245,6 +245,17 @@ class UserServiceTest {
     }
 
     @Test
+    void testViewModerators() throws DAOException, ServiceException {
+        List<User> users = new ArrayList<>();
+        List<UserDTO> userDTOs = new ArrayList<>();
+        users.add(getTestUser());
+        userDTOs.add(getTestUserDTO());
+        String query = userQueryBuilder().setRoleFilter("2").getQuery();
+        when(userDAO.getSorted(query)).thenReturn(users);
+        assertIterableEquals(userDTOs, userService.getModerators());
+    }
+
+    @Test
     void testEditProfile() throws DAOException {
         doNothing().when(userDAO).update(isA(User.class));
         assertDoesNotThrow(() -> userService.update(getTestUserDTO()));
@@ -302,6 +313,14 @@ class UserServiceTest {
         testUser.setPassword(encode(PASSWORD));
         when(userDAO.getById(ONE)).thenReturn(Optional.of(testUser));
         assertDoesNotThrow(() -> userService.changePassword(ONE, PASSWORD, PASSWORD, PASSWORD));
+    }
+
+    @Test
+    void testResetPassword() throws DAOException, ServiceException {
+        doNothing().when(userDAO).updatePassword(isA(User.class));
+        String password = userService.changePassword(ID_VALUE);
+        assertEquals(8, password.length());
+        assertEquals("1aA", password.substring(0,3));
     }
 
     @Test

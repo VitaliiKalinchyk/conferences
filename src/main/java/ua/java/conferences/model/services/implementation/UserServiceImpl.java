@@ -1,5 +1,6 @@
 package ua.java.conferences.model.services.implementation;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.model.dao.UserDAO;
 import ua.java.conferences.model.entities.User;
@@ -137,6 +138,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDTO> getModerators() throws ServiceException {
+        List<UserDTO> userDTOS = new ArrayList<>();
+        try {
+            List<User> moderators = userDAO.getSorted(userQueryBuilder().setRoleFilter("2").getQuery());
+            moderators.forEach(user -> userDTOS.add(convertUserToDTO(user)));
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return userDTOS;
+    }
+
+    @Override
     public void update(UserDTO userDTO) throws ServiceException {
         validateUser(userDTO);
         User user = convertDTOToUser(userDTO);
@@ -161,6 +174,18 @@ public class UserServiceImpl implements UserService {
         } catch (DAOException e) {
             throw new ServiceException(e);
         }
+    }
+
+    @Override
+    public String changePassword(long userId) throws ServiceException {
+        String newPass = generatePassword();
+        try {
+            User user = User.builder().id(userId).password(encode(newPass)).build();
+            userDAO.updatePassword(user);
+        } catch (DAOException e) {
+            throw new ServiceException(e);
+        }
+        return newPass;
     }
 
     @Override
@@ -227,5 +252,9 @@ public class UserServiceImpl implements UserService {
         validateEmail(userDTO.getEmail());
         validateName(userDTO.getName(), ENTER_CORRECT_NAME);
         validateName(userDTO.getSurname(), ENTER_CORRECT_SURNAME);
+    }
+
+    private String generatePassword() {
+        return "1aA" + RandomStringUtils.randomAlphanumeric(5);
     }
 }
