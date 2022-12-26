@@ -14,6 +14,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/showPass.js"></script>
 </head>
 
 <body>
@@ -47,6 +48,12 @@
             <c:if test="${fn:contains(error, 'pass')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if><br>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" onclick="showPass('password')" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    <fmt:message key="show.password"/>
+                </label>
+            </div>
         </div>
 
         <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="sign.in"/></button>

@@ -13,7 +13,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/showPass.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="https://www.google.com/recaptcha/api.js"></script>
 </head>
 
 <body>
@@ -47,16 +49,21 @@
                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$" required>
             <c:if test="${fn:contains(error, 'pass')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
-            </c:if>
-            <br>
+            </c:if><br>
         </div>
 
         <div class="form-group">
             <label class="form-label fs-5" for="confirm-password"><fmt:message key="confirm.password"/>*: </label>
             <input class="form-control" type="password" name="confirm-password" id="confirm-password"
                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$"
-                   title="<fmt:message key="password.requirements"/>" required>
-            <br>
+                   title="<fmt:message key="password.requirements"/>" required><br>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="flexCheckDefault"
+                       onclick="showPass('password'); showPass('confirm-password');">
+                <label class="form-check-label" for="flexCheckDefault">
+                    <fmt:message key="show.password"/>
+                </label>
+            </div><br>
         </div>
 
         <div class="form-group">
@@ -86,6 +93,8 @@
             <input type="checkbox" name="notification" id="notification" checked>
             <br>
         </div>
+
+        <div class="g-recaptcha" data-sitekey="6LdMAgMTAAAAAGYY5PEQeW7b3L3tqACmUcU6alQf"></div><br>
 
         <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="sign.up"/></button>
     </form>

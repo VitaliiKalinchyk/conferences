@@ -12,6 +12,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <script src="js/showPass.js"></script>
     <script src="js/bootstrap.min.js"></script>
 </head>
 
@@ -52,6 +53,13 @@
                    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,20}$"
                    title="<fmt:message key="password.requirements"/>" required><br>
         </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="flexCheckDefault"
+                   onclick="showPass('old-password'); showPass('password'); showPass('confirm-password')">
+            <label class="form-check-label" for="flexCheckDefault">
+                <fmt:message key="show.password"/>
+            </label>
+        </div><br>
 
         <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="change.password"/></button>
     </form>
