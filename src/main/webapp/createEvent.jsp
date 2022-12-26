@@ -4,6 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="resources"/>
+<jsp:useBean id="now" class="java.util.Date"/>
+<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="nowFormatted"/>
 
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
@@ -45,7 +47,7 @@
         <div class="form-group">
             <label class="form-label fs-5" for="date"><fmt:message key="date"/>*: </label>
             <input class="form-control" type="date" name="date" id="date"
-                   required value="${requestScope.event.date}"/>
+                   required value="${requestScope.event.date}" min="${nowFormatted}"/>
             <c:if test="${fn:contains(error, 'date')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if><br>
