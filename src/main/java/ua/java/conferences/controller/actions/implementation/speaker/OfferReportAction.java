@@ -93,7 +93,7 @@ public class OfferReportAction implements Action {
             new Thread(
                     () -> {
                         String body = String.format(MESSAGE_OFFER_REPORT, moderator.getName(), report.getSpeakerName(),
-                                report.getTopic(), report.getTitle());
+                                report.getTopic(), report.getTitle(), report.getEventId());
                         emailSender.send(SUBJECT_NOTIFICATION, body, moderator.getEmail());})
                     .start();
         }

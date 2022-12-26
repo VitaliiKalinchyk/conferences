@@ -51,10 +51,11 @@ public class SetOrRemoveSpeakerBySpeakerAction implements Action {
         String speakerName = speaker.getName() + " " + speaker.getSurname();
         String topic = request.getParameter(TOPIC);
         String title = request.getParameter(TITLE);
+        String reportId = request.getParameter(REPORT_ID);
         for (UserDTO moderator : userService.getModerators()) {
             new Thread(
                     () -> {
-                        String body = String.format(message, moderator.getName(), speakerName, topic, title);
+                        String body = String.format(message, moderator.getName(), speakerName, topic, title, reportId);
                         emailSender.send(SUBJECT_NOTIFICATION, body, moderator.getEmail());})
                     .start();
         }
