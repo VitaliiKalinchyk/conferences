@@ -91,10 +91,13 @@
         <div class="form-group">
             <label class="form-label fs-5" for="notification"><fmt:message key="notification"/>: </label>
             <input type="checkbox" name="notification" id="notification" checked>
-            <br>
+            <br><br>
         </div>
 
-        <div class="g-recaptcha" data-sitekey="6LdMAgMTAAAAAGYY5PEQeW7b3L3tqACmUcU6alQf"></div><br>
+        <div class="g-recaptcha" data-sitekey="6LecrqsjAAAAACSNHc7GqpvVkK6-fKxvSgT7Sx5e"></div>
+        <c:if test="${fn:contains(error, 'captcha')}">
+            <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
+        </c:if><br>
 
         <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="sign.up"/></button>
     </form>

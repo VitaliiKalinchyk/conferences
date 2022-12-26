@@ -5,6 +5,7 @@ public class Message {
     public static final String ENTER_CORRECT_PASSWORD = "error.pass.format";
     public static final String ENTER_CORRECT_NAME = "error.name.format";
     public static final String ENTER_CORRECT_SURNAME = "error.surname.format";
+    public static final String CAPTCHA_INVALID = "error.captcha.invalid";
     public static final String ENTER_CORRECT_TOPIC = "error.topic.format";
     public static final String ENTER_CORRECT_TITLE = "error.title.format";
     public static final String ENTER_VALID_DATE = "error.date.format";

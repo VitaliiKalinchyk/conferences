@@ -2,6 +2,7 @@ package ua.java.conferences.controller.context;
 
 import lombok.*;
 import ua.java.conferences.model.services.*;
+import ua.java.conferences.utils.Captcha;
 import ua.java.conferences.utils.EmailSender;
 
 import static ua.java.conferences.model.dao.constants.DbImplementations.MYSQL;
@@ -12,6 +13,7 @@ public class AppContext {
     @Getter private final UserService userService = serviceFactory.getUserService();
     @Getter private final ReportService reportService = serviceFactory.getReportService();
     @Getter private final EmailSender emailSender = new EmailSender();
+    @Getter private final Captcha captcha = new Captcha();
 
     public static AppContext getAppContext() {
         return new AppContext();

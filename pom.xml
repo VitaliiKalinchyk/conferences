@@ -28,6 +28,7 @@
         <lombok.version>1.18.24</lombok.version>
         <mail.version>1.6.2</mail.version>
         <common-lang.version>3.12.0</common-lang.version>
+        <json.version>2.0.1</json.version>
     </properties>
 
     <dependencies>
@@ -133,8 +134,13 @@
             <artifactId>commons-lang3</artifactId>
             <version>${common-lang.version}</version>
         </dependency>
-    </dependencies>
+        <dependency>
+            <groupId>org.glassfish</groupId>
+            <artifactId>jakarta.json</artifactId>
+            <version>${json.version}</version>
+        </dependency>
 
+    </dependencies>
 
     <build>
         <plugins>
