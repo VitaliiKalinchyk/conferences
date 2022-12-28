@@ -4,8 +4,9 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 
+import static ua.java.conferences.controller.actions.constants.Parameters.LOCALE;
+
 public class LocaleFilter implements Filter {
-    private static final String LOCALE = "locale";
     private static final String REFERER = "referer";
     private String defaultLocale;
 

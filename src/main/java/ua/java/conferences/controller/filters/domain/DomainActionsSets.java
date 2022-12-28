@@ -49,6 +49,7 @@ public final class DomainActionsSets {
     static {
         MODERATOR_ACTIONS.addAll(LOGGED_USER_ACTIONS);
         MODERATOR_ACTIONS.add(VIEW_EVENTS_ACTION);
+        MODERATOR_ACTIONS.add(EVENTS_PDF_ACTION);
         MODERATOR_ACTIONS.add(CREATE_EVENT_ACTION);
         MODERATOR_ACTIONS.add(SEARCH_EVENT_ACTION);
         MODERATOR_ACTIONS.add(DELETE_EVENT_ACTION);
@@ -67,6 +68,7 @@ public final class DomainActionsSets {
         ADMIN_ACTIONS.add(DELETE_USER_ACTION);
         ADMIN_ACTIONS.add(SET_ROLE_ACTION);
         ADMIN_ACTIONS.add(VIEW_USERS_ACTION);
+        ADMIN_ACTIONS.add(USERS_PDF_ACTION);
     }
 
     public static Set<String>  getAnonymousUserActions() {

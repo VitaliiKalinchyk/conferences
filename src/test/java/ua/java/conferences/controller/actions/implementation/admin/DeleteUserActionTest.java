@@ -17,6 +17,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
 
 class DeleteUserActionTest {
     private final HttpServletRequest request = mock(HttpServletRequest.class);
+    private final HttpServletResponse response = mock(HttpServletResponse.class);
     private final AppContext appContext = mock(AppContext.class);
     private final UserService userService = mock(UserService.class);
 
@@ -28,7 +29,8 @@ class DeleteUserActionTest {
         when(appContext.getUserService()).thenReturn(userService);
         doNothing().when(userService).delete("1");
 
-        assertEquals(getActionToRedirect(DELETE_USER_ACTION), new DeleteUserAction(appContext).execute(myRequest));
+        assertEquals(getActionToRedirect(DELETE_USER_ACTION),
+                new DeleteUserAction(appContext).execute(myRequest, response));
     }
 
     @Test
@@ -39,7 +41,7 @@ class DeleteUserActionTest {
         when(appContext.getUserService()).thenReturn(userService);
         doThrow(NoSuchUserException.class).when(userService).delete(null);
 
-        assertThrows(NoSuchUserException.class, () -> new DeleteUserAction(appContext).execute(myRequest));
+        assertThrows(NoSuchUserException.class, () -> new DeleteUserAction(appContext).execute(myRequest, response));
     }
 
 
@@ -49,7 +51,7 @@ class DeleteUserActionTest {
         when(request.getMethod()).thenReturn("GET");
         myRequest.getSession().setAttribute(MESSAGE, SUCCEED_DELETE);
 
-        assertEquals(SEARCH_USER_PAGE, new DeleteUserAction(appContext).execute(myRequest));
+        assertEquals(SEARCH_USER_PAGE, new DeleteUserAction(appContext).execute(myRequest, response));
         assertEquals(SUCCEED_DELETE, myRequest.getAttribute(MESSAGE));
     }
 }

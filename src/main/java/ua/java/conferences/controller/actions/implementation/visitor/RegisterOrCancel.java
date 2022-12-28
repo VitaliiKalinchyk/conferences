@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.visitor;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -21,7 +22,7 @@ public class RegisterOrCancel implements Action {
     }
 
     @Override
-    public String execute(HttpServletRequest request) throws ServiceException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         long userId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         String eventId = request.getParameter(EVENT_ID);
         String todo = request.getParameter(TODO);

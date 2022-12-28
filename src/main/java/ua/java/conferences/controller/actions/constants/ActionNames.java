@@ -11,6 +11,7 @@ public final class ActionNames {
     public static final String CHANGE_PASSWORD_ACTION = "change-password";
     public static final String SEARCH_USER_ACTION = "search-user";
     public static final String VIEW_USERS_ACTION = "view-users";
+    public static final String USERS_PDF_ACTION = "users-pdf";
     public static final String DELETE_USER_ACTION = "delete-user";
     public static final String SET_ROLE_ACTION = "set-role";
     public static final String VIEW_UPCOMING_EVENTS_ACTION = "view-upcoming-events";
@@ -23,6 +24,7 @@ public final class ActionNames {
     public static final String OFFER_REPORT_ACTION = "offer-report";
     public static final String SET_OR_REMOVE_SPEAKER_BY_SPEAKER_ACTION = "set-or-remove-speaker-by-speaker";
     public static final String VIEW_EVENTS_ACTION = "view-events";
+    public static final String EVENTS_PDF_ACTION = "events-pdf";
     public static final String CREATE_EVENT_ACTION = "create-event";
     public static final String SEARCH_EVENT_ACTION = "search-event";
     public static final String DELETE_EVENT_ACTION = "delete-event";

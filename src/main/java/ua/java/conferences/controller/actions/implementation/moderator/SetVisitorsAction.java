@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.exceptions.ServiceException;
@@ -18,7 +19,7 @@ public class SetVisitorsAction implements Action {
     }
 
     @Override
-    public String execute(HttpServletRequest request) throws ServiceException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         String eventId = request.getParameter(EVENT_ID);
         String visitors = request.getParameter(VISITORS);
         eventService.setVisitorsCount(eventId, visitors);

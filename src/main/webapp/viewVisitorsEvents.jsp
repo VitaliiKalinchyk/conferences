@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/darkPagination.css">
+    <link rel="stylesheet" href="css/my.css">
     <script src="js/bootstrap.min.js"></script>
 </head>
 

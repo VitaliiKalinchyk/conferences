@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/bootstrap-icons.css">
-    <link rel="stylesheet" href="css/darkPagination.css">
+    <link rel="stylesheet" href="css/my.css">
     <script src="js/bootstrap.min.js"></script>
 </head>
 
@@ -28,29 +28,35 @@
         <span class="fs-4"><fmt:message key="users"/></span>
     </header>
 
-    <form method="GET" action="controller">
-        <div class="d-flex justify-content-between">
+    <div class="row">
+        <form class="col-11" method="GET" action="controller">
             <input type="hidden" name="action" value="view-users">
             <input type="hidden" name="offset" value="0">
-            <div class="flex-column">
-                <label>
-                    <select name="role" class="form-select mt-2" onchange='submit();'>
-                        <option><fmt:message key="select.role"/></option>
-                        <option value="4" ${param.role eq "4" ? "selected" : ""}><fmt:message key="VISITOR"/></option>
-                        <option value="3" ${param.role eq "3" ? "selected" : ""}><fmt:message key="SPEAKER"/></option>
-                        <option value="2" ${param.role eq "2" ? "selected" : ""}><fmt:message key="MODERATOR"/></option>
-                        <option value="1" ${param.role eq "1" ? "selected" : ""}><fmt:message key="ADMIN"/></option>
-                    </select>
-                </label>
-            </div>
-            <div class="flex-column">
-                <label for="records"><fmt:message key="number.records"/></label>
-                <input class="col-2" type="number" min="1" name="records" id="records"
-                       value="${not empty requestScope.records ? requestScope.records : "5"}">&nbsp&nbsp&nbsp&nbsp&nbsp
-                <button type="submit" class="btn btn-dark mt-2 mb-3"><fmt:message key="submit"/></button>
-            </div>
-        </div>
-    </form>
+
+            <label>
+                <select name="role" class="form-select mt-2" onchange='submit();'>
+                    <option><fmt:message key="select.role"/></option>
+                    <option value="4" ${param.role eq "4" ? "selected" : ""}><fmt:message key="VISITOR"/></option>
+                    <option value="3" ${param.role eq "3" ? "selected" : ""}><fmt:message key="SPEAKER"/></option>
+                    <option value="2" ${param.role eq "2" ? "selected" : ""}><fmt:message key="MODERATOR"/></option>
+                    <option value="1" ${param.role eq "1" ? "selected" : ""}><fmt:message key="ADMIN"/></option>
+                </select>
+            </label>&nbsp&nbsp&nbsp&nbsp&nbsp
+
+            <label for="records"><fmt:message key="number.records"/></label>
+            <input class="col-2" type="number" min="1" name="records" id="records"
+                   value="${not empty requestScope.records ? requestScope.records : "5"}">&nbsp&nbsp&nbsp
+            <button type="submit" class="btn btn-dark mt-2 mb-3"><fmt:message key="submit"/></button>
+        </form>
+
+        <form class="col-1 mt-3" method="GET" action="controller">
+            <input type="hidden" name="action" value="users-pdf">
+            <input type="hidden" name="role" value="${param.role}">
+            <input type="hidden" name="sort" value="${param.sort}">
+            <input type="hidden" name="order" value="${param.order}">
+            <button type="submit" class="icon-button"><i class="bi bi-download"></i></button>
+        </form>
+    </div>
 
     <div class="bd-example-snippet bd-code-snippet">
         <div class="bd-example">

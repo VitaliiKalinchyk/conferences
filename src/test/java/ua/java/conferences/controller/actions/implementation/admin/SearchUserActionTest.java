@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.admin;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
@@ -18,6 +19,7 @@ import static ua.java.conferences.exceptions.constants.Message.*;
 
 class SearchUserActionTest {
     private final HttpServletRequest request = mock(HttpServletRequest.class);
+    private final HttpServletResponse response = mock(HttpServletResponse.class);
     private final AppContext appContext = mock(AppContext.class);
     private final UserService userService = mock(UserService.class);
 
@@ -29,7 +31,7 @@ class SearchUserActionTest {
         when(appContext.getUserService()).thenReturn(userService);
         when(userService.getByEmail(email)).thenReturn(getTestUserDTO());
 
-        assertEquals(USER_BY_EMAIL_PAGE, new SearchUserAction(appContext).execute(myRequest));
+        assertEquals(USER_BY_EMAIL_PAGE, new SearchUserAction(appContext).execute(myRequest, response));
         assertEquals(getTestUserDTO(), myRequest.getAttribute(USER));
     }
 
@@ -41,7 +43,7 @@ class SearchUserActionTest {
         when(appContext.getUserService()).thenReturn(userService);
         when(userService.getByEmail(email)).thenThrow(new IncorrectFormatException(ENTER_CORRECT_EMAIL));
 
-        assertEquals(SEARCH_USER_PAGE, new SearchUserAction(appContext).execute(myRequest));
+        assertEquals(SEARCH_USER_PAGE, new SearchUserAction(appContext).execute(myRequest, response));
         assertEquals(ENTER_CORRECT_EMAIL, myRequest.getAttribute(ERROR));
     }
 
@@ -53,7 +55,7 @@ class SearchUserActionTest {
         when(appContext.getUserService()).thenReturn(userService);
         when(userService.getByEmail(email)).thenThrow(new IncorrectFormatException(ENTER_CORRECT_EMAIL));
 
-        assertEquals(SEARCH_USER_PAGE, new SearchUserAction(appContext).execute(myRequest));
+        assertEquals(SEARCH_USER_PAGE, new SearchUserAction(appContext).execute(myRequest, response));
         assertEquals(ENTER_CORRECT_EMAIL, myRequest.getAttribute(ERROR));
     }
 
@@ -65,7 +67,7 @@ class SearchUserActionTest {
         when(appContext.getUserService()).thenReturn(userService);
         when(userService.getByEmail(email)).thenThrow(new NoSuchUserException());
 
-        assertEquals(SEARCH_USER_PAGE, new SearchUserAction(appContext).execute(myRequest));
+        assertEquals(SEARCH_USER_PAGE, new SearchUserAction(appContext).execute(myRequest, response));
         assertEquals(NO_USER, myRequest.getAttribute(ERROR));
     }
 

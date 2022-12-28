@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import ua.java.conferences.controller.actions.MyRequest;
@@ -14,12 +15,13 @@ import static ua.java.conferences.controller.actions.constants.Parameters.LOGGED
 
 class SignOutActionTest {
     private final HttpServletRequest request = mock(HttpServletRequest.class);
+    private final HttpServletResponse response = mock(HttpServletResponse.class);
 
     @Test
     void testExecute() {
         MyRequest myRequest = new MyRequest(request);
         myRequest.getSession().setAttribute(LOGGED_USER, UserDTO.builder().build());
-        assertEquals(SIGN_IN_PAGE, new SignOutAction().execute(myRequest));
+        assertEquals(SIGN_IN_PAGE, new SignOutAction().execute(myRequest, response));
         Assertions.assertFalse(((MySession)myRequest.getSession()).isValid);
     }
 }

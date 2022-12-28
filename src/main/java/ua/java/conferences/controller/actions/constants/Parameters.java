@@ -45,6 +45,7 @@ public final class Parameters {
     public static final String VISITORS = "visitors";
     public static final String PAGES = "pages";
     public static final String CAPTCHA = "g-recaptcha-response";
+    public static final String LOCALE = "locale";
 
     private Parameters() {}
 }

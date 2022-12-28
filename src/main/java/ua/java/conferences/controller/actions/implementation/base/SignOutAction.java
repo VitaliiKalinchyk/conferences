@@ -10,7 +10,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.LOGGED
 public class SignOutAction implements Action {
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public String execute(HttpServletRequest request, HttpServletResponse response) {
         if (request.getSession().getAttribute(LOGGED_USER) != null) {
             request.getSession().invalidate();
         }

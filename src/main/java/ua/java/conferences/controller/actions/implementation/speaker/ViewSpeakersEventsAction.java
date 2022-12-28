@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.speaker;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.*;
@@ -22,7 +23,7 @@ public class ViewSpeakersEventsAction implements Action {
     }
 
     @Override
-    public String execute(HttpServletRequest request) throws ServiceException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         QueryBuilder queryBuilder = getQueryBuilder(request);
         request.setAttribute(EVENTS, eventService.getSortedByUser(queryBuilder.getQuery(), SPEAKER));
         int numberOfRecords = eventService.getNumberOfRecords(queryBuilder.getRecordQuery(), SPEAKER);

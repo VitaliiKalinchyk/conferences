@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.speaker;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -26,7 +27,7 @@ public class SetOrRemoveSpeakerBySpeakerAction implements Action {
     }
 
     @Override
-    public String execute(HttpServletRequest request) throws ServiceException {
+    public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         long reportId = Long.parseLong(request.getParameter(REPORT_ID));
         String eventId = request.getParameter(EVENT_ID);
         setOrRemove(request, reportId);
