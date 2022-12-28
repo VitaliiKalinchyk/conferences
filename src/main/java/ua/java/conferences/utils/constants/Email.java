@@ -86,13 +86,13 @@ public class Email {
     public static final String MESSAGE_REMOVE_SPEAKER = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
-            "You were removed as speaker at report \"%s\" at %s (%s %s) due to important circumstances" +
+            "You were removed as speaker for report \"%s\" at %s (%s %s) due to important circumstances" +
             DOUBLE_ENTER +
             SIGNATURE;
     public static final String MESSAGE_SET_SPEAKER = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
-            "You were set as speaker at report \"%s\" at %s (%s %s) due to important circumstances" +
+            "You were set as speaker for report \"%s\" at %s (%s %s) due to important circumstances" +
             DOUBLE_ENTER +
             SIGNATURE;
     public static final String MESSAGE_OFFER_REPORT = HELLO +

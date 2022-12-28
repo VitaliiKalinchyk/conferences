@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS `user` (
   `name` VARCHAR(45) NOT NULL,
   `surname` VARCHAR(45) NOT NULL,
   `role_id` INT NOT NULL DEFAULT 4,
-  `notification` TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
   INDEX `fk_user_role_idx` (`role_id` ASC) VISIBLE,

@@ -18,7 +18,6 @@ CREATE TABLE IF NOT EXISTS `conferences`.`user` (
   `name` VARCHAR(45) NOT NULL,
   `surname` VARCHAR(45) NOT NULL,
   `role_id` INT NOT NULL DEFAULT 4,
-  `notification` TINYINT NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE INDEX `email_UNIQUE` (`email` ASC) VISIBLE,
   INDEX `fk_user_role_idx` (`role_id` ASC) VISIBLE,
@@ -202,4 +201,4 @@ UPDATE report SET user_id=13 WHERE id=7;
 UPDATE report SET user_id=13 WHERE id=12;
 UPDATE report SET user_id=12 WHERE id=13;
 
-select email, name from user JOIN report ON user.id=report.user_id WHERE report.id=8;
+SELECT * FROM event;

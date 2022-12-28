@@ -12,7 +12,6 @@ import static ua.java.conferences.Constants.DESCRIPTION;
 import static ua.java.conferences.Constants.EMAIL;
 import static ua.java.conferences.Constants.LOCATION;
 import static ua.java.conferences.Constants.NAME;
-import static ua.java.conferences.Constants.NOTIFICATION;
 import static ua.java.conferences.Constants.REGISTRATIONS;
 import static ua.java.conferences.Constants.REPORTS;
 import static ua.java.conferences.Constants.ROLE_VISITOR;
@@ -123,7 +122,6 @@ class ActionUtilTest {
                 .email(EMAIL)
                 .name(NAME)
                 .surname(SURNAME)
-                .notification(NOTIFICATION)
                 .role(ROLE_VISITOR)
                 .build();
     }

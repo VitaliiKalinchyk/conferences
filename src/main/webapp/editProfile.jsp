@@ -36,8 +36,6 @@
                                 sessionScope.loggedUser.name : requestScope.user.name}"/>
         <c:set var="surnameValue" value="${requestScope.user.surname eq null ?
                                 sessionScope.loggedUser.surname : requestScope.user.surname}"/>
-        <c:set var="notification" value="${requestScope.user.notification eq null ?
-                                sessionScope.loggedUser.notification : requestScope.user.notification}"/>
 
         <div class="form-group">
             <c:if test="${not empty requestScope.message}">
@@ -67,12 +65,6 @@
             <c:if test="${fn:contains(error, 'surname')}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if><br>
-        </div>
-
-        <div class="form-group">
-            <label class="form-label fs-5" for="notification"><fmt:message key="notification"/>: </label>
-            <input type="checkbox" name="notification" id="notification" ${notification ? "checked" : ""}>
-            <br>
         </div>
 
         <button type="submit" class="btn btn-dark mt-4 mb-4"><fmt:message key="submit"/></button>

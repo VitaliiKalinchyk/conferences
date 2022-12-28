@@ -35,17 +35,7 @@
         <p class="fs-5">${sessionScope.loggedUser.name}</p>
 
         <p class="fs-6"><fmt:message key="surname"/>:</p>
-        <p class="fs-5">${sessionScope.loggedUser.surname}</p>
-
-        <p class="fs-6"><fmt:message key="notification"/>:</p>
-        <c:choose>
-            <c:when test="${sessionScope.loggedUser.notification}">
-                <p class="fs-5"><fmt:message key="yes"/></p>
-            </c:when>
-            <c:otherwise>
-                <p class="fs-5"><fmt:message key="no"/></p>
-            </c:otherwise>
-        </c:choose><br>
+        <p class="fs-5">${sessionScope.loggedUser.surname}</p><br>
     </main>
 
     <a href="editProfile.jsp" class="btn btn-dark mt-0 mb-1"><fmt:message key="edit.profile"/></a>

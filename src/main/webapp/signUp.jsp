@@ -13,6 +13,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/my.css">
     <script src="js/showPass.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="https://www.google.com/recaptcha/api.js"></script>
@@ -86,12 +87,6 @@
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if>
             <br>
-        </div>
-
-        <div class="form-group">
-            <label class="form-label fs-5" for="notification"><fmt:message key="notification"/>: </label>
-            <input type="checkbox" name="notification" id="notification" checked>
-            <br><br>
         </div>
 
         <div class="g-recaptcha" data-sitekey="6LecrqsjAAAAACSNHc7GqpvVkK6-fKxvSgT7Sx5e"></div>

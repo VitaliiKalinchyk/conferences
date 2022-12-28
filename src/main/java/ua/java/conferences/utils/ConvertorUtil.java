@@ -16,7 +16,6 @@ public final class ConvertorUtil {
                 .email(userDTO.getEmail())
                 .name(userDTO.getName())
                 .surname(userDTO.getSurname())
-                .emailNotification(userDTO.isNotification())
                 .build();
     }
 
@@ -26,7 +25,6 @@ public final class ConvertorUtil {
                 .email(user.getEmail())
                 .name(user.getName())
                 .surname(user.getSurname())
-                .notification(user.isEmailNotification())
                 .role(String.valueOf(Role.getRole(user.getRoleId())))
                 .build();
     }

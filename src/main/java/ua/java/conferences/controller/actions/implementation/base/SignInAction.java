@@ -44,7 +44,7 @@ public class SignInAction implements Action {
             path = SIGN_IN_PAGE;
         }
         request.getSession().setAttribute(CURRENT_PATH, path);
-        return getActionToRedirect(SIGN_IN_ACTION) ;
+        return getActionToRedirect(SIGN_IN_ACTION);
     }
 
     private static void setLoggedUser(HttpServletRequest request, UserDTO user) {

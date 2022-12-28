@@ -24,7 +24,7 @@
         <span class="fs-4"><fmt:message key="reset.password"/></span>
     </header>
 
-    <form method="GET" action="controller">
+    <form method="POST" action="controller">
         <input type="hidden" name="action" value="password-reset">
 
         <div class="form-group">
@@ -33,8 +33,9 @@
             </c:if>
             <br>
             <label class="form-label fs-5" for="email"><fmt:message key="email"/>: </label>
-            <input class="form-control" type="email" name="email" id="email"
-                   pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" required>
+            <input class="form-control" type="email" name="email" id="email" required
+                   value="${not empty requestScope.email ? requestScope.email : ""}"
+                   pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$">
             <c:if test="${not empty requestScope.error}">
                 <span class="text-danger"><fmt:message key="${requestScope.error}"/></span>
             </c:if>

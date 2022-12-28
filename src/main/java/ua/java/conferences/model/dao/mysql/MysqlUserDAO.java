@@ -224,7 +224,6 @@ public class MysqlUserDAO implements UserDAO {
                 .name(resultSet.getString(NAME))
                 .surname(resultSet.getString(SURNAME))
                 .password(resultSet.getString(PASSWORD))
-                .emailNotification(resultSet.getInt(NOTIFICATION) == 1)
                 .roleId(resultSet.getInt(ROLE_ID))
                 .build();
     }
@@ -235,7 +234,6 @@ public class MysqlUserDAO implements UserDAO {
         preparedStatement.setString(++k, user.getPassword());
         preparedStatement.setString(++k, user.getName());
         preparedStatement.setString(++k, user.getSurname());
-        preparedStatement.setInt(++k, user.isEmailNotification() ? 1 : 0);
     }
 
     private static void setStatementFieldsForUpdateMethod(User user, PreparedStatement preparedStatement)
@@ -244,7 +242,6 @@ public class MysqlUserDAO implements UserDAO {
         preparedStatement.setString(++k, user.getEmail());
         preparedStatement.setString(++k, user.getName());
         preparedStatement.setString(++k, user.getSurname());
-        preparedStatement.setInt(++k, user.isEmailNotification() ? 1 : 0);
         preparedStatement.setLong(++k, user.getId());
     }
 

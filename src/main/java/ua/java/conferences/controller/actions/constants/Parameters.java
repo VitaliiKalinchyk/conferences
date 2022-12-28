@@ -14,7 +14,6 @@ public final class Parameters {
     public static final String OLD_PASSWORD = "old-password";
     public static final String NAME = "name";
     public static final String SURNAME = "surname";
-    public static final String NOTIFICATION = "notification";
     public static final String IS_REGISTERED = "isRegistered";
     public static final String IS_COMING = "isComing";
     public static final String EVENT_ID = "event-id";

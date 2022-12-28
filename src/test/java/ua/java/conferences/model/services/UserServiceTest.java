@@ -400,7 +400,6 @@ class UserServiceTest {
                 .email(EMAIL)
                 .name(NAME)
                 .surname(SURNAME)
-                .notification(NOTIFICATION)
                 .role(ROLE_VISITOR)
                 .build();
     }

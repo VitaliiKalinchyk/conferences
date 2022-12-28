@@ -12,6 +12,5 @@ public class User implements Serializable {
     private transient String password;
     private String name;
     private String surname;
-    private boolean emailNotification;
     @EqualsAndHashCode.Exclude private int roleId;
 }

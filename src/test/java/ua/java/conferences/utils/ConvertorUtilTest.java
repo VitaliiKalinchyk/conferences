@@ -27,7 +27,6 @@ class ConvertorUtilTest {
         UserDTO userToDTO = convertUserToDTO(getTestUser());
         assertEquals(testDTO, userToDTO);
         assertEquals(testDTO.getId(), userToDTO.getId());
-        assertEquals(testDTO.isNotification(), userToDTO.isNotification());
         assertEquals(testDTO.getRole(), userToDTO.getRole());
     }
 
@@ -85,7 +84,6 @@ class ConvertorUtilTest {
                 .email(EMAIL)
                 .name(NAME)
                 .surname(SURNAME)
-                .notification(NOTIFICATION)
                 .role(ROLE_VISITOR)
                 .build();
     }

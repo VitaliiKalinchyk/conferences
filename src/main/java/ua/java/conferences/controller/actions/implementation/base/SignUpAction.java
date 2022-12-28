@@ -67,12 +67,6 @@ public class SignUpAction implements Action {
                 .email(request.getParameter(EMAIL))
                 .name(request.getParameter(NAME))
                 .surname(request.getParameter(SURNAME))
-                .notification(isNotified(request))
                 .build();
-    }
-
-    private static boolean isNotified(HttpServletRequest request) {
-        String notification = request.getParameter(NOTIFICATION);
-        return notification != null && notification.equals("on");
     }
 }

@@ -20,7 +20,6 @@ public final class Constants {
     public static final String SURNAME = "Yi";
     public static final String INCORRECT_SURNAME = "";
     public static final String SPEAKER_NAME = "Joe Yi";
-    public static final boolean NOTIFICATION = false;
     public static final String ROLE_VISITOR = "VISITOR";
     public static final int ROLE_ID = 4;
     public static final String TOPIC = "Report topic";

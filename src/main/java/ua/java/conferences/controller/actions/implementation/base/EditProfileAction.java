@@ -53,19 +53,12 @@ public class EditProfileAction implements Action {
                 .email(request.getParameter(EMAIL))
                 .name(request.getParameter(NAME))
                 .surname(request.getParameter(SURNAME))
-                .notification(isNotified(request))
                 .build();
-    }
-
-    private boolean isNotified(HttpServletRequest request) {
-        String notification = request.getParameter(NOTIFICATION);
-        return notification != null && notification.equals("on");
     }
 
     private void updateSessionUser(UserDTO currentUser, UserDTO user) {
         currentUser.setEmail(user.getEmail());
         currentUser.setName(user.getName());
         currentUser.setSurname(user.getSurname());
-        currentUser.setNotification(user.isNotification());
     }
 }
