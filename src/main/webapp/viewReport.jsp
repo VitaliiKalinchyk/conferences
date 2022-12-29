@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
@@ -7,13 +8,7 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 
-<head>
-    <title>Conference Smart App. <fmt:message key="view.report"/></title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.min.js"></script>
-</head>
+<tags:title title="view.report"/>
 
 <body>
 
@@ -60,12 +55,8 @@
         </c:choose>
     </c:if>
 
-    <c:if test="${not empty requestScope.message}">
-        <span class="text-success"><fmt:message key="${requestScope.message}"/></span>
-    </c:if>
-    <c:if test="${not empty requestScope.error}">
-        <span class="text-warning"><fmt:message key="${requestScope.error}"/></span>
-    </c:if><br>
+    <tags:notEmptyMessage value="${requestScope.message}"/>
+    <tags:notEmptyError value="${requestScope.error}"/><br>
 
     <c:if test="${requestScope.isComing}">
 

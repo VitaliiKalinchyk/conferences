@@ -1,23 +1,16 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
+<%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <fmt:setLocale value="${sessionScope.locale}" scope="session"/>
 <fmt:setBundle basename="resources"/>
-<jsp:useBean id="now" class="java.util.Date"/>
-<fmt:formatDate value="${now}" pattern="yyyy-MM-dd" var="nowFormatted"/>
-<c:set var="isComing" value="${nowFormatted le requestScope.event.date}" scope="request"/>
-
+<c:set var="now"><tags:now/></c:set>
+<c:set var="isComing" value="${now le requestScope.event.date}" scope="request"/>
 
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 
-<head>
-    <title>Conference Smart App. <fmt:message key="view.event"/></title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-    <script src="js/bootstrap.min.js"></script>
-</head>
+<tags:title title="view.event"/>
 
 <body>
 
@@ -67,11 +60,8 @@
                 <button type="submit" class="btn btn-dark mt-3 mb-4"><fmt:message key="submit"/></button>
             </form>
         </c:otherwise>
-    </c:choose>
-
-    <br><c:if test="${not empty requestScope.message}">
-    <span class="text-success"><fmt:message key="${requestScope.message}"/></span>
-</c:if><br>
+    </c:choose><br>
+    <tags:notEmptyMessage value="${requestScope.message}"/><br>
 
     <div class="bd-example-snippet bd-code-snippet">
         <div class="bd-example">
