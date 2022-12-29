@@ -48,7 +48,9 @@ public class UsersPdfAction implements Action {
     }
 
     private void setResponse(HttpServletResponse response, ByteArrayOutputStream output) {
+        response.setContentType("application/pdf");
         response.setContentLength(output.size());
+        response.setHeader("Content-Disposition", "attachment; filename=\"users.pdf\"");
         try (OutputStream outputStream = response.getOutputStream()) {
             output.writeTo(outputStream);
             outputStream.flush();
