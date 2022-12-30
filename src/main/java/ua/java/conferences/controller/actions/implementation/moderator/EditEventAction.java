@@ -66,7 +66,7 @@ public class EditEventAction implements Action {
         try {
             eventService.update(event);
             request.getSession().setAttribute(MESSAGE, SUCCEED_UPDATE);
-            sendEmail(event);
+            sendEmail(event, request);
         } catch (IncorrectFormatException | DuplicateTitleException e) {
             request.getSession().setAttribute(EVENT_NEW, event);
             request.getSession().setAttribute(ERROR, e.getMessage());
@@ -84,7 +84,7 @@ public class EditEventAction implements Action {
                 .build();
     }
 
-    private void sendEmail(EventDTO event) throws ServiceException {
+    private void sendEmail(EventDTO event, HttpServletRequest request) throws ServiceException {
         String eventId = String.valueOf(event.getId());
         String title = event.getTitle();
         String date = event.getDate();
@@ -94,7 +94,7 @@ public class EditEventAction implements Action {
             new Thread(
                     () -> {
                         String body = String.format(MESSAGE_EVENT_CHANGED_VISITOR, participant.getName(), title,
-                                date, location, description, eventId);
+                                date, location, description, getURL(request), eventId);
                         emailSender.send(SUBJECT_NOTIFICATION, body, participant.getEmail());})
                     .start();
 
@@ -103,7 +103,7 @@ public class EditEventAction implements Action {
             new Thread(
                     () -> {
                         String body = String.format(MESSAGE_EVENT_CHANGED_SPEAKER, participant.getName(), title,
-                                date, location, description, eventId);
+                                date, location, description, getURL(request), eventId);
                         emailSender.send(SUBJECT_NOTIFICATION, body, participant.getEmail());})
                     .start();
         }

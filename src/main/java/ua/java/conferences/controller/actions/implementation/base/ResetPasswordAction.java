@@ -43,15 +43,15 @@ public class ResetPasswordAction implements Action {
             UserDTO user = userService.getByEmail(email);
             String newPass = userService.changePassword(user.getId());
             request.getSession().setAttribute(MESSAGE, CHECK_EMAIL);
-            sendEmail(user, newPass);
+            sendEmail(user, newPass, request);
         } catch (IncorrectFormatException | NoSuchUserException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
         }
         return getActionToRedirect(PASSWORD_RESET_ACTION);
     }
 
-    private void sendEmail(UserDTO user, String newPass)  {
-        String body = String.format(MESSAGE_RESET_PASSWORD, user.getName(), newPass);
+    private void sendEmail(UserDTO user, String newPass, HttpServletRequest request)  {
+        String body = String.format(MESSAGE_RESET_PASSWORD, user.getName(), newPass, getURL(request));
         new Thread(() -> emailSender.send(SUBJECT_NOTIFICATION, body, user.getEmail())).start();
     }
 }

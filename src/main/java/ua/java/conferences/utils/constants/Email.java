@@ -1,15 +1,6 @@
 package ua.java.conferences.utils.constants;
 
-import org.slf4j.*;
-import ua.java.conferences.utils.EmailSender;
-
-import java.io.*;
-import java.util.Properties;
-
 public class Email {
-    private static final Logger logger = LoggerFactory.getLogger(Email.class);
-    private static final String EMAIL_FILE = "email.properties";
-    private static final String URL = getUrl();
     public static final String SUBJECT_GREETINGS = "Welcome to Conference Smart App!";
     public static final String SUBJECT_NOTIFICATION = "Conference Smart App notification!";
     public static final String HELLO = "Hello %s,<br>";
@@ -22,11 +13,11 @@ public class Email {
             "We have prepared some useful information for you:" +
             DOUBLE_ENTER +
             "<h4>Upcoming Conferences</h4>" +
-            "Check " + A_HREF + URL + "controller?action=view-upcoming-events>upcoming events</a>, " +
+            "Check " + A_HREF + "%2$s" + "/controller?action=view-upcoming-events>upcoming events</a>, " +
             "register and enjoy listening to world famous Conference Smart App speakers." +
             DOUBLE_ENTER +
             "<h4>Your Conferences</h4>" +
-            "Navigate through " + A_HREF + URL + "controller?action=view-visitors-events>your conferences</a>, " +
+            "Navigate through " + A_HREF + "%2$s" + "/controller?action=view-visitors-events>your conferences</a>, " +
             "check date, location, topics." +
             DOUBLE_ENTER +
             SIGNATURE;
@@ -36,7 +27,7 @@ public class Email {
             "Your temporary password is %s. Do not forget to change it in your profile!" +
             DOUBLE_ENTER +
             "Enter your account " +
-            A_HREF + URL + "signIn.jsp>here</a>, " +
+            A_HREF + "%s" + "/signIn.jsp>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
     public static final String MESSAGE_EVENT_CHANGED_VISITOR = HELLO +
@@ -48,7 +39,7 @@ public class Email {
             "Conference description: %s" +
             DOUBLE_ENTER +
             "You can also check this conference " +
-            A_HREF + URL + "controller?action=view-event-by-visitor&event-id=%s>here</a>, " +
+            A_HREF + "%s" + "/controller?action=view-event-by-visitor&event-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
     public static final String MESSAGE_EVENT_CHANGED_SPEAKER = HELLO +
@@ -60,7 +51,7 @@ public class Email {
             "Conference description: %s" +
             DOUBLE_ENTER +
             "You can also check this conference " +
-            A_HREF + URL + "controller?action=view-event-by-speaker&event-id=%s>here</a>, " +
+            A_HREF + "%s" + "/controller?action=view-event-by-speaker&event-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
     public static final String MESSAGE_EVENT_DELETED = HELLO +
@@ -74,7 +65,7 @@ public class Email {
             DOUBLE_ENTER +
             "Topic for you report at %s (%s %s) was changed to %s" +
             "<br>" +
-            "You can check this report " + A_HREF + URL + "controller?action=view-event-by-speaker&event-id=%s>here</a>, " +
+            "You can check this report " + A_HREF + "%s" + "/controller?action=view-event-by-speaker&event-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
     public static final String MESSAGE_REPORT_DELETED = HELLO +
@@ -101,7 +92,7 @@ public class Email {
             "Speaker %s offered report \"%s\" for %s" +
             DOUBLE_ENTER +
             "Check this conference " +
-            A_HREF + URL + "controller?action=view-event&event-id=%s>here</a>, " +
+            A_HREF + "%s" + "/controller?action=view-event&event-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
     public static final String MESSAGE_SET_SPEAKER_BY_SPEAKER = HELLO +
@@ -110,7 +101,7 @@ public class Email {
             "%s set himself as speaker for  report \"%s\" at %s" +
             DOUBLE_ENTER +
             "Check this report " +
-            A_HREF + URL + "controller?action=view-report&report-id=%s>here</a>, " +
+            A_HREF + "%s" + "/controller?action=view-report&report-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
     public static final String MESSAGE_REMOVE_SPEAKER_BY_SPEAKER = HELLO +
@@ -119,19 +110,9 @@ public class Email {
             "%s remove himself as speaker for  report \"%s\" at %s" +
             DOUBLE_ENTER +
             "Check this report " +
-            A_HREF + URL + "controller?action=view-report&report-id=%s>here</a>, " +
+            A_HREF + "%s" + "/controller?action=view-report&report-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
 
     private Email() {}
-
-    private static String getUrl() {
-        Properties properties = new Properties();
-        try (InputStream resource = EmailSender.class.getClassLoader().getResourceAsStream(EMAIL_FILE)){
-            properties.load(resource);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        return properties.getProperty("url");
-    }
 }

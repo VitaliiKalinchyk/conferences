@@ -51,5 +51,11 @@ public class ActionUtil {
         return base + (parameters.length > 0 ? stringJoiner : "");
     }
 
+    public static String getURL(HttpServletRequest request) {
+        String servletPath = request.getServletPath();
+        String requestURL = request.getRequestURL().toString();
+        return requestURL.replace(servletPath, "");
+    }
+
     private ActionUtil() {}
 }

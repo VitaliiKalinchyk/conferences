@@ -1,7 +1,6 @@
 package ua.java.conferences.controller.actions.implementation.base;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -48,7 +47,7 @@ public class SignUpAction implements Action {
             captcha.verify(request.getParameter(CAPTCHA));
             userService.add(user, request.getParameter(PASSWORD), request.getParameter(CONFIRM_PASSWORD));
             request.getSession().setAttribute(MESSAGE, SUCCEED_REGISTER);
-            sendEmail(user);
+            sendEmail(user, request);
         } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException | CaptchaException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
             path = SIGN_UP_PAGE;
@@ -57,8 +56,8 @@ public class SignUpAction implements Action {
         return getActionToRedirect(SIGN_UP_ACTION);
     }
 
-    private void sendEmail(UserDTO user) {
-        String body = String.format(MESSAGE_GREETINGS, user.getName());
+    private void sendEmail(UserDTO user, HttpServletRequest request) {
+        String body = String.format(MESSAGE_GREETINGS, user.getName(), getURL(request));
         new Thread(() -> emailSender.send(SUBJECT_GREETINGS, body, user.getEmail())).start();
     }
 
