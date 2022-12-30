@@ -28,7 +28,7 @@ public final class ActionFactory {
         ACTION_MAP.put(CHANGE_PASSWORD_ACTION, new ChangePasswordAction(APP_CONTEXT));
 
         ACTION_MAP.put(VIEW_USERS_ACTION, new ViewUsersAction(APP_CONTEXT));
-        ACTION_MAP.put(USERS_PDF_ACTION, new UsersPdfAction(APP_CONTEXT));
+        ACTION_MAP.put(USERS_PDF_ACTION, new UsersToPdfAction(APP_CONTEXT));
         ACTION_MAP.put(SEARCH_USER_ACTION, new SearchUserAction(APP_CONTEXT));
         ACTION_MAP.put(DELETE_USER_ACTION, new DeleteUserAction(APP_CONTEXT));
         ACTION_MAP.put(SET_ROLE_ACTION, new SetRoleAction(APP_CONTEXT));
