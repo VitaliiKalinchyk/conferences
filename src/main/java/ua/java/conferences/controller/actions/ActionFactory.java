@@ -45,7 +45,7 @@ public final class ActionFactory {
         ACTION_MAP.put(SET_OR_REMOVE_SPEAKER_BY_SPEAKER_ACTION, new SetOrRemoveSpeakerBySpeakerAction(APP_CONTEXT));
 
         ACTION_MAP.put(VIEW_EVENTS_ACTION, new ViewEventsAction(APP_CONTEXT));
-        ACTION_MAP.put(EVENTS_PDF_ACTION, new EventsPdfAction(APP_CONTEXT));
+        ACTION_MAP.put(EVENTS_PDF_ACTION, new EventsToPdfAction(APP_CONTEXT));
         ACTION_MAP.put(CREATE_EVENT_ACTION, new CreateEventAction(APP_CONTEXT));
         ACTION_MAP.put(SEARCH_EVENT_ACTION, new SearchEventAction(APP_CONTEXT));
         ACTION_MAP.put(DELETE_EVENT_ACTION, new DeleteEventAction(APP_CONTEXT));
