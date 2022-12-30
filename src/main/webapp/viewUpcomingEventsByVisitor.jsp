@@ -8,7 +8,15 @@
 <!DOCTYPE html>
 <html lang="${sessionScope.locale}">
 
-<tags:title title="view.up.events.by.visitor"/>
+<head>
+    <title>Conference Smart App. <fmt:message key="view.up.events.by.visitor"/></title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-icons.css">
+    <link rel="stylesheet" href="css/my.css">
+    <script src="js/bootstrap.min.js"></script>
+</head>
 
 <body>
 

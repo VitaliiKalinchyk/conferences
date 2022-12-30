@@ -14,7 +14,6 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.doNothing;
 import static ua.java.conferences.controller.actions.constants.Pages.SIGN_IN_PAGE;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.ACCESS_DENIED;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;

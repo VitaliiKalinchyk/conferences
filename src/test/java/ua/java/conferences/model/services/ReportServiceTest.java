@@ -13,7 +13,6 @@ import ua.java.conferences.model.services.implementation.ReportServiceImpl;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.exceptions.constants.Message.*;

@@ -8,7 +8,6 @@ public final class SQLFields {
     public static final String PASSWORD = "password";
     public static final String NAME = "name";
     public static final String SURNAME = "surname";
-    public static final String NOTIFICATION = "notification";
     public static final String ROLE_ID = "role_id";
     public static final String TITLE = "title";
     public static final String EVENT_ID = "event_id";

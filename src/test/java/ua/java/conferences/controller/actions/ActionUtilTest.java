@@ -14,7 +14,6 @@ import static ua.java.conferences.Constants.LOCATION;
 import static ua.java.conferences.Constants.NAME;
 import static ua.java.conferences.Constants.REGISTRATIONS;
 import static ua.java.conferences.Constants.REPORTS;
-import static ua.java.conferences.Constants.ROLE_VISITOR;
 import static ua.java.conferences.Constants.SURNAME;
 import static ua.java.conferences.Constants.TITLE;
 import static ua.java.conferences.Constants.VISITORS;

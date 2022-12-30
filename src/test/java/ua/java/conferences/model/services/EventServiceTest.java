@@ -15,7 +15,6 @@ import java.sql.SQLException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
