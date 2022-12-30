@@ -62,13 +62,13 @@ public final class ValidatorUtil {
     }
 
     private static long checkId(String idString, ServiceException exception) throws ServiceException {
-        long eventId;
+        long id;
         try {
-            eventId = Long.parseLong(idString);
+            id = Long.parseLong(idString);
         } catch (NumberFormatException e) {
             throw exception;
         }
-        return eventId;
+        return id;
     }
 
     public static long getLong(String longString) throws ServiceException {
