@@ -111,15 +111,14 @@ public class PdfUtil {
     }
 
     private void addEventTableRows(Table table, List<EventDTO> events) {
-        events.forEach(event ->
-                {
-                    table.addCell(event.getTitle());
-                    table.addCell(event.getDate());
-                    table.addCell(event.getLocation());
-                    table.addCell(String.valueOf(event.getReports()));
-                    table.addCell(String.valueOf(event.getRegistrations()));
-                    table.addCell(String.valueOf(event.getVisitors()));
-                }
+        events.forEach(event -> {
+            table.addCell(event.getTitle());
+            table.addCell(event.getDate());
+            table.addCell(event.getLocation());
+            table.addCell(String.valueOf(event.getReports()));
+            table.addCell(String.valueOf(event.getRegistrations()));
+            table.addCell(String.valueOf(event.getVisitors()));
+        }
         );
     }
 

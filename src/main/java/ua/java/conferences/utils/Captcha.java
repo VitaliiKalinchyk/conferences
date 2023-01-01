@@ -24,7 +24,7 @@ public class Captcha {
             StringBuilder response = getResponse(connection);
             checkIfCaptchaPassed(response);
         } catch(IllegalStateException | UnknownHostException e){
-            logger.error(e.getMessage());
+            logger.error("skipped captcha - couldn't connect to google");
         } catch(Exception e){
             logger.error(e.getMessage());
             throw new CaptchaException();
