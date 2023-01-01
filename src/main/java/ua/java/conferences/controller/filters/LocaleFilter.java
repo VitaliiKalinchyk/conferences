@@ -2,16 +2,20 @@ package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import org.slf4j.*;
+
 import java.io.IOException;
 
 import static ua.java.conferences.controller.actions.constants.Parameters.LOCALE;
 
 public class LocaleFilter implements Filter {
+    private static final Logger logger = LoggerFactory.getLogger(LocaleFilter.class);
     private static final String REFERER = "referer";
     private String defaultLocale;
 
     @Override
     public void init(FilterConfig config) {
+        logger.info("default locale is set");
         defaultLocale = config.getInitParameter("defaultLocale");
     }
 
@@ -20,6 +24,7 @@ public class LocaleFilter implements Filter {
         String locale = httpRequest.getParameter(LOCALE);
         if (isNotBlank(locale)) {
             httpRequest.getSession().setAttribute(LOCALE, locale);
+            logger.info("locale is changed");
             ((HttpServletResponse) response).sendRedirect(((HttpServletRequest) request).getHeader(REFERER));
         } else {
             String sessionLocale = (String) httpRequest.getSession().getAttribute(LOCALE);
