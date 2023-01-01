@@ -115,6 +115,14 @@ class ActionUtilTest {
         assertEquals(result, getActionToRedirect(DELETE_USER_ACTION, USER_ID, "1", TODO, SET));
     }
 
+    @Test
+    void testGetURL() {
+        String result = "http://localhost:8080/conferences";
+        when(request.getServletPath()).thenReturn("/controller");
+        when(request.getRequestURL()).thenReturn(new StringBuffer("http://localhost:8080/conferences/controller"));
+        assertEquals(result, getURL(request));
+    }
+
     private UserDTO getTestUserDTO() {
         return UserDTO.builder()
                 .id(ID_VALUE)
