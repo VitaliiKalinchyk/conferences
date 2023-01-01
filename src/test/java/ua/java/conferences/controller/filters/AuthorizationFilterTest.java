@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 import ua.java.conferences.controller.actions.MyRequest;
 
 import java.io.IOException;
@@ -25,8 +25,7 @@ class AuthorizationFilterTest {
     private final FilterChain chain = mock(FilterChain.class);
 
     @ParameterizedTest
-    @ValueSource(strings = {"/index.jsp", "/about.jsp", "/contacts.jsp", "/signIn.jsp", "/signUp.jsp",
-            "/resetPassword.jsp", "/error.jsp", "/profile.jsp", "/editProfile.jsp", "/changePassword.jsp"})
+    @CsvFileSource(resources = {"/unLoggedUserPages.csv", "/loggedUserPages.csv"})
     void testVisitorDoFilterCorrectPage(String page) throws ServletException, IOException {
         AuthorizationFilter filter = new AuthorizationFilter();
         MyRequest myRequest = new MyRequest(request);
@@ -38,8 +37,43 @@ class AuthorizationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"sign-in", "sign-up", "password-reset", "sign-out", "edit-profile", "change-password",
-            "register-or-cancel"})
+    @CsvFileSource(resources = {"/unLoggedUserPages.csv", "/loggedUserPages.csv"})
+    void testSpeakerDoFilterCorrectPage(String page) throws ServletException, IOException {
+        AuthorizationFilter filter = new AuthorizationFilter();
+        MyRequest myRequest = new MyRequest(request);
+        myRequest.getSession().setAttribute(ROLE, "SPEAKER");
+        when(request.getServletPath()).thenReturn(page);
+        doNothing().when(chain).doFilter(myRequest, response);
+        filter.doFilter(myRequest, response, chain);
+        assertNull(myRequest.getAttribute(MESSAGE));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/unLoggedUserPages.csv", "/loggedUserPages.csv", "/moderatorPages.csv"})
+    void testModeratorDoFilterCorrectPage(String page) throws ServletException, IOException {
+        AuthorizationFilter filter = new AuthorizationFilter();
+        MyRequest myRequest = new MyRequest(request);
+        myRequest.getSession().setAttribute(ROLE, "MODERATOR");
+        when(request.getServletPath()).thenReturn(page);
+        doNothing().when(chain).doFilter(myRequest, response);
+        filter.doFilter(myRequest, response, chain);
+        assertNull(myRequest.getAttribute(MESSAGE));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/unLoggedUserPages.csv", "/loggedUserPages.csv", "/adminPages.csv"})
+    void testAdminDoFilterCorrectPage(String page) throws ServletException, IOException {
+        AuthorizationFilter filter = new AuthorizationFilter();
+        MyRequest myRequest = new MyRequest(request);
+        myRequest.getSession().setAttribute(ROLE, "ADMIN");
+        when(request.getServletPath()).thenReturn(page);
+        doNothing().when(chain).doFilter(myRequest, response);
+        filter.doFilter(myRequest, response, chain);
+        assertNull(myRequest.getAttribute(MESSAGE));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/unLoggedUserActions.csv", "/loggedUserActions.csv", "/visitorActions.csv"})
     void testVisitorDoFilterCorrectAction(String action) throws ServletException, IOException {
         AuthorizationFilter filter = new AuthorizationFilter();
         MyRequest myRequest = new MyRequest(request);
@@ -51,7 +85,43 @@ class AuthorizationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"/createEvent.jsp", "/searchEvent.jsp", "/viewEvent.jsp", "/viewUsers.jsp"})
+    @CsvFileSource(resources = {"/unLoggedUserActions.csv", "/loggedUserActions.csv", "/speakerActions.csv"})
+    void testSpeakerDoFilterCorrectAction(String action) throws ServletException, IOException {
+        AuthorizationFilter filter = new AuthorizationFilter();
+        MyRequest myRequest = new MyRequest(request);
+        myRequest.getSession().setAttribute(ROLE, "SPEAKER");
+        when(request.getParameter(ACTION)).thenReturn(action);
+        doNothing().when(chain).doFilter(myRequest, response);
+        filter.doFilter(myRequest, response, chain);
+        assertNull(myRequest.getAttribute(MESSAGE));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/unLoggedUserActions.csv", "/loggedUserActions.csv", "/moderatorActions.csv"})
+    void testModeratorDoFilterCorrectAction(String action) throws ServletException, IOException {
+        AuthorizationFilter filter = new AuthorizationFilter();
+        MyRequest myRequest = new MyRequest(request);
+        myRequest.getSession().setAttribute(ROLE, "MODERATOR");
+        when(request.getParameter(ACTION)).thenReturn(action);
+        doNothing().when(chain).doFilter(myRequest, response);
+        filter.doFilter(myRequest, response, chain);
+        assertNull(myRequest.getAttribute(MESSAGE));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/unLoggedUserActions.csv", "/loggedUserActions.csv", "/adminActions.csv"})
+    void testAdminDoFilterCorrectAction(String action) throws ServletException, IOException {
+        AuthorizationFilter filter = new AuthorizationFilter();
+        MyRequest myRequest = new MyRequest(request);
+        myRequest.getSession().setAttribute(ROLE, "ADMIN");
+        when(request.getParameter(ACTION)).thenReturn(action);
+        doNothing().when(chain).doFilter(myRequest, response);
+        filter.doFilter(myRequest, response, chain);
+        assertNull(myRequest.getAttribute(MESSAGE));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/moderatorPages.csv", "/adminPages.csv"})
     void testVisitorDoFilterAccessDeniedPage(String page) throws ServletException, IOException {
         AuthorizationFilter filter = new AuthorizationFilter();
         MyRequest myRequest = new MyRequest(request);
@@ -64,46 +134,7 @@ class AuthorizationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"offer-report", "edit-event", "search-user"})
-    void testVisitorDoFilterAccessDeniedAction(String action) throws ServletException, IOException {
-        AuthorizationFilter filter = new AuthorizationFilter();
-        MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(ROLE, "VISITOR");
-        when(request.getParameter(ACTION)).thenReturn(action);
-        when(request.getRequestDispatcher(SIGN_IN_PAGE)).thenReturn(dispatcher);
-        doNothing().when(dispatcher).forward(myRequest, response);
-        filter.doFilter(myRequest, response, chain);
-        assertEquals(ACCESS_DENIED, myRequest.getAttribute(MESSAGE));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"/index.jsp", "/about.jsp", "/contacts.jsp", "/signIn.jsp", "/signUp.jsp",
-            "/resetPassword.jsp", "/error.jsp", "/profile.jsp", "/editProfile.jsp", "/changePassword.jsp"})
-    void testSpeakerDoFilterCorrectPage(String page) throws ServletException, IOException {
-        AuthorizationFilter filter = new AuthorizationFilter();
-        MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(ROLE, "SPEAKER");
-        when(request.getServletPath()).thenReturn(page);
-        doNothing().when(chain).doFilter(myRequest, response);
-        filter.doFilter(myRequest, response, chain);
-        assertNull(myRequest.getAttribute(MESSAGE));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"sign-in", "sign-up", "password-reset", "sign-out", "edit-profile", "change-password",
-            "offer-report"})
-    void testSpeakerDoFilterCorrectAction(String action) throws ServletException, IOException {
-        AuthorizationFilter filter = new AuthorizationFilter();
-        MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(ROLE, "SPEAKER");
-        when(request.getParameter(ACTION)).thenReturn(action);
-        doNothing().when(chain).doFilter(myRequest, response);
-        filter.doFilter(myRequest, response, chain);
-        assertNull(myRequest.getAttribute(MESSAGE));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"/createEvent.jsp", "/searchEvent.jsp", "/viewEvent.jsp", "/viewUsers.jsp"})
+    @CsvFileSource(resources = {"/moderatorPages.csv", "/adminPages.csv"})
     void testSpeakerDoFilterAccessDeniedPage(String page) throws ServletException, IOException {
         AuthorizationFilter filter = new AuthorizationFilter();
         MyRequest myRequest = new MyRequest(request);
@@ -116,47 +147,7 @@ class AuthorizationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"register-or-cancel", "edit-event", "search-user"})
-    void testSpeakerDoFilterAccessDeniedAction(String action) throws ServletException, IOException {
-        AuthorizationFilter filter = new AuthorizationFilter();
-        MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(ROLE, "SPEAKER");
-        when(request.getParameter(ACTION)).thenReturn(action);
-        when(request.getRequestDispatcher(SIGN_IN_PAGE)).thenReturn(dispatcher);
-        doNothing().when(dispatcher).forward(myRequest, response);
-        filter.doFilter(myRequest, response, chain);
-        assertEquals(ACCESS_DENIED, myRequest.getAttribute(MESSAGE));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"/index.jsp", "/about.jsp", "/contacts.jsp", "/signIn.jsp", "/signUp.jsp",
-            "/resetPassword.jsp", "/error.jsp", "/profile.jsp", "/editProfile.jsp",
-            "/createEvent.jsp", "/searchEvent.jsp", "/viewEvent.jsp"})
-    void testModeratorDoFilterCorrectPage(String page) throws ServletException, IOException {
-        AuthorizationFilter filter = new AuthorizationFilter();
-        MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(ROLE, "MODERATOR");
-        when(request.getServletPath()).thenReturn(page);
-        doNothing().when(chain).doFilter(myRequest, response);
-        filter.doFilter(myRequest, response, chain);
-        assertNull(myRequest.getAttribute(MESSAGE));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"sign-in", "sign-up", "password-reset", "sign-out", "edit-profile", "change-password",
-            "view-events", "create-event", "edit-event", "create-report"})
-    void testModeratorDoFilterCorrectAction(String action) throws ServletException, IOException {
-        AuthorizationFilter filter = new AuthorizationFilter();
-        MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(ROLE, "MODERATOR");
-        when(request.getParameter(ACTION)).thenReturn(action);
-        doNothing().when(chain).doFilter(myRequest, response);
-        filter.doFilter(myRequest, response, chain);
-        assertNull(myRequest.getAttribute(MESSAGE));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"/searchUser.jsp", "/viewUsers.jsp"})
+    @CsvFileSource(resources = "/adminPages.csv")
     void testModeratorDoFilterAccessDeniedPage(String page) throws ServletException, IOException {
         AuthorizationFilter filter = new AuthorizationFilter();
         MyRequest myRequest = new MyRequest(request);
@@ -169,47 +160,7 @@ class AuthorizationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"register-or-cancel", "offer-report", "search-user"})
-    void testModeratorDoFilterAccessDeniedAction(String action) throws ServletException, IOException {
-        AuthorizationFilter filter = new AuthorizationFilter();
-        MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(ROLE, "MODERATOR");
-        when(request.getParameter(ACTION)).thenReturn(action);
-        when(request.getRequestDispatcher(SIGN_IN_PAGE)).thenReturn(dispatcher);
-        doNothing().when(dispatcher).forward(myRequest, response);
-        filter.doFilter(myRequest, response, chain);
-        assertEquals(ACCESS_DENIED, myRequest.getAttribute(MESSAGE));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"/index.jsp", "/about.jsp", "/contacts.jsp", "/signIn.jsp", "/signUp.jsp",
-            "/resetPassword.jsp", "/error.jsp", "/profile.jsp", "/editProfile.jsp",
-            "/viewUsers.jsp", "/searchUser.jsp"})
-    void testAdminDoFilterCorrectPage(String page) throws ServletException, IOException {
-        AuthorizationFilter filter = new AuthorizationFilter();
-        MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(ROLE, "ADMIN");
-        when(request.getServletPath()).thenReturn(page);
-        doNothing().when(chain).doFilter(myRequest, response);
-        filter.doFilter(myRequest, response, chain);
-        assertNull(myRequest.getAttribute(MESSAGE));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"sign-in", "sign-up", "password-reset", "sign-out", "edit-profile", "change-password",
-            "view-users", "set-role", "delete-user", "search-user"})
-    void testAdminDoFilterCorrectAction(String action) throws ServletException, IOException {
-        AuthorizationFilter filter = new AuthorizationFilter();
-        MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(ROLE, "ADMIN");
-        when(request.getParameter(ACTION)).thenReturn(action);
-        doNothing().when(chain).doFilter(myRequest, response);
-        filter.doFilter(myRequest, response, chain);
-        assertNull(myRequest.getAttribute(MESSAGE));
-    }
-
-    @ParameterizedTest
-    @ValueSource(strings = {"/createEvent.jsp", "/searchEvent.jsp", "/viewEvent.jsp"})
+    @CsvFileSource(resources = "/moderatorPages.csv")
     void testAdminDoFilterAccessDeniedPage(String page) throws ServletException, IOException {
         AuthorizationFilter filter = new AuthorizationFilter();
         MyRequest myRequest = new MyRequest(request);
@@ -222,7 +173,47 @@ class AuthorizationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"register-or-cancel", "offer-report", "search-event"})
+    @CsvFileSource(resources = {"/speakerActions.csv", "/moderatorActions.csv", "/adminActions.csv"})
+    void testVisitorDoFilterAccessDeniedAction(String action) throws ServletException, IOException {
+        AuthorizationFilter filter = new AuthorizationFilter();
+        MyRequest myRequest = new MyRequest(request);
+        myRequest.getSession().setAttribute(ROLE, "VISITOR");
+        when(request.getParameter(ACTION)).thenReturn(action);
+        when(request.getRequestDispatcher(SIGN_IN_PAGE)).thenReturn(dispatcher);
+        doNothing().when(dispatcher).forward(myRequest, response);
+        filter.doFilter(myRequest, response, chain);
+        assertEquals(ACCESS_DENIED, myRequest.getAttribute(MESSAGE));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/visitorActions.csv", "/moderatorActions.csv", "/adminActions.csv"})
+    void testSpeakerDoFilterAccessDeniedAction(String action) throws ServletException, IOException {
+        AuthorizationFilter filter = new AuthorizationFilter();
+        MyRequest myRequest = new MyRequest(request);
+        myRequest.getSession().setAttribute(ROLE, "SPEAKER");
+        when(request.getParameter(ACTION)).thenReturn(action);
+        when(request.getRequestDispatcher(SIGN_IN_PAGE)).thenReturn(dispatcher);
+        doNothing().when(dispatcher).forward(myRequest, response);
+        filter.doFilter(myRequest, response, chain);
+        assertEquals(ACCESS_DENIED, myRequest.getAttribute(MESSAGE));
+    }
+
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/visitorActions.csv", "/speakerActions.csv", "/adminActions.csv"})
+    void testModeratorDoFilterAccessDeniedAction(String action) throws ServletException, IOException {
+        AuthorizationFilter filter = new AuthorizationFilter();
+        MyRequest myRequest = new MyRequest(request);
+        myRequest.getSession().setAttribute(ROLE, "MODERATOR");
+        when(request.getParameter(ACTION)).thenReturn(action);
+        when(request.getRequestDispatcher(SIGN_IN_PAGE)).thenReturn(dispatcher);
+        doNothing().when(dispatcher).forward(myRequest, response);
+        filter.doFilter(myRequest, response, chain);
+        assertEquals(ACCESS_DENIED, myRequest.getAttribute(MESSAGE));
+    }
+
+    @ParameterizedTest
+    @CsvFileSource(resources = {"/visitorActions.csv", "/speakerActions.csv", "/moderatorActions.csv"})
     void testAdminDoFilterAccessDeniedAction(String action) throws ServletException, IOException {
         AuthorizationFilter filter = new AuthorizationFilter();
         MyRequest myRequest = new MyRequest(request);

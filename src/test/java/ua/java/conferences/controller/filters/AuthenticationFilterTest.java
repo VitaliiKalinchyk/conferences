@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import ua.java.conferences.controller.actions.MyRequest;
 import ua.java.conferences.dto.UserDTO;
 
@@ -26,7 +26,7 @@ class AuthenticationFilterTest {
     private final FilterChain chain = mock(FilterChain.class);
 
     @ParameterizedTest
-    @ValueSource(strings = {"/index.jsp", "/about.jsp", "/contacts.jsp", "/signIn.jsp", "/signUp.jsp", "/resetPassword.jsp"})
+    @CsvFileSource(resources = "/unLoggedUserPages.csv")
     void testDoFilterCorrectPage(String page) throws ServletException, IOException {
         AuthenticationFilter filter = new AuthenticationFilter();
         MyRequest myRequest = new MyRequest(request);
@@ -37,7 +37,7 @@ class AuthenticationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"sign-in", "sign-up", "password-reset"})
+    @CsvFileSource(resources = "/unLoggedUserActions.csv")
     void testDoFilterCorrectAction(String action) throws ServletException, IOException {
         AuthenticationFilter filter = new AuthenticationFilter();
         MyRequest myRequest = new MyRequest(request);
@@ -48,7 +48,7 @@ class AuthenticationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"/profile.jsp", "/editProfile.jsp", "/changePassword.jsp", "/createEvent.jsp"})
+    @CsvFileSource(resources = {"/loggedUserPages.csv", "/moderatorPages.csv", "/adminPages.csv"})
     void testDoFilterAccessDeniedPage(String page) throws ServletException, IOException {
         AuthenticationFilter filter = new AuthenticationFilter();
         MyRequest myRequest = new MyRequest(request);
@@ -60,7 +60,8 @@ class AuthenticationFilterTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"edit-profile", "register-or-cancel", "offer-report", "edit-event"})
+    @CsvFileSource(resources = {"/loggedUserActions.csv", "/visitorActions.csv", "/speakerActions.csv",
+            "/moderatorActions.csv", "/adminActions.csv"})
     void testDoFilterAccessDeniedAction(String action) throws ServletException, IOException {
         AuthenticationFilter filter = new AuthenticationFilter();
         MyRequest myRequest = new MyRequest(request);
