@@ -38,9 +38,6 @@ public class Domain {
     private void setDomains(String role) {
         Role roleValue = Role.valueOf(role);
         switch (roleValue) {
-            case VISITOR: domainPages = DomainPagesSets.getVisitorPages();
-                          domainActions = DomainActionsSets.getVisitorActions();
-                          break;
             case SPEAKER: domainPages = DomainPagesSets.getSpeakerPages();
                           domainActions = DomainActionsSets.getSpeakerActions();
                           break;
@@ -50,8 +47,8 @@ public class Domain {
             case ADMIN: domainPages = DomainPagesSets.getAdminPages();
                         domainActions = DomainActionsSets.getAdminActions();
                         break;
-            default: domainPages = DomainPagesSets.getAnonymousUserPages();
-                     domainActions = DomainActionsSets.getAnonymousUserActions();
+            default: domainPages = DomainPagesSets.getVisitorPages();
+                     domainActions = DomainActionsSets.getVisitorActions();
         }
     }
 
