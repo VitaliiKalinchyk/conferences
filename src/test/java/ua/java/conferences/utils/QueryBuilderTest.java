@@ -76,6 +76,12 @@ class QueryBuilderTest {
     }
 
     @Test
+    void testSetNegativeRoleFilter() {
+        String query = userQueryBuilder().setRoleFilter("-4").getQuery();
+        assertFalse(query.contains("role_id="));
+    }
+
+    @Test
     void testSetRoleFilterBadFilter() {
         String query = userQueryBuilder().setRoleFilter("a").getQuery();
         assertFalse(query.contains("role_id"));
@@ -159,6 +165,12 @@ class QueryBuilderTest {
     @Test
     void testSetWrongLimits() {
         String query = userQueryBuilder().setLimits("a", "a").getQuery();
+        assertTrue(query.contains(" LIMIT 0, 5"));
+    }
+
+    @Test
+    void testSetNegativeLimits() {
+        String query = userQueryBuilder().setLimits("-5", "-10").getQuery();
         assertTrue(query.contains(" LIMIT 0, 5"));
     }
 

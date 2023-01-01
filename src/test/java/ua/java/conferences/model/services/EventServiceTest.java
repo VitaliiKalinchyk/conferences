@@ -2,8 +2,7 @@ package ua.java.conferences.model.services;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 import ua.java.conferences.model.dao.EventDAO;
 import ua.java.conferences.dto.EventDTO;
 import ua.java.conferences.model.entities.Event;
@@ -111,6 +110,12 @@ class EventServiceTest {
     }
 
     @Test
+    void testSQLErrorGetById() throws DAOException {
+        doThrow(DAOException.class).when(eventDAO).getById(isA(long.class));
+        assertThrows(ServiceException.class, () -> eventService.getById(String.valueOf(ID_VALUE)));
+    }
+
+    @Test
     void testGetByIdNoEvent() throws DAOException {
         when(eventDAO.getById(ID_VALUE)).thenReturn(Optional.empty());
         assertThrows(NoSuchEventException.class,() -> eventService.getById(String.valueOf(ID_VALUE)));
@@ -120,6 +125,12 @@ class EventServiceTest {
     void testGetByTitle() throws DAOException, ServiceException {
         when(eventDAO.getByTitle(TITLE)).thenReturn(Optional.of(getTestEvent()));
         assertEquals(getTestEventDTO(), eventService.getByTitle(TITLE));
+    }
+
+    @Test
+    void testSQLErrorGetByTitle() throws DAOException {
+        doThrow(DAOException.class).when(eventDAO).getByTitle(isA(String.class));
+        assertThrows(ServiceException.class, () -> eventService.getByTitle(TITLE));
     }
 
     @Test
@@ -135,6 +146,12 @@ class EventServiceTest {
     }
 
     @Test
+    void testSQLErrorGetAll() throws DAOException {
+        doThrow(DAOException.class).when(eventDAO).getAll();
+        assertThrows(ServiceException.class, eventService::getAll);
+    }
+
+    @Test
     void testGetSorted() throws DAOException, ServiceException {
         List<Event> events = new ArrayList<>();
         List<EventDTO> eventDTOs = new ArrayList<>();
@@ -143,6 +160,12 @@ class EventServiceTest {
         String query = eventQueryBuilder().getQuery();
         when(eventDAO.getSorted(query)).thenReturn(events);
         assertIterableEquals(eventDTOs, eventService.getSorted(query));
+    }
+
+    @Test
+    void testSQLErrorGetSorted() throws DAOException {
+        doThrow(DAOException.class).when(eventDAO).getSorted(isA(String.class));
+        assertThrows(ServiceException.class, () -> eventService.getSorted(TITLE));
     }
 
     @Test
@@ -157,10 +180,22 @@ class EventServiceTest {
     }
 
     @Test
+    void testSQLErrorGetSortedByUser() throws DAOException {
+        doThrow(DAOException.class).when(eventDAO).getSortedByUser(isA(String.class), isA(Role.class));
+        assertThrows(ServiceException.class, () -> eventService.getSortedByUser("query", Role.VISITOR));
+    }
+
+    @Test
     void testGetNumberOfRecords() throws DAOException, ServiceException {
         String filter = visitorEventQueryBuilder().getRecordQuery();
         when(eventDAO.getNumberOfRecords(filter,  Role.MODERATOR)).thenReturn(TEN);
         assertEquals(TEN, eventService.getNumberOfRecords(filter, Role.MODERATOR));
+    }
+
+    @Test
+    void testSQLErrorGetNumberOfRecords() throws DAOException {
+        doThrow(DAOException.class).when(eventDAO).getNumberOfRecords(isA(String.class), isA(Role.class));
+        assertThrows(ServiceException.class, () -> eventService.getNumberOfRecords("filter", Role.MODERATOR));
     }
 
     @Test
@@ -177,10 +212,17 @@ class EventServiceTest {
     }
 
     @Test
-    void testUpdateIncorrectTitle() throws DAOException {
+    void testSQLErrorUpdate() throws DAOException {
+        doThrow(DAOException.class).when(eventDAO).update(isA(Event.class));
+        assertThrows(ServiceException.class, () -> eventService.update(getTestEventDTO()));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"q", "ё", "11111111111111111111111111111111111111111111111111111111111111111111111"})
+    void testUpdateIncorrectTitle(String title) throws DAOException {
         doNothing().when(eventDAO).update(isA(Event.class));
         EventDTO eventDTO = getTestEventDTO();
-        eventDTO.setTitle(INCORRECT_TITLE);
+        eventDTO.setTitle(title);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.update(eventDTO));
         assertEquals(ENTER_CORRECT_TITLE, e.getMessage());
     }
@@ -194,11 +236,12 @@ class EventServiceTest {
         assertEquals(ENTER_VALID_DATE, e.getMessage());
     }
 
-    @Test
-    void testUpdateIncorrectLocation() throws DAOException {
+    @ParameterizedTest
+    @ValueSource(strings = {"q", "ё", "11111111111111111111111111111111111111111111111111111111111111111111111"})
+    void testUpdateIncorrectLocation(String location) throws DAOException {
         doNothing().when(eventDAO).update(isA(Event.class));
         EventDTO eventDTO = getTestEventDTO();
-        eventDTO.setLocation(INCORRECT_LOCATION);
+        eventDTO.setLocation(location);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.update(eventDTO));
         assertEquals(ENTER_CORRECT_LOCATION, e.getMessage());
     }
@@ -219,27 +262,40 @@ class EventServiceTest {
     }
 
     @Test
-    void setVisitorsCount() throws DAOException {
+    void testSetVisitorsCount() throws DAOException {
         doNothing().when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
         assertDoesNotThrow(() -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), String.valueOf(VISITORS)));
     }
 
     @Test
-    void setVisitorsCountWrongEventId() throws DAOException {
+    void testSQLErrorSetVisitorsCount() throws DAOException {
+        doThrow(DAOException.class).when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
+        assertThrows(ServiceException.class,
+                () -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), String.valueOf(VISITORS)));
+    }
+
+    @Test
+    void testSetVisitorsCountWrongEventId() throws DAOException {
         doNothing().when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
         assertThrows(NoSuchEventException.class, () -> eventService.setVisitorsCount(NAME, String.valueOf(VISITORS)));
     }
 
     @Test
-    void setVisitorsCountWrongNumber() throws DAOException {
+    void testSetVisitorsCountWrongNumber() throws DAOException {
         doNothing().when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
         assertThrows(ServiceException.class, () -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), NAME));
     }
 
     @Test
-    void deleteEvent() throws DAOException {
+    void testDeleteEvent() throws DAOException {
         doNothing().when(eventDAO).delete(isA(long.class));
         assertDoesNotThrow(() -> eventService.delete(String.valueOf(ID_VALUE)));
+    }
+
+    @Test
+    void testSQLErrorDeleteEvent() throws DAOException {
+        doThrow(DAOException.class).when(eventDAO).delete(isA(long.class));
+        assertThrows(ServiceException.class, () -> eventService.delete(String.valueOf(ID_VALUE)));
     }
 
     private EventDTO getTestShortEventDTO() {

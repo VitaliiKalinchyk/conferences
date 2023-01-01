@@ -161,8 +161,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(long userId, String password, String newPass, String confirmPass)
-            throws ServiceException {
+    public void changePassword(long userId, String password, String newPass, String confirmPass) throws ServiceException {
         checkStrings(password, newPass, confirmPass);
         try {
             User user = userDAO.getById(userId).orElseThrow(NoSuchUserException::new);

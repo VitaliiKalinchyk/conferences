@@ -2,8 +2,7 @@ package ua.java.conferences.model.services;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
+import org.junit.jupiter.params.provider.*;
 import ua.java.conferences.model.dao.ReportDAO;
 import ua.java.conferences.dto.ReportDTO;
 import ua.java.conferences.exceptions.*;
@@ -26,8 +25,13 @@ class ReportServiceTest {
     @Test
     void testCreateReport() throws DAOException {
         doNothing().when(reportDAO).add(isA(Report.class));
-        ReportDTO reportDTO = getReportDTO();
-        assertDoesNotThrow(() -> reportService.addReport(reportDTO));
+        assertDoesNotThrow(() -> reportService.addReport(getReportDTO()));
+    }
+
+    @Test
+    void testSQLErrorCreateReport() throws DAOException {
+        doThrow(DAOException.class).when(reportDAO).add(isA(Report.class));
+        assertThrows(ServiceException.class, () -> reportService.addReport(getReportDTO()));
     }
 
     @ParameterizedTest
@@ -36,7 +40,7 @@ class ReportServiceTest {
         doNothing().when(reportDAO).add(isA(Report.class));
         ReportDTO reportDTO = getReportDTO();
         reportDTO.setTopic(topic);
-        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> reportService.addReport(reportDTO));
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class, () -> reportService.addReport(reportDTO));
         assertEquals(ENTER_CORRECT_TOPIC, e.getMessage());
     }
 
@@ -46,7 +50,7 @@ class ReportServiceTest {
         doNothing().when(reportDAO).add(isA(Report.class));
         ReportDTO reportDTO = getReportDTO();
         reportDTO.setTopic(topic);
-        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> reportService.addReport(reportDTO));
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class, () -> reportService.addReport(reportDTO));
         assertEquals(ENTER_CORRECT_TOPIC, e.getMessage());
     }
 
@@ -57,9 +61,15 @@ class ReportServiceTest {
     }
 
     @Test
+    void testSQLErrorViewReport() throws DAOException {
+        doThrow(DAOException.class).when(reportDAO).getById(isA(long.class));
+        assertThrows(ServiceException.class, () -> reportService.getById(String.valueOf(ID_VALUE)));
+    }
+
+    @Test
     void testViewNoReport() throws DAOException {
         when(reportDAO.getById(ID_VALUE)).thenReturn(Optional.empty());
-        assertThrows(NoSuchReportException.class,() -> reportService.getById(String.valueOf(ID_VALUE)));
+        assertThrows(NoSuchReportException.class, () -> reportService.getById(String.valueOf(ID_VALUE)));
     }
 
     @Test
@@ -73,6 +83,12 @@ class ReportServiceTest {
     }
 
     @Test
+    void testSQLErrorGetAll() throws DAOException {
+        doThrow(DAOException.class).when(reportDAO).getAll();
+        assertThrows(ServiceException.class, reportService::getAll);
+    }
+
+    @Test
     void testViewEventsReports() throws DAOException, ServiceException {
         List<Report> reports = new ArrayList<>();
         List<ReportDTO> reportDTOs = new ArrayList<>();
@@ -80,6 +96,12 @@ class ReportServiceTest {
         reportDTOs.add(getReportDTO());
         when(reportDAO.getEventsReports(ID_VALUE)).thenReturn(reports);
         assertIterableEquals(reportDTOs, reportService.viewEventsReports(String.valueOf(ID_VALUE)));
+    }
+
+    @Test
+    void testSQLErrorViewEventsReports() throws DAOException {
+        doThrow(DAOException.class).when(reportDAO).getEventsReports(isA(long.class));
+        assertThrows(ServiceException.class, () -> reportService.viewEventsReports(String.valueOf(ID_VALUE)));
     }
 
     @Test
@@ -93,17 +115,30 @@ class ReportServiceTest {
     }
 
     @Test
+    void testSQLErrorViewSpeakersReports() throws DAOException {
+        doThrow(DAOException.class).when(reportDAO).getSpeakersReports(isA(long.class));
+        assertThrows(ServiceException.class, () -> reportService.viewSpeakersReports(ID_VALUE));
+    }
+
+    @Test
     void testUpdateReport() throws DAOException {
         doNothing().when(reportDAO).update(isA(Report.class));
         assertDoesNotThrow(() -> reportService.update(getReportDTO()));
     }
 
     @Test
-    void testUpdateReportIncorrectTopic() throws DAOException {
+    void testSQLErrorUpdateReport() throws DAOException {
+        doThrow(DAOException.class).when(reportDAO).update(isA(Report.class));
+        assertThrows(ServiceException.class, () -> reportService.update(getReportDTO()));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"q", "ё", "11111111111111111111111111111111111111111111111111111111111111111111111"})
+    void testUpdateReportIncorrectTopic(String topic) throws DAOException {
         doNothing().when(reportDAO).update(isA(Report.class));
         ReportDTO reportDTO = getReportDTO();
-        reportDTO.setTopic(INCORRECT_TOPIC);
-        IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> reportService.update(reportDTO));
+        reportDTO.setTopic(topic);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class, () -> reportService.update(reportDTO));
         assertEquals(ENTER_CORRECT_TOPIC, e.getMessage());
     }
 
@@ -114,15 +149,33 @@ class ReportServiceTest {
     }
 
     @Test
+    void testSQLErrorSetSpeaker() throws DAOException {
+        doThrow(DAOException.class).when(reportDAO).setSpeaker(isA(long.class), isA(long.class));
+        assertThrows(ServiceException.class, () -> reportService.setSpeaker(ID_VALUE, ID_VALUE));
+    }
+
+    @Test
     void testDeleteSpeaker() throws DAOException {
         doNothing().when(reportDAO).deleteSpeaker(isA(long.class));
         assertDoesNotThrow(() -> reportService.deleteSpeaker(ID_VALUE));
     }
 
     @Test
+    void testSQLErrorDeleteSpeaker() throws DAOException {
+        doThrow(DAOException.class).when(reportDAO).deleteSpeaker(isA(long.class));
+        assertThrows(ServiceException.class, () -> reportService.deleteSpeaker(ID_VALUE));
+    }
+
+    @Test
     void testDeleteReport() throws DAOException {
         doNothing().when(reportDAO).delete(isA(long.class));
         assertDoesNotThrow(() -> reportService.delete(String.valueOf(ID_VALUE)));
+    }
+
+    @Test
+    void testSQLErrorDeleteReport() throws DAOException {
+        doThrow(DAOException.class).when(reportDAO).delete(isA(long.class));
+        assertThrows(ServiceException.class, () -> reportService.delete(String.valueOf(ID_VALUE)));
     }
 
     private ReportDTO getReportDTO() {

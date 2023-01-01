@@ -139,7 +139,7 @@ public class EventServiceImpl implements EventService {
     }
 
     private void checkExceptionType(DAOException e) throws ServiceException {
-        if (e.getMessage().contains("Duplicate")) {
+        if (e.getMessage() != null && e.getMessage().contains("Duplicate")) {
             throw new DuplicateTitleException();
         } else {
             throw new ServiceException(e);

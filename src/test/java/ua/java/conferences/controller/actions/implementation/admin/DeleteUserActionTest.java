@@ -20,11 +20,12 @@ class DeleteUserActionTest {
     private final HttpServletResponse response = mock(HttpServletResponse.class);
     private final AppContext appContext = mock(AppContext.class);
     private final UserService userService = mock(UserService.class);
+    private final String POST = "POST";
 
     @Test
     void testExecutePost() throws ServiceException {
         MyRequest myRequest = new MyRequest(request);
-        when(request.getMethod()).thenReturn("POST");
+        when(request.getMethod()).thenReturn(POST);
         when(request.getParameter(USER_ID)).thenReturn("1");
         when(appContext.getUserService()).thenReturn(userService);
         doNothing().when(userService).delete("1");
@@ -36,7 +37,7 @@ class DeleteUserActionTest {
     @Test
     void testExecutePostNull() throws ServiceException {
         MyRequest myRequest = new MyRequest(request);
-        when(request.getMethod()).thenReturn("POST");
+        when(request.getMethod()).thenReturn(POST);
         when(request.getParameter(USER_ID)).thenReturn(null);
         when(appContext.getUserService()).thenReturn(userService);
         doThrow(NoSuchUserException.class).when(userService).delete(null);

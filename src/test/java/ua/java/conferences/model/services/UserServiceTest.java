@@ -142,8 +142,7 @@ class UserServiceTest {
         Exception exception = new DAOException(new SQLException());
         doThrow(exception).when(userDAO).add(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
-        ServiceException e = assertThrows(ServiceException.class ,
-                () -> userService.add(userDTO, PASSWORD, PASSWORD));
+        ServiceException e = assertThrows(ServiceException.class , () -> userService.add(userDTO, PASSWORD, PASSWORD));
         assertEquals(e.getCause(), exception);
         assertFalse(e.getMessage().contains("Duplicate entry"));
     }
@@ -172,6 +171,17 @@ class UserServiceTest {
     }
 
     @Test
+    void testWrongDbSignIn() throws DAOException {
+        when(userDAO.getByEmail(EMAIL)).thenThrow(DAOException.class);
+        assertThrows(ServiceException.class,() -> userService.signIn(EMAIL, PASSWORD));
+    }
+
+    @Test
+    void testNullSignIn() {
+        assertThrows(ServiceException.class,() -> userService.signIn(null, null));
+    }
+
+    @Test
     void testViewProfile() throws DAOException, ServiceException {
         when(userDAO.getById(ONE)).thenReturn(Optional.of(getTestUser()));
         assertEquals(getTestUserDTO(), userService.getById(String.valueOf(ONE)));
@@ -181,6 +191,28 @@ class UserServiceTest {
     void testViewProfileNoUser() throws DAOException {
         when(userDAO.getById(ONE)).thenReturn(Optional.empty());
         assertThrows(NoSuchUserException.class,() -> userService.getById(String.valueOf(ONE)));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testViewProfileWrongId(String id) {
+        assertThrows(NoSuchUserException.class,() -> userService.getById(id));
+    }
+
+    @Test
+    void testViewProfileWrongId2() {
+        assertThrows(NoSuchUserException.class,() -> userService.getById("id"));
+    }
+
+    @Test
+    void testNullViewProfile() {
+        assertThrows(ServiceException.class,() -> userService.getById(String.valueOf(ONE)));
+    }
+
+    @Test
+    void testSQLErrorViewProfile() throws DAOException {
+        when(userDAO.getById(ONE)).thenThrow(DAOException.class);
+        assertThrows(ServiceException.class,() -> userService.getById(String.valueOf(ONE)));
     }
 
     @Test
@@ -196,6 +228,27 @@ class UserServiceTest {
     }
 
     @Test
+    void testSearchIncorrectFormat() {
+        IncorrectFormatException exception = assertThrows(IncorrectFormatException.class,
+                () -> userService.getByEmail(INCORRECT_EMAIL));
+        assertEquals(ENTER_CORRECT_EMAIL, exception.getMessage());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testSearchIncorrectFormat2(String email) {
+        IncorrectFormatException exception = assertThrows(IncorrectFormatException.class,
+                () -> userService.getByEmail(email));
+        assertEquals(ENTER_CORRECT_EMAIL, exception.getMessage());
+    }
+
+    @Test
+    void testSQLErrorSearchUser() throws DAOException {
+        when(userDAO.getByEmail(EMAIL)).thenThrow(DAOException.class);
+        assertThrows(ServiceException.class,() -> userService.getByEmail(EMAIL));
+    }
+
+    @Test
     void testViewUsers() throws DAOException, ServiceException {
         List<User> users = new ArrayList<>();
         List<UserDTO> userDTOs = new ArrayList<>();
@@ -203,6 +256,12 @@ class UserServiceTest {
         userDTOs.add(getTestUserDTO());
         when(userDAO.getAll()).thenReturn(users);
         assertIterableEquals(userDTOs, userService.getAll());
+    }
+
+    @Test
+    void testSQLErrorViewUsers() throws DAOException {
+        when(userDAO.getAll()).thenThrow(DAOException.class);
+        assertThrows(ServiceException.class, userService::getAll);
     }
 
     @Test
@@ -217,6 +276,12 @@ class UserServiceTest {
     }
 
     @Test
+    void testSQLErrorViewSortedUsers() throws DAOException {
+        when(userDAO.getSorted("query")).thenThrow(DAOException.class);
+        assertThrows(ServiceException.class,() -> userService.getSortedUsers("query"));
+    }
+
+    @Test
     void testGetParticipants() throws DAOException, ServiceException {
         List<User> users = new ArrayList<>();
         List<UserDTO> userDTOs = new ArrayList<>();
@@ -227,10 +292,22 @@ class UserServiceTest {
     }
 
     @Test
+    void testSQLErrorGetParticipants() throws DAOException {
+        when(userDAO.getParticipants(1, Role.VISITOR)).thenThrow(DAOException.class);
+        assertThrows(ServiceException.class,() -> userService.getParticipants("1", Role.VISITOR));
+    }
+
+    @Test
     void testNumberOfRecords() throws DAOException, ServiceException {
         String filter = userQueryBuilder().getRecordQuery();
         when(userDAO.getNumberOfRecords(filter)).thenReturn(1);
         assertEquals(1, userService.getNumberOfRecords(filter));
+    }
+
+    @Test
+    void testSQLErrorNumberOfRecords() throws DAOException {
+        when(userDAO.getNumberOfRecords("filter")).thenThrow(DAOException.class);
+        assertThrows(ServiceException.class,() -> userService.getNumberOfRecords("filter"));
     }
 
     @Test
@@ -245,6 +322,13 @@ class UserServiceTest {
     }
 
     @Test
+    void testSQLErrorViewSpeakers() throws DAOException {
+        String query = userQueryBuilder().setRoleFilter("3").getQuery();
+        when(userDAO.getSorted(query)).thenThrow(DAOException.class);
+        assertThrows(ServiceException.class, userService::getSpeakers);
+    }
+
+    @Test
     void testViewModerators() throws DAOException, ServiceException {
         List<User> users = new ArrayList<>();
         List<UserDTO> userDTOs = new ArrayList<>();
@@ -256,42 +340,79 @@ class UserServiceTest {
     }
 
     @Test
+    void testSQLErrorViewModerators() throws DAOException {
+        String query = userQueryBuilder().setRoleFilter("2").getQuery();
+        when(userDAO.getSorted(query)).thenThrow(DAOException.class);
+        assertThrows(ServiceException.class, userService::getModerators);
+    }
+
+    @Test
     void testEditProfile() throws DAOException {
         doNothing().when(userDAO).update(isA(User.class));
         assertDoesNotThrow(() -> userService.update(getTestUserDTO()));
     }
 
-    @Test
-    void testWrongEmailEditProfile() throws DAOException {
+    @ParameterizedTest
+    @ValueSource(strings = {"email", "email.com", "email@com", "email@epam.m", "email@epam.mmmmmmmm", "email@epam.444"})
+    void testWrongEmailEditProfile(String email) throws DAOException {
         doNothing().when(userDAO).update(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
-        userDTO.setEmail(INCORRECT_EMAIL);
+        userDTO.setEmail(email);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
                 () -> userService.update(userDTO));
         assertEquals(ENTER_CORRECT_EMAIL, e.getMessage());
     }
 
-    @Test
-    void testWrongPassEditProfile() throws DAOException {
-        doNothing().when(userDAO).update(isA(User.class));
-        assertDoesNotThrow(() -> userService.update(getTestUserDTO()));
-    }
-
-    @Test
-    void testWrongNameEditProfile() throws DAOException {
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testNullEmailEditProfile(String email) throws DAOException {
         doNothing().when(userDAO).update(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
-        userDTO.setName(INCORRECT_NAME);
+        userDTO.setEmail(email);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
+                () -> userService.update(userDTO));
+        assertEquals(ENTER_CORRECT_EMAIL, e.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "123", "!!!", "$*$", "Julian 2", "X Æ A-12"})
+    void testWrongNameEditProfile(String name) throws DAOException {
+        doNothing().when(userDAO).update(isA(User.class));
+        UserDTO userDTO = getTestUserDTO();
+        userDTO.setName(name);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
                 () -> userService.update(userDTO));
         assertEquals(ENTER_CORRECT_NAME, e.getMessage());
     }
 
-    @Test
-    void testWrongSurnameEditProfile() throws DAOException {
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testNullNameEditProfile(String name) throws DAOException {
         doNothing().when(userDAO).update(isA(User.class));
         UserDTO userDTO = getTestUserDTO();
-        userDTO.setSurname(INCORRECT_SURNAME);
+        userDTO.setName(name);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
+                () -> userService.update(userDTO));
+        assertEquals(ENTER_CORRECT_NAME, e.getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1", "123", "!!!", "$*$", "Julian 2", "X Æ A-12"})
+    void testWrongSurnameEditProfile(String surname) throws DAOException {
+        doNothing().when(userDAO).update(isA(User.class));
+        UserDTO userDTO = getTestUserDTO();
+        userDTO.setSurname(surname);
+        IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
+                () -> userService.update(userDTO));
+        assertEquals(ENTER_CORRECT_SURNAME, e.getMessage());
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    void testNullSurnameEditProfile(String surname) throws DAOException {
+        doNothing().when(userDAO).update(isA(User.class));
+        UserDTO userDTO = getTestUserDTO();
+        userDTO.setSurname(surname);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class ,
                 () -> userService.update(userDTO));
         assertEquals(ENTER_CORRECT_SURNAME, e.getMessage());
@@ -304,6 +425,16 @@ class UserServiceTest {
         DuplicateEmailException e = assertThrows(DuplicateEmailException.class ,
                 () -> userService.update(userDTO));
         assertEquals(DUPLICATE_EMAIL, e.getMessage());
+    }
+
+    @Test
+    void testSQLErrorEditProfile() throws DAOException {
+        Exception exception = new DAOException(new SQLException());
+        doThrow(exception).when(userDAO).update(isA(User.class));
+        UserDTO userDTO = getTestUserDTO();
+        ServiceException e = assertThrows(ServiceException.class , () -> userService.update(userDTO));
+        assertEquals(e.getCause(), exception);
+        assertFalse(e.getMessage().contains("Duplicate entry"));
     }
 
     @Test
@@ -354,9 +485,55 @@ class UserServiceTest {
     }
 
     @Test
+    void testEditNullPassword() {
+        assertThrows(ServiceException.class,
+                () -> userService.changePassword(ONE, null, null, null));
+    }
+
+    @Test
+    void testSQLErrorEditPassword() throws DAOException {
+        Exception exception = new DAOException(new SQLException());
+        doThrow(exception).when(userDAO).getById(isA(Long.class));
+        ServiceException e = assertThrows(ServiceException.class ,
+                () -> userService.changePassword(ONE, PASSWORD, PASSWORD, PASSWORD));
+        assertEquals(e.getCause(), exception);
+    }
+
+    @Test
+    void testSQLErrorEditPassword2() throws DAOException {
+        User testUser = getTestUser();
+        testUser.setPassword(encode(PASSWORD));
+        when(userDAO.getById(ONE)).thenReturn(Optional.of(testUser));
+        Exception exception = new DAOException(new SQLException());
+        doThrow(exception).when(userDAO).updatePassword(isA(User.class));
+        ServiceException e = assertThrows(ServiceException.class ,
+                () -> userService.changePassword(ONE, PASSWORD, PASSWORD, PASSWORD));
+        assertEquals(e.getCause(), exception);
+    }
+
+    @Test
+    void testSQLErrorEditPassword3() throws DAOException {
+        Exception exception = new DAOException(new SQLException());
+        doThrow(exception).when(userDAO).updatePassword(isA(User.class));
+        ServiceException e = assertThrows(ServiceException.class ,
+                () -> userService.changePassword(ONE));
+        assertEquals(e.getCause(), exception);
+        assertFalse(e.getMessage().contains("Duplicate entry"));
+    }
+
+
+    @Test
     void testSetRole() throws DAOException {
         doNothing().when(userDAO).setUserRole(isA(String.class), isA(Role.class));
         assertDoesNotThrow(() -> userService.setRole(EMAIL, ROLE_ID));
+    }
+
+    @Test
+    void testSQLErrorSetRole() throws DAOException {
+        Exception exception = new DAOException(new SQLException());
+        doThrow(exception).when(userDAO).setUserRole(isA(String.class), isA(Role.class));
+        ServiceException e = assertThrows(ServiceException.class, () -> userService.setRole(EMAIL, ROLE_ID));
+        assertEquals(e.getCause(), exception);
     }
 
     @Test
@@ -366,15 +543,41 @@ class UserServiceTest {
     }
 
     @Test
+    void testSQLErrorDeleteUser() throws DAOException {
+        Exception exception = new DAOException(new SQLException());
+        doThrow(exception).when(userDAO).delete(isA(Long.class));
+        ServiceException e = assertThrows(ServiceException.class, () -> userService.delete(String.valueOf(ONE)));
+        assertEquals(e.getCause(), exception);
+    }
+
+    @Test
     void testRegisterForEvent() throws DAOException {
         doNothing().when(userDAO).registerForEvent(isA(long.class), isA(long.class));
         assertDoesNotThrow(() -> userService.registerForEvent(ONE, String.valueOf(ONE)));
     }
 
     @Test
+    void testSQLErrorRegisterForEvent() throws DAOException {
+        Exception exception = new DAOException(new SQLException());
+        doThrow(exception).when(userDAO).registerForEvent(isA(long.class), isA(long.class));
+        ServiceException e = assertThrows(ServiceException.class,
+                () -> userService.registerForEvent(ONE, String.valueOf(ONE)));
+        assertEquals(e.getCause(), exception);
+    }
+
+    @Test
     void testCancelRegistration() throws DAOException {
         doNothing().when(userDAO).cancelRegistration(isA(long.class), isA(long.class));
         assertDoesNotThrow(() -> userService.cancelRegistration(ONE, String.valueOf(ONE)));
+    }
+
+    @Test
+    void testSQLErrorCancelRegistration() throws DAOException {
+        Exception exception = new DAOException(new SQLException());
+        doThrow(exception).when(userDAO).cancelRegistration(isA(long.class), isA(long.class));
+        ServiceException e = assertThrows(ServiceException.class,
+                () -> userService.cancelRegistration(ONE, String.valueOf(ONE)));
+        assertEquals(e.getCause(), exception);
     }
 
     @Test
@@ -387,6 +590,15 @@ class UserServiceTest {
     void TestIsNotRegistered() throws DAOException, ServiceException {
         when(userDAO.isRegistered(ONE, ONE)).thenReturn(false);
         assertFalse(userService.isRegistered(ONE, String.valueOf(ONE)));
+    }
+
+    @Test
+    void testSQLErrorIsRegistered() throws DAOException {
+        Exception exception = new DAOException(new SQLException());
+        doThrow(exception).when(userDAO).isRegistered(isA(long.class), isA(long.class));
+        ServiceException e = assertThrows(ServiceException.class,
+                () -> userService.isRegistered(ONE, String.valueOf(ONE)));
+        assertEquals(e.getCause(), exception);
     }
 
     @Test
