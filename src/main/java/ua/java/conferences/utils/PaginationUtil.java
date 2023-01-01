@@ -18,8 +18,8 @@ public final class PaginationUtil {
         int startPage = currentPage == pages ? Math.max(currentPage - 2, 1)
                                              : Math.max(currentPage - 1, 1);
         int endPage = Math.min(startPage + 2, pages);
-        request.setAttribute(RECORDS, records);
         request.setAttribute(OFFSET, offset);
+        request.setAttribute(RECORDS, records);
         request.setAttribute(PAGES, pages);
         request.setAttribute(CURRENT_PAGE, currentPage);
         request.setAttribute(START, startPage);
