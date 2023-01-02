@@ -30,17 +30,17 @@ public class ChangeTopicAction implements Action {
         try {
             reportService.update(report);
             request.getSession().setAttribute(MESSAGE, SUCCEED_UPDATE);
-            sendEmail(report, request);
+            sendEmail(report, getURL(request));
         } catch (IncorrectFormatException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
         }
         return getActionToRedirect(VIEW_REPORT_ACTION, REPORT_ID, String.valueOf(report.getId()));
     }
 
-    private void sendEmail(ReportDTO reportDTO, HttpServletRequest request) throws ServiceException {
+    private void sendEmail(ReportDTO reportDTO, String url) throws ServiceException {
         ReportDTO report = reportService.getById(String.valueOf(reportDTO.getId()));
         String body = String.format(MESSAGE_TOPIC_CHANGED, report.getSpeakerName(), report.getTitle(),
-                report.getLocation(), report.getDate(), report.getTopic(), getURL(request), report.getEventId());
+                report.getLocation(), report.getDate(), report.getTopic(), url, report.getEventId());
         new Thread(() -> emailSender.send(SUBJECT_NOTIFICATION, body, report.getSpeakerEmail())).start();
     }
 

@@ -1,32 +1,29 @@
-package ua.java.conferences.controller.actions.implementation.admin;
+package ua.java.conferences.controller.actions.implementation.moderator;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import org.junit.jupiter.api.Test;
 import ua.java.conferences.controller.actions.MyRequest;
 import ua.java.conferences.controller.context.AppContext;
-import ua.java.conferences.dto.UserDTO;
+import ua.java.conferences.dto.EventDTO;
 import ua.java.conferences.exceptions.ServiceException;
-import ua.java.conferences.model.services.UserService;
+import ua.java.conferences.model.entities.role.Role;
+import ua.java.conferences.model.services.EventService;
 import ua.java.conferences.utils.query.QueryBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.Mockito.when;
-import static ua.java.conferences.controller.actions.constants.Pages.VIEW_USERS_PAGE;
-import static ua.java.conferences.controller.actions.constants.ParameterValues.DESCENDING_ORDER;
+import static ua.java.conferences.controller.actions.constants.Pages.VIEW_EVENTS_PAGE;
+import static ua.java.conferences.controller.actions.constants.ParameterValues.*;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
-import static ua.java.conferences.utils.QueryBuilderUtil.userQueryBuilder;
+import static ua.java.conferences.utils.QueryBuilderUtil.eventQueryBuilder;
 
-class ViewUsersActionTest {
+class ViewEventsActionTest {
     private final HttpServletRequest request = mock(HttpServletRequest.class);
     private final HttpServletResponse response = mock(HttpServletResponse.class);
     private final AppContext appContext = mock(AppContext.class);
-    private final UserService userService = mock(UserService.class);
-    private final String SPEAKER = "3";
+    private final EventService eventService = mock(EventService.class);
     private final String ZERO = "0";
     private final String FIVE = "5";
 
@@ -34,12 +31,12 @@ class ViewUsersActionTest {
     void testExecute() throws ServiceException {
         setRequest();
         MyRequest myRequest = new MyRequest(request);
-        when(appContext.getUserService()).thenReturn(userService);
-        when(userService.getSortedUsers(getQueryBuilder().getQuery())).thenReturn(getUsers());
-        when(userService.getNumberOfRecords(getQueryBuilder().getRecordQuery())).thenReturn(10);
+        when(appContext.getEventService()).thenReturn(eventService);
+        when(eventService.getSorted(getQueryBuilder().getQuery())).thenReturn(getEvents());
+        when(eventService.getNumberOfRecords(getQueryBuilder().getRecordQuery(), Role.MODERATOR)).thenReturn(10);
 
-        assertEquals(VIEW_USERS_PAGE, new ViewUsersAction(appContext).execute(myRequest, response));
-        assertEquals(getUsers(), myRequest.getAttribute(USERS));
+        assertEquals(VIEW_EVENTS_PAGE, new ViewEventsAction(appContext).execute(myRequest, response));
+        assertEquals(getEvents(), myRequest.getAttribute(EVENTS));
         assertEquals(0, myRequest.getAttribute(OFFSET));
         assertEquals(5, myRequest.getAttribute(RECORDS));
         assertEquals(2, myRequest.getAttribute(PAGES));
@@ -49,25 +46,25 @@ class ViewUsersActionTest {
     }
 
     private void setRequest() {
-        when(request.getParameter(ROLE)).thenReturn(SPEAKER);
-        when(request.getParameter(SORT)).thenReturn(NAME);
+        when(request.getParameter(DATE)).thenReturn(PASSED);
+        when(request.getParameter(SORT)).thenReturn(TITLE);
         when(request.getParameter(ORDER)).thenReturn(DESCENDING_ORDER);
         when(request.getParameter(OFFSET)).thenReturn(ZERO);
         when(request.getParameter(RECORDS)).thenReturn(FIVE);
     }
 
-    private List<UserDTO> getUsers(){
-        List<UserDTO> users = new ArrayList<>();
+    private List<EventDTO> getEvents(){
+        List<EventDTO> events = new ArrayList<>();
         for (int i = 0; i < 5; i++) {
-            users.add(UserDTO.builder().id(i).build());
+            events.add(EventDTO.builder().id(i).build());
         }
-        return users;
+        return events;
     }
 
     private QueryBuilder getQueryBuilder() {
-        return userQueryBuilder()
-                .setRoleFilter(SPEAKER)
-                .setSortField(NAME)
+        return eventQueryBuilder()
+                .setDateFilter(PASSED)
+                .setSortField(TITLE)
                 .setOrder(DESCENDING_ORDER)
                 .setLimits(ZERO, FIVE);
     }
