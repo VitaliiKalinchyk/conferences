@@ -22,7 +22,7 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public EventDTO addEvent(ua.java.conferences.dto.EventDTO eventDTO) throws ServiceException {
+    public void addEvent(ua.java.conferences.dto.EventDTO eventDTO) throws ServiceException {
         validateEvent(eventDTO);
         Event event = convertDTOToEvent(eventDTO);
         try {
@@ -30,7 +30,6 @@ public class EventServiceImpl implements EventService {
         } catch (DAOException e) {
             checkExceptionType(e);
         }
-        return convertEventToDTO(event);
     }
 
     @Override
