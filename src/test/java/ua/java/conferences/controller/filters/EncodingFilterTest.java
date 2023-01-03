@@ -3,7 +3,7 @@ package ua.java.conferences.controller.filters;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.controller.actions.MyRequest;
+import ua.java.conferences.controller.actions.util.MyRequest;
 
 import java.io.IOException;
 

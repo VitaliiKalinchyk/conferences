@@ -13,11 +13,11 @@ import static ua.java.conferences.controller.actions.constants.ActionNames.VIEW_
 import static ua.java.conferences.controller.actions.constants.ParameterValues.*;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 
-public class RegisterOrCancel implements Action {
+public class RegisterOrCancelAction implements Action {
 
     private final UserService userService;
 
-    public RegisterOrCancel(AppContext appContext) {
+    public RegisterOrCancelAction(AppContext appContext) {
         userService = appContext.getUserService();
     }
 
@@ -25,8 +25,7 @@ public class RegisterOrCancel implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         long userId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         String eventId = request.getParameter(EVENT_ID);
-        String todo = request.getParameter(TODO);
-        registerOrCancel(userId, eventId, todo);
+        registerOrCancel(userId, eventId, request.getParameter(TODO));
         return getActionToRedirect(VIEW_EVENT_BY_VISITOR_ACTION, EVENT_ID, eventId);
     }
 

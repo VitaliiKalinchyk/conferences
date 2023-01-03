@@ -36,7 +36,7 @@ public final class ActionFactory {
         ACTION_MAP.put(VIEW_UPCOMING_EVENTS_ACTION, new ViewUpEventsByVisitorAction(APP_CONTEXT));
         ACTION_MAP.put(VIEW_VISITORS_EVENTS_ACTION, new ViewVisitorsEventsAction(APP_CONTEXT));
         ACTION_MAP.put(VIEW_EVENT_BY_VISITOR_ACTION, new ViewEventByVisitorAction(APP_CONTEXT));
-        ACTION_MAP.put(REGISTER_OR_CANCEL_ACTION, new RegisterOrCancel(APP_CONTEXT));
+        ACTION_MAP.put(REGISTER_OR_CANCEL_ACTION, new RegisterOrCancelAction(APP_CONTEXT));
 
         ACTION_MAP.put(VIEW_SPEAKERS_EVENTS_ACTION, new ViewSpeakersEventsAction(APP_CONTEXT));
         ACTION_MAP.put(VIEW_SPEAKERS_REPORTS_ACTION, new ViewSpeakersReportsAction(APP_CONTEXT));

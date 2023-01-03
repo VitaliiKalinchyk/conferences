@@ -6,7 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.controller.actions.MyRequest;
+import ua.java.conferences.controller.actions.util.MyRequest;
 
 import java.io.IOException;
 

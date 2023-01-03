@@ -1,4 +1,4 @@
-package ua.java.conferences.controller.actions;
+package ua.java.conferences.controller.actions.util;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;

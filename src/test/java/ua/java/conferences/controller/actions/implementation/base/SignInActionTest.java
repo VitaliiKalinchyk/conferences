@@ -3,9 +3,8 @@ package ua.java.conferences.controller.actions.implementation.base;
 import jakarta.servlet.http.*;
 import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.controller.actions.MyRequest;
+import ua.java.conferences.controller.actions.util.MyRequest;
 import ua.java.conferences.controller.context.AppContext;
-import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.model.services.UserService;
 
@@ -15,6 +14,7 @@ import static ua.java.conferences.controller.actions.ActionUtil.getActionToRedir
 import static ua.java.conferences.controller.actions.constants.ActionNames.SIGN_IN_ACTION;
 import static ua.java.conferences.controller.actions.constants.Pages.*;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
+import static ua.java.conferences.controller.actions.util.Util.*;
 import static ua.java.conferences.exceptions.constants.Message.NO_USER;
 
 class SignInActionTest {
@@ -22,8 +22,6 @@ class SignInActionTest {
     private final HttpServletResponse response = mock(HttpServletResponse.class);
     private final AppContext appContext = mock(AppContext.class);
     private final UserService userService = mock(UserService.class);
-    private static final String EMAIL_VALUE = "em@em.ua";
-    private static final String PASS_VALUE = "Password1";
 
     @Test
     void testExecutePost() throws ServiceException {
@@ -64,20 +62,16 @@ class SignInActionTest {
         assertNull(myRequest.getSession().getAttribute(EMAIL));
     }
 
-    private static UserDTO getUserDTO() {
-        return UserDTO.builder().id(1).email(EMAIL_VALUE).name("name").surname("surname").role("ADMIN").build();
-    }
-
     void setPostRequest() {
-        when(request.getMethod()).thenReturn("POST");
+        when(request.getMethod()).thenReturn(POST);
         when(request.getParameter(EMAIL)).thenReturn(EMAIL_VALUE);
         when(request.getParameter(PASSWORD)).thenReturn(PASS_VALUE);
-        when(request.getServletPath()).thenReturn("ServletPath");
-        when(request.getRequestURL()).thenReturn(new StringBuffer("RequestURL"));
+        when(request.getServletPath()).thenReturn(SERVLET_PATH);
+        when(request.getRequestURL()).thenReturn(REQUEST_URL);
     }
 
     void setGetRequest(MyRequest myRequest) {
-        when(request.getMethod()).thenReturn("GET");
+        when(request.getMethod()).thenReturn(GET);
         HttpSession session = myRequest.getSession();
         session.setAttribute(ERROR, NO_USER);
         session.setAttribute(EMAIL, EMAIL_VALUE);

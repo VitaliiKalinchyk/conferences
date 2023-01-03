@@ -71,7 +71,7 @@ public class OfferReportAction implements Action {
         try {
             reportService.addReport(reportDTO);
             request.getSession().setAttribute(MESSAGE, SUCCEED_ADD);
-            sendEmail(reportDTO, request);
+            sendEmail(reportDTO, getURL(request));
         } catch (IncorrectFormatException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
         }
@@ -89,12 +89,12 @@ public class OfferReportAction implements Action {
                 .build();
     }
 
-    private void sendEmail(ReportDTO report, HttpServletRequest request) throws ServiceException {
+    private void sendEmail(ReportDTO report, String url) throws ServiceException {
         for (UserDTO moderator : userService.getModerators()) {
             new Thread(
                     () -> {
                         String body = String.format(MESSAGE_OFFER_REPORT, moderator.getName(), report.getSpeakerName(),
-                                report.getTopic(), report.getTitle(), getURL(request), report.getEventId());
+                                report.getTopic(), report.getTitle(), url, report.getEventId());
                         emailSender.send(SUBJECT_NOTIFICATION, body, moderator.getEmail());})
                     .start();
         }

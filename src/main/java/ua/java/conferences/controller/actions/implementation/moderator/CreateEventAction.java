@@ -35,8 +35,8 @@ public class CreateEventAction implements Action {
         EventDTO event = getEventDTO(request);
         try {
             eventService.addEvent(event);
-            String id = String.valueOf(eventService.getByTitle(event.getTitle()).getId());
-            return getActionToRedirect(SEARCH_EVENT_ACTION, EVENT_ID, id);
+            long eventId = eventService.getByTitle(event.getTitle()).getId();
+            return getActionToRedirect(SEARCH_EVENT_ACTION, EVENT_ID, String.valueOf(eventId));
         } catch (IncorrectFormatException | PasswordMatchingException | DuplicateTitleException e) {
             request.getSession().setAttribute(EVENT, event);
             request.getSession().setAttribute(ERROR, e.getMessage());

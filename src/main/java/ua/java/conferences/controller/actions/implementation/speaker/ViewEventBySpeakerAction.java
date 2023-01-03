@@ -28,18 +28,18 @@ public class ViewEventBySpeakerAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-        long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
-        String parameterEventId = request.getParameter(EVENT_ID);
         try {
-            setAttributes(request, parameterEventId, speakerId);
+            setAttributes(request);
         } catch (NoSuchEventException e) {
             request.setAttribute(ERROR, ACCESS_DENIED);
         }
         return VIEW_EVENT_BY_SPEAKER_PAGE;
     }
 
-    private void setAttributes(HttpServletRequest request, String parameterEventId, long userId) throws ServiceException {
-        EventDTO event = getEvent(parameterEventId, userId);
+    private void setAttributes(HttpServletRequest request) throws ServiceException {
+        long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
+        String parameterEventId = request.getParameter(EVENT_ID);
+        EventDTO event = getEvent(parameterEventId, speakerId);
         request.setAttribute(EVENT, event);
         request.setAttribute(REPORTS, reportService.viewEventsReports(parameterEventId));
         request.setAttribute(IS_COMING, isFutureEvent(event));

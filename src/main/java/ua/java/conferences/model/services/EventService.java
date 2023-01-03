@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface EventService extends Service<EventDTO> {
 
-    EventDTO addEvent(EventDTO eventDTO) throws ServiceException;
+    void addEvent(EventDTO eventDTO) throws ServiceException;
 
     EventDTO getByTitle(String title) throws ServiceException;
 

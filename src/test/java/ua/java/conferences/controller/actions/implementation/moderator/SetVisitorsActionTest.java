@@ -2,7 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.*;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.controller.actions.MyRequest;
+import ua.java.conferences.controller.actions.util.MyRequest;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.exceptions.ServiceException;
 import ua.java.conferences.model.services.EventService;

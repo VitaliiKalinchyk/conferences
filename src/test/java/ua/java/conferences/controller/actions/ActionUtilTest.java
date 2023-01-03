@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.junit.jupiter.api.Test;
+import ua.java.conferences.controller.actions.util.MyRequest;
 import ua.java.conferences.dto.EventDTO;
 import ua.java.conferences.dto.UserDTO;
 

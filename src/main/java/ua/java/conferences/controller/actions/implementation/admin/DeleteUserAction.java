@@ -1,10 +1,10 @@
 package ua.java.conferences.controller.actions.implementation.admin;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
+import org.slf4j.*;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
-import ua.java.conferences.exceptions.ServiceException;
+import ua.java.conferences.exceptions.*;
 import ua.java.conferences.model.services.*;
 
 import static ua.java.conferences.controller.actions.ActionUtil.*;
@@ -14,6 +14,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.*;
 
 public class DeleteUserAction implements Action {
+    private static final Logger logger = LoggerFactory.getLogger(DeleteUserAction.class);
     private final UserService userService;
 
     public DeleteUserAction(AppContext appContext) {
@@ -31,8 +32,12 @@ public class DeleteUserAction implements Action {
     }
 
     private String executePost(HttpServletRequest request) throws ServiceException {
-        userService.delete(request.getParameter(USER_ID));
-        request.getSession().setAttribute(MESSAGE, SUCCEED_DELETE);
+        try {
+            userService.delete(request.getParameter(USER_ID));
+            request.getSession().setAttribute(MESSAGE, SUCCEED_DELETE);
+        } catch (NoSuchUserException e) {
+            logger.error("Couldn't delete user - no such user");
+        }
         return getActionToRedirect(DELETE_USER_ACTION);
     }
 }

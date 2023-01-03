@@ -2,7 +2,7 @@ package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.*;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.controller.actions.MyRequest;
+import ua.java.conferences.controller.actions.util.MyRequest;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
@@ -15,6 +15,7 @@ import static ua.java.conferences.controller.actions.constants.ActionNames.EDIT_
 import static ua.java.conferences.controller.actions.constants.Pages.EDIT_PROFILE_PAGE;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.SUCCEED_UPDATE;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
+import static ua.java.conferences.controller.actions.util.Util.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
 
 class EditProfileActionTest {
@@ -22,9 +23,6 @@ class EditProfileActionTest {
     private final HttpServletResponse response = mock(HttpServletResponse.class);
     private final AppContext appContext = mock(AppContext.class);
     private final UserService userService = mock(UserService.class);
-    private static final String NEW_EMAIL = "newEmail";
-    private static final String NEW_NAME = "newName";
-    private static final String NEW_SURNAME = "newSurname";
 
     @Test
     void testExecutePost() throws ServiceException {
@@ -73,23 +71,19 @@ class EditProfileActionTest {
         assertNull(myRequest.getSession().getAttribute(USER));
     }
 
-    private static UserDTO getUserDTO() {
-        return UserDTO.builder().id(1).email("email").name("name").surname("surname").build();
-    }
-
     private static UserDTO getNewUserDTO() {
         return UserDTO.builder().id(1).email(NEW_EMAIL).name(NEW_NAME).surname(NEW_SURNAME).build();
     }
 
     void setPostRequest() {
-        when(request.getMethod()).thenReturn("POST");
+        when(request.getMethod()).thenReturn(POST);
         when(request.getParameter(EMAIL)).thenReturn(NEW_EMAIL);
         when(request.getParameter(NAME)).thenReturn(NEW_NAME);
         when(request.getParameter(SURNAME)).thenReturn(NEW_SURNAME);
     }
 
     void setGetRequest(MyRequest myRequest) {
-        when(request.getMethod()).thenReturn("GET");
+        when(request.getMethod()).thenReturn(GET);
         HttpSession session = myRequest.getSession();
         session.setAttribute(MESSAGE, SUCCEED_UPDATE);
         session.setAttribute(ERROR, ENTER_CORRECT_NAME);

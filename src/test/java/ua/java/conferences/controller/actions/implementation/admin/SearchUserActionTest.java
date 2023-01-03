@@ -1,13 +1,11 @@
 package ua.java.conferences.controller.actions.implementation.admin;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
-import ua.java.conferences.controller.actions.MyRequest;
+import ua.java.conferences.controller.actions.util.MyRequest;
 import ua.java.conferences.controller.context.AppContext;
-import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.model.services.UserService;
 
@@ -15,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.controller.actions.constants.Pages.*;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
+import static ua.java.conferences.controller.actions.util.Util.*;
 import static ua.java.conferences.exceptions.constants.Message.*;
 
 class SearchUserActionTest {
@@ -25,14 +24,14 @@ class SearchUserActionTest {
 
     @Test
     void testExecute() throws ServiceException {
-        String email = "email@email.com";
+        String email = EMAIL_VALUE;
         when(request.getParameter(EMAIL)).thenReturn(email);
         MyRequest myRequest = new MyRequest(request);
         when(appContext.getUserService()).thenReturn(userService);
-        when(userService.getByEmail(email)).thenReturn(getTestUserDTO());
+        when(userService.getByEmail(email)).thenReturn(getUserDTO());
 
         assertEquals(USER_BY_EMAIL_PAGE, new SearchUserAction(appContext).execute(myRequest, response));
-        assertEquals(getTestUserDTO(), myRequest.getAttribute(USER));
+        assertEquals(getUserDTO(), myRequest.getAttribute(USER));
     }
 
     @ParameterizedTest
@@ -69,14 +68,5 @@ class SearchUserActionTest {
 
         assertEquals(SEARCH_USER_PAGE, new SearchUserAction(appContext).execute(myRequest, response));
         assertEquals(NO_USER, myRequest.getAttribute(ERROR));
-    }
-
-    private UserDTO getTestUserDTO() {
-        return UserDTO.builder()
-                .id(1)
-                .email("email@email.com")
-                .name("name")
-                .surname("surname")
-                .build();
     }
 }

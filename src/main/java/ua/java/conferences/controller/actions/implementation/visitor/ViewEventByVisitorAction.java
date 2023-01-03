@@ -26,17 +26,17 @@ public class ViewEventByVisitorAction implements Action {
 
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
-        String parameterEventId = request.getParameter(EVENT_ID);
-        long userId =  ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         try {
-            setAttributes(request, parameterEventId, userId);
+            setAttributes(request);
         } catch (NoSuchEventException e) {
             request.setAttribute(ERROR, e.getMessage());
         }
         return VIEW_EVENT_BY_VISITOR_PAGE;
     }
 
-    private void setAttributes(HttpServletRequest request, String parameterEventId, long userId) throws ServiceException {
+    private void setAttributes(HttpServletRequest request) throws ServiceException {
+        long userId =  ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
+        String parameterEventId = request.getParameter(EVENT_ID);
         EventDTO event = eventService.getById(parameterEventId);
         request.setAttribute(EVENT, event);
         request.setAttribute(IS_REGISTERED, userService.isRegistered(userId, parameterEventId));

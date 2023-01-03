@@ -2,7 +2,7 @@ package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.*;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.controller.actions.MyRequest;
+import ua.java.conferences.controller.actions.util.MyRequest;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
@@ -16,6 +16,7 @@ import static ua.java.conferences.controller.actions.constants.ActionNames.CHANG
 import static ua.java.conferences.controller.actions.constants.Pages.CHANGE_PASSWORD_PAGE;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.SUCCEED_UPDATE;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
+import static ua.java.conferences.controller.actions.util.Util.*;
 import static ua.java.conferences.exceptions.constants.Message.ENTER_CORRECT_PASSWORD;
 
 class ChangePasswordActionTest {
@@ -23,7 +24,6 @@ class ChangePasswordActionTest {
     private final HttpServletResponse response = mock(HttpServletResponse.class);
     private final AppContext appContext = mock(AppContext.class);
     private final UserService userService = mock(UserService.class);
-    private final String PASS_VALUE = "Password1";
 
     @Test
     void testExecutePost() throws ServiceException {
@@ -31,7 +31,7 @@ class ChangePasswordActionTest {
         myRequest.getSession().setAttribute(LOGGED_USER, UserDTO.builder().id(1).build());
         setPostRequest();
         when(appContext.getUserService()).thenReturn(userService);
-        doNothing().when(userService).changePassword(1, PASS_VALUE, PASS_VALUE, PASS_VALUE);
+        doNothing().when(userService).changePassword(ID_ONE, PASS_VALUE, PASS_VALUE, PASS_VALUE);
         String path = new ChangePasswordAction(appContext).execute(myRequest, response);
 
         assertEquals(getActionToRedirect(CHANGE_PASSWORD_ACTION), path);
@@ -65,14 +65,14 @@ class ChangePasswordActionTest {
     }
 
     void setPostRequest() {
-        when(request.getMethod()).thenReturn("POST");
+        when(request.getMethod()).thenReturn(POST);
         when(request.getParameter(OLD_PASSWORD)).thenReturn(PASS_VALUE);
         when(request.getParameter(PASSWORD)).thenReturn(PASS_VALUE);
         when(request.getParameter(CONFIRM_PASSWORD)).thenReturn(PASS_VALUE);
     }
 
     void setGetRequest(MyRequest myRequest) {
-        when(request.getMethod()).thenReturn("GET");
+        when(request.getMethod()).thenReturn(GET);
         HttpSession session = myRequest.getSession();
         session.setAttribute(MESSAGE, SUCCEED_UPDATE);
         session.setAttribute(ERROR, ENTER_CORRECT_PASSWORD);

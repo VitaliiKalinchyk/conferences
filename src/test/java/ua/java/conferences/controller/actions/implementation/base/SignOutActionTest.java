@@ -4,8 +4,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.controller.actions.MyRequest;
-import ua.java.conferences.controller.actions.MySession;
+import ua.java.conferences.controller.actions.util.MyRequest;
+import ua.java.conferences.controller.actions.util.MySession;
 import ua.java.conferences.dto.UserDTO;
 
 import static org.junit.jupiter.api.Assertions.*;

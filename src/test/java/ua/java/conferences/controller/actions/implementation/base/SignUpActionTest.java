@@ -2,7 +2,7 @@ package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.*;
 import org.junit.jupiter.api.Test;
-import ua.java.conferences.controller.actions.MyRequest;
+import ua.java.conferences.controller.actions.util.MyRequest;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.exceptions.*;
@@ -17,6 +17,7 @@ import static ua.java.conferences.controller.actions.constants.ActionNames.SIGN_
 import static ua.java.conferences.controller.actions.constants.Pages.*;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.SUCCEED_REGISTER;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
+import static ua.java.conferences.controller.actions.util.Util.*;
 import static ua.java.conferences.exceptions.constants.Message.CAPTCHA_INVALID;
 
 class SignUpActionTest {
@@ -26,8 +27,6 @@ class SignUpActionTest {
     private final UserService userService = mock(UserService.class);
     private final EmailSender emailSender = mock(EmailSender.class);
     private final Captcha captcha = mock(Captcha.class);
-    private static final String EMAIL_VALUE = "em@em.ua";
-    private static final String PASS_VALUE = "Password1";
 
     @Test
     void testExecutePost() throws ServiceException {
@@ -80,24 +79,20 @@ class SignUpActionTest {
         assertNull(myRequest.getSession().getAttribute(USER));
     }
 
-    private static UserDTO getUserDTO() {
-        return UserDTO.builder().id(1).email(EMAIL_VALUE).name("name").surname("surname").build();
-    }
-
     void setPostRequest() {
-        when(request.getMethod()).thenReturn("POST");
-        when(request.getParameter(CAPTCHA)).thenReturn("captcha");
+        when(request.getMethod()).thenReturn(POST);
+        when(request.getParameter(CAPTCHA)).thenReturn(CAPTCHA_VALUE);
         when(request.getParameter(EMAIL)).thenReturn(EMAIL_VALUE);
-        when(request.getParameter(NAME)).thenReturn("name");
-        when(request.getParameter(SURNAME)).thenReturn("surname");
+        when(request.getParameter(NAME)).thenReturn(NAME_VALUE);
+        when(request.getParameter(SURNAME)).thenReturn(SURNAME_VALUE);
         when(request.getParameter(PASSWORD)).thenReturn(PASS_VALUE);
         when(request.getParameter(CONFIRM_PASSWORD)).thenReturn(PASS_VALUE);
-        when(request.getServletPath()).thenReturn("ServletPath");
-        when(request.getRequestURL()).thenReturn(new StringBuffer("RequestURL"));
+        when(request.getServletPath()).thenReturn(SERVLET_PATH);
+        when(request.getRequestURL()).thenReturn(REQUEST_URL);
     }
 
     void setGetRequest(MyRequest myRequest) {
-        when(request.getMethod()).thenReturn("GET");
+        when(request.getMethod()).thenReturn(GET);
         HttpSession session = myRequest.getSession();
         session.setAttribute(MESSAGE, SUCCEED_REGISTER);
         session.setAttribute(ERROR, CAPTCHA_INVALID);
