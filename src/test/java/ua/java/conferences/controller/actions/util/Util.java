@@ -17,6 +17,7 @@ public class Util {
     public static final StringBuffer REQUEST_URL = new StringBuffer("someURL");
     public static final String CAPTCHA_VALUE = "someCaptcha";
     public static final String EN = "en";
+    public static final String UA = "uk_UA";
     public static final String FONT = "fonts/arial.ttf";
     public static final long ID_ONE = 1L;
     public static final String ONE = "1";
@@ -111,7 +112,7 @@ public class Util {
     public static String clearString(String string) {
         return string
                 .lines()
-                .filter(s -> !(s.contains("CreationDate") || s.contains("ID")))
+                .filter(s -> !(s.contains("CreationDate") || s.contains("ID") || s.contains("BaseFont")))
                 .collect(Collectors.joining("\n"));
     }
 }

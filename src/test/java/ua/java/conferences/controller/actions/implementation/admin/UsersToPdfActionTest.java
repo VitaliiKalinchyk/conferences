@@ -13,6 +13,7 @@ import ua.java.conferences.utils.query.QueryBuilder;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -36,17 +37,17 @@ class UsersToPdfActionTest {
         setRequest();
         MyResponse myResponse = new MyResponse(response);
         MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(LOCALE, EN);
+        myRequest.getSession().setAttribute(LOCALE, UA);
         when(appContext.getUserService()).thenReturn(userService);
         when(appContext.getPdfUtil()).thenReturn(pdfUtil);
         when(appContext.getServletContext()).thenReturn(servletContext);
-        when(servletContext.getResource(FONT)).thenThrow(MalformedURLException.class);
+        when(servletContext.getResource(FONT)).thenReturn(new URL("file:./../fonts/arial.ttf"));
         when(userService.getSortedUsers(getQueryBuilder().getQuery())).thenReturn(getUserDTOs());
 
         String path = new UsersToPdfAction(appContext).execute(myRequest, myResponse);
         assertEquals(getActionToRedirect(VIEW_USERS_ACTION), path);
 
-        String expected = pdfUtil.createUsersPdf(getUserDTOs(), servletContext, EN).toString();
+        String expected = pdfUtil.createUsersPdf(getUserDTOs(), servletContext, UA).toString();
         String actual = myResponse.getOutputStream().toString();
         assertEquals(clearString(expected), clearString(actual));
     }
