@@ -16,7 +16,6 @@ class ContextListenerTest {
         when(sce.getServletContext()).thenReturn(servletContext);
         new ContextListener().contextInitialized(sce);
         AppContext appContext = AppContext.getAppContext();
-        System.out.println(servletContext);
         assertEquals(servletContext, appContext.getServletContext());
     }
 }
