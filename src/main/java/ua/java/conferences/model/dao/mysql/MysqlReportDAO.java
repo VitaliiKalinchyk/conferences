@@ -1,10 +1,10 @@
 package ua.java.conferences.model.dao.mysql;
 
-import ua.java.conferences.model.connection.DataSource;
 import ua.java.conferences.model.dao.ReportDAO;
 import ua.java.conferences.exceptions.DAOException;
 import ua.java.conferences.model.entities.*;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.*;
@@ -14,10 +14,15 @@ import static ua.java.conferences.model.dao.mysql.constants.ReportSQLQueries.*;
 import static ua.java.conferences.model.dao.mysql.constants.SQLFields.*;
 
 public class MysqlReportDAO implements ReportDAO {
+    private final DataSource dataSource;
+
+    public MysqlReportDAO(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public void add(Report report) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_REPORT)) {
             int k = 0;
             preparedStatement.setString(++k, report.getTopic());
@@ -37,7 +42,7 @@ public class MysqlReportDAO implements ReportDAO {
     @Override
     public Optional<Report> getById(long id) throws DAOException {
         Report report = null;
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORT_BY_ID)) {
             int k = 0;
             preparedStatement.setLong(++k, id);
@@ -55,7 +60,7 @@ public class MysqlReportDAO implements ReportDAO {
     @Override
     public List<Report> getAll() throws DAOException {
         List<Report> reports = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_REPORTS)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -73,7 +78,6 @@ public class MysqlReportDAO implements ReportDAO {
         return getReports(eventId, GET_EVENTS_REPORTS);
     }
 
-
     @Override
     public List<Report> getSpeakersReports(long speakerId) throws DAOException {
         return getReports(speakerId, GET_SPEAKERS_REPORTS);
@@ -81,7 +85,7 @@ public class MysqlReportDAO implements ReportDAO {
 
     private List<Report> getReports(long eventId, String getEventsReports) throws DAOException {
         List<Report> reports = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(getEventsReports)) {
             int k = 0;
             preparedStatement.setLong(++k, eventId);
@@ -98,7 +102,7 @@ public class MysqlReportDAO implements ReportDAO {
 
     @Override
     public void update(Report report) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_REPORT)) {
             int k = 0;
             preparedStatement.setString(++k, report.getTopic());
@@ -111,7 +115,7 @@ public class MysqlReportDAO implements ReportDAO {
 
     @Override
     public void delete(long id) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_REPORT)) {
             int k = 0;
             preparedStatement.setLong(++k, id);
@@ -123,7 +127,7 @@ public class MysqlReportDAO implements ReportDAO {
 
     @Override
     public void setSpeaker(long reportId, long speakerId) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_SPEAKER)) {
             int k = 0;
             preparedStatement.setLong(++k, speakerId);
@@ -136,7 +140,7 @@ public class MysqlReportDAO implements ReportDAO {
 
     @Override
     public void deleteSpeaker(long reportId) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_SPEAKER)) {
             int k = 0;
             preparedStatement.setNull(++k, NULL);
@@ -151,7 +155,7 @@ public class MysqlReportDAO implements ReportDAO {
         Event event = getEvent(resultSet);
         User speaker = getSpeaker(resultSet);
         return Report.builder()
-                .id(resultSet.getInt(ID))
+                .id(resultSet.getLong(ID))
                 .topic(resultSet.getString(TOPIC))
                 .event(event)
                 .speaker(speaker)

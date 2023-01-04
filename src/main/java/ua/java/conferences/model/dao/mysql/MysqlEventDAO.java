@@ -1,11 +1,11 @@
 package ua.java.conferences.model.dao.mysql;
 
-import ua.java.conferences.model.connection.DataSource;
 import ua.java.conferences.model.dao.EventDAO;
 import ua.java.conferences.model.entities.Event;
 import ua.java.conferences.model.entities.role.Role;
 import ua.java.conferences.exceptions.DAOException;
 
+import javax.sql.DataSource;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
@@ -15,10 +15,15 @@ import static ua.java.conferences.model.dao.mysql.constants.SQLFields.*;
 import static ua.java.conferences.model.entities.role.Role.SPEAKER;
 
 public class MysqlEventDAO implements EventDAO {
+    private final DataSource dataSource;
+
+    public MysqlEventDAO(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public void add(Event event) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(ADD_EVENT)) {
             int k = 0;
             setStatementFields(event, preparedStatement, k);
@@ -31,7 +36,7 @@ public class MysqlEventDAO implements EventDAO {
     @Override
     public Optional<Event> getById(long id) throws DAOException {
         Event event = null;
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_ID)) {
             setId(id, preparedStatement);
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -49,7 +54,7 @@ public class MysqlEventDAO implements EventDAO {
     @Override
     public Optional<Event> getByTitle(String title) throws DAOException {
         Event event = null;
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENT_BY_TITLE)) {
             int k = 0;
             preparedStatement.setString(++k, title);
@@ -67,7 +72,7 @@ public class MysqlEventDAO implements EventDAO {
     @Override
     public List<Event> getAll() throws DAOException {
         List<Event> events = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_EVENTS)) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -83,7 +88,7 @@ public class MysqlEventDAO implements EventDAO {
     @Override
     public List<Event> getSorted(String query) throws DAOException {
         List<Event> events = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(String.format(GET_SORTED, query))) {
             preparedStatement.execute();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -100,7 +105,7 @@ public class MysqlEventDAO implements EventDAO {
     @Override
     public List<Event> getSortedByUser(String query, Role role) throws DAOException {
         List<Event> events = new ArrayList<>();
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(getQueryForList(query, role))) {
             preparedStatement.execute();
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
@@ -116,7 +121,7 @@ public class MysqlEventDAO implements EventDAO {
 
     @Override
     public void update(Event event) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(EDIT_EVENT)) {
             int k = 0;
             k = setStatementFields(event, preparedStatement, k);
@@ -129,7 +134,7 @@ public class MysqlEventDAO implements EventDAO {
 
     @Override
     public void setVisitorsCount(long eventId, int visitorsCount) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(SET_VISITORS)) {
             int k = 0;
             preparedStatement.setInt(++k, visitorsCount);
@@ -142,7 +147,7 @@ public class MysqlEventDAO implements EventDAO {
 
     @Override
     public void delete(long id) throws DAOException {
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(DELETE_EVENT)) {
             setId(id, preparedStatement);
             preparedStatement.execute();
@@ -154,7 +159,7 @@ public class MysqlEventDAO implements EventDAO {
     @Override
     public int getNumberOfRecords (String filter, Role role) throws DAOException {
         int numberOfRecords = 0;
-        try (Connection connection = DataSource.getConnection();
+        try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(getRecordsQuery(filter, role))) {
             try (ResultSet resultSet = preparedStatement.executeQuery()) {
                 if (resultSet.next()) {

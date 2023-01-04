@@ -5,12 +5,12 @@ import static ua.java.conferences.model.connection.ConnectionConstants.*;
 import com.zaxxer.hikari.*;
 import org.slf4j.*;
 
+import javax.sql.DataSource;
 import java.io.*;
-import java.sql.*;
 import java.util.Properties;
 
-public class DataSource {
-    private static final Logger logger = LoggerFactory.getLogger(DataSource.class);
+public class MyDataSource {
+    private static final Logger logger = LoggerFactory.getLogger(MyDataSource.class);
     private static final String CONNECTION_FILE = "connection.properties";
     private static final HikariConfig config = new HikariConfig();
     private static final HikariDataSource ds;
@@ -27,15 +27,15 @@ public class DataSource {
         ds = new HikariDataSource(config);
     }
 
-    private DataSource() {}
+    private MyDataSource() {}
 
-    public static Connection getConnection() throws SQLException {
-        return ds.getConnection();
+    public static DataSource getDataSource() {
+        return ds;
     }
 
     private static Properties getProperties() {
         Properties properties = new Properties();
-        try (InputStream resource = DataSource.class.getClassLoader().getResourceAsStream(CONNECTION_FILE)){
+        try (InputStream resource = MyDataSource.class.getClassLoader().getResourceAsStream(CONNECTION_FILE)){
             properties.load(resource);
         } catch (IOException e) {
             logger.error(e.getMessage());
