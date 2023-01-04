@@ -15,6 +15,8 @@ import ua.java.conferences.dto.*;
 import java.io.*;
 import java.net.URL;
 import java.util.List;
+import java.util.Locale;
+import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
 public class PdfUtil {
@@ -23,38 +25,35 @@ public class PdfUtil {
     private static final Color LIGHT_GREY = new DeviceRgb(220, 220, 220);
     private static final int TITLE_SIZE = 20;
     private static final Paragraph LINE_SEPARATOR = new Paragraph(new Text("\n"));
-    private static final String USER_TITLE = "USERS";
-    private static final String USER_TITLE_UA = "КОРИСТУВАЧІ";
-    private static final String[] USER_CELLS = new String[]{"ID", "Email", "Name", "Surname", "Role"};
-    private static final String[] USER_CELLS_UA = new String[]{"ID", "Пошта", "Ім'я", "Прізвище", "Роль"};
-    private static final String EVENT_TITLE = "CONFERENCES";
-    private static final String EVENT_TITLE_UA = "КОНФЕРЕНЦІЇ";
+    private static final String USER_TITLE = "users";
+    private static final String[] USER_CELLS = new String[]{"id", "email", "name", "surname", "role"};
+    private static final String EVENT_TITLE = "events";
     private static final String[] EVENT_CELLS =
-            new String[]{"Title", "Date", "Location", "Reports", "Registered", "Visitors"};
-    private static final String[] EVENT_CELLS_UA =
-            new String[]{"Назва", "Дата", "Місце", "Доповідей", "Реєстрацій", "Відвідувачів"};
+            new String[]{"title", "date", "location", "reports", "registrations", "visitors"};
 
     public ByteArrayOutputStream createUsersPdf(List<UserDTO> users, ServletContext servletContext, String locale) {
+        ResourceBundle resourceBundle = getBundle(locale);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         Document document = getDocument(servletContext, output);
-        document.add(getTableTitle(locale.equals("en") ? USER_TITLE : USER_TITLE_UA));
+        document.add(getTableTitle(resourceBundle.getString(USER_TITLE).toUpperCase()));
         document.add(LINE_SEPARATOR);
-        document.add(getUserTable(users, locale));
+        document.add(getUserTable(users, resourceBundle));
         document.close();
         return output;
     }
 
     public ByteArrayOutputStream createEventsPdf(List<EventDTO> events, ServletContext servletContext, String locale) {
+        ResourceBundle resourceBundle = getBundle(locale);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         Document document = getDocument(servletContext, output);
-        document.add(getTableTitle(locale.equals("en") ? EVENT_TITLE : EVENT_TITLE_UA));
+        document.add(getTableTitle(resourceBundle.getString(EVENT_TITLE).toUpperCase()));
         document.add(LINE_SEPARATOR);
-        document.add(getEventTable(events, locale));
+        document.add(getEventTable(events, resourceBundle));
         document.close();
         return output;
     }
 
-    private static Document getDocument(ServletContext servletContext, ByteArrayOutputStream output) {
+    private Document getDocument(ServletContext servletContext, ByteArrayOutputStream output) {
         PdfWriter writer = new PdfWriter(output);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf, PageSize.A4.rotate());
@@ -71,29 +70,29 @@ public class PdfUtil {
                 .setTextAlignment(TextAlignment.CENTER);
     }
 
-    private Table getUserTable(List<UserDTO> users, String locale) {
+    private Table getUserTable(List<UserDTO> users, ResourceBundle resourceBundle) {
         Table table = new Table(new float[]{4, 12, 6, 6, 6});
         table.setWidth(UnitValue.createPercentValue(100));
-        addUserTableHeader(table, locale.equals("en") ? USER_CELLS : USER_CELLS_UA);
+        addTableHeader(table, USER_CELLS, resourceBundle);
         addUserTableRows(table, users);
         return table;
     }
 
-    private Table getEventTable(List<EventDTO> events, String locale) {
+    private Table getEventTable(List<EventDTO> events, ResourceBundle resourceBundle) {
         Table table = new Table(new float[]{7, 3, 3, 2, 2, 2});
         table.setWidth(UnitValue.createPercentValue(100));
-        addUserTableHeader(table, locale.equals("en") ? EVENT_CELLS : EVENT_CELLS_UA);
+        addTableHeader(table, EVENT_CELLS, resourceBundle);
         addEventTableRows(table, events);
         return table;
     }
 
-    private void addUserTableHeader(Table table, String[] cells) {
+    private void addTableHeader(Table table, String[] cells, ResourceBundle resourceBundle) {
         Stream.of(cells)
                 .forEach(columnTitle -> {
                     Cell header = new Cell();
                     header.setBackgroundColor(LIGHT_GREY);
                     header.setBorder(new SolidBorder(1));
-                    header.add(new Paragraph(columnTitle));
+                    header.add(new Paragraph(resourceBundle.getString(columnTitle)));
                     table.addCell(header);
                 });
     }
@@ -122,7 +121,7 @@ public class PdfUtil {
         );
     }
 
-    private static PdfFont getPdfFont(ServletContext servletContext) {
+    private PdfFont getPdfFont(ServletContext servletContext) {
         try {
             URL resource = servletContext.getResource(FONT);
             String fontUrl = resource.getFile();
@@ -130,6 +129,17 @@ public class PdfUtil {
         } catch (IOException e) {
             logger.error(e.getMessage());
             return null;
+        }
+    }
+
+    private ResourceBundle getBundle(String locale) {
+        if (locale.contains("_")) {
+            int index = locale.indexOf("_");
+            String lang = locale.substring(0, index);
+            String country = locale.substring(index + 1);
+            return ResourceBundle.getBundle("resources", new Locale(lang, country));
+        } else {
+            return ResourceBundle.getBundle("resources", new Locale(locale));
         }
     }
 }
