@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="tags" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="custom" uri="/WEB-INF/custom.tld" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -61,10 +62,9 @@
                 </div>
 
                 <div>
-                    <c:set var="now"><tags:now/></c:set>
                     <label class="form-label fs-5" for="date"><fmt:message key="date"/>*: </label>
                     <input class="form-control" type="date" name="date" id="date"
-                           required value="${dateValue}" min="${now}">
+                           required value="${dateValue}" min="<custom:now/>">
                     <tags:contains error="${error}" value="date"/><br>
                 </div>
 
