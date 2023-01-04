@@ -9,15 +9,15 @@ import ua.java.conferences.dto.UserDTO;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
-import static ua.java.conferences.Constants.DESCRIPTION;
-import static ua.java.conferences.Constants.EMAIL;
-import static ua.java.conferences.Constants.LOCATION;
-import static ua.java.conferences.Constants.NAME;
-import static ua.java.conferences.Constants.REGISTRATIONS;
-import static ua.java.conferences.Constants.REPORTS;
-import static ua.java.conferences.Constants.SURNAME;
-import static ua.java.conferences.Constants.TITLE;
-import static ua.java.conferences.Constants.VISITORS;
+import static ua.java.conferences.Constants.DESCRIPTION_VALUE;
+import static ua.java.conferences.Constants.EMAIL_VALUE;
+import static ua.java.conferences.Constants.LOCATION_VALUE;
+import static ua.java.conferences.Constants.NAME_VALUE;
+import static ua.java.conferences.Constants.REGISTRATIONS_VALUE;
+import static ua.java.conferences.Constants.REPORTS_VALUE;
+import static ua.java.conferences.Constants.SURNAME_VALUE;
+import static ua.java.conferences.Constants.TITLE_VALUE;
+import static ua.java.conferences.Constants.VISITORS_VALUE;
 import static ua.java.conferences.controller.actions.ActionUtil.*;
 import static ua.java.conferences.controller.actions.constants.ActionNames.DELETE_USER_ACTION;
 import static ua.java.conferences.controller.actions.constants.Pages.INDEX_PAGE;
@@ -127,9 +127,9 @@ class ActionUtilTest {
     private UserDTO getTestUserDTO() {
         return UserDTO.builder()
                 .id(ID_VALUE)
-                .email(EMAIL)
-                .name(NAME)
-                .surname(SURNAME)
+                .email(EMAIL_VALUE)
+                .name(NAME_VALUE)
+                .surname(SURNAME_VALUE)
                 .role(ROLE_VISITOR)
                 .build();
     }
@@ -137,13 +137,13 @@ class ActionUtilTest {
     private EventDTO getTestEventDTO() {
         return EventDTO.builder()
                 .id(ID_VALUE)
-                .title(TITLE)
+                .title(TITLE_VALUE)
                 .date(DATE_NAME)
-                .location(LOCATION)
-                .description(DESCRIPTION)
-                .reports(REPORTS)
-                .registrations(REGISTRATIONS)
-                .visitors(VISITORS)
+                .location(LOCATION_VALUE)
+                .description(DESCRIPTION_VALUE)
+                .reports(REPORTS_VALUE)
+                .registrations(REGISTRATIONS_VALUE)
+                .visitors(VISITORS_VALUE)
                 .build();
     }
 }
