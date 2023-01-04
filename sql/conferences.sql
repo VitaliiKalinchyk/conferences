@@ -200,5 +200,3 @@ UPDATE report SET user_id=13 WHERE id=15;
 UPDATE report SET user_id=13 WHERE id=7;
 UPDATE report SET user_id=13 WHERE id=12;
 UPDATE report SET user_id=12 WHERE id=13;
-
-SELECT * FROM event;
