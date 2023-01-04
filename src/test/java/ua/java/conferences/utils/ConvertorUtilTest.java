@@ -81,9 +81,9 @@ class ConvertorUtilTest {
     private UserDTO getTestUserDTO() {
         return UserDTO.builder()
                 .id(ID_VALUE)
-                .email(EMAIL)
-                .name(NAME)
-                .surname(SURNAME)
+                .email(EMAIL_VALUE)
+                .name(NAME_VALUE)
+                .surname(SURNAME_VALUE)
                 .role(ROLE_VISITOR)
                 .build();
     }
@@ -91,58 +91,58 @@ class ConvertorUtilTest {
     private ReportDTO getTestReportDTO() {
         return ReportDTO.builder()
                 .id(ID_VALUE)
-                .topic(TOPIC)
+                .topic(TOPIC_VALUE)
                 .speakerId(ID_VALUE)
-                .speakerEmail(EMAIL)
+                .speakerEmail(EMAIL_VALUE)
                 .speakerName(SPEAKER_NAME)
                 .eventId(ID_VALUE)
-                .title(TITLE)
+                .title(TITLE_VALUE)
                 .date(DATE_NAME)
-                .location(LOCATION)
+                .location(LOCATION_VALUE)
                 .build();
     }
 
     private EventDTO getTestEventDTO() {
         return EventDTO.builder()
                 .id(ID_VALUE)
-                .title(TITLE)
+                .title(TITLE_VALUE)
                 .date(DATE_NAME)
-                .location(LOCATION)
-                .description(DESCRIPTION)
-                .reports(REPORTS)
-                .registrations(REGISTRATIONS)
-                .visitors(VISITORS)
+                .location(LOCATION_VALUE)
+                .description(DESCRIPTION_VALUE)
+                .reports(REPORTS_VALUE)
+                .registrations(REGISTRATIONS_VALUE)
+                .visitors(VISITORS_VALUE)
                 .build();
     }
 
     private User getTestUser() {
         return User.builder()
                 .id(ID_VALUE)
-                .email(EMAIL)
-                .password(PASSWORD)
-                .name(NAME)
-                .surname(SURNAME)
-                .roleId(ROLE_ID)
+                .email(EMAIL_VALUE)
+                .password(PASSWORD_VALUE)
+                .name(NAME_VALUE)
+                .surname(SURNAME_VALUE)
+                .roleId(ROLE_ID_VALUE)
                 .build();
     }
 
     private Event getTestEvent() {
         return Event.builder()
                 .id(ID_VALUE)
-                .title(TITLE)
-                .date(DATE)
-                .location(LOCATION)
-                .description(DESCRIPTION)
-                .registrations(REGISTRATIONS)
-                .visitors(VISITORS)
-                .reports(REPORTS)
+                .title(TITLE_VALUE)
+                .date(DATE_VALUE)
+                .location(LOCATION_VALUE)
+                .description(DESCRIPTION_VALUE)
+                .registrations(REGISTRATIONS_VALUE)
+                .visitors(VISITORS_VALUE)
+                .reports(REPORTS_VALUE)
                 .build();
     }
 
     private Report getTestReport() {
         return Report.builder()
                 .id(ID_VALUE)
-                .topic(TOPIC)
+                .topic(TOPIC_VALUE)
                 .speaker(getTestUser())
                 .event(getTestEvent())
                 .build();

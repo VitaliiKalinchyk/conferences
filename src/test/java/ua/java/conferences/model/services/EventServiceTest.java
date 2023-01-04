@@ -33,10 +33,10 @@ class EventServiceTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"q", "ё", "11111111111111111111111111111111111111111111111111111111111111111111111"})
-    void testAddIncorrectTitle() throws DAOException {
+    void testAddIncorrectTitle(String title) throws DAOException {
         doNothing().when(eventDAO).add(isA(Event.class));
         EventDTO eventDTO = getTestEventDTO();
-        eventDTO.setTitle(INCORRECT_TITLE);
+        eventDTO.setTitle(title);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.addEvent(eventDTO));
         assertEquals(ENTER_CORRECT_TITLE, e.getMessage());
     }
@@ -123,20 +123,20 @@ class EventServiceTest {
 
     @Test
     void testGetByTitle() throws DAOException, ServiceException {
-        when(eventDAO.getByTitle(TITLE)).thenReturn(Optional.of(getTestEvent()));
-        assertEquals(getTestEventDTO(), eventService.getByTitle(TITLE));
+        when(eventDAO.getByTitle(TITLE_VALUE)).thenReturn(Optional.of(getTestEvent()));
+        assertEquals(getTestEventDTO(), eventService.getByTitle(TITLE_VALUE));
     }
 
     @Test
     void testSQLErrorGetByTitle() throws DAOException {
         doThrow(DAOException.class).when(eventDAO).getByTitle(isA(String.class));
-        assertThrows(ServiceException.class, () -> eventService.getByTitle(TITLE));
+        assertThrows(ServiceException.class, () -> eventService.getByTitle(TITLE_VALUE));
     }
 
     @Test
     void testGetByTitleNoEvent() throws DAOException {
-        when(eventDAO.getByTitle(TITLE)).thenReturn(Optional.empty());
-        assertThrows(NoSuchEventException.class,() -> eventService.getByTitle(TITLE));
+        when(eventDAO.getByTitle(TITLE_VALUE)).thenReturn(Optional.empty());
+        assertThrows(NoSuchEventException.class,() -> eventService.getByTitle(TITLE_VALUE));
     }
 
     @Test
@@ -165,7 +165,7 @@ class EventServiceTest {
     @Test
     void testSQLErrorGetSorted() throws DAOException {
         doThrow(DAOException.class).when(eventDAO).getSorted(isA(String.class));
-        assertThrows(ServiceException.class, () -> eventService.getSorted(TITLE));
+        assertThrows(ServiceException.class, () -> eventService.getSorted(TITLE_VALUE));
     }
 
     @Test
@@ -246,11 +246,12 @@ class EventServiceTest {
         assertEquals(ENTER_CORRECT_LOCATION, e.getMessage());
     }
 
-    @Test
-    void testUpdateIncorrectDescription() throws DAOException {
+    @ParameterizedTest
+    @ValueSource(strings = {"", "ё"})
+    void testUpdateIncorrectDescription(String description) throws DAOException {
         doNothing().when(eventDAO).update(isA(Event.class));
         EventDTO eventDTO = getTestEventDTO();
-        eventDTO.setDescription(INCORRECT_DESCRIPTION);
+        eventDTO.setDescription(description);
         IncorrectFormatException e = assertThrows(IncorrectFormatException.class , () -> eventService.update(eventDTO));
         assertEquals(ENTER_CORRECT_DESCRIPTION, e.getMessage());
     }
@@ -264,26 +265,26 @@ class EventServiceTest {
     @Test
     void testSetVisitorsCount() throws DAOException {
         doNothing().when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
-        assertDoesNotThrow(() -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), String.valueOf(VISITORS)));
+        assertDoesNotThrow(() -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), String.valueOf(VISITORS_VALUE)));
     }
 
     @Test
     void testSQLErrorSetVisitorsCount() throws DAOException {
         doThrow(DAOException.class).when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
         assertThrows(ServiceException.class,
-                () -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), String.valueOf(VISITORS)));
+                () -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), String.valueOf(VISITORS_VALUE)));
     }
 
     @Test
     void testSetVisitorsCountWrongEventId() throws DAOException {
         doNothing().when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
-        assertThrows(NoSuchEventException.class, () -> eventService.setVisitorsCount(NAME, String.valueOf(VISITORS)));
+        assertThrows(NoSuchEventException.class, () -> eventService.setVisitorsCount(NAME_VALUE, String.valueOf(VISITORS_VALUE)));
     }
 
     @Test
     void testSetVisitorsCountWrongNumber() throws DAOException {
         doNothing().when(eventDAO).setVisitorsCount(isA(long.class), isA(int.class));
-        assertThrows(ServiceException.class, () -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), NAME));
+        assertThrows(ServiceException.class, () -> eventService.setVisitorsCount(String.valueOf(ID_VALUE), NAME_VALUE));
     }
 
     @Test
@@ -301,36 +302,36 @@ class EventServiceTest {
     private EventDTO getTestShortEventDTO() {
         return EventDTO.builder()
                 .id(ID_VALUE)
-                .title(TITLE)
+                .title(TITLE_VALUE)
                 .date(DATE_NAME)
-                .location(LOCATION)
-                .description(DESCRIPTION)
+                .location(LOCATION_VALUE)
+                .description(DESCRIPTION_VALUE)
                 .build();
     }
 
     private EventDTO getTestEventDTO() {
         return EventDTO.builder()
                 .id(ID_VALUE)
-                .title(TITLE)
+                .title(TITLE_VALUE)
                 .date(DATE_NAME)
-                .location(LOCATION)
-                .description(DESCRIPTION)
-                .reports(REPORTS)
-                .registrations(REGISTRATIONS)
-                .visitors(VISITORS)
+                .location(LOCATION_VALUE)
+                .description(DESCRIPTION_VALUE)
+                .reports(REPORTS_VALUE)
+                .registrations(REGISTRATIONS_VALUE)
+                .visitors(VISITORS_VALUE)
                 .build();
     }
 
     private Event getTestEvent() {
         return Event.builder()
                 .id(ID_VALUE)
-                .title(TITLE)
-                .date(DATE)
-                .location(LOCATION)
-                .description(DESCRIPTION)
-                .reports(REPORTS)
-                .registrations(REGISTRATIONS)
-                .visitors(VISITORS)
+                .title(TITLE_VALUE)
+                .date(DATE_VALUE)
+                .location(LOCATION_VALUE)
+                .description(DESCRIPTION_VALUE)
+                .reports(REPORTS_VALUE)
+                .registrations(REGISTRATIONS_VALUE)
+                .visitors(VISITORS_VALUE)
                 .build();
     }
 }

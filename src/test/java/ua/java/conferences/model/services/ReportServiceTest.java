@@ -181,32 +181,32 @@ class ReportServiceTest {
     private ReportDTO getReportDTO() {
         return ReportDTO.builder()
                 .id(ID_VALUE)
-                .topic(TOPIC)
+                .topic(TOPIC_VALUE)
                 .eventId(ID_VALUE)
-                .title(TITLE)
+                .title(TITLE_VALUE)
                 .date(DATE_NAME)
-                .location(LOCATION)
+                .location(LOCATION_VALUE)
                 .build();
     }
 
     private Report getTestReport() {
         User speaker = User.builder()
                 .id(ID_VALUE)
-                .email(EMAIL)
-                .password(PASSWORD)
-                .name(NAME)
-                .surname(SURNAME)
+                .email(EMAIL_VALUE)
+                .password(PASSWORD_VALUE)
+                .name(NAME_VALUE)
+                .surname(SURNAME_VALUE)
                 .build();
         Event event = Event.builder()
                 .id(ID_VALUE)
-                .title(TITLE)
-                .date(DATE)
-                .location(LOCATION)
-                .description(DESCRIPTION)
+                .title(TITLE_VALUE)
+                .date(DATE_VALUE)
+                .location(LOCATION_VALUE)
+                .description(DESCRIPTION_VALUE)
                 .build();
         return Report.builder()
                 .id(ID_VALUE)
-                .topic(TOPIC)
+                .topic(TOPIC_VALUE)
                 .event(event)
                 .speaker(speaker)
                 .build();

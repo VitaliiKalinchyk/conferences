@@ -2,202 +2,297 @@ package ua.java.conferences.model.dao;
 
 import org.junit.jupiter.api.*;
 import ua.java.conferences.exceptions.DAOException;
-import ua.java.conferences.model.entities.Event;
-import ua.java.conferences.model.entities.Report;
-import ua.java.conferences.model.entities.User;
+import ua.java.conferences.model.dao.mysql.MysqlReportDAO;
+import ua.java.conferences.model.entities.*;
 
-import java.io.FileNotFoundException;
-import java.sql.SQLException;
+import javax.sql.DataSource;
+import java.sql.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.isA;
+import static org.mockito.Mockito.*;
 import static ua.java.conferences.model.dao.DAOTestUtils.*;
 import static ua.java.conferences.Constants.*;
+import static ua.java.conferences.model.dao.mysql.constants.SQLFields.*;
 
 class ReportDAOTest {
 
-    @BeforeEach
-    void clearDB() throws FileNotFoundException, SQLException {
-        createEmptyDB();
+    @Test
+    void testAdd() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement ignored = prepareMocks(dataSource)) {
+            assertDoesNotThrow(() -> reportDAO.add(getTestReport()));
+        }
     }
 
     @Test
-    void testAdd() throws DAOException {
-        eventDAO.add(getTestEvent());
-        userDAO.add(getTestUser());
-        assertDoesNotThrow(() -> reportDAO.add(getTestReport()));
-    }
-
-    @Test
-    void testAddNoSpeaker() throws DAOException {
-        eventDAO.add(getTestEvent());
+    void testAddNoSpeaker() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
         Report testReport = getTestReport();
         testReport.setSpeaker(null);
-        assertDoesNotThrow(() -> reportDAO.add(testReport));
+        try (PreparedStatement ignored = prepareMocks(dataSource)) {
+            assertDoesNotThrow(() -> reportDAO.add(testReport));
+        }
     }
 
     @Test
-    void testAddNoEvent() {
+    void testSqlExceptionAdd() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
         assertThrows(DAOException.class, () -> reportDAO.add(getTestReport()));
     }
 
     @Test
-    void testAddNoSuchSpeaker() throws DAOException {
-        eventDAO.add(getTestEvent());
-        assertThrows(DAOException.class, () -> reportDAO.add(getTestReport()));
+    void testGetById() throws DAOException, SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement preparedStatement = prepareMocks(dataSource)) {
+            ResultSet resultSet = mock(ResultSet.class);
+            when(preparedStatement.executeQuery()).thenReturn(resultSet);
+            prepareResultSet(resultSet);
+
+            Report resultReport = reportDAO.getById(ID_VALUE).orElse(null);
+            assertNotNull(resultReport);
+            assertEquals(getTestReport(), resultReport);
+
+            User resultSpeaker = resultReport.getSpeaker();
+            Event resultEvent = resultReport.getEvent();
+
+            assertEquals(getTestUser().getId(), resultSpeaker.getId());
+            assertEquals(getTestUser().getEmail(), resultSpeaker.getEmail());
+            assertEquals(getTestUser().getName(), resultSpeaker.getName());
+            assertEquals(getTestUser().getSurname(), resultSpeaker.getSurname());
+            assertEquals(getTestEvent().getId(), resultEvent.getId());
+            assertEquals(getTestEvent().getTitle(), resultEvent.getTitle());
+            assertEquals(getTestEvent().getDate(), resultEvent.getDate());
+            assertEquals(getTestEvent().getLocation(), resultEvent.getLocation());
+        }
     }
 
     @Test
-    void testGetById() throws DAOException {
-        prepareDb();
-        Report resultReport = reportDAO.getById(ID_VALUE).orElse(null);
-        assertNotNull(resultReport);
-        assertEquals(getTestReport().getId(), resultReport.getId());
+    void testGetByIdAbsent() throws SQLException, DAOException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement preparedStatement = prepareMocks(dataSource)) {
+            ResultSet resultSet = mock(ResultSet.class);
+            when(preparedStatement.executeQuery()).thenReturn(resultSet);
+            when(resultSet.next()).thenReturn(false);
+
+            Report resultReport = reportDAO.getById(ID_VALUE).orElse(null);
+            assertNull(resultReport);
+        }
     }
 
     @Test
-    void testGetAbsent() throws DAOException {
-        assertNull(reportDAO.getById(ID_VALUE).orElse(null));
+    void testSqlExceptionGetById() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
+        assertThrows(DAOException.class, () -> reportDAO.getById(ID_VALUE));
     }
 
     @Test
-    void testGetReport() throws DAOException {
-        prepareDb();
-
-        Report resultReport = reportDAO.getById(ID_VALUE).orElse(null);
-        assertNotNull(resultReport);
-
-        User resultSpeaker = resultReport.getSpeaker();
-        Event resultEvent = resultReport.getEvent();
-
-        assertEquals(resultSpeaker.getId(), getTestUser().getId());
-        assertEquals(resultSpeaker.getEmail(), getTestUser().getEmail());
-        assertEquals(resultSpeaker.getName(), getTestUser().getName());
-        assertEquals(resultSpeaker.getSurname(), getTestUser().getSurname());
-        assertEquals(resultEvent.getId(), getTestEvent().getId());
-        assertEquals(resultEvent.getTitle(), getTestEvent().getTitle());
-        assertEquals(resultEvent.getDate(), getTestEvent().getDate());
-        assertEquals(resultEvent.getLocation(), getTestEvent().getLocation());
-
+    void testGetAll() throws DAOException, SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement preparedStatement = prepareMocks(dataSource)) {
+            ResultSet resultSet = mock(ResultSet.class);
+            when(preparedStatement.executeQuery()).thenReturn(resultSet);
+            prepareResultSet(resultSet);
+            List<Report> reports = reportDAO.getAll();
+            assertEquals(ONE, reports.size());
+            assertEquals(getTestReport(), reports.get(0));
+        }
     }
 
     @Test
-    void testGetAll() throws DAOException {
-        prepareDb();
-
-        List<Report> reports = reportDAO.getAll();
-        assertEquals(ONE, reports.size());
+    void testGetNoReports() throws DAOException, SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement preparedStatement = prepareMocks(dataSource)) {
+            ResultSet resultSet = mock(ResultSet.class);
+            when(preparedStatement.executeQuery()).thenReturn(resultSet);
+            when(resultSet.next()).thenReturn(false);
+            List<Report> reports = reportDAO.getAll();
+            assertEquals(ZERO, reports.size());
+        }
     }
 
     @Test
-    void testGetNoReports() throws DAOException {
-        List<Report> reports = reportDAO.getAll();
-        assertEquals(ZERO, reports.size());
+    void testSqlExceptionGetAll() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
+        assertThrows(DAOException.class, reportDAO::getAll);
     }
 
     @Test
-    void testUpdate() throws DAOException {
-        prepareDb();
-
-        assertDoesNotThrow(() -> reportDAO.update(getTestReport()));
+    void testGetEventsReports() throws DAOException, SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement preparedStatement = prepareMocks(dataSource)) {
+            ResultSet resultSet = mock(ResultSet.class);
+            when(preparedStatement.executeQuery()).thenReturn(resultSet);
+            prepareResultSet(resultSet);
+            List<Report> reports = reportDAO.getEventsReports(ID_VALUE);
+            assertEquals(ONE, reports.size());
+            assertEquals(getTestReport(), reports.get(0));
+        }
     }
 
     @Test
-    void testUpdateWithResult() throws DAOException {
-        prepareDb();
-
-        Report testReport = getTestReport();
-        testReport.setTopic("Result");
-        reportDAO.update(testReport);
-
-        Report resultReport = reportDAO.getById(ID_VALUE).orElse(null);
-        assertNotNull(resultReport);
-        assertEquals(resultReport.getTopic(), testReport.getTopic());
-    }
-
-
-    @Test
-    void testUpdateNoReport() {
-        assertDoesNotThrow(() -> reportDAO.update(getTestReport()));
+    void testGetEventsNoReports() throws DAOException, SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement preparedStatement = prepareMocks(dataSource)) {
+            ResultSet resultSet = mock(ResultSet.class);
+            when(preparedStatement.executeQuery()).thenReturn(resultSet);
+            when(resultSet.next()).thenReturn(false);
+            List<Report> reports = reportDAO.getEventsReports(ID_VALUE);
+            assertEquals(ZERO, reports.size());
+        }
     }
 
     @Test
-    void testDelete() throws DAOException {
-        prepareDb();
-
-        assertDoesNotThrow(() -> reportDAO.delete(ID_VALUE));
-        List<Report> reports = reportDAO.getAll();
-        assertEquals(ZERO, reports.size());
+    void testSqlExceptionGetEventsReports() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
+        assertThrows(DAOException.class, () -> reportDAO.getById(ID_VALUE));
     }
 
     @Test
-    void testDeleteNoReport() {
-        assertDoesNotThrow(() -> reportDAO.delete(ID_VALUE));
+    void testGetSpeakersReports() throws DAOException, SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement preparedStatement = prepareMocks(dataSource)) {
+            ResultSet resultSet = mock(ResultSet.class);
+            when(preparedStatement.executeQuery()).thenReturn(resultSet);
+            prepareResultSet(resultSet);
+
+            List<Report> reports = reportDAO.getSpeakersReports(ID_VALUE);
+            assertEquals(ONE, reports.size());
+            assertEquals(getTestReport(), reports.get(0));
+        }
     }
 
     @Test
-    void testGetEventsReports() throws DAOException {
-        prepareDb();
+    void testGetSpeakersNoReports() throws DAOException, SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement preparedStatement = prepareMocks(dataSource)) {
+            ResultSet resultSet = mock(ResultSet.class);
+            when(preparedStatement.executeQuery()).thenReturn(resultSet);
+            when(resultSet.next()).thenReturn(false);
 
-        List<Report> reports = reportDAO.getEventsReports(ID_VALUE);
-        assertEquals(ONE, reports.size());
+            List<Report> reports = reportDAO.getSpeakersReports(ID_VALUE);
+            assertEquals(ZERO, reports.size());
+        }
     }
 
     @Test
-    void testNoReport() throws DAOException {
-        eventDAO.add( getTestEvent());
-        List<Report> reports = reportDAO.getEventsReports(ID_VALUE);
-        assertEquals(ZERO, reports.size());
+    void testSqlExceptionGetSpeakersReports() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
+        assertThrows(DAOException.class, () -> reportDAO.getSpeakersReports(ID_VALUE));
     }
 
     @Test
-    void testGetSpeakersReports() throws DAOException {
-        prepareDb();
-
-        List<Report> reports = reportDAO.getSpeakersReports(ID_VALUE);
-        assertEquals(ONE, reports.size());
+    void testUpdate() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement ignored = prepareMocks(dataSource)) {
+            assertDoesNotThrow(() -> reportDAO.update(getTestReport()));
+        }
     }
 
     @Test
-    void testSetSpeakerForReport() throws DAOException {
-        eventDAO.add(getTestEvent());
-        Report testReport = getTestReport();
-        testReport.setSpeaker(null);
-        reportDAO.add(testReport);
-        userDAO.add(getTestUser());
-        assertDoesNotThrow(() -> reportDAO.setSpeaker(ID_VALUE, ID_VALUE));
-
-        List<Report> reports = reportDAO.getSpeakersReports(ID_VALUE);
-        assertEquals(ONE, reports.size());
-
-        testReport = reportDAO.getById(ID_VALUE).orElse(null);
-        assertNotNull(testReport);
-
-        User speaker = testReport.getSpeaker();
-        assertEquals(getTestUser().getName(), speaker.getName());
-        assertEquals(getTestUser().getEmail(), speaker.getEmail());
+    void testSqlExceptionUpdate() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
+        assertThrows(DAOException.class, () -> reportDAO.update(getTestReport()));
     }
 
     @Test
-    void testDeleteSpeaker() throws DAOException {
-        prepareDb();
-
-        List<Report> reports = reportDAO.getSpeakersReports(ID_VALUE);
-        assertEquals(ONE, reports.size());
-
-        assertDoesNotThrow(() -> reportDAO.deleteSpeaker(ID_VALUE));
-
-        reports = reportDAO.getSpeakersReports(ID_VALUE);
-        assertEquals(ZERO, reports.size());
-
-        Report testReport = reportDAO.getById(ID_VALUE).orElse(null);
-        assertNotNull(testReport);
-        assertNull(testReport.getSpeaker());
+    void testDelete() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement ignored = prepareMocks(dataSource)) {
+            assertDoesNotThrow(() -> reportDAO.delete(ID_VALUE));
+        }
     }
 
-    private static void prepareDb() throws DAOException {
-        eventDAO.add(getTestEvent());
-        userDAO.add(getTestUser());
-        reportDAO.add(getTestReport());
+    @Test
+    void testSqlExceptionDelete() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
+        assertThrows(DAOException.class, () -> reportDAO.delete(ID_VALUE));
+    }
+
+    @Test
+    void testSetSpeakerForReport() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement ignored = prepareMocks(dataSource)) {
+            assertDoesNotThrow(() -> reportDAO.setSpeaker(ID_VALUE, ID_VALUE));
+        }
+    }
+
+    @Test
+    void testSqlExceptionSetSpeakerForReport() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
+        assertThrows(DAOException.class, () -> reportDAO.setSpeaker(ID_VALUE, ID_VALUE));
+    }
+
+    @Test
+    void testDeleteSpeaker() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        try (PreparedStatement ignored = prepareMocks(dataSource)) {
+            assertDoesNotThrow(() -> reportDAO.deleteSpeaker(ID_VALUE));
+        }
+    }
+
+    @Test
+    void testSqlExceptionDeleteSpeaker() throws SQLException {
+        DataSource dataSource = mock(DataSource.class);
+        ReportDAO reportDAO = new MysqlReportDAO(dataSource);
+        when(dataSource.getConnection()).thenThrow(new SQLException());
+        assertThrows(DAOException.class, () -> reportDAO.deleteSpeaker(ID_VALUE));
+    }
+
+    private PreparedStatement prepareMocks(DataSource dataSource) throws SQLException {
+        Connection connection = mock(Connection.class);
+        PreparedStatement preparedStatement = mock(PreparedStatement.class);
+        when(dataSource.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(isA(String.class))).thenReturn(preparedStatement);
+        doNothing().when(preparedStatement).setLong(isA(int.class), isA(long.class));
+        doNothing().when(preparedStatement).setString(isA(int.class), isA(String.class));
+        doNothing().when(preparedStatement).setNull(isA(int.class), isA(int.class));
+        when(preparedStatement.execute()).thenReturn(true);
+        return preparedStatement;
+    }
+
+    private static void prepareResultSet(ResultSet resultSet) throws SQLException {
+        when(resultSet.next()).thenReturn(true).thenReturn(false);
+        when(resultSet.getLong(ID)).thenReturn(ID_VALUE);
+        when(resultSet.getString(TOPIC)).thenReturn(TOPIC_VALUE);
+        when(resultSet.getLong(EVENT_ID)).thenReturn(ID_VALUE);
+        when(resultSet.getString(TITLE)).thenReturn(TITLE_VALUE);
+        when(resultSet.getString(DATE)).thenReturn(String.valueOf(DATE_VALUE));
+        when(resultSet.getString(LOCATION)).thenReturn(LOCATION_VALUE);
+        when(resultSet.getLong(USER_ID)).thenReturn(ID_VALUE);
+        when(resultSet.getString(EMAIL)).thenReturn(EMAIL_VALUE);
+        when(resultSet.getString(NAME)).thenReturn(NAME_VALUE);
+        when(resultSet.getString(SURNAME)).thenReturn(SURNAME_VALUE);
     }
 }
