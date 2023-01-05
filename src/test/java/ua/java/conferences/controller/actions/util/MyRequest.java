@@ -31,6 +31,11 @@ public class MyRequest extends HttpServletRequestWrapper {
     }
 
     @Override
+    public HttpSession getSession(boolean create) {
+        return session;
+    }
+
+    @Override
     public String getCharacterEncoding() {
         return encoding;
     }
