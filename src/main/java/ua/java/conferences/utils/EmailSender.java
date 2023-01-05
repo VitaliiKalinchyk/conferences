@@ -39,7 +39,7 @@ public class EmailSender {
     }
 
     private static Session getSession(Properties properties, String user) {
-        return Session.getDefaultInstance(properties, new Authenticator() {
+        return Session.getInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(user, properties.getProperty("mail.password"));
