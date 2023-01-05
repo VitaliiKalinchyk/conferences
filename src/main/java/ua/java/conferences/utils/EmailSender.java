@@ -4,20 +4,20 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import org.slf4j.*;
 
-import java.io.*;
 import java.util.Properties;
 
 public class EmailSender {
     private static final Logger logger = LoggerFactory.getLogger(EmailSender.class);
-    private static final String EMAIL_FILE = "email.properties";
-    private static final Properties PROPERTIES = getProperties();
-    private static final String USER = PROPERTIES.getProperty("user");
-    private static final String PASSWORD = PROPERTIES.getProperty("password");
-    private static final Session SESSION = getSession();
+    private final String user;
+    private final Session session;
 
+    public EmailSender(Properties properties) {
+        user = properties.getProperty("mail.user");
+        session = getSession(properties, user);
+    }
 
     public void send(String subject, String body, String sendTo) {
-        MimeMessage message = new MimeMessage(SESSION);
+        MimeMessage message = new MimeMessage(session);
         try {
             sendEmail(subject, body, sendTo, message);
         } catch (MessagingException e) {
@@ -27,7 +27,7 @@ public class EmailSender {
 
     private void sendEmail(String subject, String body, String sendTo, MimeMessage message)
             throws MessagingException {
-        message.setFrom(new InternetAddress(USER));
+        message.setFrom(new InternetAddress(user));
         message.setSubject(subject);
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(sendTo));
         MimeBodyPart mimeBodyPart = new MimeBodyPart();
@@ -38,22 +38,12 @@ public class EmailSender {
         Transport.send(message);
     }
 
-    private static Session getSession() {
-        return Session.getDefaultInstance(PROPERTIES, new Authenticator() {
+    private static Session getSession(Properties properties, String user) {
+        return Session.getDefaultInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(USER, PASSWORD);
+                return new PasswordAuthentication(user, properties.getProperty("mail.password"));
             }
         });
-    }
-
-    private static Properties getProperties() {
-        Properties properties = new Properties();
-        try (InputStream resource = EmailSender.class.getClassLoader().getResourceAsStream(EMAIL_FILE)){
-            properties.load(resource);
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
-        return properties;
     }
 }

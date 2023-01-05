@@ -8,16 +8,27 @@ import ua.java.conferences.exceptions.CaptchaException;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.*;
+import java.util.Properties;
 
 public class Captcha {
     private static final Logger logger = LoggerFactory.getLogger(Captcha.class);
-    public static final String METHOD = "POST";
-    public static final String URL = "https://www.google.com/recaptcha/api/siteverify";
-    public static final String SECRET = "6LecrqsjAAAAAFXiIRGsirnaY2A7fzPpTlj0tWdr";
-    private static final String USER_AGENT = "Mozilla/5.0";
+    private final String method;
+    private final String captchaUrl;
+    private final String secret;
+    private final String userAgent;
+    private final String acceptLanguage;
+
+    public Captcha(Properties properties) {
+        method = properties.getProperty("captcha.method");
+        captchaUrl = properties.getProperty("captcha.url");
+        secret = properties.getProperty("captcha.secret");
+        userAgent = properties.getProperty("user-agent");
+        acceptLanguage = properties.getProperty("accept-language");
+    }
+
     public void verify(String gRecaptchaResponse) throws CaptchaException {
         try{
-            URL url = new URL(URL);
+            URL url = new URL(captchaUrl);
             HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
             setupConnection(connection);
             writeOutput(gRecaptchaResponse, connection);
@@ -31,16 +42,14 @@ public class Captcha {
         }
     }
 
-    private static void checkIfCaptchaPassed(StringBuilder response) throws CaptchaException {
+    private void checkIfCaptchaPassed(StringBuilder response) throws CaptchaException {
         try (JsonReader jsonReader = Json.createReader(new StringReader(response.toString()))) {
             JsonObject jsonObject = jsonReader.readObject();
             if (!jsonObject.getBoolean("success")) {
-                throw new CaptchaException();
-            }
-        }
+                throw new CaptchaException();}}
     }
 
-    private static StringBuilder getResponse(HttpsURLConnection connection) throws IOException {
+    private StringBuilder getResponse(HttpsURLConnection connection) throws IOException {
         StringBuilder response = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             String inputLine;
@@ -51,18 +60,18 @@ public class Captcha {
         return response;
     }
 
-    private static void writeOutput(String gRecaptchaResponse, HttpsURLConnection connection) throws IOException {
-        String postParams = "secret=" + SECRET + "&response=" + gRecaptchaResponse;
+    private void writeOutput(String gRecaptchaResponse, HttpsURLConnection connection) throws IOException {
+        String postParams = "secret=" + secret + "&response=" + gRecaptchaResponse;
         try (DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream())) {
             outputStream.writeBytes(postParams);
             outputStream.flush();
         }
     }
 
-    private static void setupConnection(HttpsURLConnection connection) throws ProtocolException {
-        connection.setRequestMethod(METHOD);
-        connection.setRequestProperty("User-Agent", USER_AGENT);
-        connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
+    private void setupConnection(HttpsURLConnection connection) throws ProtocolException {
+        connection.setRequestMethod(method);
+        connection.setRequestProperty("User-Agent", userAgent);
+        connection.setRequestProperty("Accept-Language", acceptLanguage);
         connection.setDoOutput(true);
     }
 }

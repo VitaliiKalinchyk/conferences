@@ -6,10 +6,11 @@ import ua.java.conferences.controller.context.AppContext;
 
 public class ContextListener implements ServletContextListener {
     private static final Logger logger = LoggerFactory.getLogger(ContextListener.class);
+    private static final String PROPERTIES_FILE = "context.properties";
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        AppContext.createAppContext(sce.getServletContext());
+        AppContext.createAppContext(sce.getServletContext(), PROPERTIES_FILE);
         logger.info("AppContext is set");
     }
 }

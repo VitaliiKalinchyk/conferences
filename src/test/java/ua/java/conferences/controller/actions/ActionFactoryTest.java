@@ -9,10 +9,11 @@ import static ua.java.conferences.controller.actions.ActionFactory.getActionFact
 import static ua.java.conferences.controller.actions.constants.ActionNames.SIGN_IN_ACTION;
 
 class ActionFactoryTest {
+    private static final String PROPERTIES_FILE = "context.properties";
 
     @Test
     void testCreateAction() {
-        AppContext.createAppContext(null);
+        AppContext.createAppContext(null, PROPERTIES_FILE);
         ActionFactory actionFactory = getActionFactory();
         Action action = actionFactory.createAction(SIGN_IN_ACTION);
         assertInstanceOf(SignInAction.class, action);
@@ -20,7 +21,7 @@ class ActionFactoryTest {
 
     @Test
     void testDefaultAction() {
-        AppContext.createAppContext(null);
+        AppContext.createAppContext(null, PROPERTIES_FILE);
         ActionFactory actionFactory = getActionFactory();
         Action action = actionFactory.createAction("wrongName");
         assertInstanceOf(DefaultAction.class, action);

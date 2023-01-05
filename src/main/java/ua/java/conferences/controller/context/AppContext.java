@@ -2,39 +2,58 @@ package ua.java.conferences.controller.context;
 
 import jakarta.servlet.ServletContext;
 import lombok.*;
+import org.slf4j.*;
 import ua.java.conferences.model.connection.MyDataSource;
 import ua.java.conferences.model.dao.DAOFactory;
 import ua.java.conferences.model.services.*;
-import ua.java.conferences.utils.Captcha;
-import ua.java.conferences.utils.EmailSender;
-import ua.java.conferences.utils.PdfUtil;
+import ua.java.conferences.utils.*;
 
 import javax.sql.DataSource;
+
+import java.io.*;
+import java.util.Properties;
 
 import static ua.java.conferences.model.dao.constants.DbImplementations.MYSQL;
 
 public class AppContext {
+    private static final Logger logger = LoggerFactory.getLogger(AppContext.class);
     private static AppContext appContext;
-    @Setter private DataSource dataSource = MyDataSource.getDataSource();
-    private final DAOFactory daoFactory = DAOFactory.getInstance(MYSQL, dataSource);
-    private final ServiceFactory serviceFactory = ServiceFactory.getInstance(daoFactory);
-    @Getter private final EventService eventService =  serviceFactory.getEventService();
-    @Getter private final UserService userService = serviceFactory.getUserService();
-    @Getter private final ReportService reportService = serviceFactory.getReportService();
-    @Getter private final EmailSender emailSender = new EmailSender();
+    @Getter private final EventService eventService;
+    @Getter private final UserService userService;
+    @Getter private final ReportService reportService;
+    @Getter private final EmailSender emailSender;
     @Getter private final PdfUtil pdfUtil = new PdfUtil();
-    @Getter private final Captcha captcha = new Captcha();
+    @Getter private final Captcha captcha;
     @Getter private final ServletContext servletContext;
+
+    private AppContext(ServletContext servletContext, String propertiesFile) {
+        this.servletContext = servletContext;
+        Properties properties = getProperties(propertiesFile);
+        emailSender = new EmailSender(properties);
+        captcha = new Captcha(properties);
+        DataSource dataSource = MyDataSource.getDataSource(properties);
+        DAOFactory daoFactory = DAOFactory.getInstance(MYSQL, dataSource);
+        ServiceFactory serviceFactory = ServiceFactory.getInstance(daoFactory);
+        eventService =  serviceFactory.getEventService();
+        userService = serviceFactory.getUserService();
+        reportService = serviceFactory.getReportService();
+    }
 
     public static AppContext getAppContext() {
         return appContext;
     }
 
-    public static void createAppContext(ServletContext servletContext) {
-        appContext = new AppContext(servletContext);
+    public static void createAppContext(ServletContext servletContext, String propertiesFile) {
+        appContext = new AppContext(servletContext, propertiesFile);
     }
 
-    private AppContext(ServletContext servletContext) {
-        this.servletContext = servletContext;
+    private static Properties getProperties(String propertiesFile) {
+        Properties properties = new Properties();
+        try (InputStream resource = AppContext.class.getClassLoader().getResourceAsStream(propertiesFile)){
+            properties.load(resource);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return properties;
     }
 }
