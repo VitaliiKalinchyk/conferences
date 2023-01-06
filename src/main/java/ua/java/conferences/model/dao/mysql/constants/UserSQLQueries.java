@@ -1,5 +1,11 @@
 package ua.java.conferences.model.dao.mysql.constants;
 
+/**
+ * Class that contains all My SQL queries for UserDAO
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public final class UserSQLQueries {
     public static final String ADD_USER = "INSERT INTO user (email, password, name, surname) VALUES (?,?,?,?)";
     public static final String GET_USER_BY_ID = "SELECT * FROM user WHERE id=?";

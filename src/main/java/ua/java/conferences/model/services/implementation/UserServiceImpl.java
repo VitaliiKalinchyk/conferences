@@ -150,9 +150,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void update(UserDTO userDTO) throws ServiceException {
-        validateUser(userDTO);
-        User user = convertDTOToUser(userDTO);
+    public void update(UserDTO dto) throws ServiceException {
+        validateUser(dto);
+        User user = convertDTOToUser(dto);
         try {
             userDAO.update(user);
         } catch (DAOException e) {

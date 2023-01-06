@@ -1,7 +1,15 @@
 package ua.java.conferences.model.dao.mysql.constants;
 
+/**
+ * Class that contains all My SQL queries for ReportDAO
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public final class ReportSQLQueries {
     public static final String ADD_REPORT = "INSERT INTO report (topic, event_id, user_id) VALUES (?, ?, ?)";
+
+    /** Will get report, event and speakers fields to create report instance */
     public static final String GET_REPORTS = "SELECT report.id, report.topic, report.user_id, user.email, " +
             "user.name, user.surname, report.event_id, event.title, event.date, event.location FROM report " +
             "LEFT JOIN user ON report.user_id=user.id LEFT JOIN event ON report.event_id=event.id";

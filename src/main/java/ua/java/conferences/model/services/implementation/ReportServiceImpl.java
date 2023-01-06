@@ -81,9 +81,9 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public void update(ReportDTO reportDTO) throws ServiceException {
-        validateComplexName(reportDTO.getTopic(), ENTER_CORRECT_TOPIC);
-        Report report = convertDTOToReport(reportDTO);
+    public void update(ReportDTO dto) throws ServiceException {
+        validateComplexName(dto.getTopic(), ENTER_CORRECT_TOPIC);
+        Report report = convertDTOToReport(dto);
         try {
             reportDAO.update(report);
         } catch (DAOException e) {

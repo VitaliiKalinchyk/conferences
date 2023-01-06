@@ -3,6 +3,13 @@ package ua.java.conferences.model.entities;
 import lombok.*;
 import java.io.Serializable;
 
+/**
+ * Report entity class. Matches table 'report' in database.
+ * Use Report.builder().fieldName(fieldValue).build() to create an instance
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 @Data
 @Builder
 public class Report implements Serializable {

@@ -106,9 +106,9 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public void update(EventDTO eventDTO) throws ServiceException {
-        validateEvent(eventDTO);
-        Event event = convertDTOToEvent(eventDTO);
+    public void update(EventDTO dto) throws ServiceException {
+        validateEvent(dto);
+        Event event = convertDTOToEvent(dto);
         try {
             eventDAO.update(event);
         } catch (DAOException e) {
