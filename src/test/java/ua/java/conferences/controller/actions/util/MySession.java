@@ -7,11 +7,8 @@ import java.util.*;
 
 public class MySession implements HttpSession {
     private final Map<String, Object> attributes = new HashMap<>();
-    public boolean isValid;
 
-    public MySession() {
-        isValid = true;
-    }
+    public MySession(){}
 
     @Override
     public void setAttribute(String name, Object object) {
@@ -28,9 +25,7 @@ public class MySession implements HttpSession {
     }
 
     @Override
-    public void invalidate() {
-        isValid = false;
-    }
+    public void invalidate() {}
     @Override
     public boolean isNew() {
         return false;

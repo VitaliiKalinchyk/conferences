@@ -29,7 +29,6 @@ class EventsToPdfActionTest {
     private final AppContext appContext = mock(AppContext.class);
     private final EventService eventService = mock(EventService.class);
     private final ServletContext servletContext = mock(ServletContext.class);
-    private final PdfUtil pdfUtil = new PdfUtil();
 
     @Test
     void testExecute() throws ServiceException, MalformedURLException {
@@ -38,15 +37,15 @@ class EventsToPdfActionTest {
         MyRequest myRequest = new MyRequest(request);
         myRequest.getSession().setAttribute(LOCALE, EN);
         when(appContext.getEventService()).thenReturn(eventService);
-        when(appContext.getPdfUtil()).thenReturn(pdfUtil);
-        when(appContext.getServletContext()).thenReturn(servletContext);
         when(servletContext.getResource(FONT)).thenThrow(MalformedURLException.class);
+        PdfUtil pdfUtil = new PdfUtil(servletContext);
+        when(appContext.getPdfUtil()).thenReturn(pdfUtil);
         when(eventService.getSorted(getQueryBuilder().getQuery())).thenReturn(getEventDTOs());
 
         String path = new EventsToPdfAction(appContext).execute(myRequest, myResponse);
         assertEquals(getActionToRedirect(VIEW_EVENTS_ACTION), path);
 
-        String expected = pdfUtil.createEventsPdf(getEventDTOs(), servletContext, EN).toString();
+        String expected = pdfUtil.createEventsPdf(getEventDTOs(), EN).toString();
         String actual = myResponse.getOutputStream().toString();
         assertEquals(clearString(expected), clearString(actual));
     }
@@ -57,9 +56,9 @@ class EventsToPdfActionTest {
         MyRequest myRequest = new MyRequest(request);
         myRequest.getSession().setAttribute(LOCALE, EN);
         when(appContext.getEventService()).thenReturn(eventService);
-        when(appContext.getPdfUtil()).thenReturn(pdfUtil);
-        when(appContext.getServletContext()).thenReturn(servletContext);
         when(servletContext.getResource(FONT)).thenThrow(MalformedURLException.class);
+        PdfUtil pdfUtil = new PdfUtil(servletContext);
+        when(appContext.getPdfUtil()).thenReturn(pdfUtil);
         when(eventService.getSorted(getQueryBuilder().getQuery())).thenReturn(getEventDTOs());
         when(response.getOutputStream()).thenThrow(IOException.class);
 

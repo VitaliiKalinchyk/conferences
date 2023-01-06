@@ -15,7 +15,9 @@ public class AuthenticationFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        if (isNoLoggedUser(httpRequest) && isAccessDenied(httpRequest)) {
+        String servletPath = httpRequest.getServletPath();
+        String action = httpRequest.getParameter(ACTION);
+        if (isNoLoggedUser(httpRequest) && isAccessDenied(servletPath, action)) {
             httpRequest.setAttribute(MESSAGE, ACCESS_DENIED);
             request.getRequestDispatcher(SIGN_IN_PAGE).forward(request, response);
         } else {
@@ -27,7 +29,7 @@ public class AuthenticationFilter implements Filter {
         return request.getSession().getAttribute(LOGGED_USER) == null;
     }
 
-    private boolean isAccessDenied(HttpServletRequest request) {
-        return getDomain(request.getServletPath(), request.getParameter(ACTION)).checkAccess();
+    private boolean isAccessDenied(String servletPath, String action) {
+        return getDomain(servletPath, action).checkAccess();
     }
 }

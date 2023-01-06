@@ -16,7 +16,8 @@ public class LocaleFilter implements Filter {
         defaultLocale = config.getInitParameter("defaultLocale");
     }
 
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String locale = httpRequest.getParameter(LOCALE);
         if (isNotBlank(locale)) {

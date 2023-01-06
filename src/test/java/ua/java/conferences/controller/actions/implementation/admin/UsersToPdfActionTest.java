@@ -30,7 +30,6 @@ class UsersToPdfActionTest {
     private final AppContext appContext = mock(AppContext.class);
     private final UserService userService = mock(UserService.class);
     private final ServletContext servletContext = mock(ServletContext.class);
-    private final PdfUtil pdfUtil = new PdfUtil();
 
     @Test
     void testExecute() throws ServiceException, MalformedURLException {
@@ -39,15 +38,15 @@ class UsersToPdfActionTest {
         MyRequest myRequest = new MyRequest(request);
         myRequest.getSession().setAttribute(LOCALE, UA);
         when(appContext.getUserService()).thenReturn(userService);
-        when(appContext.getPdfUtil()).thenReturn(pdfUtil);
-        when(appContext.getServletContext()).thenReturn(servletContext);
         when(servletContext.getResource(FONT)).thenReturn(new URL("file:./../fonts/arial.ttf"));
+        PdfUtil pdfUtil = new PdfUtil(servletContext);
+        when(appContext.getPdfUtil()).thenReturn(pdfUtil);
         when(userService.getSortedUsers(getQueryBuilder().getQuery())).thenReturn(getUserDTOs());
 
         String path = new UsersToPdfAction(appContext).execute(myRequest, myResponse);
         assertEquals(getActionToRedirect(VIEW_USERS_ACTION), path);
 
-        String expected = pdfUtil.createUsersPdf(getUserDTOs(), servletContext, UA).toString();
+        String expected = pdfUtil.createUsersPdf(getUserDTOs(), UA).toString();
         String actual = myResponse.getOutputStream().toString();
         assertEquals(clearString(expected), clearString(actual));
     }
@@ -58,9 +57,9 @@ class UsersToPdfActionTest {
         MyRequest myRequest = new MyRequest(request);
         myRequest.getSession().setAttribute(LOCALE, EN);
         when(appContext.getUserService()).thenReturn(userService);
-        when(appContext.getPdfUtil()).thenReturn(pdfUtil);
-        when(appContext.getServletContext()).thenReturn(servletContext);
         when(servletContext.getResource(FONT)).thenThrow(MalformedURLException.class);
+        PdfUtil pdfUtil = new PdfUtil(servletContext);
+        when(appContext.getPdfUtil()).thenReturn(pdfUtil);
         when(userService.getSortedUsers(getQueryBuilder().getQuery())).thenReturn(getUserDTOs());
         when(response.getOutputStream()).thenThrow(IOException.class);
 

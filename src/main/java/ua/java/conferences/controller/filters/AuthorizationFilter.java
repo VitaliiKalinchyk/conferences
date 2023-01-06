@@ -17,7 +17,9 @@ public class AuthorizationFilter implements Filter {
             throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String role = (String) httpRequest.getSession().getAttribute(ROLE);
-        if (role != null && isAccessDenied(httpRequest, role)) {
+        String servletPath = httpRequest.getServletPath();
+        String action = httpRequest.getParameter(ACTION);
+        if (role != null && isAccessDenied(servletPath, action, role)) {
             httpRequest.setAttribute(MESSAGE, ACCESS_DENIED);
             request.getRequestDispatcher(SIGN_IN_PAGE).forward(request, response);
         } else {
@@ -25,7 +27,7 @@ public class AuthorizationFilter implements Filter {
         }
     }
 
-    private boolean isAccessDenied(HttpServletRequest request, String role) {
-        return (getDomain(request.getServletPath(), request.getParameter(ACTION), role).checkAccess());
+    private boolean isAccessDenied(String servletPath, String action, String role) {
+        return (getDomain(servletPath, action, role).checkAccess());
     }
 }

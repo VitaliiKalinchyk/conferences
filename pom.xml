@@ -19,10 +19,10 @@
         <servlet.jsp-api.version>3.1.0</servlet.jsp-api.version>
         <servlet.jsp.jstl.version>3.0.0</servlet.jsp.jstl.version>
         <mysql.version>8.0.31</mysql.version>
-        <mybatis.version>3.5.11</mybatis.version>
         <hikari.version>5.0.1</hikari.version>
         <argon2.version>2.11</argon2.version>
         <mockito.version>4.10.0</mockito.version>
+        <greenmail.version>1.6.12</greenmail.version>
         <slf4j.version>2.0.5</slf4j.version>
         <log4j.version>2.19.0</log4j.version>
         <lombok.version>1.18.24</lombok.version>
@@ -75,15 +75,15 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.icegreen</groupId>
+            <artifactId>greenmail-junit5</artifactId>
+            <version>${greenmail.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>${mybatis.version}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.zaxxer</groupId>

@@ -1,7 +1,6 @@
 package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.*;
-import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
 import ua.java.conferences.controller.actions.util.MyRequest;
 import ua.java.conferences.controller.context.AppContext;

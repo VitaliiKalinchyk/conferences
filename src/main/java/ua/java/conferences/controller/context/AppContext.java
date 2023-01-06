@@ -22,12 +22,11 @@ public class AppContext {
     @Getter private final UserService userService;
     @Getter private final ReportService reportService;
     @Getter private final EmailSender emailSender;
-    @Getter private final PdfUtil pdfUtil = new PdfUtil();
+    @Getter private final PdfUtil pdfUtil;
     @Getter private final Captcha captcha;
-    @Getter private final ServletContext servletContext;
 
     private AppContext(ServletContext servletContext, String propertiesFile) {
-        this.servletContext = servletContext;
+        pdfUtil = new PdfUtil(servletContext);
         Properties properties = getProperties(propertiesFile);
         emailSender = new EmailSender(properties);
         captcha = new Captcha(properties);

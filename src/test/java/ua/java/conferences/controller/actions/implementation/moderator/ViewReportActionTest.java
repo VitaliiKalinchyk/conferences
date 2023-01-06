@@ -8,7 +8,6 @@ import ua.java.conferences.exceptions.*;
 import ua.java.conferences.model.services.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.controller.actions.constants.Pages.VIEW_REPORT_PAGE;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.*;

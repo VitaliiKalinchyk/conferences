@@ -1,7 +1,6 @@
 package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.*;
-import jakarta.servlet.http.HttpSession;
 import org.junit.jupiter.api.Test;
 import ua.java.conferences.controller.actions.util.MyRequest;
 import ua.java.conferences.controller.context.AppContext;
@@ -10,7 +9,6 @@ import ua.java.conferences.model.services.UserService;
 import ua.java.conferences.utils.EmailSender;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.controller.actions.ActionUtil.getActionToRedirect;
 import static ua.java.conferences.controller.actions.constants.ActionNames.PASSWORD_RESET_ACTION;

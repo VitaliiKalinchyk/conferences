@@ -10,7 +10,6 @@ import ua.java.conferences.model.services.UserService;
 import ua.java.conferences.utils.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.controller.actions.ActionUtil.getActionToRedirect;
 import static ua.java.conferences.controller.actions.constants.ActionNames.SIGN_UP_ACTION;

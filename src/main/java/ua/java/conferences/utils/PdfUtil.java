@@ -21,6 +21,7 @@ import java.util.stream.Stream;
 
 public class PdfUtil {
     private static final Logger logger = LoggerFactory.getLogger(PdfUtil.class);
+    private final ServletContext servletContext;
     private static final String FONT = "fonts/arial.ttf";
     private static final Color LIGHT_GREY = new DeviceRgb(220, 220, 220);
     private static final int TITLE_SIZE = 20;
@@ -31,10 +32,14 @@ public class PdfUtil {
     private static final String[] EVENT_CELLS =
             new String[]{"title", "date", "location", "reports", "registrations", "visitors"};
 
-    public ByteArrayOutputStream createUsersPdf(List<UserDTO> users, ServletContext servletContext, String locale) {
+    public PdfUtil(ServletContext servletContext) {
+        this.servletContext = servletContext;
+    }
+
+    public ByteArrayOutputStream createUsersPdf(List<UserDTO> users, String locale) {
         ResourceBundle resourceBundle = getBundle(locale);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        Document document = getDocument(servletContext, output);
+        Document document = getDocument(output);
         document.add(getTableTitle(resourceBundle.getString(USER_TITLE).toUpperCase()));
         document.add(LINE_SEPARATOR);
         document.add(getUserTable(users, resourceBundle));
@@ -42,10 +47,10 @@ public class PdfUtil {
         return output;
     }
 
-    public ByteArrayOutputStream createEventsPdf(List<EventDTO> events, ServletContext servletContext, String locale) {
+    public ByteArrayOutputStream createEventsPdf(List<EventDTO> events, String locale) {
         ResourceBundle resourceBundle = getBundle(locale);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
-        Document document = getDocument(servletContext, output);
+        Document document = getDocument(output);
         document.add(getTableTitle(resourceBundle.getString(EVENT_TITLE).toUpperCase()));
         document.add(LINE_SEPARATOR);
         document.add(getEventTable(events, resourceBundle));
@@ -53,11 +58,11 @@ public class PdfUtil {
         return output;
     }
 
-    private Document getDocument(ServletContext servletContext, ByteArrayOutputStream output) {
+    private Document getDocument(ByteArrayOutputStream output) {
         PdfWriter writer = new PdfWriter(output);
         PdfDocument pdf = new PdfDocument(writer);
         Document document = new Document(pdf, PageSize.A4.rotate());
-        PdfFont font = getPdfFont(servletContext);
+        PdfFont font = getPdfFont();
         if (font != null) {
             document.setFont(font);
         }
@@ -121,7 +126,7 @@ public class PdfUtil {
         );
     }
 
-    private PdfFont getPdfFont(ServletContext servletContext) {
+    private PdfFont getPdfFont() {
         try {
             URL resource = servletContext.getResource(FONT);
             String fontUrl = resource.getFile();
@@ -133,13 +138,14 @@ public class PdfUtil {
     }
 
     private ResourceBundle getBundle(String locale) {
+        String resources = "resources";
         if (locale.contains("_")) {
             int index = locale.indexOf("_");
             String lang = locale.substring(0, index);
             String country = locale.substring(index + 1);
-            return ResourceBundle.getBundle("resources", new Locale(lang, country));
+            return ResourceBundle.getBundle(resources, new Locale(lang, country));
         } else {
-            return ResourceBundle.getBundle("resources", new Locale(locale));
+            return ResourceBundle.getBundle(resources, new Locale(locale));
         }
     }
 }

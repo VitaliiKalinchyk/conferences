@@ -10,7 +10,6 @@ import java.sql.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.model.dao.DAOTestUtils.*;
 import static ua.java.conferences.Constants.*;

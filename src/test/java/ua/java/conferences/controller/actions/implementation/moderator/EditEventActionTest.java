@@ -11,7 +11,6 @@ import ua.java.conferences.model.services.*;
 import ua.java.conferences.utils.EmailSender;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.controller.actions.ActionUtil.*;
 import static ua.java.conferences.controller.actions.constants.ActionNames.*;

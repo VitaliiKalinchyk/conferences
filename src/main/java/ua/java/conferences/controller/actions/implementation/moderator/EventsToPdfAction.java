@@ -1,6 +1,5 @@
 package ua.java.conferences.controller.actions.implementation.moderator;
 
-import jakarta.servlet.ServletContext;
 import jakarta.servlet.http.*;
 import org.slf4j.*;
 import ua.java.conferences.controller.actions.Action;
@@ -23,12 +22,10 @@ public class EventsToPdfAction implements Action {
     private static final Logger logger = LoggerFactory.getLogger(EventsToPdfAction.class);
     private final EventService eventService;
     private final PdfUtil pdfUtil;
-    private final ServletContext servletContext;
 
     public EventsToPdfAction(AppContext appContext) {
         eventService = appContext.getEventService();
         pdfUtil = appContext.getPdfUtil();
-        servletContext = appContext.getServletContext();
     }
 
     @Override
@@ -36,7 +33,7 @@ public class EventsToPdfAction implements Action {
         QueryBuilder queryBuilder = getQueryBuilder(request);
         List<EventDTO> events = eventService.getSorted(queryBuilder.getQuery());
         String locale = (String) request.getSession().getAttribute(LOCALE);
-        ByteArrayOutputStream usersPdf = pdfUtil.createEventsPdf(events, servletContext, locale);
+        ByteArrayOutputStream usersPdf = pdfUtil.createEventsPdf(events, locale);
         setResponse(response, usersPdf);
         return getActionToRedirect(VIEW_EVENTS_ACTION);
     }
