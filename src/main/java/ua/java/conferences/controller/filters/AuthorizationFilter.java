@@ -10,8 +10,20 @@ import static ua.java.conferences.controller.actions.constants.ParameterValues.A
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.controller.filters.domain.Domain.*;
 
+/**
+ * AuthorizationFilter class. Controls access to pages for logged user
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class AuthorizationFilter implements Filter {
 
+    /**
+     * Checks for role in session and then checks if user has access to page or action.
+     * @param request passed by application
+     * @param response passed by application
+     * @param chain passed by application
+     */
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {

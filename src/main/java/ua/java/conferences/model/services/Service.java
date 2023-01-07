@@ -14,7 +14,7 @@ import java.util.List;
 public interface Service<T> {
 
     /**
-     * Obtains instance of DTO from DAO
+     * Obtains instance of DTO from DAO by id
      * @param idString - id as a String to validate and convert to long
      * @return DTO instance
      * @throws ServiceException - may wrap DAOException or be thrown by another mistakes
@@ -29,14 +29,14 @@ public interface Service<T> {
     List<T> getAll() throws ServiceException;
 
     /**
-     * Is trying to update entity
+     * Updates entity
      * @param dto - dto to be updated
      * @throws ServiceException - may wrap DAOException or be thrown by another mistakes
      */
     void update(T dto) throws ServiceException;
 
     /**
-     * Is trying to delete entity
+     * Deletes entity
      * @param idString - id as a String to validate and convert to long
      * @throws ServiceException - may wrap DAOException or be thrown by another mistakes
      */

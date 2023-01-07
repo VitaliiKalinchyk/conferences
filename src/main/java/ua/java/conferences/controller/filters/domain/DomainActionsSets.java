@@ -1,93 +1,81 @@
 package ua.java.conferences.controller.filters.domain;
 
+import lombok.Getter;
+
 import java.util.*;
 
 import static ua.java.conferences.controller.actions.constants.ActionNames.*;
 
+/**
+ * Contains action sets for anonymous user and different roles logged user. Defines if user has access to the action
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public final class DomainActionsSets {
     private DomainActionsSets() {}
 
-    private static final Set<String> ANONYMOUS_USER_ACTIONS = new HashSet<>();
-    private static final Set<String> LOGGED_USER_ACTIONS = new HashSet<>();
-    private static final Set<String> VISITOR_ACTIONS = new HashSet<>();
-    private static final Set<String> SPEAKER_ACTIONS = new HashSet<>();
-    private static final Set<String> MODERATOR_ACTIONS = new HashSet<>();
-    private static final Set<String> ADMIN_ACTIONS = new HashSet<>();
+    @Getter private static final Set<String> anonymousUserActions = new HashSet<>();
+    private static final Set<String> loggedUserActions = new HashSet<>();
+    @Getter private static final Set<String> visitorActions = new HashSet<>();
+    @Getter private static final Set<String> speakerActions = new HashSet<>();
+    @Getter private static final Set<String> moderatorActions = new HashSet<>();
+    @Getter private static final Set<String> adminActions = new HashSet<>();
 
     static {
-        ANONYMOUS_USER_ACTIONS.add(DEFAULT_ACTION);
-        ANONYMOUS_USER_ACTIONS.add(SIGN_IN_ACTION);
-        ANONYMOUS_USER_ACTIONS.add(SIGN_UP_ACTION);
-        ANONYMOUS_USER_ACTIONS.add(PASSWORD_RESET_ACTION);
-        ANONYMOUS_USER_ACTIONS.add(ERROR_ACTION);
-        ANONYMOUS_USER_ACTIONS.add(SIGN_OUT_ACTION);
-    }
-
-    static {
-        LOGGED_USER_ACTIONS.addAll(ANONYMOUS_USER_ACTIONS);
-        LOGGED_USER_ACTIONS.add(EDIT_PROFILE_ACTION);
-        LOGGED_USER_ACTIONS.add(CHANGE_PASSWORD_ACTION);
+        anonymousUserActions.add(DEFAULT_ACTION);
+        anonymousUserActions.add(SIGN_IN_ACTION);
+        anonymousUserActions.add(SIGN_UP_ACTION);
+        anonymousUserActions.add(PASSWORD_RESET_ACTION);
+        anonymousUserActions.add(ERROR_ACTION);
+        anonymousUserActions.add(SIGN_OUT_ACTION);
     }
 
     static {
-        VISITOR_ACTIONS.addAll(LOGGED_USER_ACTIONS);
-        VISITOR_ACTIONS.add(VIEW_UPCOMING_EVENTS_ACTION);
-        VISITOR_ACTIONS.add(VIEW_VISITORS_EVENTS_ACTION);
-        VISITOR_ACTIONS.add(VIEW_EVENT_BY_VISITOR_ACTION);
-        VISITOR_ACTIONS.add(REGISTER_OR_CANCEL_ACTION);
+        loggedUserActions.addAll(anonymousUserActions);
+        loggedUserActions.add(EDIT_PROFILE_ACTION);
+        loggedUserActions.add(CHANGE_PASSWORD_ACTION);
     }
 
     static {
-        SPEAKER_ACTIONS.addAll(LOGGED_USER_ACTIONS);
-        SPEAKER_ACTIONS.add(VIEW_SPEAKERS_EVENTS_ACTION);
-        SPEAKER_ACTIONS.add(VIEW_SPEAKERS_REPORTS_ACTION);
-        SPEAKER_ACTIONS.add(VIEW_EVENT_BY_SPEAKER_ACTION);
-        SPEAKER_ACTIONS.add(OFFER_REPORT_ACTION);
-        SPEAKER_ACTIONS.add(SET_OR_REMOVE_SPEAKER_BY_SPEAKER_ACTION);
+        visitorActions.addAll(loggedUserActions);
+        visitorActions.add(VIEW_UPCOMING_EVENTS_ACTION);
+        visitorActions.add(VIEW_VISITORS_EVENTS_ACTION);
+        visitorActions.add(VIEW_EVENT_BY_VISITOR_ACTION);
+        visitorActions.add(REGISTER_OR_CANCEL_ACTION);
     }
 
     static {
-        MODERATOR_ACTIONS.addAll(LOGGED_USER_ACTIONS);
-        MODERATOR_ACTIONS.add(VIEW_EVENTS_ACTION);
-        MODERATOR_ACTIONS.add(EVENTS_PDF_ACTION);
-        MODERATOR_ACTIONS.add(CREATE_EVENT_ACTION);
-        MODERATOR_ACTIONS.add(SEARCH_EVENT_ACTION);
-        MODERATOR_ACTIONS.add(DELETE_EVENT_ACTION);
-        MODERATOR_ACTIONS.add(EDIT_EVENT_ACTION);
-        MODERATOR_ACTIONS.add(SET_VISITORS_ACTION);
-        MODERATOR_ACTIONS.add(CREATE_REPORT_ACTION);
-        MODERATOR_ACTIONS.add(VIEW_REPORT_ACTION);
-        MODERATOR_ACTIONS.add(CHANGE_TOPIC_ACTION);
-        MODERATOR_ACTIONS.add(DELETE_REPORT_ACTION);
-        MODERATOR_ACTIONS.add(SET_OR_REMOVE_SPEAKER_ACTION);
+        speakerActions.addAll(loggedUserActions);
+        speakerActions.add(VIEW_SPEAKERS_EVENTS_ACTION);
+        speakerActions.add(VIEW_SPEAKERS_REPORTS_ACTION);
+        speakerActions.add(VIEW_EVENT_BY_SPEAKER_ACTION);
+        speakerActions.add(OFFER_REPORT_ACTION);
+        speakerActions.add(SET_OR_REMOVE_SPEAKER_BY_SPEAKER_ACTION);
     }
 
     static {
-        ADMIN_ACTIONS.addAll(LOGGED_USER_ACTIONS);
-        ADMIN_ACTIONS.add(SEARCH_USER_ACTION);
-        ADMIN_ACTIONS.add(DELETE_USER_ACTION);
-        ADMIN_ACTIONS.add(SET_ROLE_ACTION);
-        ADMIN_ACTIONS.add(VIEW_USERS_ACTION);
-        ADMIN_ACTIONS.add(USERS_PDF_ACTION);
+        moderatorActions.addAll(loggedUserActions);
+        moderatorActions.add(VIEW_EVENTS_ACTION);
+        moderatorActions.add(EVENTS_PDF_ACTION);
+        moderatorActions.add(CREATE_EVENT_ACTION);
+        moderatorActions.add(SEARCH_EVENT_ACTION);
+        moderatorActions.add(DELETE_EVENT_ACTION);
+        moderatorActions.add(EDIT_EVENT_ACTION);
+        moderatorActions.add(SET_VISITORS_ACTION);
+        moderatorActions.add(CREATE_REPORT_ACTION);
+        moderatorActions.add(VIEW_REPORT_ACTION);
+        moderatorActions.add(CHANGE_TOPIC_ACTION);
+        moderatorActions.add(DELETE_REPORT_ACTION);
+        moderatorActions.add(SET_OR_REMOVE_SPEAKER_ACTION);
     }
 
-    public static Set<String>  getAnonymousUserActions() {
-        return ANONYMOUS_USER_ACTIONS;
-    }
-
-    public static Set<String>  getVisitorActions() {
-        return VISITOR_ACTIONS;
-    }
-
-    public static Set<String>  getSpeakerActions() {
-        return SPEAKER_ACTIONS;
-    }
-
-    public static Set<String>  getModeratorActions() {
-        return MODERATOR_ACTIONS;
-    }
-
-    public static Set<String>  getAdminActions() {
-        return ADMIN_ACTIONS;
+    static {
+        adminActions.addAll(loggedUserActions);
+        adminActions.add(SEARCH_USER_ACTION);
+        adminActions.add(DELETE_USER_ACTION);
+        adminActions.add(SET_ROLE_ACTION);
+        adminActions.add(VIEW_USERS_ACTION);
+        adminActions.add(USERS_PDF_ACTION);
     }
 }

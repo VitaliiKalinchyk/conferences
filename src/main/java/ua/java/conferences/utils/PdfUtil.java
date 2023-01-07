@@ -19,9 +19,17 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.stream.Stream;
 
+/**
+ * Create required pdf docs with itext pdf library
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class PdfUtil {
     private static final Logger logger = LoggerFactory.getLogger(PdfUtil.class);
     private final ServletContext servletContext;
+
+    /** Use this font fo cyrillic */
     private static final String FONT = "fonts/arial.ttf";
     private static final Color LIGHT_GREY = new DeviceRgb(220, 220, 220);
     private static final int TITLE_SIZE = 20;
@@ -32,10 +40,19 @@ public class PdfUtil {
     private static final String[] EVENT_CELLS =
             new String[]{"title", "date", "location", "reports", "registrations", "visitors"};
 
+    /**
+     * @param servletContext to properly define way to font file
+     */
     public PdfUtil(ServletContext servletContext) {
         this.servletContext = servletContext;
     }
 
+    /**
+     * Creates pdf document with Users' info. Creates resourceBundle to localize table fields
+     * @param users - list of users to be placed in the document
+     * @param locale - for localization purpose
+     * @return outputStream to place in response
+     */
     public ByteArrayOutputStream createUsersPdf(List<UserDTO> users, String locale) {
         ResourceBundle resourceBundle = getBundle(locale);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -47,6 +64,12 @@ public class PdfUtil {
         return output;
     }
 
+    /**
+     * Creates pdf document with Events' info. Creates resourceBundle to localize table fields
+     * @param events - list of events to be placed in the document
+     * @param locale - for localization purpose
+     * @return outputStream to place in response
+     */
     public ByteArrayOutputStream createEventsPdf(List<EventDTO> events, String locale) {
         ResourceBundle resourceBundle = getBundle(locale);
         ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -58,6 +81,11 @@ public class PdfUtil {
         return output;
     }
 
+    /**
+     * Will create document with album orientation and font that supports cyrillic
+     * @param output to create Document based on output
+     * @return Document
+     */
     private Document getDocument(ByteArrayOutputStream output) {
         PdfWriter writer = new PdfWriter(output);
         PdfDocument pdf = new PdfDocument(writer);
@@ -126,6 +154,9 @@ public class PdfUtil {
         );
     }
 
+    /**
+     * @return font that support cyrillic or null if not able to load it
+     */
     private PdfFont getPdfFont() {
         try {
             URL resource = servletContext.getResource(FONT);
@@ -137,6 +168,11 @@ public class PdfUtil {
         }
     }
 
+    /**
+     * Obtains ResourceBundle based on locale. Works for any type - short - 'en', long - 'uk_UA'
+     * @param locale to set ResourceBundle
+     * @return ResourceBundle
+     */
     private ResourceBundle getBundle(String locale) {
         String resources = "resources";
         if (locale.contains("_")) {

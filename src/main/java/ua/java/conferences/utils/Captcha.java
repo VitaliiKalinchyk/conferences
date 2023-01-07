@@ -10,6 +10,12 @@ import java.io.*;
 import java.net.*;
 import java.util.Properties;
 
+/**
+ * Validate Google ReCaptcha
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class Captcha {
     private static final Logger logger = LoggerFactory.getLogger(Captcha.class);
     private final String method;
@@ -18,6 +24,9 @@ public class Captcha {
     private final String userAgent;
     private final String acceptLanguage;
 
+    /**
+     * @param properties - should contain all required fields to properly configure
+     */
     public Captcha(Properties properties) {
         method = properties.getProperty("captcha.method");
         captchaUrl = properties.getProperty("captcha.url");
@@ -26,6 +35,12 @@ public class Captcha {
         acceptLanguage = properties.getProperty("accept-language");
     }
 
+    /**
+     * Checks if user is human. Setups and connects to Google ReCaptcha services. Sends User's captcha result.
+     * Gets response and checks if it matches. Disable captcha if Google is down.
+     * @param gRecaptchaResponse get if from controller
+     * @throws CaptchaException if captcha is not valid
+     */
     public void verify(String gRecaptchaResponse) throws CaptchaException {
         try{
             URL url = new URL(captchaUrl);

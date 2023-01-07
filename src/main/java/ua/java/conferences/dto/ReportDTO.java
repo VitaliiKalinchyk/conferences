@@ -3,6 +3,13 @@ package ua.java.conferences.dto;
 import lombok.*;
 import java.io.Serializable;
 
+/**
+ * ReportDTO class. Fields adapted to view.
+ * Use ReportDTO.builder().fieldName(fieldValue).build() to create an instance
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 @Data
 @EqualsAndHashCode(of = {"id", "topic"})
 @Builder

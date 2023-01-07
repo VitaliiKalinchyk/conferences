@@ -15,15 +15,22 @@ import java.util.Properties;
 
 import static ua.java.conferences.model.dao.constants.DbImplementations.MYSQL;
 
+/**
+ * AppContext  class. Contains all required to correct application work objects
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
+@Getter
 public class AppContext {
     private static final Logger logger = LoggerFactory.getLogger(AppContext.class);
     private static AppContext appContext;
-    @Getter private final EventService eventService;
-    @Getter private final UserService userService;
-    @Getter private final ReportService reportService;
-    @Getter private final EmailSender emailSender;
-    @Getter private final PdfUtil pdfUtil;
-    @Getter private final Captcha captcha;
+    private final EventService eventService;
+    private final UserService userService;
+    private final ReportService reportService;
+    private final EmailSender emailSender;
+    private final PdfUtil pdfUtil;
+    private final Captcha captcha;
 
     private AppContext(ServletContext servletContext, String propertiesFile) {
         pdfUtil = new PdfUtil(servletContext);
@@ -38,10 +45,18 @@ public class AppContext {
         reportService = serviceFactory.getReportService();
     }
 
+    /**
+     * @return instance of AppContext
+     */
     public static AppContext getAppContext() {
         return appContext;
     }
 
+    /**
+     * Creates instance of AppContext to use in Actions. Configure all required classes. Loads properties
+     * @param servletContext - to use relative address in classes
+     * @param propertiesFile - to configure DataSource, EmailSender and Captcha
+     */
     public static void createAppContext(ServletContext servletContext, String propertiesFile) {
         appContext = new AppContext(servletContext, propertiesFile);
     }

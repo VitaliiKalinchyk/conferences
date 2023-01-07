@@ -37,7 +37,7 @@ public class CreateEventAction implements Action {
             eventService.addEvent(event);
             long eventId = eventService.getByTitle(event.getTitle()).getId();
             return getActionToRedirect(SEARCH_EVENT_ACTION, EVENT_ID, String.valueOf(eventId));
-        } catch (IncorrectFormatException | PasswordMatchingException | DuplicateTitleException e) {
+        } catch (IncorrectFormatException | DuplicateTitleException e) {
             request.getSession().setAttribute(EVENT, event);
             request.getSession().setAttribute(ERROR, e.getMessage());
         }

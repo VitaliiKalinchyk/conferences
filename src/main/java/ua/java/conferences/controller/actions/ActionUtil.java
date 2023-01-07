@@ -8,16 +8,36 @@ import java.util.StringJoiner;
 import static ua.java.conferences.controller.actions.constants.Pages.CONTROLLER_PAGE;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 
+/**
+ * ActionUtil  class. Contains utils methods to use in actions.
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class ActionUtil {
 
+    /**
+     * Checks if method is POST method
+     * @param request passed by action
+     * @return true if POST method
+     */
     public static boolean isPostMethod(HttpServletRequest request) {
         return request.getMethod().equals("POST");
     }
 
+    /**
+     * Used in get Actions to redirect to concrete page
+     * @param request passed by action
+     * @return page to redirect
+     */
     public static String getPath(HttpServletRequest request){
         return (String) request.getSession().getAttribute(CURRENT_PATH);
     }
 
+    /**
+     * Transfers sessions attributes to request. Delete then
+     * @param request passed by action
+     */
     public static void transferUserDTOFromSessionToRequest(HttpServletRequest request) {
         UserDTO user = (UserDTO) request.getSession().getAttribute(USER);
         if (user != null) {
@@ -26,6 +46,10 @@ public class ActionUtil {
         }
     }
 
+    /**
+     * Transfers sessions attributes to request. Delete then
+     * @param request passed by action
+     */
     public static void transferEventDTOFromSessionToRequest(HttpServletRequest request, String attributeName) {
         EventDTO event = (EventDTO) request.getSession().getAttribute(EVENT);
         if (event != null) {
@@ -34,6 +58,10 @@ public class ActionUtil {
         }
     }
 
+    /**
+     * Transfers sessions attributes to request. Delete then
+     * @param request passed by action
+     */
     public static void transferStringFromSessionToRequest(HttpServletRequest request, String attributeName) {
         String attributeValue = (String) request.getSession().getAttribute(attributeName);
         if (attributeValue != null) {
@@ -42,6 +70,12 @@ public class ActionUtil {
         }
     }
 
+    /**
+     * Creates path to another Action
+     * @param action - Action to be sent
+     * @param parameters - required parameters
+     * @return - path
+     */
     public static String getActionToRedirect(String action, String... parameters) {
         String base = CONTROLLER_PAGE + "?" + ACTION + "=" + action;
         StringJoiner stringJoiner = new StringJoiner("&", "&", "");
@@ -51,6 +85,11 @@ public class ActionUtil {
         return base + (parameters.length > 0 ? stringJoiner : "");
     }
 
+    /**
+     * Obtain Web App address. Common usage - email sender
+     * @param request passed by action
+     * @return - Web App address
+     */
     public static String getURL(HttpServletRequest request) {
         String servletPath = request.getServletPath();
         String requestURL = request.getRequestURL().toString();

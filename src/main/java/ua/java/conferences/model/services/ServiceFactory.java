@@ -1,12 +1,24 @@
 package ua.java.conferences.model.services;
 
+import lombok.Getter;
 import ua.java.conferences.model.dao.DAOFactory;
 import ua.java.conferences.model.services.implementation.*;
 
+/**
+ * Service factory that provides concrete implementations of EventService, ReportService and UserService classes
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
+@Getter
 public final class ServiceFactory {
-
+    /** A concrete instance of UserService*/
     private final UserService userService;
+
+    /** A concrete instance of ReportService*/
     private final ReportService reportService;
+
+    /** A concrete instance of EventService*/
     private final EventService eventService;
 
     private ServiceFactory(DAOFactory daoFactory) {
@@ -15,19 +27,12 @@ public final class ServiceFactory {
         eventService = new EventServiceImpl(daoFactory.getEventDAO());
     }
 
+    /**
+     * Obtains instance of ServiceFactory to get concrete Services
+     * @param daoFactory - pass concrete DAOFactory instance to get access to DAO
+     * @return ServiceFactory instance
+     */
     public static ServiceFactory getInstance(DAOFactory daoFactory) {
         return new  ServiceFactory(daoFactory);
-    }
-
-    public UserService getUserService() {
-        return userService;
-    }
-
-    public ReportService getReportService() {
-        return reportService;
-    }
-
-    public EventService getEventService() {
-        return eventService;
     }
 }

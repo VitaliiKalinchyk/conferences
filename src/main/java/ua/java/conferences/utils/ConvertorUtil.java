@@ -6,10 +6,19 @@ import ua.java.conferences.model.entities.role.Role;
 
 import java.time.LocalDate;
 
+/**
+ * Converts DTO to Entities and vise versa
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public final class ConvertorUtil {
 
-    private ConvertorUtil() {}
-
+    /**
+     * Converts UserDTO into User
+     * @param userDTO to convert
+     * @return User entity
+     */
     public static User convertDTOToUser(UserDTO userDTO) {
         return User.builder()
                 .id(userDTO.getId())
@@ -19,6 +28,11 @@ public final class ConvertorUtil {
                 .build();
     }
 
+    /**
+     * Converts User into UserDTO
+     * @param user to convert
+     * @return UserDTO
+     */
     public static UserDTO convertUserToDTO(User user) {
         return UserDTO.builder()
                 .id(user.getId())
@@ -29,6 +43,11 @@ public final class ConvertorUtil {
                 .build();
     }
 
+    /**
+     * Converts ReportDTO into Report. Checks for Speaker presence by checking speakerId
+     * @param reportDTO to convert
+     * @return Report
+     */
     public static Report convertDTOToReport(ReportDTO reportDTO) {
         long speakerId = reportDTO.getSpeakerId();
         return Report.builder()
@@ -39,6 +58,11 @@ public final class ConvertorUtil {
                 .build();
     }
 
+    /**
+     * Converts Report into ReportDTO. Checks for Speaker's and Event's presences
+     * @param report to convert
+     * @return ReportDTO
+     */
     public static ReportDTO convertReportToDTO(Report report) {
         User speaker = report.getSpeaker();
         Event event = report.getEvent();
@@ -55,7 +79,12 @@ public final class ConvertorUtil {
                 .build();
     }
 
-    public static Event convertDTOToEvent(ua.java.conferences.dto.EventDTO eventDTO) {
+    /**
+     * Converts EventDTO into Event
+     * @param eventDTO to convert
+     * @return Event
+     */
+    public static Event convertDTOToEvent(EventDTO eventDTO) {
         return Event.builder()
                 .id(eventDTO.getId())
                 .title(eventDTO.getTitle())
@@ -65,6 +94,11 @@ public final class ConvertorUtil {
                 .build();
     }
 
+    /**
+     * Converts Event into EventDTO
+     * @param event to convert
+     * @return EventDTO
+     */
     public static EventDTO convertEventToDTO(Event event) {
         return EventDTO.builder()
                 .id(event.getId())
@@ -77,4 +111,6 @@ public final class ConvertorUtil {
                 .reports(event.getReports())
                 .build();
     }
+
+    private ConvertorUtil() {}
 }

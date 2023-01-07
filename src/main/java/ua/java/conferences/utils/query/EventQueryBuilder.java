@@ -6,9 +6,16 @@ import java.util.*;
 
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 
+/**
+ * EventQueryBuilder. Able to build query to obtain sorted, ordered and limited list of events
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class EventQueryBuilder extends QueryBuilder {
     private static final Logger logger = LoggerFactory.getLogger(EventQueryBuilder.class);
     private static final String EVENT_DOT_ID = "event.id";
+    /** Contains set of allowed sort fields */
     private static final Set<String> EVENT_SORT_FIELDS_SET = new HashSet<>();
 
     static {
@@ -21,10 +28,16 @@ public class EventQueryBuilder extends QueryBuilder {
         EVENT_SORT_FIELDS_SET.add(VISITORS);
     }
 
+    /**
+     * set id as default sort field
+     */
     public EventQueryBuilder() {
         super(EVENT_DOT_ID);
     }
 
+    /**
+     * @return concrete order by
+     */
     @Override
     protected String getGroupByQuery() {
         return " GROUP BY " + EVENT_DOT_ID + " ";

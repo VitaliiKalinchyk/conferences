@@ -21,7 +21,7 @@ public class Event implements Serializable {
     private LocalDate date;
     private String location;
     private String description;
+    private int reports;
     private int registrations;
     private int visitors;
-    private int reports;
 }

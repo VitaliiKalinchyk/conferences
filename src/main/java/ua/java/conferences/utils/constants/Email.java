@@ -1,13 +1,26 @@
 package ua.java.conferences.utils.constants;
 
+/**
+ * Contains letter's subjects and bodies
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class Email {
+    /** For new users only */
     public static final String SUBJECT_GREETINGS = "Welcome to Conference Smart App!";
+
+    /** Any notification letter subject */
     public static final String SUBJECT_NOTIFICATION = "Conference Smart App notification!";
+
+    /** Place user's name instead of %s */
     public static final String HELLO = "Hello %s,<br>";
     public static final String INFORMATION = "We have some important information for you:";
     public static final String SIGNATURE = "Yours truly,<br>Conference Smart App team";
     public static final String A_HREF = "<a href=";
     public static final String DOUBLE_ENTER = "<br><br>";
+
+    /** Place correct domain name instead of %s */
     public static final String MESSAGE_GREETINGS = HELLO +
             "Thank you for choosing Conference Smart App!<br>" +
             "We have prepared some useful information for you:" +
@@ -21,6 +34,8 @@ public class Email {
             "check date, location, topics." +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place password and then correct domain name instead of %s */
     public static final String MESSAGE_RESET_PASSWORD = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
@@ -30,6 +45,8 @@ public class Email {
             A_HREF + "%s" + "/signIn.jsp>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place title, date, location, description, then correct domain name and event id instead of %s */
     public static final String MESSAGE_EVENT_CHANGED_VISITOR = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
@@ -42,6 +59,8 @@ public class Email {
             A_HREF + "%s" + "/controller?action=view-event-by-visitor&event-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place title, date, location, description, then correct domain name and event id instead of %s */
     public static final String MESSAGE_EVENT_CHANGED_SPEAKER = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
@@ -54,38 +73,50 @@ public class Email {
             A_HREF + "%s" + "/controller?action=view-event-by-speaker&event-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place title instead of %s */
     public static final String MESSAGE_EVENT_DELETED = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
             "The conference \"%s\" was canceled due to important circumstances" +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place title, date, location, topic, then correct domain name and event id instead of %s */
     public static final String MESSAGE_TOPIC_CHANGED = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
-            "Topic for you report at %s (%s %s) was changed to %s" +
+            "Topic for your report at %s (%s %s) was changed to %s" +
             "<br>" +
             "You can check this report " + A_HREF + "%s" + "/controller?action=view-event-by-speaker&event-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place topic, title, date, location instead of %s */
     public static final String MESSAGE_REPORT_DELETED = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
             "The report \"%s\" at %s (%s %s)  was canceled due to important circumstances" +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place topic, title, date, location instead of %s */
     public static final String MESSAGE_REMOVE_SPEAKER = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
             "You were removed as speaker for report \"%s\" at %s (%s %s) due to important circumstances" +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place topic, title, date, location instead of %s */
     public static final String MESSAGE_SET_SPEAKER = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
             "You were set as speaker for report \"%s\" at %s (%s %s) due to important circumstances" +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place speaker's name, topic, title, then correct domain name and event id instead of %s */
     public static final String MESSAGE_OFFER_REPORT = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
@@ -95,6 +126,8 @@ public class Email {
             A_HREF + "%s" + "/controller?action=view-event&event-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place speaker's name, topic, title, then correct domain name and event id instead of %s */
     public static final String MESSAGE_SET_SPEAKER_BY_SPEAKER = HELLO +
             INFORMATION +
             DOUBLE_ENTER +
@@ -104,6 +137,8 @@ public class Email {
             A_HREF + "%s" + "/controller?action=view-report&report-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
+
+    /** Place speaker's name, topic, title, then correct domain name and event id instead of %s */
     public static final String MESSAGE_REMOVE_SPEAKER_BY_SPEAKER = HELLO +
             INFORMATION +
             DOUBLE_ENTER +

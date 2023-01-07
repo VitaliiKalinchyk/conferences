@@ -6,16 +6,31 @@ import org.slf4j.*;
 
 import java.util.Properties;
 
+/**
+ * Send emails to Users
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class EmailSender {
     private static final Logger logger = LoggerFactory.getLogger(EmailSender.class);
     private final String user;
     private final Session session;
 
+    /**
+     * @param properties - should contain all required fields to properly configure
+     */
     public EmailSender(Properties properties) {
         user = properties.getProperty("mail.user");
         session = getSession(properties, user);
     }
 
+    /**
+     * Sends email to one User. Email sends in html/text format with some tags
+     * @param subject - email's greetings
+     * @param body - email's letter
+     * @param sendTo - email's recipient
+     */
     public void send(String subject, String body, String sendTo) {
         MimeMessage message = new MimeMessage(session);
         try {
