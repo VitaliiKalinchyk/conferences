@@ -10,7 +10,7 @@ import java.net.MalformedURLException;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static ua.java.conferences.controller.actions.ActionFactory.getActionFactory;
+import static ua.java.conferences.controller.actions.ActionFactory.*;
 import static ua.java.conferences.controller.actions.constants.ActionNames.SIGN_IN_ACTION;
 import static ua.java.conferences.controller.actions.util.Util.FONT;
 

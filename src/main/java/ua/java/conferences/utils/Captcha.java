@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.java.conferences.exceptions.CaptchaException;
 
-import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.*;
 import java.io.*;
 import java.net.*;
 import java.util.Properties;
@@ -49,7 +49,7 @@ public class Captcha {
             writeOutput(gRecaptchaResponse, connection);
             StringBuilder response = getResponse(connection);
             checkIfCaptchaPassed(response);
-        } catch(IllegalStateException | UnknownHostException e){
+        } catch(IllegalStateException | UnknownHostException | SSLException e){
             logger.error("skipped captcha - couldn't connect to google");
         } catch(Exception e){
             logger.error(e.getMessage());
