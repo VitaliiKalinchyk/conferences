@@ -45,7 +45,7 @@
                     </c:otherwise>
                 </c:choose>
             </ul>
-            <form method="POST" class="d-flex" >
+            <form method="POST" class="d-flex mt-3" >
                 <label>
                     <select name="locale" onchange='submit();'>
                         <option value="en" ${sessionScope.locale eq 'en' ? 'selected' : ''}>
