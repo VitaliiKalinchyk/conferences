@@ -1,5 +1,6 @@
 package ua.java.conferences.controller.actions.util;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
 import jakarta.servlet.http.HttpSession;
@@ -8,6 +9,7 @@ import java.util.*;
 
 public class MyRequest extends HttpServletRequestWrapper {
     private final Map<String, Object> attributes = new HashMap<>();
+    private final List<Cookie> cookies = new ArrayList<>();
     private final HttpSession session = new MySession();
     private String encoding;
 
@@ -43,5 +45,14 @@ public class MyRequest extends HttpServletRequestWrapper {
     @Override
     public void setCharacterEncoding(String enc) {
         encoding = enc;
+    }
+
+    @Override
+    public Cookie[] getCookies() {
+        return cookies.isEmpty() ? null : cookies.toArray(Cookie[]::new);
+    }
+
+    public void addCookie(String name, String value){
+        cookies.add(new Cookie(name, value));
     }
 }
