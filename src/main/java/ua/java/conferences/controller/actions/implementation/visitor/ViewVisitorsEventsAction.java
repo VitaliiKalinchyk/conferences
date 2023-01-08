@@ -15,13 +15,30 @@ import static ua.java.conferences.model.entities.role.Role.VISITOR;
 import static ua.java.conferences.utils.PaginationUtil.*;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
+/**
+ * This is ViewVisitorsEventsAction class. Accessible by visitor. Allows to return list of sorted events where visitor
+ * registered.
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class ViewVisitorsEventsAction implements Action {
     private final EventService eventService;
 
+    /**
+     * @param appContext contains EventService instance to use in action
+     */
     public ViewVisitorsEventsAction(AppContext appContext) {
         eventService = appContext.getEventService();
     }
 
+    /**
+     * Builds required query for service, sets visitors events list in request and obtains required path. Also sets all
+     * required for pagination attributes
+     *
+     * @param request to get queries parameters and put events list in request
+     * @return view visitors events page
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         QueryBuilder queryBuilder = getQueryBuilder(request);

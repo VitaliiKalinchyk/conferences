@@ -13,14 +13,31 @@ import static ua.java.conferences.controller.actions.constants.ActionNames.VIEW_
 import static ua.java.conferences.controller.actions.constants.ParameterValues.*;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 
+/**
+ * This is RegisterOrCancelAction class. Accessible by visitor. Allows to register or cancel registrations for event.
+ * Implements PRG pattern
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class RegisterOrCancelAction implements Action {
 
     private final UserService userService;
 
+    /**
+     * @param appContext contains UserService instance to use in action
+     */
     public RegisterOrCancelAction(AppContext appContext) {
         userService = appContext.getUserService();
     }
 
+    /**
+     * Obtains required path and change user registration status for event.
+     *
+     * @param request to get user and event ids
+     * @return path to redirect to executeGet method in ViewEventByVisitorAction through front-controller with required
+     * parameters.
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         long userId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();

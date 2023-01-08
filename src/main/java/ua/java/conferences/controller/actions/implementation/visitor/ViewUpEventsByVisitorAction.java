@@ -15,13 +15,29 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.utils.PaginationUtil.*;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
+/**
+ * This is ViewUpEventsByVisitorAction class. Accessible by visitor. Allows to return list of sorted upcoming events.
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class ViewUpEventsByVisitorAction implements Action {
     private final EventService eventService;
 
+    /**
+     * @param appContext contains EventService instance to use in action
+     */
     public ViewUpEventsByVisitorAction(AppContext appContext) {
         eventService = appContext.getEventService();
     }
 
+    /**
+     * Builds required query for service, sets upcoming events list in request and obtains required path. Also sets all
+     * required for pagination attributes
+     *
+     * @param request to get queries parameters and put events list in request
+     * @return view upcoming events by visitor page
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         QueryBuilder queryBuilder = getQueryBuilder(request);

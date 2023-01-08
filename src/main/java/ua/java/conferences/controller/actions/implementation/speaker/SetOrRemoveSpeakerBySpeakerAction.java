@@ -15,17 +15,35 @@ import static ua.java.conferences.controller.actions.constants.ParameterValues.*
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.utils.constants.Email.*;
 
+/**
+ * This is SetOrRemoveSpeakerBySpeakerAction class. Accessible by speaker. Allows to change report's speaker.
+ * Implements PRG pattern
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class SetOrRemoveSpeakerBySpeakerAction implements Action {
     private final ReportService reportService;
     private final UserService userService;
     private final EmailSender emailSender;
 
+    /**
+     * @param appContext contains ReportService, UserService and EmailSender instances to use in action
+     */
     public SetOrRemoveSpeakerBySpeakerAction(AppContext appContext) {
         reportService = appContext.getReportService();
         userService = appContext.getUserService();
         emailSender = appContext.getEmailSender();
     }
 
+    /**
+     * Obtains required path and change report's speaker. Sends email to all moderators. Sends email using
+     * multithreading to make it faster.
+     *
+     * @param request to get report and event ids
+     * @return path to redirect to executeGet method in ViewEventBYSpeakerAction through front-controller with required
+     * parameters or ViewSpeakersReportsAction (if it comes from speakers report page).
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         long reportId = Long.parseLong(request.getParameter(REPORT_ID));

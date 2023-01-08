@@ -17,15 +17,31 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.model.entities.role.Role.SPEAKER;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
+/**
+ * This is ViewEventBySpeakerAction class. Accessible by speaker. Allows to view event with all it's reports.
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class ViewEventBySpeakerAction implements Action {
     private final EventService eventService;
     private final ReportService reportService;
 
+    /**
+     * @param appContext contains ReportService and EventService instances to use in action
+     */
     public ViewEventBySpeakerAction(AppContext appContext) {
         eventService = appContext.getEventService();
         reportService = appContext.getReportService();
     }
 
+    /**
+     * Gets event by id, check if it is future event. Set to request EventDTO and all report there. Checks if speaker
+     * participates. If not - throws exceptions.
+     *
+     * @param request to get event id
+     * @return view event by speaker page
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         try {

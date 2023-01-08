@@ -14,13 +14,29 @@ import static ua.java.conferences.model.entities.role.Role.MODERATOR;
 import static ua.java.conferences.utils.PaginationUtil.*;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
+/**
+ * This is ViewEventsAction class. Accessible by moderator. Allows to return list of sorted events.
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class ViewEventsAction implements Action {
     private final EventService eventService;
 
+    /**
+     * @param appContext contains EventService instance to use in action
+     */
     public ViewEventsAction(AppContext appContext) {
         eventService = appContext.getEventService();
     }
 
+    /**
+     * Builds required query for service, sets events list in request and obtains required path. Also sets all required
+     * for pagination attributes
+     *
+     * @param request to get queries parameters and put events list in request
+     * @return view events page
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         QueryBuilder queryBuilder = getQueryBuilder(request);

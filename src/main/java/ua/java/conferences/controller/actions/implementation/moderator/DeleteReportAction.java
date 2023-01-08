@@ -14,15 +14,33 @@ import static ua.java.conferences.controller.actions.constants.ParameterValues.S
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.utils.constants.Email.*;
 
+/**
+ * This is DeleteReportAction class. Accessible by moderator. Allows to delete report from database.
+ * Implements PRG pattern
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class DeleteReportAction implements Action {
     private final ReportService reportService;
     private final EmailSender emailSender;
 
+    /**
+     * @param appContext contains ReportService and EmailSender instances to use in action
+     */
     public DeleteReportAction(AppContext appContext) {
         reportService = appContext.getReportService();
         emailSender = appContext.getEmailSender();
     }
 
+    /**
+     * Obtains required path and deletes report. Sends email to report speakers email if it's present.
+     * Sets succeed message if everything fine.
+     *
+     * @param request to get reports id and set message
+     * @return path to redirect to executeGet method in SearchEventAction through front-controller with required
+     * parameters to find event.
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         reportService.delete(request.getParameter(REPORT_ID));

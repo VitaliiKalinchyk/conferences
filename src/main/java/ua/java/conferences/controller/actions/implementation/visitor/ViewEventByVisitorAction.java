@@ -13,17 +13,33 @@ import java.time.LocalDate;
 import static ua.java.conferences.controller.actions.constants.Pages.VIEW_EVENT_BY_VISITOR_PAGE;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 
+/**
+ * This is ViewEventByVisitorAction class. Accessible by visitor. Allows to view event with all it's reports.
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class ViewEventByVisitorAction implements Action {
     private final EventService eventService;
     private final ReportService reportService;
     private final UserService userService;
 
+    /**
+     * @param appContext contains UserService, ReportService and EventService instances to use in action
+     */
     public ViewEventByVisitorAction(AppContext appContext) {
         eventService = appContext.getEventService();
         reportService = appContext.getReportService();
         userService = appContext.getUserService();
     }
 
+    /**
+     * Gets event by id, check if it is future event and if user registered for event. Set to request EventDTO and
+     * all report there.
+     *
+     * @param request to get event id
+     * @return view event by visitor page
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         try {

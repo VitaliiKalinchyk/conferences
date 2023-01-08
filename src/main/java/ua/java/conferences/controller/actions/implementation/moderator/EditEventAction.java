@@ -20,22 +20,46 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.*;
 import static ua.java.conferences.utils.constants.Email.*;
 
+/**
+ * This is EditEventAction class. Accessible by moderator. Allows to edit conference
+ * Implements PRG pattern
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class EditEventAction implements Action {
     private final EventService eventService;
     private final UserService userService;
     private final EmailSender emailSender;
 
+    /**
+     * @param appContext contains EventService, UserService and EmailSender instances to use in action
+     */
     public EditEventAction(AppContext appContext) {
         eventService = appContext.getEventService();
         userService = appContext.getUserService();
         emailSender = appContext.getEmailSender();
     }
 
+    /**
+     * Checks method and calls required implementation
+     *
+     * @param request  to get method, session and set all required attributes
+     * @return path to redirect or forward by front-controller
+     * @throws ServiceException to call error page in front-controller
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         return isPostMethod(request) ? executePost(request) : executeGet(request);
     }
 
+    /**
+     * Called from doGet method in front-controller. Obtains required path and transfer attributes from session
+     * to request
+     *
+     * @param request to get message, error and event attributes from session and put it in request
+     * @return search event page after trying to delete conference
+     */
     private String executeGet(HttpServletRequest request) throws ServiceException {
         transferAttributes(request);
         String eventId = request.getParameter(EVENT_ID);
@@ -61,6 +85,14 @@ public class EditEventAction implements Action {
         transferEventDTOFromSessionToRequest(request, EVENT_NEW);
     }
 
+    /**
+     * Called from doPost method in front-controller. Tries to edit conference. Sends email to all visitors and
+     * speakers participate in the conference. Sends email using multithreading to make it faster so
+     * moderator will not wail till all emails are send.
+     *
+     * @param request to get event id and set message in case of successful updating or error
+     * @return path to redirect to executeGet method through front-controller with required parameters
+     */
     private String executePost(HttpServletRequest request) throws ServiceException {
         EventDTO event = getEventDTO(request);
         try {

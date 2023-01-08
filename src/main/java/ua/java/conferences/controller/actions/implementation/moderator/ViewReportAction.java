@@ -14,15 +14,30 @@ import static ua.java.conferences.controller.actions.ActionUtil.*;
 import static ua.java.conferences.controller.actions.constants.Pages.VIEW_REPORT_PAGE;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 
+/**
+ * This is ViewReportAction class. Accessible by moderator. Allows to view report.
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class ViewReportAction implements Action {
     private final ReportService reportService;
     private final UserService userService;
 
+    /**
+     * @param appContext contains ReportService and UserService instances to use in action
+     */
     public ViewReportAction(AppContext appContext) {
         reportService = appContext.getReportService();
         userService = appContext.getUserService();
     }
 
+    /**
+     * Gets report by id, check if it is future report. Set to request reportDTO and all available speakers
+     *
+     * @param request to get report id
+     * @return view report page
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         transferAttributes(request);

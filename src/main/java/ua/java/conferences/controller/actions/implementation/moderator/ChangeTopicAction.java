@@ -15,15 +15,33 @@ import static ua.java.conferences.controller.actions.constants.ParameterValues.S
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 import static ua.java.conferences.utils.constants.Email.*;
 
+/**
+ * This is ChangeTopicAction class. Accessible by moderator. Allows to change report's topic.
+ * Implements PRG pattern
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class ChangeTopicAction implements Action {
     private final ReportService reportService;
     private final EmailSender emailSender;
 
+    /**
+     * @param appContext contains ReportService and EmailSender instances to use in action
+     */
     public ChangeTopicAction(AppContext appContext) {
         reportService = appContext.getReportService();
         emailSender = appContext.getEmailSender();
     }
 
+    /**
+     * Obtains required path and change report's topic. Sends email to report speakers email if it's present.
+     * Sets error if topic format is invalid.
+     *
+     * @param request to get report fields
+     * @return path to redirect to executeGet method in ViewReportAction through front-controller with required
+     * parameters to find report.
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         ReportDTO report = getReportDTO(request);
@@ -39,9 +57,11 @@ public class ChangeTopicAction implements Action {
 
     private void sendEmail(ReportDTO reportDTO, String url) throws ServiceException {
         ReportDTO report = reportService.getById(String.valueOf(reportDTO.getId()));
-        String body = String.format(MESSAGE_TOPIC_CHANGED, report.getSpeakerName(), report.getTitle(),
-                report.getLocation(), report.getDate(), report.getTopic(), url, report.getEventId());
-        new Thread(() -> emailSender.send(SUBJECT_NOTIFICATION, body, report.getSpeakerEmail())).start();
+        if (report.getSpeakerEmail() != null) {
+            String body = String.format(MESSAGE_TOPIC_CHANGED, report.getSpeakerName(), report.getTitle(),
+                    report.getLocation(), report.getDate(), report.getTopic(), url, report.getEventId());
+            new Thread(() -> emailSender.send(SUBJECT_NOTIFICATION, body, report.getSpeakerEmail())).start();
+        }
     }
 
     private ReportDTO getReportDTO(HttpServletRequest request) {

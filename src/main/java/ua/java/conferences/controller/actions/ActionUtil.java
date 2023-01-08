@@ -86,9 +86,9 @@ public class ActionUtil {
     }
 
     /**
-     * Obtain Web App address. Common usage - email sender
+     * Obtain Web App domain address. Common usage - email sender
      * @param request passed by action
-     * @return - Web App address
+     * @return - Web App domain address
      */
     public static String getURL(HttpServletRequest request) {
         String servletPath = request.getServletPath();

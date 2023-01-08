@@ -20,12 +20,21 @@ import static ua.java.conferences.model.entities.role.Role.SPEAKER;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
 import static ua.java.conferences.utils.constants.Email.*;
 
+/**
+ * This is OfferReportAction class. Accessible by speaker. Allows to create new report. Implements PRG pattern
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class OfferReportAction implements Action {
     private final ReportService reportService;
     private final EventService eventService;
     private final UserService userService;
     private final EmailSender emailSender;
 
+    /**
+     * @param appContext contains all services and EmailSender instances to use in action
+     */
     public OfferReportAction(AppContext appContext) {
         reportService = appContext.getReportService();
         eventService = appContext.getEventService();
@@ -33,11 +42,26 @@ public class OfferReportAction implements Action {
         emailSender = appContext.getEmailSender();
     }
 
+    /**
+     * Checks method and calls required implementation
+     *
+     * @param request  to get method, session and set all required attributes
+     * @return path to redirect or forward by front-controller
+     * @throws ServiceException to call error page in front-controller
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         return isPostMethod(request) ? executePost(request) : executeGet(request);
     }
 
+
+    /**
+     * Called from doGet method in front-controller. Obtains required path and transfer attributes from session
+     * to request. Gets event from EventService
+     *
+     * @param request to get message and error attribute from session and put it in request
+     * @return offer report page
+     */
     private String executeGet(HttpServletRequest request) throws ServiceException {
         transferAttributes(request);
         long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
@@ -66,6 +90,13 @@ public class OfferReportAction implements Action {
         transferStringFromSessionToRequest(request, ERROR);
     }
 
+    /**
+     * Called from doPost method in front-controller. Tries to create report for conference. Sends email to all
+     * moderators. Sends email using multithreading to make it faster.
+     *
+     * @param request to get event id and set message in case of successful deleting
+     * @return path to redirect to executeGet method through front-controller with all required parameters
+     */
     private String executePost(HttpServletRequest request) throws ServiceException {
         ReportDTO reportDTO = getReportDTO(request);
         try {

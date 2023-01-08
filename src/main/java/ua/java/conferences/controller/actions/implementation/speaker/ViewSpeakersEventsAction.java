@@ -15,13 +15,29 @@ import static ua.java.conferences.model.entities.role.Role.SPEAKER;
 import static ua.java.conferences.utils.PaginationUtil.paginate;
 import static ua.java.conferences.utils.QueryBuilderUtil.*;
 
+/**
+ * This is ViewSpeakersEventsAction class. Accessible by speaker. Allows to return list of sorted events.
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public class ViewSpeakersEventsAction implements Action {
     private final EventService eventService;
 
+    /**
+     * @param appContext contains EventService instance to use in action
+     */
     public ViewSpeakersEventsAction(AppContext appContext) {
         eventService = appContext.getEventService();
     }
 
+    /**
+     * Builds required query for service, sets events list in request and obtains required path. Also sets all required
+     * for pagination attributes
+     *
+     * @param request to get queries parameters and put events list in request
+     * @return view speakers events page
+     */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         QueryBuilder queryBuilder = getQueryBuilder(request);

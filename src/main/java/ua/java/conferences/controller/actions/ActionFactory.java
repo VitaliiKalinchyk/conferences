@@ -1,5 +1,6 @@
 package ua.java.conferences.controller.actions;
 
+import lombok.Getter;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.implementation.admin.*;
 import ua.java.conferences.controller.actions.implementation.base.*;
@@ -11,9 +12,20 @@ import java.util.*;
 
 import static ua.java.conferences.controller.actions.constants.ActionNames.*;
 
+/**
+ * ActionFactory class. Contains all available actions and method to get any of them.
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
 public final class ActionFactory {
-    private static final ActionFactory ACTION_FACTORY = new ActionFactory();
+    /** Action factory instance. Singleton */
+    @Getter private static final ActionFactory actionFactory = new ActionFactory();
+
+    /** Map of all available actions, name as key and class instance as value */
     private static final Map<String, Action> ACTION_MAP = new HashMap<>();
+
+    /** Application context instance. Contains all required services and utils */
     private static final AppContext APP_CONTEXT = AppContext.getAppContext();
 
     static {
@@ -60,10 +72,12 @@ public final class ActionFactory {
 
     private ActionFactory() {}
 
-    public static ActionFactory getActionFactory() {
-        return ACTION_FACTORY;
-    }
-
+    /**
+     * Obtains action by its name
+     *
+     * @param actionName - to search in map
+     * @return required action implementation or DefaultAction if there is no such action
+     */
     public Action createAction(String actionName) {
         return ACTION_MAP.getOrDefault(actionName, new DefaultAction());
     }
