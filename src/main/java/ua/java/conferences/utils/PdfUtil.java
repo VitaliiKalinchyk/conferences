@@ -176,10 +176,8 @@ public class PdfUtil {
     private ResourceBundle getBundle(String locale) {
         String resources = "resources";
         if (locale.contains("_")) {
-            int index = locale.indexOf("_");
-            String lang = locale.substring(0, index);
-            String country = locale.substring(index + 1);
-            return ResourceBundle.getBundle(resources, new Locale(lang, country));
+            String[] splitLocale = locale.split("_");
+            return ResourceBundle.getBundle(resources, new Locale(splitLocale[0], splitLocale[1]));
         } else {
             return ResourceBundle.getBundle(resources, new Locale(locale));
         }

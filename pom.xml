@@ -21,7 +21,7 @@
         <mysql.version>8.0.31</mysql.version>
         <hikari.version>5.0.1</hikari.version>
         <argon2.version>2.11</argon2.version>
-        <mockito.version>4.10.0</mockito.version>
+        <mockito.version>4.11.0</mockito.version>
         <greenmail.version>1.6.12</greenmail.version>
         <slf4j.version>2.0.5</slf4j.version>
         <log4j.version>2.19.0</log4j.version>
