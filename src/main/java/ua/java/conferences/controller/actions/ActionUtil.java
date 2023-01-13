@@ -79,10 +79,11 @@ public class ActionUtil {
     public static String getActionToRedirect(String action, String... parameters) {
         String base = CONTROLLER_PAGE + "?" + ACTION + "=" + action;
         StringJoiner stringJoiner = new StringJoiner("&", "&", "");
+        stringJoiner.setEmptyValue("");
         for (int i = 0; i < parameters.length; i+=2) {
             stringJoiner.add(parameters[i] + "=" + parameters[i + 1]);
         }
-        return base + (parameters.length > 0 ? stringJoiner : "");
+        return base + stringJoiner;
     }
 
     /**
