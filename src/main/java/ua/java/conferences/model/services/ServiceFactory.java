@@ -12,13 +12,8 @@ import ua.java.conferences.model.services.implementation.*;
  */
 @Getter
 public final class ServiceFactory {
-    /** A concrete instance of UserService*/
     private final UserService userService;
-
-    /** A concrete instance of ReportService*/
     private final ReportService reportService;
-
-    /** A concrete instance of EventService*/
     private final EventService eventService;
 
     private ServiceFactory(DAOFactory daoFactory) {

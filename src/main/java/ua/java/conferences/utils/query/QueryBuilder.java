@@ -1,7 +1,5 @@
 package ua.java.conferences.utils.query;
 
-import org.slf4j.*;
-
 import java.util.*;
 
 import static ua.java.conferences.controller.actions.constants.ParameterValues.*;
@@ -13,7 +11,6 @@ import static ua.java.conferences.controller.actions.constants.ParameterValues.*
  * @version 1.0
  */
 public abstract class QueryBuilder {
-    private static final Logger logger = LoggerFactory.getLogger(QueryBuilder.class);
     private final List<String> filters = new ArrayList<>();
     private String sortField;
     private String order = ASCENDING_ORDER;
@@ -151,7 +148,6 @@ public abstract class QueryBuilder {
                 return false;
             }
         } catch (NumberFormatException e) {
-            logger.info("wrong offset/records format");
             return false;
         }
         return true;

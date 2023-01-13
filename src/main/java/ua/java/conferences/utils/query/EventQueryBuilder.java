@@ -1,7 +1,5 @@
 package ua.java.conferences.utils.query;
 
-import org.slf4j.*;
-
 import java.util.*;
 
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
@@ -13,7 +11,6 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @version 1.0
  */
 public class EventQueryBuilder extends QueryBuilder {
-    private static final Logger logger = LoggerFactory.getLogger(EventQueryBuilder.class);
     private static final String EVENT_DOT_ID = "event.id";
     /** Contains set of allowed sort fields */
     private static final Set<String> EVENT_SORT_FIELDS_SET = new HashSet<>();
@@ -48,7 +45,6 @@ public class EventQueryBuilder extends QueryBuilder {
         if (EVENT_SORT_FIELDS_SET.contains(sortField.toLowerCase())) {
             return sortField;
         }
-        logger.info("wrong sort field");
         return EVENT_DOT_ID;
     }
 
