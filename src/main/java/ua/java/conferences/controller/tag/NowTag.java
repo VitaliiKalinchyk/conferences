@@ -20,6 +20,6 @@ public class NowTag extends SimpleTagSupport {
     @Override
     public void doTag() throws IOException {
         final JspWriter writer = getJspContext().getOut();
-        writer.print(LocalDate.now());
+        writer.print(LocalDate.now().plusDays(1));
     }
 }

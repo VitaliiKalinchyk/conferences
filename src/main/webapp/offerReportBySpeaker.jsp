@@ -46,7 +46,9 @@
                     <tags:notEmptyMessage value="${requestScope.message}"/><br>
                     <label class="form-label fs-5" for="topic"><fmt:message key="topic.name"/>: </label>
                     <input class="form-control" name="topic" id="topic"
-                           pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!@#$^&*()={}| ]{2,70}" required value="">
+                           pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!?@#$^&*()={}| ]{2,70}"
+                           title="<fmt:message key="topic.requirements"/>"
+                           required value="">
                     <tags:contains error="${error}" value="topic"/><br>
                 </div>
 

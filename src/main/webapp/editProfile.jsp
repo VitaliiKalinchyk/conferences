@@ -29,7 +29,7 @@
 
     <form method="POST" action="controller">
         <input type="hidden" name="action" value="edit-profile">
-        <c:set var="titleValue" value="${requestScope.user.email eq null ?
+        <c:set var="emailValue" value="${requestScope.user.email eq null ?
                                 sessionScope.loggedUser.email : requestScope.user.email}"/>
         <c:set var="nameValue" value="${requestScope.user.name eq null ?
                                 sessionScope.loggedUser.name : requestScope.user.name}"/>
@@ -40,7 +40,7 @@
             <tags:notEmptyMessage value="${requestScope.message}"/><br>
             <label class="form-label fs-5" for="email"><fmt:message key="email"/>: </label>
             <input class="form-control" type="email" name="email" id="email"
-                   pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" required value="${titleValue}">
+                   pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$" required value="${emailValue}">
             <tags:contains error="${requestScope.error}" value="email"/><br>
         </div>
 

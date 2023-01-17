@@ -72,7 +72,8 @@
             <input type="hidden" name="report-id" value="${requestScope.report.id}">
             <label class="fs-5" for="topic"><fmt:message key="change.topic"/>: </label>
             <input class="col-7"  name="topic" id="topic" required value="${requestScope.report.topic}"
-                   pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!@#$^&*()={}| ]{2,70}">
+                   pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!?@#$^&*()={}| ]{2,70}"
+                   title="<fmt:message key="topic.requirements"/>">
             <button type="submit" class="btn btn-dark mt-3 mb-4"><fmt:message key="submit"/></button>
         </form>
 

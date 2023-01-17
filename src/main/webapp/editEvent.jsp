@@ -38,7 +38,7 @@
         <c:otherwise>
             <c:set var="idValue" value="${requestScope.eventNew.id eq null ?
                                 requestScope.event.id : requestScope.eventNew.id}"/>
-            <c:set var="titleValue" value="${requestScope.eventNew.title eq null ?
+            <c:set var="emailValue" value="${requestScope.eventNew.title eq null ?
                                 requestScope.event.title : requestScope.eventNew.title}"/>
             <c:set var="dateValue" value="${requestScope.eventNew.date eq null ?
                                 requestScope.event.date : requestScope.eventNew.date}"/>
@@ -56,8 +56,9 @@
                 <div>
                     <label class="form-label fs-5" for="title"><fmt:message key="title"/>*: </label>
                     <input class="form-control" name="title" id="title"
-                           pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!@#$^&*()={}| ]{2,70}"
-                           required value="${titleValue}">
+                           pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!?@#$^&*()={}| ]{2,70}"
+                           title="<fmt:message key="title.requirements"/>"
+                           required value="${emailValue}">
                     <tags:contains error="${error}" value="title"/><br>
                 </div>
 
@@ -71,7 +72,8 @@
                 <div class="form-group">
                     <label class="form-label fs-5" for="location"><fmt:message key="location"/>*: </label>
                     <input class="form-control" name="location" id="location"
-                           pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!@#$^&*()={}| ]{2,70}"
+                           pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!?@#$^&*()={}| ]{2,70}"
+                           title="<fmt:message key="location.requirements"/>"
                            required value="${locationValue}">
                     <tags:contains error="${error}" value="location"/><br>
                 </div>
@@ -79,7 +81,8 @@
                 <div class="form-group">
                     <label class="form-label fs-5" for="description"><fmt:message key="description"/>*: </label>
                     <input class="form-control" name="description" id="description"
-                           pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!@#$^&*()={}| ]{1,200}"
+                           pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!?@#$^&*()={}| ]{1,200}"
+                           title="<fmt:message key="description.requirements"/>"
                            required value="${descriptionValue}">
                     <tags:contains error="${error}" value="description"/><br>
                 </div>

@@ -35,8 +35,9 @@
         <div>
             <label class="form-label fs-5" for="title"><fmt:message key="title"/>*: </label>
             <input class="form-control" name="title" id="title"
-                   pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!@#$^&*()={}| ]{2,70}"
-                   required value="${requestScope.event.title}">
+                   pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!?@#$^&*()={}| ]{2,70}"
+                   required value="${requestScope.event.title}"
+                   title="<fmt:message key="title.requirements"/>">
             <tags:contains error="${requestScope.error}" value="title"/><br>
         </div>
 
@@ -51,7 +52,8 @@
             <label class="form-label fs-5" for="location"><fmt:message key="location"/>*: </label>
             <input class="form-control" name="location" id="location"
                    pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!@#$^&*()={}| ]{2,70}"
-                   required value="${requestScope.event.location}">
+                   required value="${requestScope.event.location}"
+                   title="<fmt:message key="location.requirements"/>">
             <tags:contains error="${requestScope.error}" value="location"/><br>
         </div>
 
@@ -59,7 +61,8 @@
             <label class="form-label fs-5" for="description"><fmt:message key="description"/>*: </label>
             <input class="form-control" name="description" id="description"
                    pattern="^[0-9A-Za-zА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\-~`!@#$^&*()={}| ]{1,200}"
-                   required value="${requestScope.event.description}">
+                   required value="${requestScope.event.description}"
+                   title="<fmt:message key="description.requirements"/>">
             <tags:contains error="${requestScope.error}" value="description"/><br>
         </div>
 
