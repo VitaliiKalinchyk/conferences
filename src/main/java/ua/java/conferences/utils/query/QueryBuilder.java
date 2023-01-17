@@ -115,8 +115,7 @@ public abstract class QueryBuilder {
     }
 
     private String getFilterQuery() {
-        StringJoiner stringJoiner = new StringJoiner(" AND ", " WHERE ", " ");
-        stringJoiner.setEmptyValue("");
+        StringJoiner stringJoiner = new StringJoiner(" AND ", " WHERE ", " ").setEmptyValue("");
         filters.forEach(stringJoiner::add);
         return stringJoiner.toString();
     }
