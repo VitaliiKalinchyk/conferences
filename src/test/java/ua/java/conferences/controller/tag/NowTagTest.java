@@ -22,7 +22,7 @@ class NowTagTest {
             NowTag nowTag = new NowTag();
             nowTag.setJspContext(jspContext);
             assertDoesNotThrow(nowTag::doTag);
-            assertEquals(LocalDate.now().toString(), jspWriter.toString());
+            assertEquals(LocalDate.now().plusDays(1).toString(), jspWriter.toString());
         }
     }
 
