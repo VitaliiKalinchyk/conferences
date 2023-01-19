@@ -14,7 +14,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.source>11</maven.compiler.source>
-        <junit.version>5.9.1</junit.version>
+        <junit.version>5.9.2</junit.version>
         <servlet.version>6.0.0</servlet.version>
         <servlet.jsp-api.version>3.1.0</servlet.jsp-api.version>
         <servlet.jsp.jstl.version>3.0.0</servlet.jsp.jstl.version>
@@ -23,7 +23,7 @@
         <argon2.version>2.11</argon2.version>
         <mockito.version>5.0.0</mockito.version>
         <greenmail.version>1.6.12</greenmail.version>
-        <slf4j.version>2.0.5</slf4j.version>
+        <slf4j.version>2.0.6</slf4j.version>
         <log4j.version>2.19.0</log4j.version>
         <lombok.version>1.18.24</lombok.version>
         <mail.version>1.6.2</mail.version>
