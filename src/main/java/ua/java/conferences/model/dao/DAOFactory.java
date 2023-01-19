@@ -24,7 +24,7 @@ public abstract class DAOFactory {
      * @return concrete DAO factory
      */
     public static synchronized DAOFactory getInstance(String dbImplementation, DataSource dataSource) {
-        if (instance == null && DbImplementations.MYSQL.equals(dbImplementation)) {
+        if (instance == null && DbImplementations.MYSQL.equalsIgnoreCase(dbImplementation)) {
             instance = new MysqlDAOFactory(dataSource);
         }
         return instance;
