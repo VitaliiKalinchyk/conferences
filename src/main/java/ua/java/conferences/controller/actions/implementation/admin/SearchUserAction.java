@@ -34,10 +34,12 @@ public class SearchUserAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         String path = USER_BY_EMAIL_PAGE;
+        String email = request.getParameter(EMAIL);
         try {
-            request.setAttribute(USER, userService.getByEmail(request.getParameter(EMAIL)));
+            request.setAttribute(USER, userService.getByEmail(email));
         } catch (NoSuchUserException | IncorrectFormatException e) {
             request.setAttribute(ERROR, e.getMessage());
+            request.setAttribute(EMAIL, email);
             path = SEARCH_USER_PAGE;
         }
         return path;
