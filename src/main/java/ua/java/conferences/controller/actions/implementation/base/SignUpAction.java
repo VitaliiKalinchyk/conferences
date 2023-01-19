@@ -10,7 +10,7 @@ import ua.java.conferences.utils.Captcha;
 import ua.java.conferences.utils.EmailSender;
 
 import static ua.java.conferences.controller.actions.ActionUtil.*;
-import static ua.java.conferences.controller.actions.constants.ActionNames.SIGN_UP_ACTION;
+import static ua.java.conferences.controller.actions.constants.ActionNames.*;
 import static ua.java.conferences.controller.actions.constants.Pages.*;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.SUCCEED_REGISTER;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
@@ -56,10 +56,9 @@ public class SignUpAction implements Action {
      * @return either sign-in page if everything is fine or sign-up if not
      */
     private String executeGet(HttpServletRequest request) {
-        transferStringFromSessionToRequest(request, MESSAGE);
         transferStringFromSessionToRequest(request, ERROR);
         transferUserDTOFromSessionToRequest(request);
-        return getPath(request);
+        return SIGN_UP_PAGE;
     }
 
     /**
@@ -70,20 +69,19 @@ public class SignUpAction implements Action {
      * @return path to redirect to executeGet method
      */
     private String executePost(HttpServletRequest request) throws ServiceException {
-        String path = SIGN_IN_PAGE;
         UserDTO user = getUserDTO(request);
-        request.getSession().setAttribute(USER, user);
         try {
             captcha.verify(request.getParameter(CAPTCHA));
             userService.add(user, request.getParameter(PASSWORD), request.getParameter(CONFIRM_PASSWORD));
             request.getSession().setAttribute(MESSAGE, SUCCEED_REGISTER);
+            request.getSession().setAttribute(EMAIL, user.getEmail());
             sendEmail(user, getURL(request));
+            return getActionToRedirect(SIGN_IN_ACTION);
         } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException | CaptchaException e) {
+            request.getSession().setAttribute(USER, user);
             request.getSession().setAttribute(ERROR, e.getMessage());
-            path = SIGN_UP_PAGE;
+            return getActionToRedirect(SIGN_UP_ACTION);
         }
-        request.getSession().setAttribute(CURRENT_PATH, path);
-        return getActionToRedirect(SIGN_UP_ACTION);
     }
 
     private void sendEmail(UserDTO user, String url) {

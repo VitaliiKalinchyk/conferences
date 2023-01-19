@@ -12,7 +12,7 @@ import ua.java.conferences.utils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static ua.java.conferences.controller.actions.ActionUtil.getActionToRedirect;
-import static ua.java.conferences.controller.actions.constants.ActionNames.SIGN_UP_ACTION;
+import static ua.java.conferences.controller.actions.constants.ActionNames.*;
 import static ua.java.conferences.controller.actions.constants.Pages.*;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.SUCCEED_REGISTER;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
@@ -39,10 +39,10 @@ class SignUpActionTest {
         doNothing().when(emailSender).send(isA(String.class), isA(String.class), isA(String.class));
         String path = new SignUpAction(appContext).execute(myRequest, response);
 
-        assertEquals(getActionToRedirect(SIGN_UP_ACTION), path);
-        assertEquals(getUserDTO(), myRequest.getSession().getAttribute(USER));
+        assertEquals(getActionToRedirect(SIGN_IN_ACTION), path);
+        assertNull(myRequest.getSession().getAttribute(USER));
         assertEquals(SUCCEED_REGISTER, myRequest.getSession().getAttribute(MESSAGE));
-        assertEquals(SIGN_IN_PAGE, myRequest.getSession().getAttribute(CURRENT_PATH));
+        assertEquals(getUserDTO().getEmail(), myRequest.getSession().getAttribute(EMAIL));
         assertNull(myRequest.getSession().getAttribute(ERROR));
     }
 
@@ -59,8 +59,8 @@ class SignUpActionTest {
         assertEquals(getActionToRedirect(SIGN_UP_ACTION), path);
         assertEquals(getUserDTO(), myRequest.getSession().getAttribute(USER));
         assertEquals(CAPTCHA_INVALID, myRequest.getSession().getAttribute(ERROR));
-        assertEquals(SIGN_UP_PAGE, myRequest.getSession().getAttribute(CURRENT_PATH));
         assertNull(myRequest.getSession().getAttribute(MESSAGE));
+        assertNull(myRequest.getSession().getAttribute(EMAIL));
     }
 
     @Test
@@ -69,11 +69,9 @@ class SignUpActionTest {
         setGetRequest(myRequest);
         String path = new SignUpAction(appContext).execute(myRequest, response);
 
-        assertEquals(SIGN_IN_PAGE, path);
-        assertEquals(SUCCEED_REGISTER, myRequest.getAttribute(MESSAGE));
+        assertEquals(SIGN_UP_PAGE, path);
         assertEquals(CAPTCHA_INVALID, myRequest.getAttribute(ERROR));
         assertEquals(getUserDTO() , myRequest.getAttribute(USER));
-        assertNull(myRequest.getSession().getAttribute(MESSAGE));
         assertNull(myRequest.getSession().getAttribute(ERROR));
         assertNull(myRequest.getSession().getAttribute(USER));
     }
@@ -96,6 +94,5 @@ class SignUpActionTest {
         session.setAttribute(MESSAGE, SUCCEED_REGISTER);
         session.setAttribute(ERROR, CAPTCHA_INVALID);
         session.setAttribute(USER, getUserDTO());
-        session.setAttribute(CURRENT_PATH, SIGN_IN_PAGE);
     }
 }

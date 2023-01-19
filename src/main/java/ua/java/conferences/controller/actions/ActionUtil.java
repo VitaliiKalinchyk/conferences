@@ -26,15 +26,6 @@ public class ActionUtil {
     }
 
     /**
-     * Used in get Actions to redirect to concrete page
-     * @param request passed by action
-     * @return page to redirect
-     */
-    public static String getPath(HttpServletRequest request){
-        return (String) request.getSession().getAttribute(CURRENT_PATH);
-    }
-
-    /**
      * Transfers sessions attributes to request. Delete then
      * @param request passed by action
      */

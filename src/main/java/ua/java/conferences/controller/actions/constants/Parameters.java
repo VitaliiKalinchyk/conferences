@@ -60,9 +60,6 @@ public final class Parameters {
     public static final String ERROR = "error";
     public static final String MESSAGE = "message";
 
-    /** Stores path to redirect */
-    public static final String CURRENT_PATH = "currentPath";
-
     /** Parameter to get action name */
     public static final String ACTION = "action";
 

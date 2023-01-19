@@ -11,7 +11,6 @@ import static org.mockito.Mockito.*;
 import static ua.java.conferences.Constants.*;
 import static ua.java.conferences.controller.actions.ActionUtil.*;
 import static ua.java.conferences.controller.actions.constants.ActionNames.DELETE_USER_ACTION;
-import static ua.java.conferences.controller.actions.constants.Pages.INDEX_PAGE;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.SET;
 import static ua.java.conferences.controller.actions.constants.ParameterValues.SUCCEED_UPDATE;
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
@@ -29,13 +28,6 @@ class ActionUtilTest {
     void testIsPostMethodForGet() {
         when(request.getMethod()).thenReturn("GET");
         assertFalse(isPostMethod(request));
-    }
-
-    @Test
-    void testGetPath() {
-        MyRequest myRequest = new MyRequest(request);
-        myRequest.getSession().setAttribute(CURRENT_PATH, INDEX_PAGE);
-        assertEquals(INDEX_PAGE, getPath(myRequest));
     }
 
     @Test
