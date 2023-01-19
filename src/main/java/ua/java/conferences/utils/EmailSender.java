@@ -40,8 +40,7 @@ public class EmailSender {
         }
     }
 
-    private void sendEmail(String subject, String body, String sendTo, MimeMessage message)
-            throws MessagingException {
+    private void sendEmail(String subject, String body, String sendTo, MimeMessage message) throws MessagingException {
         message.setFrom(new InternetAddress(user));
         message.setSubject(subject);
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(sendTo));

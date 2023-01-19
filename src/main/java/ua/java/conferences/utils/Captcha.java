@@ -38,7 +38,7 @@ public class Captcha {
     /**
      * Checks if user is human. Setups and connects to Google ReCaptcha services. Sends User's captcha result.
      * Gets response and checks if it matches. Disable captcha if Google is down.
-     * @param gRecaptchaResponse get if from controller
+     * @param gRecaptchaResponse get it from controller
      * @throws CaptchaException if captcha is not valid
      */
     public void verify(String gRecaptchaResponse) throws CaptchaException {
