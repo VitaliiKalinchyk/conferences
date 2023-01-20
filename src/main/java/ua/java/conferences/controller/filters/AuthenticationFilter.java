@@ -2,6 +2,7 @@ package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.*;
 
 import java.io.IOException;
 
@@ -17,6 +18,7 @@ import static ua.java.conferences.controller.filters.domain.Domain.getDomain;
  * @version 1.0
  */
 public class AuthenticationFilter implements Filter {
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
 
     /**
      * Checks user in session and then checks if user has access to page or action.
@@ -30,6 +32,7 @@ public class AuthenticationFilter implements Filter {
         String servletPath = httpRequest.getServletPath();
         String action = httpRequest.getParameter(ACTION);
         if (isNoLoggedUser(httpRequest) && isAccessDenied(servletPath, action)) {
+            logger.info("Anonymous user tried to access forbidden page");
             httpRequest.setAttribute(MESSAGE, ACCESS_DENIED);
             request.getRequestDispatcher(SIGN_IN_PAGE).forward(request, response);
         } else {

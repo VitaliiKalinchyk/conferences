@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.*;
+import org.slf4j.*;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -23,6 +24,7 @@ import static ua.java.conferences.utils.constants.Email.*;
  * @version 1.0
  */
 public class SignUpAction implements Action {
+    private static final Logger logger = LoggerFactory.getLogger(SignUpAction.class);
     private final UserService userService;
     private final EmailSender emailSender;
     private final Captcha captcha;
@@ -76,6 +78,8 @@ public class SignUpAction implements Action {
             request.getSession().setAttribute(MESSAGE, SUCCEED_REGISTER);
             request.getSession().setAttribute(EMAIL, user.getEmail());
             sendEmail(user, getURL(request));
+            String info = "New user registered - " + user.getEmail();
+            logger.info(info);
             return getActionToRedirect(SIGN_IN_ACTION);
         } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException | CaptchaException e) {
             request.getSession().setAttribute(USER, user);
