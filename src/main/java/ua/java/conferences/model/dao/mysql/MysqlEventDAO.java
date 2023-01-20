@@ -21,9 +21,11 @@ import static ua.java.conferences.model.entities.role.Role.SPEAKER;
  * @version 1.0
  */
 public class MysqlEventDAO implements EventDAO {
-    /** An instance of datasource to provide connection to database */
     private final DataSource dataSource;
 
+    /** The only constructor to get DAO instance
+     * @param dataSource to get connection to database
+     */
     public MysqlEventDAO(DataSource dataSource) {
         this.dataSource = dataSource;
     }
