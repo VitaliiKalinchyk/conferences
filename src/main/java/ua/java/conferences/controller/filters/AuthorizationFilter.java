@@ -2,7 +2,6 @@ package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.*;
 
 import java.io.IOException;
 
@@ -18,7 +17,6 @@ import static ua.java.conferences.controller.filters.domain.Domain.*;
  * @version 1.0
  */
 public class AuthorizationFilter implements Filter {
-    private static final Logger logger = LoggerFactory.getLogger(AuthorizationFilter.class);
 
     /**
      * Checks for role in session and then checks if user has access to page or action.
@@ -34,8 +32,6 @@ public class AuthorizationFilter implements Filter {
         String servletPath = httpRequest.getServletPath();
         String action = httpRequest.getParameter(ACTION);
         if (role != null && isAccessDenied(servletPath, action, role)) {
-            String info = "User " + httpRequest.getSession().getAttribute(LOGGED_USER) + " tried to access forbidden page";
-            logger.info(info);
             httpRequest.setAttribute(MESSAGE, ACCESS_DENIED);
             request.getRequestDispatcher(SIGN_IN_PAGE).forward(request, response);
         } else {
