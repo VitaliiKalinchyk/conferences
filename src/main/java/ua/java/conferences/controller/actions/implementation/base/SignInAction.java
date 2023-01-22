@@ -3,6 +3,7 @@ package ua.java.conferences.controller.actions.implementation.base;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.*;
+import org.slf4j.event.Level;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -71,8 +72,7 @@ public class SignInAction implements Action {
         try {
             UserDTO user = userService.signIn(email, password);
             setLoggedUser(request, user);
-            String info = user.getEmail() + " entered web app";
-            logger.info(info);
+            logger.atLevel(Level.INFO).log(String.format("%s entered web app", user.getEmail()));
             return PROFILE_PAGE;
         } catch (NoSuchUserException | IncorrectPasswordException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());

@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.admin;
 
 import jakarta.servlet.http.*;
 import org.slf4j.*;
+import org.slf4j.event.Level;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.model.entities.role.Role;
@@ -42,8 +43,7 @@ public class SetRoleAction implements Action {
         String role = request.getParameter(ROLE);
         int roleId = Role.valueOf(role).getValue();
         userService.setRole(email, roleId);
-        String info = "User " + email + " got new role: " + role;
-        logger.info(info);
+        logger.atLevel(Level.INFO).log(String.format("User %s got new role: %s", email, role));
         request.setAttribute(USER, userService.getByEmail(email));
         return getActionToRedirect(SEARCH_USER_ACTION, EMAIL, email);
     }

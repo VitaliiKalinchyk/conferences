@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.*;
 import org.slf4j.*;
+import org.slf4j.event.Level;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -78,8 +79,7 @@ public class SignUpAction implements Action {
             request.getSession().setAttribute(MESSAGE, SUCCEED_REGISTER);
             request.getSession().setAttribute(EMAIL, user.getEmail());
             sendEmail(user, getURL(request));
-            String info = "New user registered - " + user.getEmail();
-            logger.info(info);
+            logger.atLevel(Level.INFO).log(String.format("New user registered - %s", user.getEmail()));
             return getActionToRedirect(SIGN_IN_ACTION);
         } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException | CaptchaException e) {
             request.getSession().setAttribute(USER, user);
