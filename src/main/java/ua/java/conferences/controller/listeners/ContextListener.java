@@ -1,8 +1,12 @@
 package ua.java.conferences.controller.listeners;
 
+import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 import jakarta.servlet.*;
 import org.slf4j.*;
 import ua.java.conferences.controller.context.AppContext;
+
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * ContextListener  class.
@@ -24,5 +28,23 @@ public class ContextListener implements ServletContextListener {
     public void contextInitialized(ServletContextEvent sce) {
         AppContext.createAppContext(sce.getServletContext(), PROPERTIES_FILE);
         logger.info("AppContext is set");
+    }
+
+    /**
+     * closes mysql thread and deregister all drivers
+     */
+    @Override
+    public void contextDestroyed(ServletContextEvent sce) {
+        AbandonedConnectionCleanupThread.checkedShutdown();
+        deregisterDrivers();
+    }
+
+    private static void deregisterDrivers() {
+        DriverManager.drivers().forEach(driver -> {try {
+            DriverManager.deregisterDriver(driver);
+        } catch (SQLException e) {
+            logger.warn(String.format("Couldn't deregister %s", driver), e);
+        }
+        });
     }
 }
