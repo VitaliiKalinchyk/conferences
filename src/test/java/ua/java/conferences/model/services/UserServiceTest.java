@@ -450,7 +450,7 @@ class UserServiceTest {
     void testResetPassword() throws DAOException, ServiceException {
         doNothing().when(userDAO).updatePassword(isA(User.class));
         String password = userService.changePassword(ID_VALUE);
-        assertEquals(8, password.length());
+        assertEquals(20, password.length());
         assertEquals("1aA", password.substring(0,3));
     }
 

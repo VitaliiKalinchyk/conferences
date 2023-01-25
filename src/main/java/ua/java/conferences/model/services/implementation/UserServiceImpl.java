@@ -1,7 +1,6 @@
 package ua.java.conferences.model.services.implementation;
 
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.model.dao.UserDAO;
 import ua.java.conferences.model.entities.User;
@@ -10,6 +9,7 @@ import ua.java.conferences.exceptions.*;
 import ua.java.conferences.model.services.UserService;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 import static ua.java.conferences.exceptions.constants.Message.*;
 import static ua.java.conferences.utils.ConvertorUtil.*;
@@ -27,6 +27,8 @@ import static ua.java.conferences.utils.QueryBuilderUtil.*;
 public class UserServiceImpl implements UserService {
     /** Contains userDAO field to work with UserDAO */
     private final UserDAO userDAO;
+    private static final String SYMBOLS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    private final Random random = new Random();
 
     /**
      * Gets UserDTO from action and calls DAO to add relevant entity. Validate user's fields, passwords.
@@ -381,6 +383,10 @@ public class UserServiceImpl implements UserService {
      * @return generated password
      */
     private String generatePassword() {
-        return "1aA" + RandomStringUtils.randomAlphanumeric(5);
+        return IntStream.generate(() -> random.nextInt(SYMBOLS.length()))
+                .map(SYMBOLS::charAt)
+                .limit(17)
+                .collect(() -> new StringBuilder("1aA"), StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
     }
 }
