@@ -239,7 +239,7 @@ class ReportDAOTest {
     void testSetSpeakerForReport() throws SQLException {
         DataSource dataSource = mock(DataSource.class);
         ReportDAO reportDAO = new MysqlReportDAO(dataSource);
-        try (PreparedStatement ignored = prepareMocks(dataSource)) {
+        try (PreparedStatement ignored = prepareUpdateQuery(dataSource)) {
             assertDoesNotThrow(() -> reportDAO.setSpeaker(ID_VALUE, ID_VALUE));
         }
     }
@@ -280,6 +280,18 @@ class ReportDAOTest {
         when(preparedStatement.execute()).thenReturn(true);
         return preparedStatement;
     }
+
+    private PreparedStatement prepareUpdateQuery(DataSource dataSource) throws SQLException {
+        Connection connection = mock(Connection.class);
+        PreparedStatement preparedStatement = mock(PreparedStatement.class);
+        when(dataSource.getConnection()).thenReturn(connection);
+        when(connection.prepareStatement(isA(String.class))).thenReturn(preparedStatement);
+        doNothing().when(preparedStatement).setLong(isA(int.class), isA(long.class));
+        when(preparedStatement.executeUpdate()).thenReturn(1);
+        return preparedStatement;
+    }
+
+
 
     private static void prepareResultSet(ResultSet resultSet) throws SQLException {
         when(resultSet.next()).thenReturn(true).thenReturn(false);

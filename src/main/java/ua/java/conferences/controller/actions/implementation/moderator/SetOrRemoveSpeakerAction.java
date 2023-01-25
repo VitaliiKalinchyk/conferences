@@ -45,19 +45,23 @@ public class SetOrRemoveSpeakerAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         String reportId = request.getParameter(REPORT_ID);
         setOrRemove(request, Long.parseLong(reportId));
-        request.getSession().setAttribute(MESSAGE, SUCCEED_UPDATE);
         return getActionToRedirect(VIEW_REPORT_ACTION, REPORT_ID, reportId);
     }
 
     private void setOrRemove(HttpServletRequest request, long reportId) throws ServiceException {
         String todo = request.getParameter(TODO);
-        if (todo.equals(REMOVE)) {
+        if (todo.equals(SET)) {
+            if (reportService.setSpeaker(reportId, Long.parseLong(request.getParameter(USER_ID)))) {
+                sendEmail(MESSAGE_SET_SPEAKER, String.valueOf(reportId), null);
+            } else {
+                request.getSession().setAttribute(ERROR, FAIL_SET_SPEAKER);
+                return;
+            }
+        } else if (todo.equals(REMOVE)) {
             reportService.deleteSpeaker(reportId);
             sendEmail(MESSAGE_REMOVE_SPEAKER, String.valueOf(reportId), request);
-        } else if (todo.equals(SET)) {
-            reportService.setSpeaker(reportId, Long.parseLong(request.getParameter(USER_ID)));
-            sendEmail(MESSAGE_SET_SPEAKER, String.valueOf(reportId), null);
         }
+        request.getSession().setAttribute(MESSAGE, SUCCEED_UPDATE);
     }
 
     private void sendEmail(String message, String reportId, HttpServletRequest request) throws ServiceException {

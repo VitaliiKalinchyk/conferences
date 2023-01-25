@@ -29,13 +29,27 @@ class SetOrRemoveSpeakerActionTest {
         MyRequest myRequest = new MyRequest(request);
         when(appContext.getReportService()).thenReturn(reportService);
         when(appContext.getEmailSender()).thenReturn(emailSender);
-        doNothing().when(reportService).setSpeaker(isA(long.class), isA(long.class));
+        when(reportService.setSpeaker(isA(long.class), isA(long.class))).thenReturn(true);
         when(reportService.getById(ONE)).thenReturn(getReportDTO());
         doNothing().when(emailSender).send(isA(String.class), isA(String.class), isA(String.class));
         String path = new SetOrRemoveSpeakerAction(appContext).execute(myRequest, response);
 
         assertEquals(getActionToRedirect(VIEW_REPORT_ACTION, REPORT_ID, ONE), path);
         assertEquals(SUCCEED_UPDATE, myRequest.getSession().getAttribute(MESSAGE));
+    }
+
+    @Test
+    void testExecuteSetSpeakerAlreadySet() throws ServiceException {
+        setRequestSetSpeaker();
+        MyRequest myRequest = new MyRequest(request);
+        when(appContext.getReportService()).thenReturn(reportService);
+        when(appContext.getEmailSender()).thenReturn(emailSender);
+        when(reportService.setSpeaker(isA(long.class), isA(long.class))).thenReturn(false);
+        when(reportService.getById(ONE)).thenReturn(getReportDTO());
+        String path = new SetOrRemoveSpeakerAction(appContext).execute(myRequest, response);
+
+        assertEquals(getActionToRedirect(VIEW_REPORT_ACTION, REPORT_ID, ONE), path);
+        assertEquals(FAIL_SET_SPEAKER, myRequest.getSession().getAttribute(ERROR));
     }
 
     @Test

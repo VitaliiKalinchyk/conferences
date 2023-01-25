@@ -31,7 +31,7 @@ class SetOrRemoveSpeakerBySpeakerActionTest {
         when(appContext.getReportService()).thenReturn(reportService);
         when(appContext.getUserService()).thenReturn(userService);
         when(appContext.getEmailSender()).thenReturn(emailSender);
-        doNothing().when(reportService).setSpeaker(isA(long.class), isA(long.class));
+        when(reportService.setSpeaker(isA(long.class), isA(long.class))).thenReturn(true);
         doNothing().when(emailSender).send(isA(String.class), isA(String.class), isA(String.class));
         when(userService.getModerators()).thenReturn(getUserDTOs());
         String path = new SetOrRemoveSpeakerBySpeakerAction(appContext).execute(myRequest, response);

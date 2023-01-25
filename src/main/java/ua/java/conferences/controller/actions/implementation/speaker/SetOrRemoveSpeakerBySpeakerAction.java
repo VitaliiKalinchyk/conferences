@@ -57,8 +57,9 @@ public class SetOrRemoveSpeakerBySpeakerAction implements Action {
         String todo = request.getParameter(TODO);
         if(todo.equals(SET)) {
             long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
-            reportService.setSpeaker(reportId, speakerId);
-            sendEmail(request, MESSAGE_SET_SPEAKER_BY_SPEAKER);
+            if (reportService.setSpeaker(reportId, speakerId)) {
+                sendEmail(request, MESSAGE_SET_SPEAKER_BY_SPEAKER);
+            }
         } else if (todo.equals(REMOVE)) {
             reportService.deleteSpeaker(reportId);
             sendEmail(request, MESSAGE_REMOVE_SPEAKER_BY_SPEAKER);

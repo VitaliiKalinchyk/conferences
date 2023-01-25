@@ -14,6 +14,7 @@ public final class ParameterValues {
     public static final String SUCCEED_ADD = "succeed.add";
     public static final String SUCCEED_UPDATE = "succeed.update";
     public static final String SUCCEED_DELETE = "succeed.delete";
+    public static final String FAIL_SET_SPEAKER = "fail.set.speaker";
 
     /** Some common errors for user */
     public static final String ACCESS_DENIED = "access.denied";

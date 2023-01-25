@@ -143,9 +143,9 @@ class ReportServiceTest {
     }
 
     @Test
-    void testSetSpeaker() throws DAOException {
-        doNothing().when(reportDAO).setSpeaker(isA(long.class), isA(long.class));
-        assertDoesNotThrow(() -> reportService.setSpeaker(ID_VALUE, ID_VALUE));
+    void testSetSpeaker() throws DAOException, ServiceException {
+        when(reportDAO.setSpeaker(isA(long.class), isA(long.class))).thenReturn(true);
+        assertTrue(reportService.setSpeaker(ID_VALUE, ID_VALUE));
     }
 
     @Test

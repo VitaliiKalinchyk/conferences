@@ -138,9 +138,9 @@ public class ReportServiceImpl implements ReportService {
      * @throws ServiceException - may wrap DAOException
      */
     @Override
-    public void setSpeaker(long reportId, long speakerId) throws ServiceException {
+    public boolean setSpeaker(long reportId, long speakerId) throws ServiceException {
         try {
-            reportDAO.setSpeaker(reportId, speakerId);
+            return reportDAO.setSpeaker(reportId, speakerId);
         } catch (DAOException e) {
             throw new ServiceException(e);
         }

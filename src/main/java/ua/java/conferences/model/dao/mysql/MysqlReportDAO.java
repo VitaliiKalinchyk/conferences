@@ -177,13 +177,14 @@ public class MysqlReportDAO implements ReportDAO {
      * @throws DAOException is wrapper for SQLException
      */
     @Override
-    public void setSpeaker(long reportId, long speakerId) throws DAOException {
+    public boolean setSpeaker(long reportId, long speakerId) throws DAOException {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SET_SPEAKER)) {
+             PreparedStatement preparedStatement =
+                     connection.prepareStatement(SET_SPEAKER)) {
             int k = 0;
             preparedStatement.setLong(++k, speakerId);
             preparedStatement.setLong(++k, reportId);
-            preparedStatement.execute();
+            return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
             throw new DAOException(e);
         }
@@ -197,9 +198,8 @@ public class MysqlReportDAO implements ReportDAO {
     @Override
     public void deleteSpeaker(long reportId) throws DAOException {
         try (Connection connection = dataSource.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(SET_SPEAKER)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(DELETE_SPEAKER)) {
             int k = 0;
-            preparedStatement.setNull(++k, NULL);
             preparedStatement.setLong(++k, reportId);
             preparedStatement.execute();
         } catch (SQLException e) {

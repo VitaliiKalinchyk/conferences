@@ -36,7 +36,7 @@ public interface ReportDAO extends EntityDAO<Report> {
      * @param speakerId - value of user id
      * @throws DAOException is wrapper for SQLException
      */
-    void setSpeaker(long reportId, long speakerId) throws DAOException;
+    boolean setSpeaker(long reportId, long speakerId) throws DAOException;
 
     /**
      * Set user id as null for report

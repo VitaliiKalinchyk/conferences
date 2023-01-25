@@ -43,7 +43,7 @@ public interface ReportService extends Service<ReportDTO> {
      * @param speakerId - speaker id
      * @throws ServiceException - may wrap DAOException or be thrown by another mistakes
      */
-    void setSpeaker(long reportId, long speakerId) throws ServiceException;
+    boolean setSpeaker(long reportId, long speakerId) throws ServiceException;
 
     /**
      * Calls DAO to delete speaker from report

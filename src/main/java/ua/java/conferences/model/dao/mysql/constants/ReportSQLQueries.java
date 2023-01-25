@@ -17,7 +17,8 @@ public final class ReportSQLQueries {
     public static final String GET_SPEAKERS_REPORTS = GET_REPORTS + " WHERE report.user_id=? AND event.date > now()";
     public static final String GET_EVENTS_REPORTS = GET_REPORTS + " WHERE event_id=?";
     public static final String EDIT_REPORT = "UPDATE report SET topic=? WHERE id=?";
-    public static final String SET_SPEAKER = "UPDATE report SET user_id=? WHERE id=?";
+    public static final String SET_SPEAKER = "UPDATE report SET user_id=? WHERE user_id IS NULL AND id=?";
+    public static final String DELETE_SPEAKER = "UPDATE report SET user_id=NULL WHERE id=?";
     public static final String DELETE_REPORT = "DELETE FROM report WHERE id=?";
 
     private ReportSQLQueries() {}
