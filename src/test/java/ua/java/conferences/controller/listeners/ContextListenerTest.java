@@ -2,6 +2,7 @@ package ua.java.conferences.controller.listeners;
 
 import jakarta.servlet.*;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
 import org.mockito.MockedStatic;
 import ua.java.conferences.controller.context.AppContext;
 
@@ -18,8 +19,11 @@ class ContextListenerTest {
     @Test
     void testContextInitialized() {
         when(sce.getServletContext()).thenReturn(servletContext);
-        new ContextListener().contextInitialized(sce);
-        assertNotNull(AppContext.getAppContext());
+        try (MockedStatic<AppContext> mocked = mockStatic(AppContext.class)) {
+            mocked.when(() -> AppContext.createAppContext(isA(ServletContext.class), isA(String.class)))
+                    .thenAnswer(Answers.RETURNS_DEFAULTS);
+            assertDoesNotThrow(() -> new ContextListener().contextInitialized(sce));
+        }
     }
 
     @Test

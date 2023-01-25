@@ -1,38 +1,36 @@
 package ua.java.conferences.controller.actions;
 
-import jakarta.servlet.ServletContext;
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
 import ua.java.conferences.controller.actions.implementation.base.*;
 import ua.java.conferences.controller.context.AppContext;
 
-import java.net.MalformedURLException;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static ua.java.conferences.controller.actions.ActionFactory.*;
 import static ua.java.conferences.controller.actions.constants.ActionNames.SIGN_IN_ACTION;
-import static ua.java.conferences.controller.actions.util.Util.FONT;
 
 class ActionFactoryTest {
-    private static final String PROPERTIES_FILE = "context.properties";
-    private final ServletContext servletContext = mock(ServletContext.class);
+    private final AppContext appContext = mock(AppContext.class);
 
     @Test
-    void testCreateAction() throws MalformedURLException {
-        when(servletContext.getResource(FONT)).thenThrow(MalformedURLException.class);
-        AppContext.createAppContext(servletContext, PROPERTIES_FILE);
-        ActionFactory actionFactory = getActionFactory();
-        Action action = actionFactory.createAction(SIGN_IN_ACTION);
-        assertInstanceOf(SignInAction.class, action);
+    void testCreateAction() {
+        try (MockedStatic<AppContext> mocked = mockStatic(AppContext.class)) {
+            mocked.when(AppContext::getAppContext).thenReturn(appContext);
+            ActionFactory actionFactory = getActionFactory();
+            Action action = actionFactory.createAction(SIGN_IN_ACTION);
+            assertInstanceOf(SignInAction.class, action);
+        }
+
     }
 
     @Test
-    void testDefaultAction() throws MalformedURLException {
-        when(servletContext.getResource(FONT)).thenThrow(MalformedURLException.class);
-        AppContext.createAppContext(servletContext, PROPERTIES_FILE);
-        ActionFactory actionFactory = getActionFactory();
-        Action action = actionFactory.createAction("wrongName");
-        assertInstanceOf(DefaultAction.class, action);
+    void testDefaultAction() {
+        try (MockedStatic<AppContext> mocked = mockStatic(AppContext.class)) {
+            mocked.when(AppContext::getAppContext).thenReturn(appContext);
+            ActionFactory actionFactory = getActionFactory();
+            Action action = actionFactory.createAction("wrongName");
+            assertInstanceOf(DefaultAction.class, action);
+        }
     }
 }
