@@ -5,12 +5,15 @@ import static org.mockito.Mockito.*;
 
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
+import org.mockito.*;
+import org.mockito.stubbing.*;
 import ua.java.conferences.model.dao.UserDAO;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.model.entities.User;
 import ua.java.conferences.model.entities.role.Role;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.model.services.implementation.UserServiceImpl;
+import ua.java.conferences.utils.*;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -443,7 +446,25 @@ class UserServiceTest {
         User testUser = getTestUser();
         testUser.setPassword(encode(PASSWORD_VALUE));
         when(userDAO.getById(ONE)).thenReturn(Optional.of(testUser));
-        assertDoesNotThrow(() -> userService.changePassword(ONE, PASSWORD_VALUE, PASSWORD_VALUE, PASSWORD_VALUE));
+        try (MockedStatic<ValidatorUtil> validator = mockStatic(ValidatorUtil.class)) {
+            validator.when(() -> ValidatorUtil.validatePassword(anyString()))
+                    .thenAnswer((Answer<Void>) invocation -> null);
+            assertDoesNotThrow(() -> userService.changePassword(ONE, PASSWORD_VALUE, PASSWORD_VALUE, PASSWORD_VALUE));
+        }
+    }
+
+    @Test
+    void testUpdatePasswordException() throws DAOException {
+        doNothing().when(userDAO).updatePassword(isA(User.class));
+        User testUser = getTestUser();
+        testUser.setPassword(encode(PASSWORD_VALUE));
+        when(userDAO.getById(ONE)).thenReturn(Optional.of(testUser));
+        try (MockedStatic<ValidatorUtil> validator = mockStatic(ValidatorUtil.class)) {
+            validator.when(() -> ValidatorUtil.validatePassword(anyString()))
+                    .thenThrow(IncorrectFormatException.class);
+            assertThrows(IncorrectFormatException.class,
+                    () -> userService.changePassword(ONE, PASSWORD_VALUE, PASSWORD_VALUE, PASSWORD_VALUE));
+        }
     }
 
     @Test
