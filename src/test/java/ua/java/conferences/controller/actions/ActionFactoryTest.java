@@ -21,7 +21,6 @@ class ActionFactoryTest {
             Action action = actionFactory.createAction(SIGN_IN_ACTION);
             assertInstanceOf(SignInAction.class, action);
         }
-
     }
 
     @Test
