@@ -32,7 +32,19 @@ class UserServiceTest {
     void testCorrectRegistration() throws DAOException {
        doNothing().when(userDAO).add(isA(User.class));
        UserDTO userDTO = getTestUserDTO();
-       assertDoesNotThrow(() -> userService.add(userDTO, PASSWORD_VALUE, PASSWORD_VALUE));
+        try (MockedStatic<ValidatorUtil> validator = mockStatic(ValidatorUtil.class);
+             MockedStatic<ConvertorUtil> convertor = mockStatic(ConvertorUtil.class);
+             MockedStatic<PasswordHashUtil> passwordHash = mockStatic(PasswordHashUtil.class)) {
+            validator.when(() -> ValidatorUtil.validateEmail(anyString())).thenAnswer(invocationOnMock -> null);
+            validator.when(() -> ValidatorUtil.validateName(anyString(), anyString())).thenAnswer(invocationOnMock -> null);
+            validator.when(() -> ValidatorUtil.validatePassword(anyString())).thenAnswer(invocationOnMock -> null);
+            convertor.when(() -> ConvertorUtil.convertDTOToUser(userDTO)).thenReturn(getTestUser());
+            passwordHash.when(() -> PasswordHashUtil.encode(anyString())).thenReturn(PASSWORD_VALUE);
+            assertDoesNotThrow(() -> userService.add(userDTO, PASSWORD_VALUE, PASSWORD_VALUE));
+            validator.verify(() -> ValidatorUtil.validateEmail(anyString()));
+            validator.verify(() -> ValidatorUtil.validateName(anyString(), anyString()), times(2));
+            validator.verify(() -> ValidatorUtil.validatePassword(anyString()));
+       }
     }
 
     @ParameterizedTest
