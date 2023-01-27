@@ -6,7 +6,6 @@ import static org.mockito.Mockito.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 import org.mockito.*;
-import org.mockito.stubbing.*;
 import ua.java.conferences.model.dao.UserDAO;
 import ua.java.conferences.dto.UserDTO;
 import ua.java.conferences.model.entities.User;
@@ -448,7 +447,7 @@ class UserServiceTest {
         when(userDAO.getById(ONE)).thenReturn(Optional.of(testUser));
         try (MockedStatic<ValidatorUtil> validator = mockStatic(ValidatorUtil.class)) {
             validator.when(() -> ValidatorUtil.validatePassword(anyString()))
-                    .thenAnswer((Answer<Void>) invocation -> null);
+                    .thenAnswer(invocation -> null);
             assertDoesNotThrow(() -> userService.changePassword(ONE, PASSWORD_VALUE, PASSWORD_VALUE, PASSWORD_VALUE));
         }
     }
