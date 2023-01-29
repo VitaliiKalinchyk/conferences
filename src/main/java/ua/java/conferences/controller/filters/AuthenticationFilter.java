@@ -1,7 +1,9 @@
 package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
+import jakarta.servlet.http.HttpFilter;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.*;
 
 import java.io.IOException;
@@ -17,7 +19,7 @@ import static ua.java.conferences.controller.filters.domain.Domain.getDomain;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
-public class AuthenticationFilter implements Filter {
+public class AuthenticationFilter extends HttpFilter {
     private static final Logger logger = LoggerFactory.getLogger(AuthenticationFilter.class);
 
     /**
@@ -27,13 +29,13 @@ public class AuthenticationFilter implements Filter {
      * @param chain passed by application
      */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String servletPath = httpRequest.getServletPath();
-        String action = httpRequest.getParameter(ACTION);
-        if (isNoLoggedUser(httpRequest) && isAccessDenied(servletPath, action)) {
+    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        String servletPath = request.getServletPath();
+        String action = request.getParameter(ACTION);
+        if (isNoLoggedUser(request) && isAccessDenied(servletPath, action)) {
             logger.info("Anonymous user tried to access forbidden page");
-            httpRequest.setAttribute(MESSAGE, ACCESS_DENIED);
+            request.setAttribute(MESSAGE, ACCESS_DENIED);
             request.getRequestDispatcher(SIGN_IN_PAGE).forward(request, response);
         } else {
             chain.doFilter(request, response);

@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
@@ -10,7 +11,7 @@ import java.io.IOException;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
-public class EncodingFilter implements Filter {
+public class EncodingFilter extends HttpFilter {
     private String encoding;
 
     /**
@@ -29,7 +30,7 @@ public class EncodingFilter implements Filter {
      * @param chain passed by application
      */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    protected void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
         request.setCharacterEncoding(encoding);
         chain.doFilter(request, response);

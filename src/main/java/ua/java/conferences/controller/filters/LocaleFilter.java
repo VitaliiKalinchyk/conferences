@@ -15,7 +15,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.LOCALE
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
-public class LocaleFilter implements Filter {
+public class LocaleFilter  extends HttpFilter {
     private static final String REFERER = "referer";
     private String defaultLocale;
 
@@ -37,19 +37,18 @@ public class LocaleFilter implements Filter {
      * @param response passed by application
      * @param chain passed by application
      */
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    @Override
+    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        HttpServletResponse httpResponse = (HttpServletResponse) response;
-        String locale = httpRequest.getParameter(LOCALE);
+        String locale = request.getParameter(LOCALE);
         if (isNotBlank(locale)) {
-            httpRequest.getSession().setAttribute(LOCALE, locale);
-            httpResponse.addCookie(new Cookie(LOCALE, locale));
-            httpResponse.sendRedirect(httpRequest.getHeader(REFERER));
+            request.getSession().setAttribute(LOCALE, locale);
+            response.addCookie(new Cookie(LOCALE, locale));
+            response.sendRedirect(request.getHeader(REFERER));
         } else {
-            String sessionLocale = (String) httpRequest.getSession().getAttribute(LOCALE);
+            String sessionLocale = (String) request.getSession().getAttribute(LOCALE);
             if (isBlank(sessionLocale)) {
-                httpRequest.getSession().setAttribute(LOCALE, getCookiesLocale(httpRequest));
+                request.getSession().setAttribute(LOCALE, getCookiesLocale(request));
             }
             chain.doFilter(request, response);
         }
@@ -57,11 +56,11 @@ public class LocaleFilter implements Filter {
 
     /**
      * Obtains locale value. Checks if Cookies are present, if so then checks if Cookie locale is present.
-     * @param httpRequest to get Cookies
+     * @param request to get Cookies
      * @return either cookie locale or default locale
      */
-    private String getCookiesLocale(HttpServletRequest httpRequest) {
-        return Stream.ofNullable(httpRequest.getCookies())
+    private String getCookiesLocale(HttpServletRequest request) {
+        return Stream.ofNullable(request.getCookies())
                 .flatMap(Arrays::stream)
                 .filter(cookie -> cookie.getName().equals(LOCALE))
                 .map(Cookie::getValue)

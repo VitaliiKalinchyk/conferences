@@ -1,7 +1,7 @@
 package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
-import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
@@ -16,7 +16,7 @@ import static ua.java.conferences.controller.filters.domain.Domain.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
-public class AuthorizationFilter implements Filter {
+public class AuthorizationFilter extends HttpFilter {
 
     /**
      * Checks for role in session and then checks if user has access to page or action.
@@ -25,14 +25,13 @@ public class AuthorizationFilter implements Filter {
      * @param chain passed by application
      */
     @Override
-    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+    public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws IOException, ServletException {
-        HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String role = (String) httpRequest.getSession().getAttribute(ROLE);
-        String servletPath = httpRequest.getServletPath();
-        String action = httpRequest.getParameter(ACTION);
+        String role = (String) request.getSession().getAttribute(ROLE);
+        String servletPath = request.getServletPath();
+        String action = request.getParameter(ACTION);
         if (role != null && isAccessDenied(servletPath, action, role)) {
-            httpRequest.setAttribute(MESSAGE, ACCESS_DENIED);
+            request.setAttribute(MESSAGE, ACCESS_DENIED);
             request.getRequestDispatcher(SIGN_IN_PAGE).forward(request, response);
         } else {
             chain.doFilter(request, response);
