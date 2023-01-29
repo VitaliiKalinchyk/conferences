@@ -1,9 +1,7 @@
 package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
-import jakarta.servlet.http.HttpFilter;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.*;
 import org.slf4j.*;
 
 import java.io.IOException;
