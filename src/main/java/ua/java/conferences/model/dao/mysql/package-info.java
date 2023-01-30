@@ -1,5 +1,5 @@
 /**
- * This package contains DAD implementation for MySQL database.
+ * This package contains DAO implementation for MySQL database.
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
