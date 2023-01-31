@@ -1,4 +1,3 @@
-ua.java.conferences
 ua.java.conferences.controller
 ua.java.conferences.controller.actions
 ua.java.conferences.controller.actions.constants
@@ -7,7 +6,6 @@ ua.java.conferences.controller.actions.implementation.base
 ua.java.conferences.controller.actions.implementation.moderator
 ua.java.conferences.controller.actions.implementation.speaker
 ua.java.conferences.controller.actions.implementation.visitor
-ua.java.conferences.controller.actions.util
 ua.java.conferences.controller.context
 ua.java.conferences.controller.filters
 ua.java.conferences.controller.filters.domain
