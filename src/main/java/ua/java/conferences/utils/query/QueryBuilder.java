@@ -136,6 +136,8 @@ public abstract class QueryBuilder {
 
     /**
      * Should be implemented in subclasses
+     *
+     * @param sortField - field to sort entities
      * @return sort field if it's suitable or default
      */
     protected abstract String checkSortField(String sortField);

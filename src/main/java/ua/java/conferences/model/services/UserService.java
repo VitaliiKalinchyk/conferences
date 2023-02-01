@@ -122,11 +122,13 @@ public interface UserService extends Service<UserDTO> {
      */
     void cancelRegistration(long userId, String eventIdString) throws ServiceException;
 
+
     /**
      * Calls DAO to check if user registered for event
      * @param userId - can be long cause be gotten from session
      * @param eventIdString - id as a String to validate and convert to long
      * @throws ServiceException - may wrap DAOException or be thrown by another mistakes
+     * @return true if user registered for event
      */
     boolean isRegistered(long userId, String eventIdString) throws ServiceException;
 }

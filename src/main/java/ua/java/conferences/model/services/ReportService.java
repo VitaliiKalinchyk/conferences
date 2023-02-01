@@ -41,6 +41,7 @@ public interface ReportService extends Service<ReportDTO> {
      * Calls DAO to set speaker to report
      * @param reportId - report id
      * @param speakerId - speaker id
+     * @return true if it set new speaker
      * @throws ServiceException - may wrap DAOException or be thrown by another mistakes
      */
     boolean setSpeaker(long reportId, long speakerId) throws ServiceException;

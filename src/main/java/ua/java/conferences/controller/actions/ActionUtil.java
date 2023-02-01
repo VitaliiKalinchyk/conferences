@@ -40,6 +40,7 @@ public class ActionUtil {
     /**
      * Transfers sessions attributes to request. Delete then
      * @param request passed by action
+     * @param attributeName - name of attribute to transfer from session to request
      */
     public static void transferEventDTOFromSessionToRequest(HttpServletRequest request, String attributeName) {
         EventDTO event = (EventDTO) request.getSession().getAttribute(EVENT);
@@ -52,6 +53,7 @@ public class ActionUtil {
     /**
      * Transfers sessions attributes to request. Delete then
      * @param request passed by action
+     * @param attributeName - name of attribute to transfer from session to request
      */
     public static void transferStringFromSessionToRequest(HttpServletRequest request, String attributeName) {
         String attributeValue = (String) request.getSession().getAttribute(attributeName);

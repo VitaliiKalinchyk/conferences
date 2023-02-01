@@ -83,6 +83,7 @@ public interface UserDAO extends EntityDAO<User> {
      * Checks if record exists in user_has_event table
      * @param userId - value of user id
      * @param eventId - value of event id
+     * @return true id user registered for event
      * @throws DAOException is wrapper for SQLException
      */
     boolean isRegistered(long userId, long eventId) throws DAOException;
