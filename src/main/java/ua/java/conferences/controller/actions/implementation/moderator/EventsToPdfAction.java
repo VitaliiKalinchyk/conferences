@@ -1,7 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.*;
-import org.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.dto.EventDTO;
@@ -24,8 +24,8 @@ import static ua.java.conferences.utils.QueryBuilderUtil.eventQueryBuilder;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class EventsToPdfAction implements Action {
-    private static final Logger logger = LoggerFactory.getLogger(EventsToPdfAction.class);
     private final EventService eventService;
     private final PdfUtil pdfUtil;
 
@@ -77,8 +77,9 @@ public class EventsToPdfAction implements Action {
         try (OutputStream outputStream = response.getOutputStream()) {
             output.writeTo(outputStream);
             outputStream.flush();
+            log.info("Event list was downloaded");
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(String.format("Couldn't set event list to download because of %s", e.getMessage()));
         }
     }
 }

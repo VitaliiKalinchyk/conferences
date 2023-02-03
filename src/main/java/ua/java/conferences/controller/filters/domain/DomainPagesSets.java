@@ -1,6 +1,8 @@
 package ua.java.conferences.controller.filters.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.*;
 
@@ -12,9 +14,8 @@ import static ua.java.conferences.controller.actions.constants.Pages.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DomainPagesSets {
-    private DomainPagesSets() {}
-
     @Getter private static final Set<String> anonymousUserPages = new HashSet<>();
     private static final Set<String> loggedUserPages = new HashSet<>();
     @Getter private static final Set<String> visitorPages = new HashSet<>();

@@ -2,7 +2,7 @@ package ua.java.conferences.controller.listeners;
 
 import com.mysql.cj.jdbc.AbandonedConnectionCleanupThread;
 import jakarta.servlet.*;
-import org.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 
 import java.sql.DriverManager;
@@ -14,9 +14,8 @@ import java.sql.SQLException;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class ContextListener implements ServletContextListener {
-    private static final Logger logger = LoggerFactory.getLogger(ContextListener.class);
-
     /** Name of properties file to configure DataSource, EmailSender and Captcha */
     private static final String PROPERTIES_FILE = "context.properties";
 
@@ -27,7 +26,8 @@ public class ContextListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         AppContext.createAppContext(sce.getServletContext(), PROPERTIES_FILE);
-        logger.info("AppContext is set");
+        log.info("The application has started");
+        log.info("AppContext is set");
     }
 
     /**
@@ -37,13 +37,14 @@ public class ContextListener implements ServletContextListener {
     public void contextDestroyed(ServletContextEvent sce) {
         AbandonedConnectionCleanupThread.checkedShutdown();
         deregisterDrivers();
+        log.info("The application has stopped working");
     }
 
     private static void deregisterDrivers() {
         DriverManager.drivers().forEach(driver -> {try {
             DriverManager.deregisterDriver(driver);
         } catch (SQLException e) {
-            logger.warn(String.format("Couldn't deregister %s", driver), e);
+            log.warn(String.format("Couldn't deregister %s", driver), e);
         }
         });
     }

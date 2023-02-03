@@ -1,11 +1,14 @@
 package ua.java.conferences.exceptions.constants;
 
+import lombok.*;
+
 /**
  * Contains messages for all user-defined exceptions
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Message {
     public static final String ENTER_CORRECT_EMAIL = "error.email.format";
     public static final String ENTER_CORRECT_PASSWORD = "error.pass.format";
@@ -24,6 +27,4 @@ public class Message {
     public static final String NO_REPORT = "error.report.absent";
     public static final String NO_USER = "error.email.absent";
     public static final String CAPTCHA_INVALID = "error.captcha.invalid";
-
-    private Message() {}
 }

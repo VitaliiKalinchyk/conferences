@@ -1,8 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.*;
-import org.slf4j.*;
-import org.slf4j.event.Level;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -24,8 +23,8 @@ import static ua.java.conferences.utils.constants.Email.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class SignUpAction implements Action {
-    private static final Logger logger = LoggerFactory.getLogger(SignUpAction.class);
     private final UserService userService;
     private final EmailSender emailSender;
     private final Captcha captcha;
@@ -79,11 +78,12 @@ public class SignUpAction implements Action {
             request.getSession().setAttribute(MESSAGE, SUCCEED_REGISTER);
             request.getSession().setAttribute(EMAIL, user.getEmail());
             sendEmail(user, getURL(request));
-            logger.atLevel(Level.INFO).log(String.format("New user registered - %s", user.getEmail()));
+            log.info(String.format("New user registered - %s", user.getEmail()));
             return getActionToRedirect(SIGN_IN_ACTION);
         } catch (IncorrectFormatException | PasswordMatchingException | DuplicateEmailException | CaptchaException e) {
             request.getSession().setAttribute(USER, user);
             request.getSession().setAttribute(ERROR, e.getMessage());
+            log.info(String.format("New user couldn't register - %s because of %s", user.getEmail(), e.getMessage()));
             return getActionToRedirect(SIGN_UP_ACTION);
         }
     }

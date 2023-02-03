@@ -1,5 +1,6 @@
 package ua.java.conferences.model.dao.mysql;
 
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.model.dao.UserDAO;
 import ua.java.conferences.model.entities.User;
 import ua.java.conferences.model.entities.role.Role;
@@ -19,6 +20,7 @@ import static ua.java.conferences.model.entities.role.Role.VISITOR;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class MysqlUserDAO implements UserDAO {
     /** An instance of datasource to provide connection to database */
     private final DataSource dataSource;
@@ -39,6 +41,7 @@ public class MysqlUserDAO implements UserDAO {
             setStatementFieldsForAddMethod(user, preparedStatement);
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't add new user %s because of %s", user.getEmail(), e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -62,6 +65,7 @@ public class MysqlUserDAO implements UserDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't find user with id=%d because of %s", userId, e.getMessage()));
             throw new DAOException(e);
         }
         return  Optional.ofNullable(user);
@@ -74,7 +78,7 @@ public class MysqlUserDAO implements UserDAO {
      * @throws DAOException is wrapper for SQLException
      */
     @Override
-    public Optional<User>  getByEmail(String email) throws DAOException {
+    public Optional<User> getByEmail(String email) throws DAOException {
         User user = null;
         try (Connection connection = dataSource.getConnection();
              PreparedStatement preparedStatement = connection.prepareStatement(GET_USER_BY_EMAIL)) {
@@ -86,6 +90,7 @@ public class MysqlUserDAO implements UserDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't find user with email - %s because of %s", email, e.getMessage()));
             throw new DAOException(e);
         }
         return  Optional.ofNullable(user);
@@ -107,6 +112,7 @@ public class MysqlUserDAO implements UserDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't get list of all users because of %s", e.getMessage()));
             throw new DAOException(e);
         }
         return users;
@@ -129,6 +135,7 @@ public class MysqlUserDAO implements UserDAO {
                 }
             }
         }catch (SQLException e) {
+            log.error(String.format("Couldn't get sorted list of users because of %s", e.getMessage()));
             throw new DAOException(e);
         }
         return users;
@@ -155,6 +162,7 @@ public class MysqlUserDAO implements UserDAO {
                 }
             }
         }catch (SQLException e) {
+            log.error(String.format("Couldn't get list of participants of event because of %s", e.getMessage()));
             throw new DAOException(e);
         }
         return users;
@@ -178,6 +186,7 @@ public class MysqlUserDAO implements UserDAO {
                 }
             }
         }catch (SQLException e) {
+            log.error(String.format("Couldn't get number of users because of %s", e.getMessage()));
             throw new DAOException(e);
         }
         return numberOfRecords;
@@ -195,6 +204,7 @@ public class MysqlUserDAO implements UserDAO {
             setStatementFieldsForUpdateMethod(user, preparedStatement);
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't update user %s because of %s", user.getEmail(), e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -213,6 +223,7 @@ public class MysqlUserDAO implements UserDAO {
             preparedStatement.setLong(++k, user.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't update user %s password because of %s", user.getEmail(), e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -232,6 +243,7 @@ public class MysqlUserDAO implements UserDAO {
             preparedStatement.setString(++k, userEmail);
             preparedStatement.execute();
         }catch (SQLException e) {
+            log.error(String.format("Couldn't set user %s role because of %s", userEmail, e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -249,6 +261,7 @@ public class MysqlUserDAO implements UserDAO {
             preparedStatement.setLong(++k, userId);
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't delete user with id=%d because of %s", userId, e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -266,6 +279,7 @@ public class MysqlUserDAO implements UserDAO {
             setIds(userId, eventId, preparedStatement);
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't register for event user with id=%d because of %s", userId, e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -283,6 +297,8 @@ public class MysqlUserDAO implements UserDAO {
             setIds(userId, eventId, preparedStatement);
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't cancel registration for event user with id=%d because of %s",
+                    userId, e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -304,6 +320,8 @@ public class MysqlUserDAO implements UserDAO {
                 }
             }
         }catch (SQLException e) {
+            log.error(String.format("Couldn't check of user with id=%d registered for event because of %s",
+                    userId, e.getMessage()));
             throw new DAOException(e);
         }
         return false;

@@ -1,11 +1,14 @@
 package ua.java.conferences.model.dao.mysql.constants;
 
+import lombok.*;
+
 /**
  * Class that contains all My SQL queries for ReportDAO
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ReportSQLQueries {
     public static final String ADD_REPORT = "INSERT INTO report (topic, event_id, user_id) VALUES (?, ?, ?)";
 
@@ -20,6 +23,4 @@ public final class ReportSQLQueries {
     public static final String SET_SPEAKER = "UPDATE report SET user_id=? WHERE user_id IS NULL AND id=?";
     public static final String DELETE_SPEAKER = "UPDATE report SET user_id=NULL WHERE id=?";
     public static final String DELETE_REPORT = "DELETE FROM report WHERE id=?";
-
-    private ReportSQLQueries() {}
 }

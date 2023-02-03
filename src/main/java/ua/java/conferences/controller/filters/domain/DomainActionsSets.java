@@ -1,6 +1,8 @@
 package ua.java.conferences.controller.filters.domain;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.*;
 
@@ -12,9 +14,8 @@ import static ua.java.conferences.controller.actions.constants.ActionNames.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class DomainActionsSets {
-    private DomainActionsSets() {}
-
     @Getter private static final Set<String> anonymousUserActions = new HashSet<>();
     private static final Set<String> loggedUserActions = new HashSet<>();
     @Getter private static final Set<String> visitorActions = new HashSet<>();

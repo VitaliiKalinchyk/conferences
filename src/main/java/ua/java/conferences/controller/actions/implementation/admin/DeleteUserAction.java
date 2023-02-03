@@ -1,7 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.admin;
 
 import jakarta.servlet.http.*;
-import org.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.exceptions.*;
@@ -19,8 +19,8 @@ import static ua.java.conferences.controller.actions.constants.ParameterValues.*
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class DeleteUserAction implements Action {
-    private static final Logger logger = LoggerFactory.getLogger(DeleteUserAction.class);
     private final UserService userService;
 
     /**
@@ -66,7 +66,7 @@ public class DeleteUserAction implements Action {
             userService.delete(request.getParameter(USER_ID));
             request.getSession().setAttribute(MESSAGE, SUCCEED_DELETE);
         } catch (NoSuchUserException e) {
-            logger.error("Couldn't delete user - no such user");
+            log.info("Couldn't delete user - no such user");
         }
         return getActionToRedirect(DELETE_USER_ACTION);
     }

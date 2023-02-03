@@ -2,6 +2,7 @@ package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
@@ -11,6 +12,7 @@ import java.io.IOException;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class EncodingFilter extends HttpFilter {
     private String encoding;
 
@@ -20,6 +22,7 @@ public class EncodingFilter extends HttpFilter {
      */
     @Override
     public void init(FilterConfig config) {
+        log.info("Default encoding was set");
         encoding = config.getInitParameter("encoding");
     }
 

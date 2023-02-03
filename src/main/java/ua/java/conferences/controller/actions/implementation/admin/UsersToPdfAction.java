@@ -1,7 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.admin;
 
 import jakarta.servlet.http.*;
-import org.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.dto.UserDTO;
@@ -24,8 +24,8 @@ import static ua.java.conferences.utils.QueryBuilderUtil.userQueryBuilder;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class UsersToPdfAction implements Action {
-    private static final Logger logger = LoggerFactory.getLogger(UsersToPdfAction.class);
     private final UserService userService;
     private final PdfUtil pdfUtil;
 
@@ -77,8 +77,9 @@ public class UsersToPdfAction implements Action {
         try (OutputStream outputStream = response.getOutputStream()) {
             output.writeTo(outputStream);
             outputStream.flush();
+            log.info("User list was downloaded");
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.error(String.format("Couldn't set user list to download because of %s", e.getMessage()));
         }
     }
 }

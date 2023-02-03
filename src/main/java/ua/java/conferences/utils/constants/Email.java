@@ -1,11 +1,14 @@
 package ua.java.conferences.utils.constants;
 
+import lombok.*;
+
 /**
  * Contains letter's subjects and bodies
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Email {
     /** For new users only */
     public static final String SUBJECT_GREETINGS = "Welcome to Conference Smart App!";
@@ -148,6 +151,4 @@ public class Email {
             A_HREF + "%s" + "/controller?action=view-report&report-id=%s>here</a>, " +
             DOUBLE_ENTER +
             SIGNATURE;
-
-    private Email() {}
 }

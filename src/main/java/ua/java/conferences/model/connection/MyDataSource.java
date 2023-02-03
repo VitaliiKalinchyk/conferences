@@ -3,6 +3,8 @@ package ua.java.conferences.model.connection;
 import static ua.java.conferences.model.connection.ConnectionConstants.*;
 
 import com.zaxxer.hikari.*;
+import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -13,6 +15,8 @@ import java.util.Properties;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class MyDataSource {
     private static DataSource dataSource;
 
@@ -25,6 +29,7 @@ public class MyDataSource {
         if (dataSource == null) {
             HikariConfig config = getHikariConfig(properties);
             dataSource = new HikariDataSource(config);
+            log.info("Hikari pool instance was created");
         }
         return dataSource;
     }
@@ -36,8 +41,7 @@ public class MyDataSource {
         config.setPassword(properties.getProperty(DB_PASSWORD));
         config.setDriverClassName(properties.getProperty(DRIVER));
         config.setDataSourceProperties(properties);
+        log.info("Hikari pool was configured");
         return config;
     }
-
-    private MyDataSource() {}
 }

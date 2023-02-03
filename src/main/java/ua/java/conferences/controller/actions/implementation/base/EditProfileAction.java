@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -21,6 +22,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class EditProfileAction implements Action {
     private final UserService userService;
 
@@ -73,10 +75,12 @@ public class EditProfileAction implements Action {
         try {
             userService.update(user);
             request.getSession().setAttribute(MESSAGE, SUCCEED_UPDATE);
+            log.info(String.format("%s was successfully changed his profile info", sessionUser.getEmail()));
             updateSessionUser(sessionUser, user);
         } catch (IncorrectFormatException | DuplicateEmailException e) {
             request.getSession().setAttribute(USER, user);
             request.getSession().setAttribute(ERROR, e.getMessage());
+            log.info(String.format("%s couldn't change his profile info", sessionUser.getEmail()));
         }
         return getActionToRedirect(EDIT_PROFILE_ACTION);
     }

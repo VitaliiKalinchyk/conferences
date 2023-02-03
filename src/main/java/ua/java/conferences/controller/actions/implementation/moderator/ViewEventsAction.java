@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.exceptions.*;
@@ -20,6 +21,7 @@ import static ua.java.conferences.utils.QueryBuilderUtil.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class ViewEventsAction implements Action {
     private final EventService eventService;
 
@@ -43,6 +45,7 @@ public class ViewEventsAction implements Action {
         request.setAttribute(EVENTS, eventService.getSorted(queryBuilder.getQuery()));
         int numberOfRecords = eventService.getNumberOfRecords(queryBuilder.getRecordQuery(), MODERATOR);
         paginate(numberOfRecords, request);
+        log.info("List of events was successfully returned");
         return VIEW_EVENTS_PAGE;
     }
 

@@ -1,6 +1,7 @@
 package ua.java.conferences.utils;
 
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.*;
 
 import static ua.java.conferences.controller.actions.constants.Parameters.*;
 
@@ -10,6 +11,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PaginationUtil {
 
     /**
@@ -49,6 +51,4 @@ public final class PaginationUtil {
         }
         return defaultValue;
     }
-
-    private PaginationUtil() {}
 }

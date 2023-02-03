@@ -1,11 +1,14 @@
 package ua.java.conferences.controller.actions.constants;
 
+import lombok.*;
+
 /**
  * This is Parameters class. It contains required parameters and attributes names
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Parameters {
     /** To store logged user in session */
     public static final String LOGGED_USER = "loggedUser";
@@ -71,6 +74,4 @@ public final class Parameters {
 
     /** Parameter and attribute to get or set locale */
     public static final String LOCALE = "locale";
-
-    private Parameters() {}
 }

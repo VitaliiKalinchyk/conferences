@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.visitor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -20,6 +21,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class RegisterOrCancelAction implements Action {
 
     private final UserService userService;
@@ -49,8 +51,10 @@ public class RegisterOrCancelAction implements Action {
     private void registerOrCancel(long userId, String eventId, String todo) throws ServiceException {
         if (todo.equals(REGISTER)) {
             userService.registerForEvent(userId, eventId);
+            log.info(String.format("User with id=%d registered for event with id=%s", userId, eventId));
         } else if (todo.equals(CANCEL)) {
             userService.cancelRegistration(userId, eventId);
+            log.info(String.format("User with id=%d cancel it's registration for event with id=%s", userId, eventId));
         }
     }
 }

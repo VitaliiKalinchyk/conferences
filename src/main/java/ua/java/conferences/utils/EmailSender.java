@@ -2,7 +2,8 @@ package ua.java.conferences.utils;
 
 import javax.mail.*;
 import javax.mail.internet.*;
-import org.slf4j.*;
+
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Properties;
 
@@ -12,8 +13,8 @@ import java.util.Properties;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class EmailSender {
-    private static final Logger logger = LoggerFactory.getLogger(EmailSender.class);
     private final String user;
     private final Session session;
 
@@ -35,8 +36,9 @@ public class EmailSender {
         MimeMessage message = new MimeMessage(session);
         try {
             sendEmail(subject, body, sendTo, message);
+            log.info(String.format("Email was send to %s", sendTo));
         } catch (MessagingException e) {
-            logger.error(e.getMessage());
+            log.error(String.format("Email wasn't send to %s because of %s", sendTo, e.getMessage()));
         }
     }
 

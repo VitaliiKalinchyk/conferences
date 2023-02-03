@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.EventDTO;
@@ -18,6 +19,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class SearchEventAction implements Action {
     private final EventService eventService;
     private final ReportService reportService;
@@ -44,9 +46,11 @@ public class SearchEventAction implements Action {
             EventDTO event = getEventDTO(request);
             request.setAttribute(EVENT, event);
             request.setAttribute(REPORTS, reportService.viewEventsReports(String.valueOf(event.getId())));
+            log.info(String.format("Event %s was successfully found", event.getTitle()));
         } catch (NoSuchEventException | IncorrectFormatException e) {
             request.setAttribute(ERROR, e.getMessage());
             request.setAttribute(TITLE, request.getParameter(TITLE));
+            log.info("Couldn't find an event");
             path = SEARCH_EVENT_PAGE;
         }
         return path;

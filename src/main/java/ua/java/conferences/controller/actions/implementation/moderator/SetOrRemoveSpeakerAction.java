@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.ReportDTO;
@@ -22,6 +23,7 @@ import static ua.java.conferences.utils.constants.Email.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class SetOrRemoveSpeakerAction implements Action {
     private final ReportService reportService;
     private final EmailSender emailSender;
@@ -53,12 +55,15 @@ public class SetOrRemoveSpeakerAction implements Action {
         if (todo.equals(SET)) {
             if (reportService.setSpeaker(reportId, Long.parseLong(request.getParameter(USER_ID)))) {
                 sendEmail(MESSAGE_SET_SPEAKER, String.valueOf(reportId), null);
+                log.info(String.format("For report with id=%d speaker was set",reportId));
             } else {
                 request.getSession().setAttribute(ERROR, FAIL_SET_SPEAKER);
+                log.info(String.format("Couldn't set speaker for report with id=%d",reportId));
                 return;
             }
         } else if (todo.equals(REMOVE)) {
             reportService.deleteSpeaker(reportId);
+            log.info(String.format("Deleted speaker for report with id=%d",reportId));
             sendEmail(MESSAGE_REMOVE_SPEAKER, String.valueOf(reportId), request);
         }
         request.getSession().setAttribute(MESSAGE, SUCCEED_UPDATE);

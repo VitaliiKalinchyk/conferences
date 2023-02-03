@@ -1,5 +1,6 @@
 package ua.java.conferences.model.dao.mysql;
 
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.model.dao.ReportDAO;
 import ua.java.conferences.exceptions.DAOException;
 import ua.java.conferences.model.entities.*;
@@ -19,6 +20,7 @@ import static ua.java.conferences.model.dao.mysql.constants.SQLFields.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class MysqlReportDAO implements ReportDAO {
     /** An instance of datasource to provide connection to database */
     private final DataSource dataSource;
@@ -47,6 +49,7 @@ public class MysqlReportDAO implements ReportDAO {
             }
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't add new report %s because of %s", report.getTopic(), e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -70,6 +73,7 @@ public class MysqlReportDAO implements ReportDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't find report with id=%d because of %s", id, e.getMessage()));
             throw new DAOException(e);
         }
         return Optional.ofNullable(report);
@@ -91,6 +95,7 @@ public class MysqlReportDAO implements ReportDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't get list of all reports because of %s", e.getMessage()));
             throw new DAOException(e);
         }
         return reports;
@@ -130,6 +135,7 @@ public class MysqlReportDAO implements ReportDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't get list of reports because of %s", e.getMessage()));
             throw new DAOException(e);
         }
         return reports;
@@ -149,6 +155,7 @@ public class MysqlReportDAO implements ReportDAO {
             preparedStatement.setLong(++k, report.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't update report %s because of %s", report.getTopic(), e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -166,6 +173,7 @@ public class MysqlReportDAO implements ReportDAO {
             preparedStatement.setLong(++k, id);
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't delete report with id=%d because of %s", id, e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -186,6 +194,7 @@ public class MysqlReportDAO implements ReportDAO {
             preparedStatement.setLong(++k, reportId);
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException e) {
+            log.error(String.format("Couldn't set speaker for report with id=%d because of %s", reportId, e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -203,6 +212,7 @@ public class MysqlReportDAO implements ReportDAO {
             preparedStatement.setLong(++k, reportId);
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't delete speaker for report with id=%d because of %s", reportId, e.getMessage()));
             throw new DAOException(e);
         }
     }

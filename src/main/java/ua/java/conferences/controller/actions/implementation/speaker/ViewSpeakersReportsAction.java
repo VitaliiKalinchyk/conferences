@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.speaker;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -17,6 +18,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class ViewSpeakersReportsAction implements Action {
     private final ReportService reportService;
 
@@ -37,6 +39,7 @@ public class ViewSpeakersReportsAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
         request.setAttribute(REPORTS, reportService.viewSpeakersReports(speakerId));
+        log.info("List of reports was successfully returned");
         return VIEW_SPEAKERS_REPORTS_PAGE;
     }
 }

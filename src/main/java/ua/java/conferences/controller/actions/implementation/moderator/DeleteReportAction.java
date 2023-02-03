@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.exceptions.ServiceException;
@@ -21,6 +22,7 @@ import static ua.java.conferences.utils.constants.Email.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class DeleteReportAction implements Action {
     private final ReportService reportService;
     private final EmailSender emailSender;
@@ -45,6 +47,7 @@ public class DeleteReportAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         reportService.delete(request.getParameter(REPORT_ID));
         request.getSession().setAttribute(MESSAGE, SUCCEED_DELETE);
+        log.info(String.format("Report %s was deleted", request.getParameter(TOPIC)));
         sendEmail(request);
         return getActionToRedirect(SEARCH_EVENT_ACTION, EVENT_ID, request.getParameter(EVENT_ID));
     }

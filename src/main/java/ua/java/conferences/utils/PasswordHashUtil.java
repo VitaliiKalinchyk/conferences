@@ -1,6 +1,7 @@
 package ua.java.conferences.utils;
 
 import de.mkammerer.argon2.*;
+import lombok.*;
 import ua.java.conferences.exceptions.IncorrectPasswordException;
 
 /**
@@ -9,6 +10,7 @@ import ua.java.conferences.exceptions.IncorrectPasswordException;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class PasswordHashUtil {
     private static final Argon2 argon2 = Argon2Factory.create();
     private static final int ITERATIONS = 2;
@@ -35,6 +37,4 @@ public final class PasswordHashUtil {
             throw new IncorrectPasswordException();
         }
     }
-
-    private PasswordHashUtil(){}
 }

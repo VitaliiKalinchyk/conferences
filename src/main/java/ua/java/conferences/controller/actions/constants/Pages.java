@@ -1,11 +1,14 @@
 package ua.java.conferences.controller.actions.constants;
 
+import lombok.*;
+
 /**
  * This is Pages class. It contains all web app pages
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Pages {
     /** Any user's pages */
     public static final String CONTROLLER_PAGE = "controller";
@@ -45,6 +48,4 @@ public final class Pages {
     public static final String VIEW_EVENT_PAGE = "viewEvent.jsp";
     public static final String EDIT_EVENT_PAGE = "editEvent.jsp";
     public static final String VIEW_REPORT_PAGE = "viewReport.jsp";
-
-    private Pages() {}
 }

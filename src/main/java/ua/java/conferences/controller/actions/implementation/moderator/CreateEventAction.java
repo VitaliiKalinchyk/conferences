@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.EventDTO;
@@ -19,6 +20,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class CreateEventAction implements Action {
     private final EventService eventService;
 
@@ -67,8 +69,10 @@ public class CreateEventAction implements Action {
         try {
             eventService.addEvent(event);
             long eventId = eventService.getByTitle(event.getTitle()).getId();
+            log.info(String.format("Event %s was created", event.getTitle()));
             return getActionToRedirect(SEARCH_EVENT_ACTION, EVENT_ID, String.valueOf(eventId));
         } catch (IncorrectFormatException | DuplicateTitleException e) {
+            log.info(String.format(" Couldn't creat event %s because of %s", event.getTitle(), e.getMessage()));
             request.getSession().setAttribute(EVENT, event);
             request.getSession().setAttribute(ERROR, e.getMessage());
         }

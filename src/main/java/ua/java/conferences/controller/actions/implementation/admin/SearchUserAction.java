@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.admin;
 
 import jakarta.servlet.http.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.exceptions.*;
@@ -15,6 +16,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class SearchUserAction implements Action {
     private final UserService userService;
 
@@ -38,6 +40,7 @@ public class SearchUserAction implements Action {
         try {
             request.setAttribute(USER, userService.getByEmail(email));
         } catch (NoSuchUserException | IncorrectFormatException e) {
+            log.info(String.format("Couldn't find user - %s", e.getMessage()));
             request.setAttribute(ERROR, e.getMessage());
             request.setAttribute(EMAIL, email);
             path = SEARCH_USER_PAGE;

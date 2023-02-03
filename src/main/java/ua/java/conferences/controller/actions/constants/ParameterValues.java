@@ -1,11 +1,14 @@
 package ua.java.conferences.controller.actions.constants;
 
+import lombok.*;
+
 /**
  * This is ParameterValues class. It contains all constant parameters and attributes values
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ParameterValues {
 
     /** Some common messages for user */
@@ -36,6 +39,4 @@ public final class ParameterValues {
     /** Available parameters and attributes values for setting or removing speaker for report */
     public static final String SET = "set";
     public static final String REMOVE = "remove";
-
-    private ParameterValues() {}
 }

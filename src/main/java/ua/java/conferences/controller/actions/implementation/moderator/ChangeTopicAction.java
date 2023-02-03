@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.*;
@@ -22,6 +23,7 @@ import static ua.java.conferences.utils.constants.Email.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class ChangeTopicAction implements Action {
     private final ReportService reportService;
     private final EmailSender emailSender;
@@ -48,9 +50,11 @@ public class ChangeTopicAction implements Action {
         try {
             reportService.update(report);
             request.getSession().setAttribute(MESSAGE, SUCCEED_UPDATE);
+            log.info(String.format("Report changed topic to %s", report.getTopic()));
             sendEmail(report, getURL(request));
         } catch (IncorrectFormatException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
+            log.info(String.format("Couldn't change report's topic to %s because of %s", report.getTopic(), e.getMessage()));
         }
         return getActionToRedirect(VIEW_REPORT_ACTION, REPORT_ID, String.valueOf(report.getId()));
     }

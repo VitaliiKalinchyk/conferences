@@ -1,11 +1,14 @@
 package ua.java.conferences.utils.constants;
 
+import lombok.*;
+
 /**
  * Contains all required for validation regexes
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class Regex {
     /** Use it for email only*/
     public static final String EMAIL_REGEX = "^[\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,6}$";
@@ -21,6 +24,4 @@ public class Regex {
 
     /** Use it for description*/
     public static final String DESCRIPTION_REGEX = "^[\\wА-ЩЬЮЯҐІЇЄа-щьюяґіїє'.,;:+\\-~`!?@#$^&*()={}| ]{1,200}";
-
-    private Regex() {}
 }

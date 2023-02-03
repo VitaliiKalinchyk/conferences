@@ -2,6 +2,7 @@ package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
@@ -16,6 +17,7 @@ import static ua.java.conferences.controller.filters.domain.Domain.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class AuthorizationFilter extends HttpFilter {
 
     /**
@@ -32,6 +34,7 @@ public class AuthorizationFilter extends HttpFilter {
         String action = request.getParameter(ACTION);
         if (role != null && isAccessDenied(servletPath, action, role)) {
             request.setAttribute(MESSAGE, ACCESS_DENIED);
+            log.warn(String.format("%s tried to access forbidden page", request.getSession().getAttribute(USER)));
             request.getRequestDispatcher(SIGN_IN_PAGE).forward(request, response);
         } else {
             chain.doFilter(request, response);

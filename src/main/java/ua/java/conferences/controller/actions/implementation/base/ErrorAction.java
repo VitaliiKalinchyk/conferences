@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.actions.Action;
 
 import static ua.java.conferences.controller.actions.constants.Pages.ERROR_PAGE;
@@ -12,6 +13,7 @@ import static ua.java.conferences.controller.actions.constants.Pages.ERROR_PAGE;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class ErrorAction implements Action {
 
     /**
@@ -19,6 +21,7 @@ public class ErrorAction implements Action {
      */
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
+        log.info("For some reason error action was called");
         return ERROR_PAGE;
     }
 }

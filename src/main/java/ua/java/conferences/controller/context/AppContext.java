@@ -2,7 +2,7 @@ package ua.java.conferences.controller.context;
 
 import jakarta.servlet.ServletContext;
 import lombok.*;
-import org.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.model.connection.MyDataSource;
 import ua.java.conferences.model.dao.DAOFactory;
 import ua.java.conferences.model.services.*;
@@ -22,8 +22,8 @@ import static ua.java.conferences.model.dao.constants.DbImplementations.MYSQL;
  * @version 1.0
  */
 @Getter
+@Slf4j
 public class AppContext {
-    private static final Logger logger = LoggerFactory.getLogger(AppContext.class);
     private static AppContext appContext;
     private final EventService eventService;
     private final UserService userService;
@@ -66,7 +66,7 @@ public class AppContext {
         try (InputStream resource = AppContext.class.getClassLoader().getResourceAsStream(propertiesFile)){
             properties.load(resource);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(String.format("AppContext couldn't read properties because of %s", e.getMessage()));
         }
         return properties;
     }

@@ -1,8 +1,10 @@
 package ua.java.conferences.controller.actions.implementation.base;
 
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.actions.Action;
 
 import jakarta.servlet.http.*;
+import ua.java.conferences.dto.UserDTO;
 
 import static ua.java.conferences.controller.actions.constants.Pages.SIGN_IN_PAGE;
 import static ua.java.conferences.controller.actions.constants.Parameters.LOCALE;
@@ -14,6 +16,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.LOGGED
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class SignOutAction implements Action {
 
     /**
@@ -25,9 +28,11 @@ public class SignOutAction implements Action {
     @Override
     public String execute(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession();
-        if (session.getAttribute(LOGGED_USER) != null) {
+        UserDTO user = (UserDTO) session.getAttribute(LOGGED_USER);
+        if (user != null) {
             String locale = (String) session.getAttribute(LOCALE);
             session.invalidate();
+            log.info(String.format("%s signed out", user.getEmail()));
             request.getSession(true).setAttribute(LOCALE, locale);
         }
         return SIGN_IN_PAGE;

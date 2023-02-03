@@ -1,8 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.admin;
 
 import jakarta.servlet.http.*;
-import org.slf4j.*;
-import org.slf4j.event.Level;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.model.entities.role.Role;
@@ -19,8 +18,8 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class SetRoleAction implements Action {
-    private static final Logger logger = LoggerFactory.getLogger(SetRoleAction.class);
     private final UserService userService;
 
     /**
@@ -43,7 +42,7 @@ public class SetRoleAction implements Action {
         String role = request.getParameter(ROLE);
         int roleId = Role.valueOf(role).getValue();
         userService.setRole(email, roleId);
-        logger.atLevel(Level.INFO).log(String.format("User %s got new role: %s", email, role));
+        log.info(String.format("User %s got new role: %s", email, role));
         request.setAttribute(USER, userService.getByEmail(email));
         return getActionToRedirect(SEARCH_USER_ACTION, EMAIL, email);
     }

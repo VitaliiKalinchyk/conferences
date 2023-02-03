@@ -2,7 +2,7 @@ package ua.java.conferences.controller;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.*;
-import org.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.actions.*;
 
 import java.io.IOException;
@@ -16,8 +16,8 @@ import static ua.java.conferences.controller.actions.constants.Parameters.ACTION
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class Controller extends HttpServlet {
-    private static final Logger logger = LoggerFactory.getLogger(Controller.class);
     private static final ActionFactory ACTION_FACTORY = ActionFactory.getActionFactory();
 
     /**
@@ -51,7 +51,7 @@ public class Controller extends HttpServlet {
         try {
             path = action.execute(request, response);
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            log.error(String.format("Couldn't execute action because of %s", e.getMessage()));
         }
         return path;
     }

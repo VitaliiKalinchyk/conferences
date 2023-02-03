@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.*;
@@ -18,6 +19,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class CreateReportAction implements Action {
     private final ReportService reportService;
 
@@ -39,7 +41,9 @@ public class CreateReportAction implements Action {
         ReportDTO report = getReportDTO(request);
         try {
             reportService.addReport(report);
+            log.info(String.format("Report %s was created", report.getTopic()));
         } catch (IncorrectFormatException e) {
+            log.info(String.format("Couldn't create report %s because of %s", report.getTopic(), e.getMessage()));
             request.getSession().setAttribute(ERROR, e.getMessage());
         }
         return getActionToRedirect(SEARCH_EVENT_ACTION, EVENT_ID, String.valueOf(report.getEventId()));

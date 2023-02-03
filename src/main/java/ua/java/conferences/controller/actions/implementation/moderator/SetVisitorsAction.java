@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.exceptions.ServiceException;
@@ -18,6 +19,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class SetVisitorsAction implements Action {
     private final EventService eventService;
 
@@ -39,6 +41,7 @@ public class SetVisitorsAction implements Action {
         String eventId = request.getParameter(EVENT_ID);
         String visitors = request.getParameter(VISITORS);
         eventService.setVisitorsCount(eventId, visitors);
+        log.info(String.format("Event with id=%s updated with visitors number",eventId));
         return getActionToRedirect(SEARCH_EVENT_ACTION, EVENT_ID, eventId);
     }
 }

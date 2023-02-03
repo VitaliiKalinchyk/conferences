@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -24,6 +25,7 @@ import static ua.java.conferences.utils.constants.Email.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class DeleteEventAction implements Action {
     private final EventService eventService;
     private final UserService userService;
@@ -72,8 +74,10 @@ public class DeleteEventAction implements Action {
      */
     private String executePost(HttpServletRequest request) throws ServiceException {
         String eventId = request.getParameter(EVENT_ID);
-        sendEmail(eventId, request.getParameter(TITLE));
+        String title = request.getParameter(TITLE);
+        sendEmail(eventId, title);
         eventService.delete(eventId);
+        log.info(String.format("Event %s was deleted", title));
         request.getSession().setAttribute(MESSAGE, SUCCEED_DELETE);
         return getActionToRedirect(DELETE_EVENT_ACTION);
     }

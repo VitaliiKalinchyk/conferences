@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.EventDTO;
@@ -27,6 +28,7 @@ import static ua.java.conferences.utils.constants.Email.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class EditEventAction implements Action {
     private final EventService eventService;
     private final UserService userService;
@@ -64,8 +66,11 @@ public class EditEventAction implements Action {
         transferAttributes(request);
         String eventId = request.getParameter(EVENT_ID);
         try {
-            request.setAttribute(EVENT, getEvent(eventId));
+            EventDTO event = getEvent(eventId);
+            request.setAttribute(EVENT, event);
+            log.info(String.format("Event %s was successfully changed ", event.getTitle()));
         } catch (NoSuchEventException e) {
+            log.info(String.format("Couldn't change event because of %s", e.getMessage()));
             request.setAttribute(ERROR, e.getMessage());
         }
         return EDIT_EVENT_PAGE;
@@ -98,10 +103,12 @@ public class EditEventAction implements Action {
         try {
             eventService.update(event);
             request.getSession().setAttribute(MESSAGE, SUCCEED_UPDATE);
+            log.info(String.format("Event %s was successfully changed ", event.getTitle()));
             sendEmail(event, getURL(request));
         } catch (IncorrectFormatException | DuplicateTitleException e) {
             request.getSession().setAttribute(EVENT_NEW, event);
             request.getSession().setAttribute(ERROR, e.getMessage());
+            log.info(String.format("Couldn't change event %s because of %s", event.getTitle(), e.getMessage()));
         }
         return getActionToRedirect(EDIT_EVENT_ACTION, EVENT_ID, String.valueOf(event.getId()));
     }

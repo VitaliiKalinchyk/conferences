@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.admin;
 
 import jakarta.servlet.http.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.exceptions.ServiceException;
@@ -18,6 +19,7 @@ import static ua.java.conferences.utils.QueryBuilderUtil.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class ViewUsersAction implements Action {
     private final UserService userService;
 
@@ -41,6 +43,7 @@ public class ViewUsersAction implements Action {
         request.setAttribute(USERS, userService.getSortedUsers(queryBuilder.getQuery()));
         int numberOfRecords = userService.getNumberOfRecords(queryBuilder.getRecordQuery());
         paginate(numberOfRecords, request);
+        log.info("List of users was successfully returned");
         return VIEW_USERS_PAGE;
     }
 

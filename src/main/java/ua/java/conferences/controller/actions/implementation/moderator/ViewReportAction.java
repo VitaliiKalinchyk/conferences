@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.moderator;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.*;
@@ -20,6 +21,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class ViewReportAction implements Action {
     private final ReportService reportService;
     private final UserService userService;
@@ -46,7 +48,9 @@ public class ViewReportAction implements Action {
             request.setAttribute(IS_COMING, isFutureReport(report));
             request.setAttribute(REPORT, report);
             request.setAttribute(SPEAKERS, userService.getSpeakers());
+            log.info(String.format("Report %s was successfully returned", report.getTopic()));
         } catch (NoSuchReportException e) {
+            log.info(String.format("Couldn't find report because of %s",e.getMessage()));
             request.setAttribute(ERROR, e.getMessage());
         }
         return VIEW_REPORT_PAGE;

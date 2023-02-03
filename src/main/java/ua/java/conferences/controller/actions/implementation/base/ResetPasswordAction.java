@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -22,6 +23,7 @@ import static ua.java.conferences.utils.constants.Email.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class ResetPasswordAction implements Action {
     private final UserService userService;
     private final EmailSender emailSender;
@@ -77,8 +79,10 @@ public class ResetPasswordAction implements Action {
             String newPass = userService.changePassword(user.getId());
             request.getSession().setAttribute(MESSAGE, CHECK_EMAIL);
             sendEmail(user, newPass, getURL(request));
+            log.info(String.format("%s was successfully reset his password", email));
         } catch (IncorrectFormatException | NoSuchUserException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
+            log.info(String.format("%s couldn't reset his password", email));
         }
         return getActionToRedirect(PASSWORD_RESET_ACTION);
     }

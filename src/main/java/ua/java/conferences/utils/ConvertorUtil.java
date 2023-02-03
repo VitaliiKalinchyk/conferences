@@ -1,5 +1,6 @@
 package ua.java.conferences.utils;
 
+import lombok.*;
 import ua.java.conferences.dto.*;
 import ua.java.conferences.model.entities.*;
 import ua.java.conferences.model.entities.role.Role;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ConvertorUtil {
 
     /**
@@ -111,6 +113,4 @@ public final class ConvertorUtil {
                 .reports(event.getReports())
                 .build();
     }
-
-    private ConvertorUtil() {}
 }

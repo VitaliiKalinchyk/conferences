@@ -1,12 +1,19 @@
 package ua.java.conferences.utils;
 
+import lombok.*;
 import ua.java.conferences.exceptions.*;
 import ua.java.conferences.utils.constants.Regex;
 
 import java.time.LocalDate;
 
 import static ua.java.conferences.exceptions.constants.Message.*;
-
+/**
+ * Validator to validate emails, names, etc..
+ *
+ * @author Vitalii Kalinchyk
+ * @version 1.0
+ */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ValidatorUtil {
 
     public static void validateEmail(String email) throws IncorrectFormatException {
@@ -94,10 +101,8 @@ public final class ValidatorUtil {
     public static void checkStrings(String... strings) throws ServiceException {
         for (String string : strings) {
             if (string == null) {
-                throw new ServiceException(new NullPointerException());
+                throw new ServiceException(new NullPointerException("Enter valid values"));
             }
         }
     }
-
-    private ValidatorUtil() {}
 }

@@ -1,6 +1,8 @@
 package ua.java.conferences.controller.actions;
 
+import lombok.AccessLevel;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.implementation.admin.*;
 import ua.java.conferences.controller.actions.implementation.base.*;
@@ -18,6 +20,7 @@ import static ua.java.conferences.controller.actions.constants.ActionNames.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ActionFactory {
     /** Action factory instance. Singleton */
     @Getter private static final ActionFactory actionFactory = new ActionFactory();
@@ -69,8 +72,6 @@ public final class ActionFactory {
         ACTION_MAP.put(DELETE_REPORT_ACTION, new DeleteReportAction(APP_CONTEXT));
         ACTION_MAP.put(SET_OR_REMOVE_SPEAKER_ACTION, new SetOrRemoveSpeakerAction(APP_CONTEXT));
     }
-
-    private ActionFactory() {}
 
     /**
      * Obtains action by its name

@@ -1,11 +1,14 @@
 package ua.java.conferences.model.dao.mysql.constants;
 
+import lombok.*;
+
 /**
  * Class that contains all My SQL queries for EventDAO
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class EventSQLQueries {
     /** Queries to use in another queries */
     private static final String UTIL_GET_EVENT = "SELECT event.id AS id, title, date, location, description, " +
@@ -35,6 +38,4 @@ public final class EventSQLQueries {
     public static final String DELETE_EVENT = "DELETE event, user_has_event, report FROM event LEFT JOIN" +
             " user_has_event ON event.id=user_has_event.event_id LEFT JOIN report" +
             " ON event.id=report.event_id WHERE event.id=?";
-
-    private EventSQLQueries() {}
 }

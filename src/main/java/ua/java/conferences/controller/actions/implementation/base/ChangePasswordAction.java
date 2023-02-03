@@ -1,6 +1,7 @@
 package ua.java.conferences.controller.actions.implementation.base;
 
 import jakarta.servlet.http.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -20,6 +21,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class ChangePasswordAction implements Action {
     private final UserService userService;
 
@@ -64,20 +66,23 @@ public class ChangePasswordAction implements Action {
      * @return path to redirect to executeGet method through front-controller
      */
     private String executePost(HttpServletRequest request) throws ServiceException {
+        UserDTO userDTO = (UserDTO) request.getSession().getAttribute(LOGGED_USER);
         try {
-            userServiceChangePassword(request);
+            userServiceChangePassword(request, userDTO);
             request.getSession().setAttribute(MESSAGE, SUCCEED_UPDATE);
         } catch (IncorrectFormatException | IncorrectPasswordException | NoSuchUserException | PasswordMatchingException e) {
             request.getSession().setAttribute(ERROR, e.getMessage());
+            log.info(String.format("%s couldn't change it's password", userDTO.getEmail()));
         }
         return getActionToRedirect(CHANGE_PASSWORD_ACTION);
     }
 
-    private void userServiceChangePassword(HttpServletRequest request) throws ServiceException {
-        long id = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
+    private void userServiceChangePassword(HttpServletRequest request, UserDTO userDTO) throws ServiceException {
+        long id = userDTO.getId();
         String oldPassword = request.getParameter(OLD_PASSWORD);
         String password = request.getParameter(PASSWORD);
         String confirmPassword = request.getParameter(CONFIRM_PASSWORD);
         userService.changePassword(id, oldPassword, password, confirmPassword);
+        log.info(String.format("%s changed it's password", userDTO.getEmail()));
     }
 }

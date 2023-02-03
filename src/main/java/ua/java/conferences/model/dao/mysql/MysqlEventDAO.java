@@ -1,5 +1,6 @@
 package ua.java.conferences.model.dao.mysql;
 
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.model.dao.EventDAO;
 import ua.java.conferences.model.entities.Event;
 import ua.java.conferences.model.entities.role.Role;
@@ -20,6 +21,7 @@ import static ua.java.conferences.model.entities.role.Role.SPEAKER;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class MysqlEventDAO implements EventDAO {
     private final DataSource dataSource;
 
@@ -43,6 +45,7 @@ public class MysqlEventDAO implements EventDAO {
             setStatementFields(event, preparedStatement, k);
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't add new event '%s' because of %s", event.getTitle(), e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -65,6 +68,7 @@ public class MysqlEventDAO implements EventDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't find event with id=%d because of %s", id, e.getMessage()));
             throw new DAOException(e);
         }
         return Optional.ofNullable(event);
@@ -89,6 +93,7 @@ public class MysqlEventDAO implements EventDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't find event %s because of %s", title, e.getMessage()));
             throw new DAOException(e);
         }
         return Optional.ofNullable(event);
@@ -110,6 +115,7 @@ public class MysqlEventDAO implements EventDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't get list of all events because of %s", e.getMessage()));
             throw new DAOException(e);
         }
         return events;
@@ -133,6 +139,7 @@ public class MysqlEventDAO implements EventDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't get sorted list of events because of %s", e.getMessage()));
             throw new DAOException(e);
         }
         return events;
@@ -157,6 +164,7 @@ public class MysqlEventDAO implements EventDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't get sorted list of events because of %s", e.getMessage()));
             throw new DAOException(e);
         }
         return events;
@@ -176,6 +184,7 @@ public class MysqlEventDAO implements EventDAO {
             preparedStatement.setLong(++k, event.getId());
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't update event %s because of %s", event.getTitle(), e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -195,6 +204,7 @@ public class MysqlEventDAO implements EventDAO {
             preparedStatement.setLong(++k, eventId);
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't set visitors for event with id=%d because of %s", eventId, e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -211,6 +221,7 @@ public class MysqlEventDAO implements EventDAO {
             setId(id, preparedStatement);
             preparedStatement.execute();
         } catch (SQLException e) {
+            log.error(String.format("Couldn't delete event with id=%d because of %s", id, e.getMessage()));
             throw new DAOException(e);
         }
     }
@@ -233,6 +244,7 @@ public class MysqlEventDAO implements EventDAO {
                 }
             }
         } catch (SQLException e) {
+            log.error(String.format("Couldn't get number of events because of %s", e.getMessage()));
             throw new DAOException(e);
         }
         return numberOfRecords;

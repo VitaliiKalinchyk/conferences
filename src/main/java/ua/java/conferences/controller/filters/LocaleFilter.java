@@ -2,6 +2,7 @@ package ua.java.conferences.controller.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.LOCALE
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class LocaleFilter  extends HttpFilter {
     private static final String REFERER = "referer";
     private String defaultLocale;
@@ -25,6 +27,7 @@ public class LocaleFilter  extends HttpFilter {
      */
     @Override
     public void init(FilterConfig config) {
+        log.info("Default locale was set");
         defaultLocale = config.getInitParameter("defaultLocale");
     }
 

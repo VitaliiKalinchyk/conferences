@@ -9,7 +9,7 @@ import com.itextpdf.layout.borders.*;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.*;
 import jakarta.servlet.ServletContext;
-import org.slf4j.*;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.dto.*;
 
 import java.io.*;
@@ -25,8 +25,8 @@ import java.util.stream.Stream;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class PdfUtil {
-    private static final Logger logger = LoggerFactory.getLogger(PdfUtil.class);
     private final ServletContext servletContext;
 
     /** Use this font fo cyrillic */
@@ -163,7 +163,7 @@ public class PdfUtil {
             String fontUrl = resource.getFile();
             return PdfFontFactory.createFont(fontUrl);
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            log.warn(String.format("Couldn't load font, will use default one because of %s", e.getMessage()));
             return null;
         }
     }

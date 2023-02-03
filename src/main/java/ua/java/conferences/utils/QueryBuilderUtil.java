@@ -1,5 +1,6 @@
 package ua.java.conferences.utils;
 
+import lombok.*;
 import ua.java.conferences.utils.query.*;
 
 /**
@@ -8,6 +9,7 @@ import ua.java.conferences.utils.query.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class QueryBuilderUtil {
 
     /**
@@ -30,6 +32,4 @@ public class QueryBuilderUtil {
     public static QueryBuilder visitorEventQueryBuilder() {
         return new VisitorEventQueryBuilder();
     }
-
-    private QueryBuilderUtil() {}
 }

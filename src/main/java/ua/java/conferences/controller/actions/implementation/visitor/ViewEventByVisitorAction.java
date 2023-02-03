@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.visitor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.*;
@@ -19,6 +20,7 @@ import static ua.java.conferences.controller.actions.constants.Parameters.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class ViewEventByVisitorAction implements Action {
     private final EventService eventService;
     private final ReportService reportService;
@@ -44,8 +46,10 @@ public class ViewEventByVisitorAction implements Action {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws ServiceException {
         try {
             setAttributes(request);
+            log.info("Event was successfully found");
         } catch (NoSuchEventException e) {
             request.setAttribute(ERROR, e.getMessage());
+            log.info("Couldn't find an event");
         }
         return VIEW_EVENT_BY_VISITOR_PAGE;
     }

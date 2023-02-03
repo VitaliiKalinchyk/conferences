@@ -1,11 +1,14 @@
 package ua.java.conferences.controller.actions.constants;
 
+import lombok.*;
+
 /**
  * This is ActionNames class. It contains all action names
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ActionNames {
     /** Any user's actions */
     public static final String DEFAULT_ACTION = "default";
@@ -52,6 +55,4 @@ public final class ActionNames {
     public static final String CHANGE_TOPIC_ACTION = "change-topic";
     public static final String DELETE_REPORT_ACTION = "delete-report";
     public static final String SET_OR_REMOVE_SPEAKER_ACTION = "set-or-remove-speaker";
-
-    private ActionNames() {}
 }

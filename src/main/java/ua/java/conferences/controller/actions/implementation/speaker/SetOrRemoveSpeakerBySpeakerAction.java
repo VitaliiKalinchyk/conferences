@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.speaker;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.UserDTO;
@@ -22,6 +23,7 @@ import static ua.java.conferences.utils.constants.Email.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class SetOrRemoveSpeakerBySpeakerAction implements Action {
     private final ReportService reportService;
     private final UserService userService;
@@ -58,10 +60,12 @@ public class SetOrRemoveSpeakerBySpeakerAction implements Action {
         if(todo.equals(SET)) {
             long speakerId = ((UserDTO) request.getSession().getAttribute(LOGGED_USER)).getId();
             if (reportService.setSpeaker(reportId, speakerId)) {
+                log.info(String.format("For report with id=%d speaker was set",reportId));
                 sendEmail(request, MESSAGE_SET_SPEAKER_BY_SPEAKER);
             }
         } else if (todo.equals(REMOVE)) {
             reportService.deleteSpeaker(reportId);
+            log.info(String.format("Deleted speaker for report with id=%d",reportId));
             sendEmail(request, MESSAGE_REMOVE_SPEAKER_BY_SPEAKER);
         }
     }

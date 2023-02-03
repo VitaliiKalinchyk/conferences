@@ -1,8 +1,7 @@
 package ua.java.conferences.utils;
 
 import jakarta.json.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.exceptions.CaptchaException;
 
 import javax.net.ssl.*;
@@ -16,8 +15,8 @@ import java.util.Properties;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class Captcha {
-    private static final Logger logger = LoggerFactory.getLogger(Captcha.class);
     private final String method;
     private final String captchaUrl;
     private final String secret;
@@ -50,9 +49,9 @@ public class Captcha {
             StringBuilder response = getResponse(connection);
             checkIfCaptchaPassed(response);
         } catch(IllegalStateException | UnknownHostException | SSLException e){
-            logger.error("skipped captcha - couldn't connect to google");
+            log.error("skipped captcha - couldn't connect to google");
         } catch(Exception e){
-            logger.error(e.getMessage());
+            log.error(e.getMessage());
             throw new CaptchaException();
         }
     }

@@ -1,11 +1,14 @@
 package ua.java.conferences.model.dao.mysql.constants;
 
+import lombok.*;
+
 /**
  * Class that contains all My SQL database fields
  *
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class SQLFields {
     /** Common id field for user, report an event tables */
     public static final String ID = "id";
@@ -35,6 +38,4 @@ public final class SQLFields {
     public static final String NUMBER_OF_RECORDS = "numberOfRecords";
     public static final String REGISTRATIONS = "registrations";
     public static final String REPORTS = "reports";
-
-    private SQLFields() {}
 }

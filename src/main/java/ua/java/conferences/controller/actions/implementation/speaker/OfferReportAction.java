@@ -2,6 +2,7 @@ package ua.java.conferences.controller.actions.implementation.speaker;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import ua.java.conferences.controller.context.AppContext;
 import ua.java.conferences.controller.actions.Action;
 import ua.java.conferences.dto.*;
@@ -26,6 +27,7 @@ import static ua.java.conferences.utils.constants.Email.*;
  * @author Vitalii Kalinchyk
  * @version 1.0
  */
+@Slf4j
 public class OfferReportAction implements Action {
     private final ReportService reportService;
     private final EventService eventService;
@@ -68,7 +70,9 @@ public class OfferReportAction implements Action {
         try {
             EventDTO event = getEvent(request.getParameter(EVENT_ID), speakerId);
             request.setAttribute(EVENT, event);
+            log.info(String.format("Report was created by speaker with id=%d", speakerId));
         } catch (NoSuchEventException e) {
+            log.info(String.format("Couldn't create report because of %s", e.getMessage()));
             request.setAttribute(ERROR, OFFER_FORBIDDEN);
         }
         return OFFER_REPORT_PAGE;
@@ -103,7 +107,9 @@ public class OfferReportAction implements Action {
             reportService.addReport(reportDTO);
             request.getSession().setAttribute(MESSAGE, SUCCEED_ADD);
             sendEmail(reportDTO, getURL(request));
+            log.info(String.format("Report %s was created by speaker", reportDTO.getTopic()));
         } catch (IncorrectFormatException e) {
+            log.info(String.format("Couldn't create report because of %s", e.getMessage()));
             request.getSession().setAttribute(ERROR, e.getMessage());
         }
         return getActionToRedirect(OFFER_REPORT_ACTION, EVENT_ID, String.valueOf(reportDTO.getEventId()));
