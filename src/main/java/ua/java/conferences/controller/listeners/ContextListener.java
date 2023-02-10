@@ -25,9 +25,13 @@ public class ContextListener implements ServletContextListener {
      */
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        AppContext.createAppContext(sce.getServletContext(), PROPERTIES_FILE);
         log.info("The application has started");
-        log.info("AppContext is set");
+        try {
+            AppContext.createAppContext(sce.getServletContext(), PROPERTIES_FILE);
+            log.info("AppContext was set");
+        } catch (Exception e) {
+            log.error("AppContext wasn't set");
+        }
     }
 
     /**

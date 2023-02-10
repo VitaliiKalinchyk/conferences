@@ -25,7 +25,7 @@
         <greenmail.version>1.6.12</greenmail.version>
         <slf4j.version>2.0.6</slf4j.version>
         <log4j.version>2.19.0</log4j.version>
-        <lombok.version>1.18.24</lombok.version>
+        <lombok.version>1.18.26</lombok.version>
         <mail.version>1.6.2</mail.version>
         <json.version>2.0.1</json.version>
         <pdf.version>7.2.4</pdf.version>
