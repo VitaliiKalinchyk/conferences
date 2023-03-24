@@ -16,7 +16,7 @@
         <maven.compiler.source>11</maven.compiler.source>
         <junit.version>5.9.2</junit.version>
         <servlet.version>6.0.0</servlet.version>
-        <servlet.jsp-api.version>3.1.0</servlet.jsp-api.version>
+        <servlet.jsp-api.version>3.0.0</servlet.jsp-api.version>
         <servlet.jsp.jstl.version>3.0.0</servlet.jsp.jstl.version>
         <mysql.version>8.0.31</mysql.version>
         <hikari.version>5.0.1</hikari.version>
@@ -43,6 +43,11 @@
             <artifactId>jakarta.servlet.jsp-api</artifactId>
             <version>${servlet.jsp-api.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>${servlet.jsp.jstl.version}</version>
         </dependency>
         <dependency>
             <groupId>jakarta.servlet.jsp.jstl</groupId>
@@ -143,11 +148,15 @@
     </dependencies>
 
     <build>
+        <finalName>conferences</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+                <configuration>
+                    <outputDirectory>C://Tomcat//webapps</outputDirectory>
+                </configuration>
             </plugin>
         </plugins>
     </build>
