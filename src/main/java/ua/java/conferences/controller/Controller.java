@@ -41,10 +41,6 @@ public class Controller extends HttpServlet {
         response.sendRedirect(process(request, response));
     }
 
-    /**
-     * Obtains path to use in doPost/doGet methods. In case of error will return error page
-     * @return path
-     */
     private String process(HttpServletRequest request, HttpServletResponse response) {
         Action action = ACTION_FACTORY.createAction(request.getParameter(ACTION));
         String path = ERROR_PAGE;
